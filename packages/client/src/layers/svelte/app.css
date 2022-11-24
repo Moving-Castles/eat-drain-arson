@@ -5,8 +5,8 @@
 body,
 html {
   background: black;
-  font-family: Helvetica, sans-serif;
-  font-size: 12px;
+  font-family: "Akkurat-mono", monospace;
+  font-size: 14px;
   margin: 0;
   padding: 0;
 }
