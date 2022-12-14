@@ -10,7 +10,8 @@
     "StatsComponent",
     "BirthComponent",
     "CannibalComponent",
-    "PlayingComponent"
+    "PlayingComponent",
+    "DeathComponent"
   ],
   "systems": [
     {
@@ -36,7 +37,8 @@
         "EnergyComponent",
         "ResourceComponent",
         "CoolDownComponent",
-        "StatsComponent"
+        "StatsComponent",
+        "DeathComponent"
       ]
     },
     {
@@ -50,7 +52,8 @@
         "EntityTypeComponent",
         "StatsComponent",
         "BirthComponent",
-        "CannibalComponent"
+        "CannibalComponent",
+        "DeathComponent"
       ]
     },
     {
@@ -68,6 +71,7 @@
     {
       "name": "FireSystem",
       "writeAccess": [
+        "SeedComponent",
         "PositionComponent",
         "ResourceComponent",
         "EnergyComponent",

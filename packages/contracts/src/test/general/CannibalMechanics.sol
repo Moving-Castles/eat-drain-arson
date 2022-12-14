@@ -2,7 +2,8 @@
 pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
-import { INITIAL_ENERGY, INITIAL_RESOURCE, entityType } from "../../constants.sol";
+import { EntityType } from "../../types.sol";
+import { INITIAL_ENERGY, INITIAL_RESOURCE } from "../../config.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { PlaySystem, ID as PlaySystemID } from "../../systems/PlaySystem.sol";
 import { GatherSystem, ID as GatherSystemID } from "../../systems/GatherSystem.sol";
@@ -38,9 +39,7 @@ contract CannibalMechanicsTest is MudTest {
 
     // Get bob some resources
     GatherSystem(system(GatherSystemID)).executeTyped(bob, 50);
-    int32 bobsResourceBalance = resourceComponent.getValue(bob);
-    console.log("bobs resourdes");
-    console.logInt(bobsResourceBalance);
+    uint32 bobsResourceBalance = resourceComponent.getValue(bob);
 
     // ...
     vm.roll(1000);
@@ -52,7 +51,7 @@ contract CannibalMechanicsTest is MudTest {
     vm.roll(2000);
 
     // Bob should be dead
-    assertEq(entityTypeComponent.getValue(bob), uint32(entityType.Corpse));
+    assertEq(entityTypeComponent.getValue(bob), uint32(EntityType.Corpse));
 
     // Alice gathers Bob's corpse
     GatherSystem(system(GatherSystemID)).executeTyped(alice, 50);
