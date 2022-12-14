@@ -62,13 +62,13 @@ export const playerDirection = writable(Directions.Random);
 export const spawnBlock = writable(0);
 // Amount of heartbeats the player has lived
 export const heartbeats = derived([spawnBlock, blockNumber], ([$s, $b]) => $b - $s);
-// player's energy, based off of moment of death
-export const playerEnergy = derived([player, heartbeats], ([$p, $h]) => {
-  const birth = parseInt($p.birth);
-  const death = parseInt($p.death);
-  const lifespan = death - birth;
 
-  return Math.max(0, lifespan - $h);
+export const playerEnergy = derived([player, blockNumber], ([$player, $blockNumber]) => {
+  if (parseInt(String($player.death)) <= $blockNumber) {
+    return 0;
+  }
+  // actualEnergy = deathBlock - currentBlock
+  return parseInt(String($player.death)) - $blockNumber;
 });
 
 // Input: an array of players, outputs, player names
