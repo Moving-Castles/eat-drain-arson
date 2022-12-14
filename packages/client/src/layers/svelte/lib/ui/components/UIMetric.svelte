@@ -1,30 +1,40 @@
 <script>
   export let label
   export let key
+  // You can also pass the value
+  export let value = undefined // You can pass a store
 
   import { entities } from "../../../stores/entities";
   import { player } from "../../../stores/player"
   import { blockNumber } from "../../../stores/network";
   import { tweened } from "svelte/motion";
-  
-  const value = tweened($player[key]);
+
   let direction
   let timeout
+  let readonly
+  
+  if (!value) {
+    value = tweened($player[key]);
+  } else {
+    readonly = true
+  }
 
-  entities.subscribe((v) => {
-    // clearTimeout(timeout)
-    let duration = ($player.coolDownBlock - $blockNumber) * 1000;
-    duration = duration > 0 ? duration : 1000;
-    
-    let newValue = $player[key]
-    direction = Math.sign(newValue - $value)
-
-    if (newValue !== $value) {
-      clearTimeout(timeout)
-      value.set(newValue, { duration });
-      timeout = setTimeout(resetDirection, duration)
-    }
-  })
+  if (!readonly) {
+    entities.subscribe((v) => {
+      // clearTimeout(timeout)
+      let duration = ($player.coolDownBlock - $blockNumber) * 1000;
+      duration = duration > 0 ? duration : 1000;
+      
+      let newValue = $player[key]
+      direction = Math.sign(newValue - $value)
+  
+      if (newValue !== $value) {
+        clearTimeout(timeout)
+        value.set(newValue, { duration });
+        timeout = setTimeout(resetDirection, duration)
+      }
+    })
+  }
 
   function resetDirection () {
     direction = 0
@@ -48,8 +58,6 @@
     width: 100%;
     border-width: 1px;
     text-align: center;
-    /* height: 60px; */
-    /* line-height: 60px; */
     margin-top: calc(var(--row-gap) / 3);
     border: var(--outer-border);
     overflow: hidden;

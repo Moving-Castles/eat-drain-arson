@@ -1,7 +1,7 @@
 <script lang="ts">
   import { playSound } from "../../../../howler";
   import UIMetric from "./UIMetric.svelte";
-  import { Activities, activityToVerb, player, playerActivity } from "../../../stores/player";
+  import { Activities, activityToVerb, player, playerActivity, playerEnergy } from "../../../stores/player";
   import { seedToName, seedToMask } from "../../../utils/name";
   import { EntityType } from "../../../stores/entities";
 
@@ -55,7 +55,7 @@
   </div>
 
   <div class="resources">
-    <UIMetric label="Energy" key="energy" />
+    <UIMetric label="Energy" key="energy" value={playerEnergy} />
     <UIMetric label="Sludge" key="resource" />
   </div>
 

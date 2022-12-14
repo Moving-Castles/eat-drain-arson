@@ -1,5 +1,5 @@
 import { derived, writable, get } from "svelte/store";
-import { network } from "./network";
+import { network, blockNumber } from "./network";
 import { entities } from "./entities";
 import { uniq } from "lodash";
 import { seedToName } from "../utils/name";
@@ -57,6 +57,19 @@ export const playerAddress = derived(network, ($network) => $network.network?.co
 export const player = derived([entities, playerAddress], ([$entities, $playerAddress]) => $entities[$playerAddress]);
 export const playerActivity = writable(Activities.Idle);
 export const playerDirection = writable(Directions.Random);
+
+// This value is set once the player spawns
+export const spawnBlock = writable(0);
+// Amount of heartbeats the player has lived
+export const heartbeats = derived([spawnBlock, blockNumber], ([$s, $b]) => $b - $s);
+// player's energy, based off of moment of death
+export const playerEnergy = derived([player, heartbeats], ([$p, $h]) => {
+  const birth = parseInt($p.birth);
+  const death = parseInt($p.death);
+  const lifespan = death - birth;
+
+  return Math.max(0, lifespan - $h);
+});
 
 // Input: an array of players, outputs, player names
 export function playerList(players: string[]) {

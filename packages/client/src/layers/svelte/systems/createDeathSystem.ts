@@ -11,6 +11,7 @@ export function createDeathSystem(network: NetworkLayer) {
   defineComponentSystem(world, Death, (update) => {
     console.log("==> Death system: ", update);
     const death = update.value[0]?.value;
+
     entities.update((value) => {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};
       value[indexToID(update.entity)].death = death;
