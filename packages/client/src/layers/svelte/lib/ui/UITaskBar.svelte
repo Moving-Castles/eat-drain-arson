@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { player } from "../../stores/player"
-  import { EntityType } from "../../stores/entities"
+  import { player } from "../../stores/player";
+  import { EntityType } from "../../stores/entities";
   import UISurvivalCounter from "./UISurvivalCounter.svelte";
   import UISpawn from "./components/UISpawn.svelte";
 </script>
@@ -10,6 +10,7 @@
     {#if $player.entityType == EntityType.Corpse}
       <UISpawn />
     {:else}
+      <UISpawn />
       <UISurvivalCounter />
     {/if}
   </div>

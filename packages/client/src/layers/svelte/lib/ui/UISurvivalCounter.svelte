@@ -1,8 +1,8 @@
 <script lang="ts">
   import { blockNumber } from "../../stores/network";
-  import { player } from "../../stores/player"
+  import { player, playerEnergy } from "../../stores/player";
 
-  const BLOCKS_IN_DAY = 600
+  const BLOCKS_IN_DAY = 600;
 
   let clockTime: number;
 
@@ -11,7 +11,8 @@
 
 <div class="ui-clock">
   {#key clockTime}
-    <div class="clock-time">You survived {clockTime} days</div>
+    <div>block: {$blockNumber} / death: {parseInt(String($player.death))} / energy: {$playerEnergy}</div>
+    <!-- <div class="clock-time">You survived {clockTime} days</div> -->
   {/key}
 </div>
 
