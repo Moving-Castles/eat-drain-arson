@@ -49,7 +49,7 @@ contract GatherSystem is System {
     // Require cooldown period to be over
     require(coolDownComponent.getValue(player) < block.number, "in cooldown period");
     // Require the player to not be past its death block
-    if (deathComponent.getValue(player) > block.number) {
+    if (deathComponent.getValue(player) <= block.number) {
       entityTypeComponent.set(player, uint32(EntityType.Corpse));
       coolDownComponent.set(player, 0);
       energyComponent.set(player, 0);
