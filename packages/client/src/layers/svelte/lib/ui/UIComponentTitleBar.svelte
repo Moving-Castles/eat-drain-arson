@@ -41,7 +41,7 @@
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    backdrop-filter: var(--backdrop);
+    -webkit-backdrop-filter: var(--backdrop);
     z-index: 99;
   }
 

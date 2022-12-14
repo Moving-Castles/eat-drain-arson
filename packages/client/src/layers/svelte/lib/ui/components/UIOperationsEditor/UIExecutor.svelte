@@ -212,6 +212,7 @@
     width: 100%;
     background: rgba(127, 127, 127, 0.8);
     backdrop-filter: gray(1);
+    -webkit-backdrop-filter: gray(1);
     height: 100%;
     top: 0;
     left: 0;

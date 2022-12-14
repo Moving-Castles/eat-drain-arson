@@ -79,6 +79,7 @@
     width: 70px;
     /* background-color: rgba(var(--background-rgb), var(--muted-opacity)); */
     backdrop-filter: var(--backdrop);
+    -webkit-backdrop-filter: var(--backdrop);
     user-select: none;
   }
   .ui-menu-container.open {

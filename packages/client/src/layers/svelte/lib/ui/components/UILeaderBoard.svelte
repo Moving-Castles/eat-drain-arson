@@ -81,6 +81,7 @@
     top: 0;
     padding-bottom: 6px;
     backdrop-filter: var(--backdrop);
+    -webkit-backdrop-filter: var(--backdrop);
     display: flex;
     justify-content: space-between;
   }
