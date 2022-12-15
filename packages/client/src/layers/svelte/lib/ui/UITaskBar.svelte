@@ -10,7 +10,7 @@
     {#if $player.entityType == EntityType.Corpse}
       <UISpawn />
     {:else}
-      <UISpawn />
+      <!-- <UISpawn /> -->
       <UISurvivalCounter />
     {/if}
   </div>

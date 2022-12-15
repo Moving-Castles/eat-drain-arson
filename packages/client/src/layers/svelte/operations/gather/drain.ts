@@ -1,10 +1,10 @@
 import { get } from "svelte/store";
 import { network } from "../../stores/network";
-import { player } from "../../stores/player";
+import { player, playerEnergy } from "../../stores/player";
 import { directToLog, LogEntryType, getOperationTale } from "../../stores/narrative";
 
 export function drain() {
-  if ((get(player).energy || 0) >= 200) {
+  if ((get(playerEnergy) || 0) >= 200) {
     get(network).api?.gather(200);
     directToLog(getOperationTale("drain", "lore"), LogEntryType.Banter);
     return true;

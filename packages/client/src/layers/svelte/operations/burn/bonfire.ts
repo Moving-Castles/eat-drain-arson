@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import { network } from "../../stores/network";
-import { player } from "../../stores/player";
+import { player, playerEnergy } from "../../stores/player";
 
 export function bonfire() {
   if ((get(player).resource || 0) >= 500) {

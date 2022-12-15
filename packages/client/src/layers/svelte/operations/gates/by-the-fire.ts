@@ -1,6 +1,6 @@
 import { Coord } from "@latticexyz/recs";
 import { get } from "svelte/store";
-import { player } from "../../stores/player";
+import { player, playerEnergy } from "../../stores/player";
 import { entities, EntityType } from "../../stores/entities";
 import { directToLog, LogEntryType } from "../../stores/narrative";
 

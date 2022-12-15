@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { player } from "../../stores/player";
+import { player, playerEnergy } from "../../stores/player";
 import { directToLog, LogEntryType } from "../../stores/narrative";
 
 export function sludgeRich() {

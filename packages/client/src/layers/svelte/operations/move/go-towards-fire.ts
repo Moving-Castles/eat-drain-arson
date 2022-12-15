@@ -1,12 +1,12 @@
 import { get } from "svelte/store";
 import { network } from "../../stores/network";
-import { player } from "../../stores/player";
+import { player, playerEnergy } from "../../stores/player";
 import { fires } from "../../stores/entities";
 import { directToLog, LogEntryType } from "../../stores/narrative";
 import { transformationToDirection, positionsToTransformation, directionalPathfind } from "../../utils/space";
 
 export function goTowardsFire() {
-  if (get(fires).length > 0 && (get(player).energy || 0) >= 10) {
+  if (get(fires).length > 0 && (get(playerEnergy) || 0) >= 10) {
     const paths = [];
     for (let i = 0; i < get(fires).length; i++) {
       // Get path between player and fire
@@ -24,7 +24,11 @@ export function goTowardsFire() {
 
     return true;
   } else {
-    directToLog("You do not have enough energy to do this", LogEntryType.Failure);
+    if (get(fires).length > 0) {
+      directToLog("You do not have enough energy to do this", LogEntryType.Failure);
+    } else {
+      directToLog("There aren't any fires", LogEntryType.Failure);
+    }
     return false;
   }
 }

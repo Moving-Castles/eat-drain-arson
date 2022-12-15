@@ -1,9 +1,10 @@
 <script lang="ts">
+  import { cloneDeep } from "lodash"
   import { playSound } from "../../../../howler";
   import UIMetric from "./UIMetric.svelte";
-  import { Activities, activityToVerb, player, playerActivity, playerEnergy } from "../../../stores/player";
+  import { Activities, activityToVerb, player, playerActivity, playerEnergy, playerAddress, dead } from "../../../stores/player";
   import { seedToName, seedToMask } from "../../../utils/name";
-  import { EntityType } from "../../../stores/entities";
+  import { entities, EntityType } from "../../../stores/entities";
 
   let activitySound = {};
 
@@ -34,6 +35,19 @@
       activitySound = playSound("death", "ui");
     }
   });
+
+  function setDead () {
+    const ent = cloneDeep($player)
+    ent.entityType = EntityType.Corpse
+    $entities[$playerAddress] = ent
+  }
+
+
+  $: {
+    console.log($dead)
+    console.log($playerAddress, $entities)
+    if ($dead) setDead()
+  }
 </script>
 
 <div class="ui-avatar">

@@ -58,17 +58,16 @@ export const player = derived([entities, playerAddress], ([$entities, $playerAdd
 export const playerActivity = writable(Activities.Idle);
 export const playerDirection = writable(Directions.Random);
 
-// This value is set once the player spawns
-export const spawnBlock = writable(0);
-// Amount of heartbeats the player has lived
-export const heartbeats = derived([spawnBlock, blockNumber], ([$s, $b]) => $b - $s);
-
 export const playerEnergy = derived([player, blockNumber], ([$player, $blockNumber]) => {
-  if (parseInt(String($player.death)) <= $blockNumber) {
-    return 0;
+  if ($player) {
+    if (parseInt(String($player.death)) <= $blockNumber) {
+      return 0;
+    }
+    // actualEnergy = deathBlock - currentBlock
+    return parseInt(String($player.death)) - $blockNumber;
   }
-  // actualEnergy = deathBlock - currentBlock
-  return parseInt(String($player.death)) - $blockNumber;
+
+  return 0;
 });
 
 // Input: an array of players, outputs, player names
@@ -84,3 +83,22 @@ export function playerList(players: string[]) {
   // HACK: should make sure that the creator array on contract level is unique instead...
   return uniq(playerNames).join(", ");
 }
+
+/**
+ * Are u ded?
+ */
+export const dead = derived(playerEnergy, ($e) => $e < 1);
+
+/**
+ * 🫀
+ */
+export const heartbeats = derived([player, blockNumber, dead], ([$p, $b, $dead]) => {
+  if ($p && $b) {
+    const lifespan = parseInt(String($p.death)) - parseInt(String($p.birth));
+    if ($dead) {
+      return lifespan;
+    } else {
+      return lifespan + ($b - parseInt(String($p.death)));
+    }
+  }
+});
