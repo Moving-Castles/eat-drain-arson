@@ -7,12 +7,12 @@
 
 <div class="ui-taskbar">
   <div>
-    {#if $player.entityType == EntityType.Corpse}
+    <UISurvivalCounter />
+    <!-- {#if $player.entityType == EntityType.Corpse}
       <UISpawn />
     {:else}
-      <!-- <UISpawn /> -->
       <UISurvivalCounter />
-    {/if}
+    {/if} -->
   </div>
 </div>
 

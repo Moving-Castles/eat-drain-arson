@@ -16,6 +16,9 @@
   let shortest: Number;
   let unit = 5;
 
+  const CLOSEST_ZOOM = 3
+  const FURTHEST_ZOOM = 21
+
   function checkForType(gridPosition: Coord, type: EntityType) {
     let entity = Object.values($entities).find(
       (e) =>
@@ -84,12 +87,12 @@
   $: shortest = Math.min(w, h);
 
   function handleZoom(e) {
-    if (e.key === "=") {
+    if (e.key === "-" && unit < FURTHEST_ZOOM) {
       unit += 2;
       grid = [];
       initGrid();
     }
-    if (e.key === "-") {
+    if (e.key === "=" && unit > CLOSEST_ZOOM) {
       unit -= 2;
       grid = [];
       initGrid();

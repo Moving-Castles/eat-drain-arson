@@ -1,6 +1,7 @@
 import { Coord } from "@latticexyz/utils";
 import { writable, get, derived } from "svelte/store";
-import { network } from "./network";
+import { network, blockNumber } from "./network";
+import { calculateEnergy, calculateHeartbeats } from "./player";
 
 export enum EntityType {
   Player,
@@ -43,13 +44,29 @@ export const indexToID = (index: number) => {
 };
 
 // Arrays
-export const players = derived(
-  entities,
-  ($entities) =>
-    Object.values($entities).filter(
-      (e) => e.entityType == EntityType.Player || e.entityType == EntityType.Corpse
-    ) as ArrayLike<Entity>
-);
+export const players = derived([entities, blockNumber], ([$entities, $blockNumber]) => {
+  let ps = Object.values($entities).filter(
+    (e) => e.entityType == EntityType.Player || e.entityType == EntityType.Corpse
+  ) as ArrayLike<Entity>;
+
+  // Now double check for each one if they are dead
+  ps = ps.map((p) => {
+    const energy = calculateEnergy(p, $blockNumber);
+    if (energy < 1) {
+      p.entityType = EntityType.Corpse;
+      console.log("u ded bro");
+    } else if (p.entityType == EntityType.Corpse && energy > 0) {
+      // Looks like you respawned, Padawan...
+      p.entityType = EntityType.Player;
+    }
+    return p;
+  });
+
+  console.log("entities being checked");
+  console.log(ps.map((p) => p.entityType));
+
+  return ps;
+});
 export const fires = derived(entities, ($entities) =>
   Object.values($entities).filter((e) => {
     return e.entityType == EntityType.Fire;

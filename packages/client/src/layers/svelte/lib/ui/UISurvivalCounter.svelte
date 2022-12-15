@@ -13,8 +13,6 @@
   {#key clockTime}
     <div>block: <span class="ch-4">{$blockNumber}</span> / death: <span class="ch-4">{parseInt(String($player.death))}</span> / energy: <span class="ch-4">{$playerEnergy}</span></div>
   {/key}
-
-  {$heartbeats}
 </div>
 
 <style>

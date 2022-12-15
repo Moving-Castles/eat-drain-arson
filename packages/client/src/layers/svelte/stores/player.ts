@@ -54,17 +54,32 @@ export function activityToVerb(activity: Activities) {
 }
 
 export const playerAddress = derived(network, ($network) => $network.network?.connectedAddress.get() || "0x0");
-export const player = derived([entities, playerAddress], ([$entities, $playerAddress]) => $entities[$playerAddress]);
+
+export const player = derived([entities, playerAddress], ([$entities, $playerAddress]) => {
+  return $entities[$playerAddress];
+});
+
 export const playerActivity = writable(Activities.Idle);
+
 export const playerDirection = writable(Directions.Random);
+
+/**
+ * Calculate the player's energy
+ * @param $player
+ * @param $blockNumber
+ * @returns
+ */
+export function calculateEnergy($player, $blockNumber) {
+  if (parseInt(String($player.death)) <= $blockNumber) {
+    return 0;
+  }
+  // actualEnergy = deathBlock - currentBlock
+  return parseInt(String($player.death)) - $blockNumber;
+}
 
 export const playerEnergy = derived([player, blockNumber], ([$player, $blockNumber]) => {
   if ($player) {
-    if (parseInt(String($player.death)) <= $blockNumber) {
-      return 0;
-    }
-    // actualEnergy = deathBlock - currentBlock
-    return parseInt(String($player.death)) - $blockNumber;
+    return calculateEnergy($player, $blockNumber);
   }
 
   return 0;
@@ -89,16 +104,23 @@ export function playerList(players: string[]) {
  */
 export const dead = derived(playerEnergy, ($e) => $e < 1);
 
+export function calculateHeartbeats(player, blockNumber) {
+  const energy = calculateEnergy(player, blockNumber);
+  const lifespan = parseInt(String(player.death)) - parseInt(String(player.birth));
+  if (energy < 1) {
+    return lifespan;
+  } else {
+    return lifespan + (blockNumber - parseInt(String(player.death)));
+  }
+}
+
 /**
  * 🫀
  */
-export const heartbeats = derived([player, blockNumber, dead], ([$p, $b, $dead]) => {
+export const heartbeats = derived([player, blockNumber], ([$p, $b]) => {
   if ($p && $b) {
-    const lifespan = parseInt(String($p.death)) - parseInt(String($p.birth));
-    if ($dead) {
-      return lifespan;
-    } else {
-      return lifespan + ($b - parseInt(String($p.death)));
-    }
+    return calculateHeartbeats($p, $b);
   }
+
+  return 0;
 });

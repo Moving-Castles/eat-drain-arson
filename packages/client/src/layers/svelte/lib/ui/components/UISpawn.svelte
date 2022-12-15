@@ -22,7 +22,7 @@
   {:else}
     <button on:click={spawn}>
       {#if $player}
-        You survived for {$heartbeats} heartbeats. Respawn
+        Respawn
         {:else}
         Spawn
       {/if}

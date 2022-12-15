@@ -2,45 +2,25 @@
   import { flip } from "svelte/animate";
   import { derived } from "svelte/store";
   import { cubicInOut as easing } from "svelte/easing";
-  import { players } from "../../../stores/entities";
-  import { category } from "../../../stores/ui";
-  import { seedToName } from "../../../utils/name";
-  import { EntityType } from "../../../stores/entities";
+  import { calculateHeartbeats } from "../../../../stores/player";
+  import { blockNumber } from "../../../../stores/network";
+  import { players } from "../../../../stores/entities";
+  import { category } from "../../../../stores/ui";
+  import { seedToName } from "../../../../utils/name";
+  import { EntityType } from "../../../../stores/entities";
 
   export let autoplay = 2500;
   // let interval;
   let i = 0;
 
-  const mappings = {
-    gluttony: "eaten",
-    arson: "burnt",
-    exploration: "traveled",
-    hoarding: "gathered",
-  };
-
-  const rankedPlayers = derived([players, category], ([$players, $category]) => {
+  const rankedPlayers = derived([players, blockNumber], ([$players, $blockNumber]) => {
     const arr = [...$players];
-    if (arr.every((p) => p?.stats)) {
-      arr.sort((a, b) => b.stats[mappings[$category]] - a.stats[mappings[$category]]);
-    }
+    arr.sort((a, b) => {
+      return calculateHeartbeats(b, $blockNumber) - calculateHeartbeats(a, $blockNumber)
+    })
     return arr;
   });
-
-  function pick(cat: string) {
-    // pause()
-    i = Object.keys(mappings).indexOf(cat);
-    $category = cat;
-  }
 </script>
-
-<div class="ui-categories">
-  {#each Object.keys(mappings) as cat}
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <span on:click={() => pick(cat)} class="link" class:active={cat === $category}>
-      {cat}
-    </span>
-  {/each}
-</div>
 
 <div class="ui-stats">
   <div class="ranks">
@@ -62,7 +42,7 @@
   <div class="scores">
     {#each $rankedPlayers as player, i (player.seed + i)}
       <div class="ui-stat-row">
-        <span>{player.stats ? player.stats[mappings[$category]] : ""}</span>
+        <span>{calculateHeartbeats(player, $blockNumber)}</span>
       </div>
     {/each}
   </div>

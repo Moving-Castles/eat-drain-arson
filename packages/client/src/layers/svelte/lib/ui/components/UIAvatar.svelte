@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { cloneDeep } from "lodash"
+  import UIDied from "../UIDied.svelte"
   import { playSound } from "../../../../howler";
   import UIMetric from "./UIMetric.svelte";
-  import { Activities, activityToVerb, player, playerActivity, playerEnergy, playerAddress, dead } from "../../../stores/player";
+  import { Activities, activityToVerb, player, playerActivity, playerEnergy, dead } from "../../../stores/player";
   import { seedToName, seedToMask } from "../../../utils/name";
-  import { entities, EntityType } from "../../../stores/entities";
+  import { EntityType } from "../../../stores/entities";
 
   let activitySound = {};
 
@@ -36,18 +36,11 @@
     }
   });
 
-  function setDead () {
-    const ent = cloneDeep($player)
-    ent.entityType = EntityType.Corpse
-    $entities[$playerAddress] = ent
-  }
-
-
   $: {
-    console.log($dead)
-    console.log($playerAddress, $entities)
-    if ($dead) setDead()
+    console.log('check in w player again ')
+    console.log($player)
   }
+
 </script>
 
 <div class="ui-avatar">
@@ -93,9 +86,22 @@
       <video src={"/animations/" + seedToMask($player.seed) + "/Idle.mp4"} autoplay muted loop />
     {/if}
   </div>
+
+  {#if $dead}
+    <div class="ui-overlay">
+      <UIDied />
+    </div>
+  {/if}
 </div>
 
 <style>
+  .ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
   .activity {
     text-align: center;
     width: 100%;

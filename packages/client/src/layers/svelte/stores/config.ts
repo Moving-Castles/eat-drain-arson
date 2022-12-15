@@ -5,7 +5,8 @@ import UIMap from "../lib/ui/components/UIMap.svelte";
 import UIGridMap from "../lib/ui/components/UIGridMap/UIGridMap.svelte";
 import UIView from "../lib/ui/components/UIView.svelte";
 import UIDebugLog from "../lib/ui/components/UIDebugLog.svelte";
-import UILeaderBoard from "../lib/ui/components/UILeaderBoard.svelte";
+import UILeaderBoard from "../lib/ui/components/UILeaderBoards/UILeaderBoard.svelte";
+import UISurvivalLeaderBoard from "../lib/ui/components/UILeaderBoards/UISurvivalLeaderBoard.svelte";
 import UIFires from "../lib/ui/components/UIFires/UIFires.svelte";
 // --- Operations Editors
 import UIPlanner from "../lib/ui/components/UIOperationsEditor/UIPlanner.svelte";
@@ -177,7 +178,24 @@ export const initialState = () => ({
   leaderboard: initialise({
     id: "leaderboard",
     title: "Leaderboard",
-    component: UIFires,
+    component: UILeaderBoard,
+    active: false,
+    options: {
+      fluid: true,
+      delay: makeDelay(),
+      layer: 2,
+    },
+    grid: {
+      col: [1, 2],
+      row: [6, 10],
+    },
+    hidden: true,
+  }),
+  // SURVIVAL
+  survival: initialise({
+    id: "survival",
+    title: "Survival",
+    component: UISurvivalLeaderBoard,
     active: true,
     options: {
       fluid: true,
