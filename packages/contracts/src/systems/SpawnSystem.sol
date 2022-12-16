@@ -4,7 +4,7 @@ import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { EntityType } from "../types.sol";
-import { WORLD_HEIGHT, WORLD_WIDTH, INITIAL_ENERGY, INITIAL_RESOURCE } from "../config.sol";
+import { WORLD_HEIGHT, WORLD_WIDTH, INITIAL_ENERGY, INITIAL_RESOURCE, MAX_INACTIVITY } from "../config.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
@@ -54,7 +54,7 @@ contract SpawnSystem is System {
 
   function setDeath(uint256 entity) private {
     DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
-    deathComponent.set(entity, block.number + INITIAL_ENERGY);
+    deathComponent.set(entity, block.number + MAX_INACTIVITY);
   }
 
   function setStats(uint256 entity) private {

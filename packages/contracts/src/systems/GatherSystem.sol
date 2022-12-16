@@ -6,7 +6,7 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { Perlin } from "noise/Perlin.sol";
 import { ABDKMath64x64 as Math } from "abdk-libraries-solidity/ABDKMath64x64.sol";
-import { SPAWN_RESOURCE_PER_POSITION } from "../config.sol";
+import { SPAWN_RESOURCE_PER_POSITION, MAX_INACTIVITY } from "../config.sol";
 import { EntityType } from "../types.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
@@ -21,12 +21,6 @@ uint256 constant ID = uint256(keccak256("system.Gather"));
 
 contract GatherSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
-
-  function getLazyUpdateEnergy(uint256 player) private view returns (uint32) {
-    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
-    // actualEnergy = deathBlock - currentBlock
-    return uint32(deathComponent.getValue(player) - block.number);
-  }
 
   function checkForEntity(Coord memory position, uint32 typeOfEntity) private view returns (uint256[] memory) {
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
@@ -140,9 +134,7 @@ contract GatherSystem is System {
   function updatePlayer(uint256 player, uint32 energyInput) private {
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
-    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
 
-    deathComponent.set(player, deathComponent.getValue(player) - energyInput);
     energyComponent.set(player, energyComponent.getValue(player) - energyInput);
     coolDownComponent.set(player, block.number + 10);
   }
@@ -163,6 +155,11 @@ contract GatherSystem is System {
       entityTypeComponent.set(player, uint32(EntityType.Corpse));
       coolDownComponent.set(player, 0);
     }
+  }
+
+  function updateDeathBlock(uint256 player) private {
+    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
+    deathComponent.set(player, block.number + MAX_INACTIVITY);
   }
 
   function execute(bytes memory arguments) public returns (bytes memory) {
@@ -188,6 +185,7 @@ contract GatherSystem is System {
     }
 
     updatePlayer(entity, energyInput);
+    updateDeathBlock(entity);
     checkIfDead(entity);
   }
 

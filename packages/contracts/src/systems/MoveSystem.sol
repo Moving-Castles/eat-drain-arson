@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
-import { WORLD_HEIGHT, WORLD_WIDTH, MAX_DISTANCE } from "../config.sol";
+import { WORLD_HEIGHT, WORLD_WIDTH, MAX_DISTANCE, MAX_INACTIVITY } from "../config.sol";
 import { EntityType, Direction } from "../types.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
@@ -17,12 +17,6 @@ uint256 constant ID = uint256(keccak256("system.Move"));
 
 contract MoveSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
-
-  function getLazyUpdateEnergy(uint256 player) private view returns (uint32) {
-    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
-    // actualEnergy = deathBlock - currentBlock
-    return uint32(deathComponent.getValue(player) - block.number);
-  }
 
   function checkRequirements(uint256 player, uint32 energyInput) private {
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
@@ -80,10 +74,7 @@ contract MoveSystem is System {
   function updatePlayer(uint256 player, uint32 energyInput) private {
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
-    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
-
-    deathComponent.set(player, deathComponent.getValue(player) - energyInput);
-    energyComponent.set(player, getLazyUpdateEnergy(player) - energyInput);
+    energyComponent.set(player, energyComponent.getValue(player) - energyInput);
     coolDownComponent.set(player, block.number + 10);
   }
 
@@ -105,6 +96,11 @@ contract MoveSystem is System {
     }
   }
 
+  function updateDeathBlock(uint256 player) private {
+    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
+    deathComponent.set(player, block.number + MAX_INACTIVITY);
+  }
+
   function execute(bytes memory arguments) public returns (bytes memory) {
     (uint256 entity, uint32 energyInput, uint32 direction) = abi.decode(arguments, (uint256, uint32, uint32));
 
@@ -121,6 +117,7 @@ contract MoveSystem is System {
 
     updatePlayer(entity, energyInput);
     updateStats(entity, steps);
+    updateDeathBlock(entity);
     checkIfDead(entity);
   }
 

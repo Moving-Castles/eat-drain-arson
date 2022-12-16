@@ -4,7 +4,7 @@ import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById } from "solecs/utils.sol";
 import { EntityType } from "../types.sol";
-import { PLAYING_DURATION } from "../config.sol";
+import { PLAYING_DURATION, MAX_INACTIVITY } from "../config.sol";
 
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
@@ -17,12 +17,6 @@ uint256 constant ID = uint256(keccak256("system.Play"));
 
 contract PlaySystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
-
-  function getLazyUpdateEnergy(uint256 player) private view returns (uint32) {
-    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
-    // actualEnergy = deathBlock - currentBlock
-    return uint32(deathComponent.getValue(player) - block.number);
-  }
 
   function checkRequirements(uint256 player, uint32 energyInput) private {
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
@@ -42,17 +36,15 @@ contract PlaySystem is System {
       require(false, "death block past. you are dead");
     }
     // Require the player to have enough energy
-    require(getLazyUpdateEnergy(player) >= energyInput, "not enough energy");
+    require(energyComponent.getValue(player) >= energyInput, "not enough energy");
   }
 
   function updatePlayer(uint256 player, uint32 energyInput) private {
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     PlayingComponent playingComponent = PlayingComponent(getAddressById(components, PlayingComponentID));
-    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
 
-    deathComponent.set(player, deathComponent.getValue(player) - energyInput);
-    energyComponent.set(player, getLazyUpdateEnergy(player) - energyInput);
+    energyComponent.set(player, energyComponent.getValue(player) - energyInput);
     coolDownComponent.set(player, block.number + PLAYING_DURATION);
     playingComponent.set(player, block.number + PLAYING_DURATION);
   }
@@ -75,11 +67,17 @@ contract PlaySystem is System {
     }
   }
 
+  function updateDeathBlock(uint256 player) private {
+    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
+    deathComponent.set(player, block.number + MAX_INACTIVITY);
+  }
+
   function execute(bytes memory arguments) public returns (bytes memory) {
     (uint256 entity, uint32 energyInput) = abi.decode(arguments, (uint256, uint32));
     checkRequirements(entity, energyInput);
     updatePlayer(entity, energyInput);
     updateStats(entity, energyInput);
+    updateDeathBlock(entity);
     checkIfDead(entity);
   }
 

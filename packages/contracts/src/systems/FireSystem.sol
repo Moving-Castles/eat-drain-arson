@@ -5,7 +5,7 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { EntityType } from "../types.sol";
-import { MINIMUM_FIRE_SIZE, FIRE_BURNTIME_MULTIPLIER, COST_TO_MAKE_FIRE } from "../config.sol";
+import { MINIMUM_FIRE_SIZE, FIRE_BURNTIME_MULTIPLIER, COST_TO_MAKE_FIRE, MAX_INACTIVITY } from "../config.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
@@ -21,12 +21,6 @@ uint256 constant ID = uint256(keccak256("system.Fire"));
 
 contract FireSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
-
-  function getLazyUpdateEnergy(uint256 player) private view returns (uint32) {
-    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
-    // actualEnergy = deathBlock - currentBlock
-    return uint32(deathComponent.getValue(player) - block.number);
-  }
 
   function checkRequirements(uint256 player, uint32 resourceInput) private {
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
@@ -118,9 +112,7 @@ contract FireSystem is System {
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
-    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
 
-    deathComponent.set(player, deathComponent.getValue(player) - COST_TO_MAKE_FIRE);
     resourceComponent.set(player, resourceComponent.getValue(player) - resourceInput);
     energyComponent.set(player, energyComponent.getValue(player) - COST_TO_MAKE_FIRE);
     coolDownComponent.set(player, block.number + 10);
@@ -144,6 +136,11 @@ contract FireSystem is System {
     }
   }
 
+  function updateDeathBlock(uint256 player) private {
+    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
+    deathComponent.set(player, block.number + MAX_INACTIVITY);
+  }
+
   function execute(bytes memory arguments) public returns (bytes memory) {
     (uint256 entity, uint32 resourceInput) = abi.decode(arguments, (uint256, uint32));
 
@@ -162,6 +159,7 @@ contract FireSystem is System {
     updatePlayer(entity, resourceInput);
     updateStats(entity, resourceInput);
     checkIfDead(entity);
+    updateDeathBlock(entity);
   }
 
   function executeTyped(uint256 entity, uint32 resourceInput) public returns (bytes memory) {
