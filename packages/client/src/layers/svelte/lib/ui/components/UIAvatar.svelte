@@ -1,5 +1,5 @@
 <script lang="ts">
-  import UIDied from "../UIDied.svelte"
+  import UIDied from "../UIDied.svelte";
   import { playSound } from "../../../../howler";
   import UIMetric from "./UIMetric.svelte";
   import { Activities, activityToVerb, player, playerActivity, playerEnergy, dead } from "../../../stores/player";
@@ -36,11 +36,10 @@
     }
   });
 
-  $: {
-    console.log('check in w player again ')
-    console.log($player)
-  }
-
+  // $: {
+  //   console.log('check in w player again ')
+  //   console.log($player)
+  // }
 </script>
 
 <div class="ui-avatar">
