@@ -1,7 +1,8 @@
 <script lang="ts">
   import { playSound } from "../../../howler";
   import { uiState } from "../../stores/ui";
-  export let id;
+  import { UIComponentOptions } from "../../stores/config";
+  export let id: string;
   export let title = "";
   export let options: UIComponentOptions;
 </script>

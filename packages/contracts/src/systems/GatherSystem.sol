@@ -22,7 +22,19 @@ uint256 constant ID = uint256(keccak256("system.Gather"));
 contract GatherSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  function checkForEntity(Coord memory position, uint32 typeOfEntity) private view returns (uint256[] memory) {
+  function checkForPlayersPastDeathBlock(Coord memory position) private view returns (uint256) {
+    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
+    uint256[] memory playersAtPosition = checkForEntity(position, EntityType.Player);
+
+    for (uint32 i = 0; i < playersAtPosition.length; i++) {
+      if (deathComponent.getValue(playersAtPosition[i]) >= block.number) {
+        return playersAtPosition[i];
+      }
+    }
+    return 0;
+  }
+
+  function checkForEntity(Coord memory position, EntityType typeOfEntity) private view returns (uint256[] memory) {
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
 
@@ -93,7 +105,7 @@ contract GatherSystem is System {
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
 
     // Check for terrain component in current location
-    uint256[] memory terrainAtPosition = checkForEntity(position, uint32(EntityType.Terrain));
+    uint256[] memory terrainAtPosition = checkForEntity(position, EntityType.Terrain);
 
     uint32 resourceToExtract = getResourcesToExtract(position, energyInput);
 
@@ -172,16 +184,21 @@ contract GatherSystem is System {
     Coord memory playerPosition = positionComponent.getValue(entity);
 
     // Require there to not be a fire in position
-    require(checkForEntity(playerPosition, uint32(EntityType.Fire)).length == 0, "can not gather in fire");
+    require(checkForEntity(playerPosition, EntityType.Fire).length == 0, "can not gather in fire");
 
     // Check for corpses in current location
-    uint256[] memory corpsesAtPosition = checkForEntity(playerPosition, uint32(EntityType.Corpse));
+    uint256[] memory corpsesAtPosition = checkForEntity(playerPosition, EntityType.Corpse);
 
     if (corpsesAtPosition.length > 0) {
       cannabalize(entity, corpsesAtPosition[0]);
     } else {
-      uint32 extractedResources = gather(entity, playerPosition, energyInput);
-      updateStats(entity, extractedResources);
+      uint256 semiDeadPlayer = checkForPlayersPastDeathBlock(playerPosition);
+      if (semiDeadPlayer != 0) {
+        cannabalize(entity, semiDeadPlayer);
+      } else {
+        uint32 extractedResources = gather(entity, playerPosition, energyInput);
+        updateStats(entity, extractedResources);
+      }
     }
 
     updatePlayer(entity, energyInput);

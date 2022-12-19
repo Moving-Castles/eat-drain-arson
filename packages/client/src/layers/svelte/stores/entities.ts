@@ -54,16 +54,12 @@ export const players = derived([entities, blockNumber], ([$entities, $blockNumbe
     const energy = calculateEnergy(p, $blockNumber);
     if (energy < 1) {
       p.entityType = EntityType.Corpse;
-      console.log("u ded bro");
     } else if (p.entityType == EntityType.Corpse && energy > 0) {
       // Looks like you respawned, Padawan...
       p.entityType = EntityType.Player;
     }
     return p;
   });
-
-  console.log("entities being checked");
-  console.log(ps.map((p) => p.entityType));
 
   return ps;
 });

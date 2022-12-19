@@ -1,46 +1,43 @@
 <script lang="ts">
-  import UIDied from "../UIDied.svelte"
+  import type { Howl } from "howler";
+  import UIDied from "../UIDied.svelte";
   import { playSound } from "../../../../howler";
   import UIMetric from "./UIMetric.svelte";
-  import { Activities, activityToVerb, player, playerActivity, playerEnergy, dead } from "../../../stores/player";
+  import { Activities, activityToVerb, player, playerActivity, timeToLive, dead } from "../../../stores/player";
   import { seedToName, seedToMask } from "../../../utils/name";
   import { EntityType } from "../../../stores/entities";
 
-  let activitySound = {};
+  let activitySound: Howl;
 
   playerActivity.subscribe((activity) => {
-    if (activitySound.volume && activitySound.playing()) {
+    if (activitySound && activitySound.playing()) {
       activitySound.stop();
     }
 
-    if (activity === Activities.Moving) {
-      activitySound = playSound("walking", "activity", true);
-    }
-    if (activity === Activities.Eating) {
-      activitySound = playSound("eating", "activity", true);
-    }
-    if (activity === Activities.Gathering) {
-      activitySound = playSound("digging", "activity", true);
-    }
-    if (activity === Activities.Burning) {
-      activitySound = playSound("fire", "environment", true);
-    }
-    if (activity === Activities.Idle) {
-      activitySound = playSound("idle", "activity", true);
-    }
-    if (activity === Activities.Playing) {
-      activitySound = playSound(String(seedToMask($player.seed || 0)), "play", true);
-    }
-    if (activity === Activities.Dead) {
-      activitySound = playSound("death", "ui");
+    switch (activity) {
+      case Activities.Moving:
+        activitySound = playSound("walking", "activity", true);
+        break;
+      case Activities.Eating:
+        activitySound = playSound("eating", "activity", true);
+        break;
+      case Activities.Gathering:
+        activitySound = playSound("digging", "activity", true);
+        break;
+      case Activities.Burning:
+        activitySound = playSound("fire", "environment", true);
+        break;
+      case Activities.Idle:
+        activitySound = playSound("idle", "activity", true);
+        break;
+      case Activities.Playing:
+        activitySound = playSound(String(seedToMask($player.seed || 0)), "play", true);
+        break;
+      case Activities.Dead:
+        activitySound = playSound("death", "ui");
+        break;
     }
   });
-
-  $: {
-    console.log('check in w player again ')
-    console.log($player)
-  }
-
 </script>
 
 <div class="ui-avatar">
@@ -62,7 +59,8 @@
   </div>
 
   <div class="resources">
-    <UIMetric label="Energy" key="energy" value={playerEnergy} />
+    <UIMetric label="Life" value={timeToLive} />
+    <UIMetric label="Energy" key="energy" />
     <UIMetric label="Sludge" key="resource" />
   </div>
 

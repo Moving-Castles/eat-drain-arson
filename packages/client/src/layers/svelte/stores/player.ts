@@ -99,11 +99,6 @@ export function playerList(players: string[]) {
   return uniq(playerNames).join(", ");
 }
 
-/**
- * Are u ded?
- */
-export const dead = derived(playerEnergy, ($e) => $e < 1);
-
 export function calculateHeartbeats(player, blockNumber) {
   const energy = calculateEnergy(player, blockNumber);
   const lifespan = parseInt(String(player.death)) - parseInt(String(player.birth));
@@ -123,4 +118,20 @@ export const heartbeats = derived([player, blockNumber], ([$p, $b]) => {
   }
 
   return 0;
+});
+
+export const timeToLive = derived([player, blockNumber], ([$player, $blockNumber]) => {
+  if ($player && $blockNumber) {
+    return Math.max(0, ($player.death || 0) - $blockNumber);
+  }
+  return 0;
+});
+
+/**
+ * Are u ded?
+ */
+export const dead = derived([player, timeToLive], ([$player, $timeToLive]) => {
+  if (($player.energy || 0) <= 0) return true;
+  if ($timeToLive <= 0) return true;
+  return false;
 });

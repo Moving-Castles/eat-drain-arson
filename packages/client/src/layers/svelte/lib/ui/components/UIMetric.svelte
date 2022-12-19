@@ -1,53 +1,50 @@
-<script>
-  export let label
-  export let key
-  // You can also pass the value
-  export let value = undefined // You can pass a store
-
+<script lang="ts">
+  import type { Readable } from "svelte/store";
   import { entities } from "../../../stores/entities";
-  import { player } from "../../../stores/player"
+  import { player } from "../../../stores/player";
   import { blockNumber } from "../../../stores/network";
   import { tweened } from "svelte/motion";
 
-  let direction
-  let timeout
-  let readonly
-  
+  export let label = "";
+  export let key = "";
+  // You can also pass the value
+  export let value: Readable<number> | undefined = undefined; // You can pass a store
+
+  let direction: number;
+  let timeout: number;
+  let readonly = false;
+
   if (!value) {
     value = tweened($player[key]);
   } else {
-    readonly = true
+    readonly = true;
   }
 
   if (!readonly) {
     entities.subscribe((v) => {
       // clearTimeout(timeout)
-      let duration = ($player.coolDownBlock - $blockNumber) * 1000;
+      let duration = ($player.coolDownBlock || 0 - $blockNumber) * 1000;
       duration = duration > 0 ? duration : 1000;
-      
-      let newValue = $player[key]
-      direction = Math.sign(newValue - $value)
-  
+
+      let newValue: number = $player[key];
+      direction = Math.sign(newValue - $value);
+
       if (newValue !== $value) {
-        clearTimeout(timeout)
+        clearTimeout(timeout);
         value.set(newValue, { duration });
-        timeout = setTimeout(resetDirection, duration)
+        timeout = window.setTimeout(resetDirection, duration);
       }
-    })
+    });
   }
 
-  function resetDirection () {
-    direction = 0
+  function resetDirection() {
+    direction = 0;
   }
 </script>
 
 <div class="large-indicator">
   <div class="label">{label}</div>
-  <div
-    class="value"
-    class:up={direction > 0}
-    class:down={direction < 0}
-  >
+  <div class="value" class:up={direction > 0} class:down={direction < 0}>
     <span>{Math.round($value)}</span>
   </div>
 </div>
@@ -94,14 +91,13 @@
   }
 
   @keyframes up {
-    to { 
+    to {
       color: var(--success);
     }
   }
 
-
   @keyframes down {
-    to { 
+    to {
       color: var(--failure);
     }
   }

@@ -11,7 +11,11 @@
 
 <div class="ui-clock">
   {#key clockTime}
-    <div>block: <span class="ch-4">{$blockNumber}</span> / death: <span class="ch-4">{parseInt(String($player.death))}</span> / energy: <span class="ch-4">{$playerEnergy}</span></div>
+    <div>
+      block: <span class="ch-4">{$blockNumber}</span> / death:
+      <span class="ch-4">{parseInt(String($player.death))}</span>
+      / energy: <span class="ch-4">{$player.energy}</span>
+    </div>
   {/key}
 </div>
 

@@ -1,11 +1,11 @@
-<script>
+<script lang="ts">
   import { playSound } from "../../../howler";
   import { player } from "../../stores/player";
   import { menuVisible, uiState } from "../../stores/ui";
   import { fade } from "svelte/transition";
   import { speed, fragSpeed } from "../../stores/ui";
 
-  const ids = ['memory', 'leaderboard', 'fires', 'grid-map']
+  const ids = ["memory", "leaderboard", "fires", "grid-map"];
 
   const toggle = () => {
     playSound("cursor", "ui");
@@ -13,34 +13,34 @@
   };
 
   const handleShortcuts = ({ code }) => {
-    if (code === 'Escape') {
+    if (code === "Escape") {
       if ($menuVisible) {
-        toggle()
+        toggle();
       }
     }
-    if (code === 'KeyM') {
-      uiState.toggle('memory', 'active')
+    if (code === "KeyM") {
+      uiState.toggle("memory", "active");
     }
-    if (code === 'KeyL') {
-      uiState.toggle('leaderboard', 'active')
+    if (code === "KeyL") {
+      uiState.toggle("leaderboard", "active");
     }
-    if (code === 'KeyF') {
-      uiState.toggle('fires', 'active')
+    if (code === "KeyF") {
+      uiState.toggle("fires", "active");
     }
-    if (code === 'KeyS') {
-      uiState.toggle('grid-map', 'active')
+    if (code === "KeyS") {
+      uiState.toggle("grid-map", "active");
     }
-  }
+  };
 
-  function shortcut (item) {
+  function shortcut(item) {
     if (ids.includes(item.id)) {
-      return `(${item.title[0].toLowerCase()})`
+      return `(${item.title[0].toLowerCase()})`;
     }
-    return ''
+    return "";
   }
 </script>
 
-<svelte:window on:keydown={handleShortcuts}></svelte:window>
+<svelte:window on:keydown={handleShortcuts} />
 
 {#if $player}
   <div class="ui-menu-container" class:open={$menuVisible}>
@@ -58,7 +58,8 @@
                 uiState.toggle(item.id, "active");
               }}
             >
-              [{item.active ? "x" : "/"}] {item.title} {shortcut(item)}
+              [{item.active ? "x" : "/"}] {item.title}
+              {shortcut(item)}
             </li>
           {/if}
         {/each}
