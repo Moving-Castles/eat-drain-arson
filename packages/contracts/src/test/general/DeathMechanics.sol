@@ -5,15 +5,11 @@ import "../MudTest.t.sol";
 import { EntityType } from "../../types.sol";
 import { MAX_INACTIVITY } from "../../config.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
-import { DeathComponent, ID as DeathComponentID } from "../../components/DeathComponent.sol";
 import { MoveSystem, ID as MoveSystemID } from "../../systems/MoveSystem.sol";
 
 contract DeathMechanicsTest is MudTest {
   function testExecute() public {
     uint256 alice = 1;
-
-    // Initialize components
-    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
 
     // Spawn Alice
     console.log("block:");
@@ -25,9 +21,11 @@ contract DeathMechanicsTest is MudTest {
 
     vm.roll(MAX_INACTIVITY);
 
+    MoveSystem moveSystem = MoveSystem(system(MoveSystemID));
+
     console.log("block:");
     console.log(block.number);
-    MoveSystem(system(MoveSystemID)).executeTyped(alice, 10, 3);
+    moveSystem.executeTyped(alice, 10, 3);
     console.log("deathBlock:");
     console.log(deathComponent.getValue(alice));
     assertEq(deathComponent.getValue(alice), block.number + MAX_INACTIVITY);
@@ -37,6 +35,6 @@ contract DeathMechanicsTest is MudTest {
     console.log("block:");
     console.log(block.number);
     vm.expectRevert("death block past. you are dead");
-    MoveSystem(system(MoveSystemID)).executeTyped(alice, 10, 3);
+    moveSystem.executeTyped(alice, 10, 3);
   }
 }

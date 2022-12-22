@@ -19,3 +19,5 @@ uint32 constant COST_TO_MAKE_FIRE = 50;
 int32 constant MAX_DISTANCE = 5;
 // --- PLAY
 uint32 constant PLAYING_DURATION = 20;
+// --- COOLDOWN
+uint32 constant GENERIC_ACTION_COOLDOWN = 10;

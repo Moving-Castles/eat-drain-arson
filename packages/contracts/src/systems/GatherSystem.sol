@@ -6,7 +6,7 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { Perlin } from "noise/Perlin.sol";
 import { ABDKMath64x64 as Math } from "abdk-libraries-solidity/ABDKMath64x64.sol";
-import { SPAWN_RESOURCE_PER_POSITION, MAX_INACTIVITY } from "../config.sol";
+import { SPAWN_RESOURCE_PER_POSITION, MAX_INACTIVITY, GENERIC_ACTION_COOLDOWN } from "../config.sol";
 import { EntityType } from "../types.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
@@ -136,7 +136,7 @@ contract GatherSystem is System {
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
 
     energyComponent.set(player, energyComponent.getValue(player) - energyInput);
-    coolDownComponent.set(player, block.number + 10);
+    coolDownComponent.set(player, block.number + GENERIC_ACTION_COOLDOWN);
   }
 
   function updateStats(uint256 entity, uint32 resourceToExtract) private {

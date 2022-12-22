@@ -7,18 +7,10 @@ import { INITIAL_ENERGY } from "../../config.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { PlaySystem, ID as PlaySystemID } from "../../systems/PlaySystem.sol";
-import { EnergyComponent, ID as EnergyComponentID } from "../../components/EnergyComponent.sol";
-import { CoolDownComponent, ID as CoolDownComponentID } from "../../components/CoolDownComponent.sol";
-import { PlayingComponent, ID as PlayingComponentID } from "../../components/PlayingComponent.sol";
 
 contract PlaySystemTest is MudTest {
   function testExecute() public {
     uint256 entity = 42;
-
-    // Initialize components
-    EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
-    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
-    PlayingComponent playingComponent = PlayingComponent(getAddressById(components, PlayingComponentID));
 
     // Spawn player
     SpawnSystem(system(SpawnSystemID)).executeTyped(entity);

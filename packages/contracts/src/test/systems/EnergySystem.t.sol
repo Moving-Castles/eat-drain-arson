@@ -4,47 +4,40 @@ pragma solidity >=0.8.0;
 import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
 import { Cheats } from "../utils/Cheats.sol";
-import { INITIAL_ENERGY, INITIAL_RESOURCE } from "../../config.sol";
+import { INITIAL_ENERGY, INITIAL_RESOURCE, RESOURCE_TO_ENERGY_CONVERSION_RATE } from "../../config.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { GatherSystem, ID as GatherSystemID } from "../../systems/GatherSystem.sol";
-import { ResourceComponent, ID as ResourceComponentID } from "../../components/ResourceComponent.sol";
 import { EnergySystem, ID as EnergySystemID } from "../../systems/EnergySystem.sol";
-import { EnergyComponent, ID as EnergyComponentID } from "../../components/EnergyComponent.sol";
-import { StatsComponent, ID as StatsComponentID, Stats } from "../../components/StatsComponent.sol";
 import { ComponentDevSystem, ID as ComponentDevSystemID } from "../../systems/ComponentDevSystem.sol";
 
 contract EnergySystemTest is MudTest {
-  function testExecute() public {
-    uint256 entity = 1;
+  function testExecute(uint32 initialResources) public {
+    // avoid overflow
+    vm.assume(initialResources <= type(uint32).max / RESOURCE_TO_ENERGY_CONVERSION_RATE - INITIAL_ENERGY);
 
-    // Initialize components
-    EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
-    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
-    StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
+    uint256 entity = 1;
 
     // Spawn player
     SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
 
     console.log(resourceComponent.getValue(entity));
 
-    // Give player 50 resources
-    // ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
-    //   ResourceComponentID,
-    //   entity,
-    //   abi.encodePacked(uint32(50))
-    // );
-
-    console.logBytes(abi.encodePacked(uint32(50)));
+    // Give player initial resources
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      ResourceComponentID,
+      entity,
+      abi.encode(initialResources)
+    );
 
     console.log(resourceComponent.getValue(entity));
 
-    // Convert 50 resource => 250 energy
-    EnergySystem(system(EnergySystemID)).executeTyped(entity, 50);
+    // Convert resources => energy
+    EnergySystem(system(EnergySystemID)).executeTyped(entity, initialResources);
     // 0
     assertEq(resourceComponent.getValue(entity), 0);
-    // INITIAL_ENERGY + 250
-    assertEq(energyComponent.getValue(entity), INITIAL_ENERGY + 250);
+    // INITIAL_ENERGY + initialResources * RESOURCE_TO_ENERGY_CONVERSION_RATE
+    assertEq(energyComponent.getValue(entity), INITIAL_ENERGY + initialResources * RESOURCE_TO_ENERGY_CONVERSION_RATE);
     // Check stats are updated
-    assertEq(statsComponent.getValue(entity).eaten, 50);
+    assertEq(statsComponent.getValue(entity).eaten, initialResources);
   }
 }
