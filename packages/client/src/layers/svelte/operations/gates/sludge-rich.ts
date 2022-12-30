@@ -1,14 +1,19 @@
 import { get } from "svelte/store";
-import { player, playerEnergy } from "../../stores/player";
-import { directToLog, LogEntryType } from "../../stores/narrative";
+import { player } from "../../stores/player";
+import { Operation, OperationCategory } from "../types";
 
-export function sludgeRich() {
-  directToLog("You open the vessel you use to store the sludge...");
-  if ((get(player).resource || 0) > 200) {
-    directToLog("It is almost full", LogEntryType.Success);
-    return true;
-  } else {
-    directToLog("Not much there.", LogEntryType.Failure);
-    return false;
-  }
-}
+export const sludgeRich: Operation = {
+  name: "sludge rich?",
+  category: OperationCategory.Gate,
+  metadata: {
+    description: "Are you carrying enough sludge to survive for a while?",
+    positiveMessage: "It is almost full.",
+    negativeMessage: "Not much there.",
+    errorMessage: "Gate failed",
+  },
+  costs: [],
+  requirement: () => {
+    return (get(player).resource || 0) > 200 ? true : false;
+  },
+  execute: () => false,
+};

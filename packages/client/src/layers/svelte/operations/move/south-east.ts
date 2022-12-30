@@ -1,15 +1,26 @@
 import { get } from "svelte/store";
+import { Operation, OperationCategory, checkCosts } from "../types";
 import { network } from "../../stores/network";
-import { player, playerEnergy } from "../../stores/player";
+import { player } from "../../stores/player";
 import { Directions } from "../../utils/space";
-import { directToLog, LogEntryType } from "../../stores/narrative";
 
-export function southEast() {
-  if ((get(playerEnergy) || 0) >= 10) {
-    get(network).api?.move(10, Directions.SouthEast);
+export const southEast: Operation = {
+  name: "south-east",
+  category: OperationCategory.Move,
+  metadata: {
+    description: "Move south east",
+    errorMessage: "Movement failed: not enough energy",
+  },
+  costs: [
+    {
+      energy: 10,
+    },
+  ],
+  requirement: (costs) => {
+    if (!checkCosts(costs, get(player))) return false;
     return true;
-  } else {
-    directToLog("You do not have enough energy to do this", LogEntryType.Failure);
-    return false;
-  }
-}
+  },
+  execute: () => {
+    return get(network).api?.move(10, Directions.SouthEast);
+  },
+};

@@ -1,4 +1,4 @@
-import { Coord } from "@latticexyz/recs";
+import { Coord } from "@latticexyz/utils";
 import { Entity } from "../../../../stores/entities";
 import { TerrainType } from "../../../../utils/space";
 

@@ -1,4 +1,4 @@
-import { Coord } from "@latticexyz/recs";
+import { Coord } from "@latticexyz/utils";
 
 export enum TerrainType {
   Dust,

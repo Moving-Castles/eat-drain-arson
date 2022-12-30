@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { onMount } from "svelte"
+  import { onMount } from "svelte";
   import { playSound } from "../../../../../howler";
   import { tooltip } from "../UIToolTip/index";
-  import { operations, Operation } from "../../../../operations/";
+  import { operations } from "../../../../operations/";
+  import { Operation, OperationCategoryString } from "../../../../operations/types";
   import { uiState } from "../../../../stores/ui";
   import {
     sequence,
@@ -49,11 +50,11 @@
 
   onMount(() => {
     if ($sequence) {
-      $sequence.forEach(s => {
-        add(s.operation)
-      })
+      $sequence.forEach((s) => {
+        add(s.operation);
+      });
     }
-  })
+  });
 </script>
 
 <div class="ui-operations-editor">
@@ -61,7 +62,7 @@
   <div class="operation-grid">
     {#each localSequence as sequenceElement}
       <div class="slot-container">
-        <div class="slot {sequenceElement.operation.category}">
+        <div class="slot {OperationCategoryString[sequenceElement.operation.category]}">
           <div class="operation-info">
             <div class="operation-name">
               {sequenceElement.operation.name}
@@ -99,13 +100,12 @@
         {#each operations.filter((o) => o.category === category) as operation}
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <div
-            title={operation.narration.description}
-            data-description={operation.narration.cost}
+            title={operation.metadata.description}
             use:tooltip
             on:mouseenter={() => {
               playSound("cursor", "ui");
             }}
-            class="operation {operation.category} action-filled"
+            class="operation {OperationCategoryString[operation.category]} action-filled"
             on:click={() => {
               add(operation);
             }}

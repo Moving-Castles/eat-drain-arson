@@ -1,7 +1,7 @@
 <script lang="ts">
   import UIGridTile from "./UIGridTile.svelte";
   import { GridTile } from "./index";
-  import { Coord } from "@latticexyz/recs";
+  import { Coord } from "@latticexyz/utils";
   import { onMount } from "svelte";
   import { entities, EntityType } from "../../../../stores/entities";
   import { Activities, player, playerActivity, playerDirection } from "../../../../stores/player";
@@ -16,8 +16,8 @@
   let shortest: Number;
   let unit = 5;
 
-  const CLOSEST_ZOOM = 3
-  const FURTHEST_ZOOM = 21
+  const CLOSEST_ZOOM = 3;
+  const FURTHEST_ZOOM = 21;
 
   function checkForType(gridPosition: Coord, type: EntityType) {
     let entity = Object.values($entities).find(

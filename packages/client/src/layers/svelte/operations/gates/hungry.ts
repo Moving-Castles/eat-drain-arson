@@ -1,14 +1,19 @@
 import { get } from "svelte/store";
-import { player, playerEnergy } from "../../stores/player";
-import { directToLog, LogEntryType } from "../../stores/narrative";
+import { Operation, OperationCategory } from "../types";
+import { player } from "../../stores/player";
 
-export function hungry() {
-  directToLog("You ask yourself if you are hungry...");
-  if ((get(playerEnergy) || 0) < 100) {
-    directToLog("You are.", LogEntryType.Success);
-    return true;
-  } else {
-    directToLog("You are not.", LogEntryType.Failure);
-    return false;
-  }
-}
+export const hungry: Operation = {
+  name: "hungry?",
+  category: OperationCategory.Gate,
+  metadata: {
+    description: "Are you hungry?",
+    positiveMessage: "You are hungry.",
+    negativeMessage: "You are not hungry.",
+    errorMessage: "Gate failed",
+  },
+  costs: [],
+  requirement: () => {
+    return (get(player).energy || 0) < 100 ? true : false;
+  },
+  execute: () => false,
+};

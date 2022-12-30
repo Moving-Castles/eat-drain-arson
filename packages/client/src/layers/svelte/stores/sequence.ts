@@ -1,11 +1,13 @@
 import { writable, get } from "svelte/store";
 import { tweened } from "svelte/motion";
-import { Operation } from "../operations/";
+import { Operation, OperationCategory } from "../operations/types";
 import { blockNumber } from "./network";
 import { player, playerActivity, Activities, categoryToActivity } from "./player";
 import { uiState } from "./ui";
 import { EntityType } from "./entities";
 import { playSound } from "../../howler";
+import { ContractReceipt } from "ethers";
+import { transactions, receipts } from "./transactions";
 
 export interface SequenceElement {
   operation: Operation;
@@ -15,13 +17,24 @@ export interface SequenceElement {
 export const emptySequenceElement: SequenceElement = {
   operation: {
     name: "+",
-    category: "empty",
-    description: "",
-    cost: "",
-    f: () => false,
+    category: OperationCategory.Empty,
+    metadata: {
+      description: "",
+      errorMessage: "",
+    },
+    costs: [],
+    requirement: () => false,
+    execute: () => false,
   },
   success: true,
 };
+
+enum SequencerState {
+  Inactive,
+  Executing,
+  Waiting,
+  Error,
+}
 
 export const SEQUENCER_LENGTH = 7;
 
@@ -61,18 +74,31 @@ export function clearSequencer() {
   sequence.set([]);
 }
 
-function executeOperation(sequenceElement: SequenceElement) {
+async function executeOperation(sequenceElement: SequenceElement) {
   if (sequenceElement) {
     playSound("eventGood", "ui");
     console.log("====> executing operation:", sequenceElement.operation.name);
-    return sequenceElement.operation.f();
+
+    // Check operation requirements
+    if (!sequenceElement.operation.requirement(sequenceElement.operation.costs)) return false;
+
+    // Execute
+    const tx = await sequenceElement.operation.execute();
+
+    if (tx === false) return false;
+    console.log(tx);
+
+    const receipt: ContractReceipt = await tx.wait();
+    console.log(receipt);
+
+    return true;
   } else {
     stopSequencer();
     return false;
   }
 }
 
-blockNumber.subscribe((newBlock) => {
+blockNumber.subscribe(async (newBlock) => {
   if (get(player)) {
     // If the player be dead
     if (get(player).entityType == EntityType.Corpse) {
@@ -110,9 +136,9 @@ blockNumber.subscribe((newBlock) => {
       activeOperationIndex.set(turnCounter % get(sequence).length);
 
       const currentSequenceElement = get(sequence)[get(activeOperationIndex)];
-      const outcome = executeOperation(currentSequenceElement);
+      const outcome = await executeOperation(currentSequenceElement);
 
-      if (currentSequenceElement.operation.category === "gate") {
+      if (currentSequenceElement.operation.category === OperationCategory.Gate) {
         // If current operation is a gate
         // – proceed if returning true
         // – start from beginning if return false
@@ -122,16 +148,16 @@ blockNumber.subscribe((newBlock) => {
       }
 
       sequence.update((s) => {
-        if (s[get(activeOperationIndex)].operation.category !== "gate") {
+        if (s[get(activeOperationIndex)].operation.category !== OperationCategory.Gate) {
           s[get(activeOperationIndex)].success = outcome;
         }
         return s;
       });
 
       // Set player activity
-      if (outcome) {
-        playerActivity.set(categoryToActivity(currentSequenceElement.operation.category));
-      }
+      // if (outcome) {
+      //   playerActivity.set(categoryToActivity(currentSequenceElement.operation.category));
+      // }
     }
 
     blockDelay++;

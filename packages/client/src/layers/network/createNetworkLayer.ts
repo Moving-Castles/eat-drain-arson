@@ -12,8 +12,7 @@ import { defineLoadingStateComponent, defineStatsComponent } from "./components"
 import { SystemTypes } from "contracts/types/SystemTypes";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { GameConfig, getNetworkConfig } from "./config";
-import { BigNumber, ContractTransaction, utils } from "ethers";
-import { transactions, receipts } from "../svelte/stores/transactions";
+import { BigNumber, utils } from "ethers";
 
 /**
  * The Network layer is the lowest layer in the client architecture.
@@ -75,55 +74,24 @@ export async function createNetworkLayer(config: GameConfig) {
     systems["system.Spawn"].executeTyped(BigNumber.from(network.connectedAddress.get()));
   }
 
-  async function move(energyInput: number, direction: number) {
-    const transaction: ContractTransaction = await systems["system.Move"].executeTyped(
-      BigNumber.from(network.connectedAddress.get()),
-      energyInput,
-      direction
-    );
-    transactions.update((ts) => [transaction.hash, ...ts]);
-    const receipt = await transaction.wait();
-    receipts.update((rs) => [receipt, ...rs]);
+  function move(energyInput: number, direction: number) {
+    return systems["system.Move"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput, direction);
   }
 
-  async function gather(energyInput: number) {
-    const transaction: ContractTransaction = await systems["system.Gather"].executeTyped(
-      BigNumber.from(network.connectedAddress.get()),
-      energyInput
-    );
-    transactions.update((ts) => [transaction.hash, ...ts]);
-    const receipt = await transaction.wait();
-    receipts.update((rs) => [receipt, ...rs]);
+  function gather(energyInput: number) {
+    return systems["system.Gather"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
   }
 
-  async function consume(resourceInput: number) {
-    const transaction: ContractTransaction = await systems["system.Energy"].executeTyped(
-      BigNumber.from(network.connectedAddress.get()),
-      resourceInput
-    );
-    transactions.update((ts) => [transaction.hash, ...ts]);
-    const receipt = await transaction.wait();
-    receipts.update((rs) => [receipt, ...rs]);
+  function consume(resourceInput: number) {
+    return systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
   }
 
-  async function burn(resourceInput: number) {
-    const transaction: ContractTransaction = await systems["system.Fire"].executeTyped(
-      BigNumber.from(network.connectedAddress.get()),
-      resourceInput
-    );
-    transactions.update((ts) => [transaction.hash, ...ts]);
-    const receipt = await transaction.wait();
-    receipts.update((rs) => [receipt, ...rs]);
+  function burn(resourceInput: number) {
+    return systems["system.Fire"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
   }
 
-  async function play(energyInput: number) {
-    const transaction: ContractTransaction = await systems["system.Play"].executeTyped(
-      BigNumber.from(network.connectedAddress.get()),
-      energyInput
-    );
-    transactions.update((ts) => [transaction.hash, ...ts]);
-    const receipt = await transaction.wait();
-    receipts.update((rs) => [receipt, ...rs]);
+  function play(energyInput: number) {
+    return systems["system.Play"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
   }
 
   // --- CONTEXT --------------------------------------------------------------------

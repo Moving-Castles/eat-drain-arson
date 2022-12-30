@@ -1,16 +1,30 @@
 import { get } from "svelte/store";
+import { Operation, OperationCategory, checkCosts } from "../types";
 import { network } from "../../stores/network";
-import { player, playerEnergy } from "../../stores/player";
-import { directToLog, getOperationTale, LogEntryType } from "../../stores/narrative";
+import { player } from "../../stores/player";
 
-export function nibble() {
-  if ((get(player).resource || 0) >= 10) {
-    get(network).api?.consume(10);
-    directToLog(getOperationTale("nibble", "lore"), LogEntryType.Banter);
-
+export const nibble: Operation = {
+  name: "nibble",
+  category: OperationCategory.Consume,
+  metadata: {
+    description: "Treat yourself, wet your tongue with a bit of sludge",
+    lore: [
+      "That should last you till nightfall.",
+      "Your stomach turns, you throw up.",
+      "Your tears add a little flavour to it.",
+    ],
+    errorMessage: "Consume failed: not enough resource",
+  },
+  costs: [
+    {
+      resource: 10,
+    },
+  ],
+  requirement: (costs) => {
+    if (!checkCosts(costs, get(player))) return false;
     return true;
-  } else {
-    console.log("Nibble: not enough resource");
-    return false;
-  }
-}
+  },
+  execute: () => {
+    return get(network).api?.consume(10);
+  },
+};

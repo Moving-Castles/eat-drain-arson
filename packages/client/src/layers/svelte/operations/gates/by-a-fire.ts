@@ -11,19 +11,18 @@ function checkForType(gridPosition: Coord, type: EntityType) {
   return entity;
 }
 
-export const drained: Operation = {
-  name: "drained?",
+export const byAFire: Operation = {
+  name: "by a fire?",
   category: OperationCategory.Gate,
   metadata: {
-    description: "Has someone already drained all the sludge in this soil?",
-    positiveMessage: "Nothing left.",
-    negativeMessage: "Some sludge left.",
+    description: "Are you at a fire?",
+    positiveMessage: "You arrived at a fire.",
+    negativeMessage: "No fire in sight.",
     errorMessage: "Gate failed",
   },
   costs: [],
   requirement: () => {
-    const terrainInLocation = checkForType(get(player).position, EntityType.Terrain);
-    return !terrainInLocation || (terrainInLocation.resource || 0) > 0 ? false : true;
+    return checkForType(get(player).position, EntityType.Fire) ? true : false;
   },
   execute: () => false,
 };

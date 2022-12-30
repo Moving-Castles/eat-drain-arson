@@ -4,12 +4,12 @@ import { network } from "../../stores/network";
 import { player } from "../../stores/player";
 import { Directions } from "../../utils/space";
 
-export const northEast: Operation = {
-  name: "north-east",
-  category: OperationCategory.Move,
+export const example: Operation = {
+  name: "example",
+  category: OperationCategory.Special,
   metadata: {
-    description: "Move north east",
-    errorMessage: "Movement failed: not enough energy",
+    description: "Example operation",
+    errorMessage: "Operation failed",
   },
   costs: [
     {
@@ -21,6 +21,6 @@ export const northEast: Operation = {
     return true;
   },
   execute: () => {
-    return get(network).api?.move(10, Directions.NorthEast);
+    return get(network).api?.move(10, Directions.North);
   },
 };

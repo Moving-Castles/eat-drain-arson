@@ -15,6 +15,7 @@
     stopSequencer,
     clearSequencer,
   } from "../../../../stores/sequence";
+  import { OperationCategory, OperationCategoryString } from "../../../../operations/types";
   export const ID = "ui-executor";
 
   function start() {
@@ -64,9 +65,8 @@
       {#each $sequence as sequenceElement, index}
         <div
           use:tooltip
-          title={sequenceElement.operation.narration.description}
-          data-description={sequenceElement.operation?.cost}
-          class="slot {sequenceElement.operation.category}"
+          title={sequenceElement.operation.metadata.description}
+          class="slot {OperationCategoryString[sequenceElement.operation.category]}"
           class:active={$sequencerActive && $activeOperationIndex === index}
           class:failure={!$sequence[index].success}
         >
@@ -74,7 +74,7 @@
             {sequenceElement.operation.name}
           </div>
 
-          {#if $activeOperationIndex === index && sequenceElement.operation.category !== "empty"}
+          {#if $activeOperationIndex === index && sequenceElement.operation.category !== OperationCategory.Empty}
             <div class="operation-progress">
               {#if ($player.coolDownBlock || 0) - $blockNumber > 0 && $progress > 0}
                 <div class="progress-bar">
