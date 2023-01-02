@@ -3,7 +3,7 @@ import { ComponentUpdate } from "@latticexyz/recs";
 import { blockNumber } from "./network";
 import { playerAddress } from "../stores/player";
 import { indexToID, entities, EntityType } from "../stores/entities";
-import { getOperation } from "../operations";
+import { getOperation } from "../operations/utils";
 
 import { movement, birth, death, gather, eat, fire, cannibalism, play } from "./narrators";
 

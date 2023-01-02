@@ -18,7 +18,7 @@ import { nibble, eat, feast } from "./consume";
 import { fire } from "./burn";
 import { serenade } from "./play";
 import { giveUp } from "./special";
-import { hungry, sludgeRich, drained, byAFire } from "./gates";
+import { hungry, sludgeRich, drained, byFire } from "./gates";
 
 export const operations: Operation[] = [
   // --- MOVE
@@ -52,11 +52,5 @@ export const operations: Operation[] = [
   hungry,
   sludgeRich,
   drained,
-  byAFire,
+  byFire,
 ];
-
-export const getOperation = (name: string) => {
-  const result = operations.find((o) => o.name === name);
-  if (!result) throw new Error("Operation Not Found");
-  return result;
-};

@@ -1,15 +1,8 @@
-import { Coord } from "@latticexyz/utils";
 import { get } from "svelte/store";
 import { player } from "../../stores/player";
-import { entities, EntityType } from "../../stores/entities";
+import { EntityType } from "../../stores/entities";
 import { Operation, OperationCategory } from "../types";
-
-function checkForType(gridPosition: Coord, type: EntityType) {
-  const entity = Object.values(get(entities)).find(
-    (e) => (e.position?.x || 0) == gridPosition.x && (e.position?.y || 0) == gridPosition.y && e.entityType == type
-  );
-  return entity;
-}
+import { checkForType } from "../utils";
 
 export const drained: Operation = {
   name: "drained?",

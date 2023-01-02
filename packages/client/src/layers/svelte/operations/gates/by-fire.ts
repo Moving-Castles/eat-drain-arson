@@ -1,17 +1,10 @@
-import { Coord } from "@latticexyz/utils";
 import { get } from "svelte/store";
 import { player } from "../../stores/player";
-import { entities, EntityType } from "../../stores/entities";
+import { EntityType } from "../../stores/entities";
 import { Operation, OperationCategory } from "../types";
+import { checkForType } from "../utils";
 
-function checkForType(gridPosition: Coord, type: EntityType) {
-  const entity = Object.values(get(entities)).find(
-    (e) => (e.position?.x || 0) == gridPosition.x && (e.position?.y || 0) == gridPosition.y && e.entityType == type
-  );
-  return entity;
-}
-
-export const byAFire: Operation = {
+export const byFire: Operation = {
   name: "by a fire?",
   category: OperationCategory.Gate,
   metadata: {

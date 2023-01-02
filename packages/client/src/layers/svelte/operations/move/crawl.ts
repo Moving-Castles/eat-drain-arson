@@ -1,6 +1,7 @@
 import { getRandomInt } from "../../utils/ui";
 import { get } from "svelte/store";
-import { Operation, OperationCategory, checkCosts } from "../types";
+import { Operation, OperationCategory } from "../types";
+import { checkCosts } from "../utils";
 import { network } from "../../stores/network";
 import { player } from "../../stores/player";
 

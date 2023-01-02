@@ -3,7 +3,8 @@ import { network } from "../../stores/network";
 import { player } from "../../stores/player";
 import { fires } from "../../stores/entities";
 import { transformationToDirection, positionsToTransformation, directionalPathfind } from "../../utils/space";
-import { Operation, OperationCategory, checkCosts } from "../types";
+import { Operation, OperationCategory } from "../types";
+import { checkCosts } from "../utils";
 
 export const goTowardsFire: Operation = {
   name: "go towards fire",

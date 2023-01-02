@@ -1,7 +1,7 @@
 import { Coord } from "@latticexyz/utils";
 import { writable, get, derived } from "svelte/store";
 import { network, blockNumber } from "./network";
-import { calculateEnergy, calculateHeartbeats } from "./player";
+import { calculateEnergy } from "./player";
 
 export enum EntityType {
   Player,
@@ -18,20 +18,64 @@ export interface StatsType {
   eaten: number;
 }
 
-export interface Entity {
-  entityType?: EntityType;
-  position?: Coord;
+type Player = {
+  entityType: EntityType.Player;
+  position: Coord;
+  coolDownBlock: number;
+  energy: number;
+  resource: number;
+  seed: number;
+  stats: StatsType;
+  birth: number;
+  death: number;
+  cannibal: string[];
+  playing: number;
+};
+
+type Terrain = {
+  entityType: EntityType.Terrain;
+  position: Coord;
+  resource: number;
+};
+
+type Fire = {
+  entityType: EntityType.Fire;
+  position: Coord;
   coolDownBlock?: number;
-  creator?: string[];
-  energy?: number;
-  resource?: number;
-  seed?: number;
-  stats?: StatsType;
-  birth?: number;
-  death?: number;
-  cannibal?: string[];
-  playing?: number;
-}
+  creator: string[];
+  resource: number;
+  seed: number;
+};
+
+type Corpse = {
+  entityType: EntityType.Corpse;
+  position: Coord;
+  coolDownBlock: number;
+  energy: number;
+  resource: number;
+  seed: number;
+  stats: StatsType;
+  birth: number;
+  death: number;
+  cannibal: string[];
+  playing: number;
+};
+
+type Ghost = {
+  entityType: EntityType.Ghost;
+  position: Coord;
+  coolDownBlock: number;
+  energy: number;
+  resource: number;
+  seed: number;
+  stats: StatsType;
+  birth: number;
+  death: number;
+  cannibal: string[];
+  playing: number;
+};
+
+export type Entity = Player | Terrain | Fire | Corpse | Ghost;
 
 export interface Entities {
   [index: string]: Entity;
