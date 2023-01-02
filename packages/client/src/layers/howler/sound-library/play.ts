@@ -1,4 +1,4 @@
-import { SoundAssets } from ".";
+import { SoundAssets } from "../types";
 
 export const play: SoundAssets = {
   electricGuitar: {

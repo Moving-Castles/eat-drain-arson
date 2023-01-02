@@ -1,11 +1,11 @@
 import { Howl } from "howler";
-import { soundLibrary, Sound } from "./sound-library";
+import { soundLibrary } from "./sound-library";
 import { sample } from "lodash";
 import { writable, get } from "svelte/store";
 import { userSettings } from "../svelte/stores/ui";
 
-export const music = writable(null);
-export const fx = writable(null);
+export const music = writable(new Howl({ src: "" }));
+export const fx = writable(new Howl({ src: "" }));
 
 export function playSound(id: string, category: string, loop = false, fade = false) {
   const settings = get(userSettings);
@@ -14,7 +14,7 @@ export function playSound(id: string, category: string, loop = false, fade = fal
 
   const sound = new Howl({
     src: [soundLibrary[category][id].src],
-    volume: soundLibrary[category][id].volumetrue,
+    volume: soundLibrary[category][id].volume,
     preload: true,
     loop: loop,
   });
@@ -48,7 +48,7 @@ export function startMelodySoundSystem(timeout = 0) {
   const settings = get(userSettings);
 
   if (settings.music.value == true) {
-    music.set(playSound(sample(Object.keys(soundLibrary.melody)), "melody"));
+    music.set(playSound(sample(Object.keys(soundLibrary.melody)) || "", "melody"));
     get(music).on("end", () => {
       setTimeout(() => {
         startMelodySoundSystem(timeout);

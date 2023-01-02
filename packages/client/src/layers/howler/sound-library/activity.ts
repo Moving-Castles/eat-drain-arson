@@ -1,4 +1,4 @@
-import { SoundAssets } from ".";
+import { SoundAssets } from "../types";
 
 const BASE_VOLUME = 0.7;
 

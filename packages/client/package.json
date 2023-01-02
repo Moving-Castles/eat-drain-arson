@@ -38,6 +38,7 @@
     "@tsconfig/svelte": "^3.0.0",
     "@types/howler": "^2.2.7",
     "@types/jest": "^27.4.1",
+    "@types/lodash": "^4.14.191",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.12.1",
     "@typescript-eslint/parser": "^5.12.1",

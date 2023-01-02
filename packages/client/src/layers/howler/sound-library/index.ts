@@ -1,3 +1,4 @@
+import { SoundLibrary } from "../types";
 import { ui } from "./ui";
 import { play } from "./play";
 import { misc } from "./misc";
@@ -6,20 +7,7 @@ import { harmony } from "./harmony";
 import { activity } from "./activity";
 import { environment } from "./environment";
 
-export interface Sound {
-  src: string;
-  volume: number;
-}
-
-export interface SoundAssets {
-  [index: string]: Sound;
-}
-
-interface soundLibrary {
-  [index: string]: SoundAssets;
-}
-
-export const soundLibrary = {
+export const soundLibrary: SoundLibrary = {
   ui,
   play,
   misc,
