@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
-import { player } from "../../stores/player";
-import { EntityType } from "../../stores/entities";
+import { player } from "../../modules/player";
+import { EntityType } from "../../modules/entities";
 import { Operation, OperationCategory } from "../types";
 import { checkForType } from "../utils";
 

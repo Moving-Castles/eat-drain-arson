@@ -2,8 +2,8 @@
   import { startEnvironmentSoundSystem, startMelodySoundSystem, startHarmonySoundSystem } from "../howler";
   import { onMount } from "svelte";
   import { bootGame } from "./boot";
-  import UIContainer from "./lib/ui/UIContainer.svelte";
-  import UIMenu from "./lib/ui/UIMenu.svelte";
+  import UIContainer from "./lib/UIContainer.svelte";
+  import UIMenu from "./lib/UIMenu.svelte";
   import {
     createPositionSystem,
     createEnergySystem,
@@ -19,8 +19,8 @@
     createPlayingSystem,
     createDeathSystem,
   } from "./systems";
-  import { network as networkStore, blockNumber, startBlock } from "./stores/network";
-  import { transactions, receipts, activeTransactions } from "./stores/transactions";
+  import { network as networkStore, blockNumber, startBlock } from "./modules/network";
+  import { transactions, receipts, activeTransactions } from "./modules/network";
 
   $: {
     console.log("___ Transactions store: ", $transactions);

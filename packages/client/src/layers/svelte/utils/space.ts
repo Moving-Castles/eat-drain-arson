@@ -58,6 +58,11 @@ export function getDirection(from: Coord, to: Coord) {
   return directionToString(transformationToDirection(positionsToTransformation(from, to)));
 }
 
+/**
+ * @param from Coordinate to start from (included in the path)
+ * @param to Coordinate to go to (included in the path)
+ * @returns Finds a path between the from and to coordinates, used in some cases when aStar fails
+ */
 export function directionalPathfind(from: Coord, to: Coord) {
   const path: Coord[] = [];
   const directionX = from.x < to.x ? 1 : -1;

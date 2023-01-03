@@ -1,10 +1,10 @@
 import { get } from "svelte/store";
 import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
-import { entities, indexToID } from "../stores/entities";
+import { entities, indexToID } from "../modules/entities";
 import { positionsToTransformation, transformationToDirection } from "../utils/space";
-import { playerDirection, playerAddress } from "../stores/player";
-import { addToLog, EventCategory } from "../stores/narrative";
+import { playerDirection, playerAddress } from "../modules/player";
+import { addToLog, EventCategory } from "../modules/narrator";
 
 export function createPositionSystem(network: NetworkLayer) {
   const {

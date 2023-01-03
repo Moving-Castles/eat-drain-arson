@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import { Operation, OperationCategory } from "../types";
-import { player } from "../../stores/player";
+import { player } from "../../modules/player";
 
 export const hungry: Operation = {
   name: "hungry?",

@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
-import { network } from "../../stores/network";
-import { player } from "../../stores/player";
-import { fires } from "../../stores/entities";
+import { network } from "../../modules/network";
+import { player } from "../../modules/player";
+import { fires } from "../../modules/entities";
 import { transformationToDirection, positionsToTransformation, directionalPathfind } from "../../utils/space";
 import { Operation, OperationCategory } from "../types";
 import { checkCosts } from "../utils";

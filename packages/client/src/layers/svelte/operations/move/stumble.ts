@@ -2,8 +2,8 @@ import { getRandomInt } from "../../utils/ui";
 import { get } from "svelte/store";
 import { Operation, OperationCategory } from "../types";
 import { checkCosts } from "../utils";
-import { network } from "../../stores/network";
-import { player } from "../../stores/player";
+import { network } from "../../modules/network";
+import { player } from "../../modules/player";
 
 export const stumble: Operation = {
   name: "stumble",

@@ -1,6 +1,6 @@
 import { defineComponentSystem, ComponentUpdate } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
-import { entities, indexToID } from "../stores/entities";
+import { entities, EntityType, indexToID } from "../modules/entities";
 
 export function createBirthSystem(network: NetworkLayer) {
   const {

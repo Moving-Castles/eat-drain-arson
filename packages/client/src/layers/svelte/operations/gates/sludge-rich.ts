@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { player } from "../../stores/player";
+import { player } from "../../modules/player";
 import { Operation, OperationCategory } from "../types";
 
 export const sludgeRich: Operation = {

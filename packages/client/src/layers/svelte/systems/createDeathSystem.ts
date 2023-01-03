@@ -1,6 +1,6 @@
 import { defineComponentSystem, ComponentUpdate } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
-import { entities, indexToID } from "../stores/entities";
+import { entities, indexToID } from "../modules/entities";
 
 export function createDeathSystem(network: NetworkLayer) {
   const {
