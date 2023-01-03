@@ -5,16 +5,11 @@ import "../MudTest.t.sol";
 import { WORLD_HEIGHT, WORLD_WIDTH } from "../../config.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { MoveSystem, ID as MoveSystemID } from "../../systems/MoveSystem.sol";
-import { PositionComponent, ID as PositionComponentID, Coord } from "../../components/PositionComponent.sol";
-import { StatsComponent, ID as StatsComponentID, Stats } from "../../components/StatsComponent.sol";
+import { Coord } from "../../components/PositionComponent.sol";
 
 contract MoveSystemTest is MudTest {
   function testExecute() public {
     uint256 entity = 1;
-
-    // Initialize components
-    PositionComponent positionComponent = PositionComponent(component(PositionComponentID));
-    StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
 
     // Spawn player
     SpawnSystem(system(SpawnSystemID)).executeTyped(entity);

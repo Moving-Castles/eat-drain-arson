@@ -6,28 +6,12 @@ import { console } from "forge-std/console.sol";
 import { EntityType } from "../../types.sol";
 import { WORLD_HEIGHT, WORLD_WIDTH, INITIAL_RESOURCE, INITIAL_ENERGY } from "../../config.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
-import { SeedComponent, ID as SeedComponentID } from "../../components/SeedComponent.sol";
-import { EnergyComponent, ID as EnergyComponentID } from "../../components/EnergyComponent.sol";
-import { PositionComponent, ID as PositionComponentID, Coord } from "../../components/PositionComponent.sol";
-import { ResourceComponent, ID as ResourceComponentID } from "../../components/ResourceComponent.sol";
-import { CoolDownComponent, ID as CoolDownComponentID } from "../../components/CoolDownComponent.sol";
-import { EntityTypeComponent, ID as EntityTypeComponentID } from "../../components/EntityTypeComponent.sol";
-import { StatsComponent, ID as StatsComponentID, Stats } from "../../components/StatsComponent.sol";
-import { BirthComponent, ID as BirthComponentID } from "../../components/BirthComponent.sol";
+import { Coord } from "../../components/PositionComponent.sol";
+import { Stats } from "../../components/StatsComponent.sol";
 
 contract SpawnSystemTest is MudTest {
   function testExecute() public {
     uint256 entity = 1;
-
-    // Initialize components
-    SeedComponent seedComponent = SeedComponent(component(SeedComponentID));
-    EnergyComponent energyComponent = EnergyComponent(component(EnergyComponentID));
-    PositionComponent positionComponent = PositionComponent(component(PositionComponentID));
-    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
-    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
-    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
-    StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
-    BirthComponent birthComponent = BirthComponent(getAddressById(components, BirthComponentID));
 
     // Spawn player
     SpawnSystem(system(SpawnSystemID)).executeTyped(entity);

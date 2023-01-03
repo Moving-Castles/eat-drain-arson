@@ -4,7 +4,7 @@ import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { EntityType } from "../types.sol";
-import { RESOURCE_TO_ENERGY_CONVERSION_RATE, MAX_INACTIVITY } from "../config.sol";
+import { RESOURCE_TO_ENERGY_CONVERSION_RATE, MAX_INACTIVITY, GENERIC_ACTION_COOLDOWN } from "../config.sol";
 
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
@@ -52,8 +52,8 @@ contract EnergySystem is System {
     resourceComponent.set(player, resourceComponent.getValue(player) - resourceInput);
     energyComponent.set(player, energyComponent.getValue(player) + resourceInput * RESOURCE_TO_ENERGY_CONVERSION_RATE);
 
-    // Add 10 cooldown points
-    coolDownComponent.set(player, block.number + 10);
+    // Add cooldown points
+    coolDownComponent.set(player, block.number + GENERIC_ACTION_COOLDOWN);
   }
 
   function updateStats(uint256 player, uint32 resourceInput) private {

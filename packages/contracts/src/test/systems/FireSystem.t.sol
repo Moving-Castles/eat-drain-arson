@@ -3,47 +3,38 @@ pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
 import { EntityType } from "../../types.sol";
+import { INITIAL_ENERGY, FIRE_BURNTIME_MULTIPLIER, COST_TO_MAKE_FIRE, MINIMUM_FIRE_SIZE, GENERIC_ACTION_COOLDOWN } from "../../config.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { FireSystem, ID as FireSystemID } from "../../systems/FireSystem.sol";
-import { PositionComponent, ID as PositionComponentID, Coord } from "../../components/PositionComponent.sol";
-import { ResourceComponent, ID as ResourceComponentID } from "../../components/ResourceComponent.sol";
-import { EnergyComponent, ID as EnergyComponentID } from "../../components/EnergyComponent.sol";
-import { EntityTypeComponent, ID as EntityTypeComponentID } from "../../components/EntityTypeComponent.sol";
-import { CreatorComponent, ID as CreatorComponentID } from "../../components/CreatorComponent.sol";
-import { CoolDownComponent, ID as CoolDownComponentID } from "../../components/CoolDownComponent.sol";
-import { StatsComponent, ID as StatsComponentID, Stats } from "../../components/StatsComponent.sol";
 import { ComponentDevSystem, ID as ComponentDevSystemID } from "../../systems/ComponentDevSystem.sol";
+import { Coord } from "../../components/PositionComponent.sol";
 
 contract FireSystemTest is MudTest {
-  function testExecute() public {
-    uint256 entity = 42;
+  function testExecute(uint32 initialResources) public {
+    vm.assume(initialResources >= MINIMUM_FIRE_SIZE * 2);
+    // burn half of the resources twice
+    uint32 resHalf1 = initialResources / 2;
+    uint32 resHalf2 = initialResources - resHalf1;
 
-    // Initialize components
-    EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
-    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
-    PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
-    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
-    CreatorComponent creatorComponent = CreatorComponent(getAddressById(components, CreatorComponentID));
-    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
-    StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
+    uint256 entity = 42;
 
     // Spawn player
     SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
 
-    // Give player 1000 resources
-    // ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
-    //   ResourceComponentID,
-    //   entity,
-    //   abi.encodePacked(uint32(1000))
-    // );
+    // Give player initial resources
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      ResourceComponentID,
+      entity,
+      abi.encode(initialResources)
+    );
 
     // Create fire
-    FireSystem(system(FireSystemID)).executeTyped(entity, 500);
-    // 200 - 100
-    assertEq(resourceComponent.getValue(entity), 100);
-    // 1000 - 50
-    assertEq(energyComponent.getValue(entity), 950);
+    FireSystem(system(FireSystemID)).executeTyped(entity, resHalf1);
+    // init resources - half
+    assertEq(resourceComponent.getValue(entity), initialResources - resHalf1);
+    // init energy - cost
+    assertEq(energyComponent.getValue(entity), INITIAL_ENERGY - COST_TO_MAKE_FIRE);
 
     // Check for fire component in current location
     Coord memory currentPosition = positionComponent.getValue(entity);
@@ -52,34 +43,37 @@ contract FireSystemTest is MudTest {
     fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(EntityType.Fire));
     uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
     assertEq(entitiesAtPosition.length, 1);
-    // Cooldown on fire component should be blocknumber + (resources added * 10):
-    // 1 + 1000 = 1001
-    assertEq(coolDownComponent.getValue(entitiesAtPosition[0]), 1001);
-    // 100 resources have been burnt
-    assertEq(resourceComponent.getValue(entitiesAtPosition[0]), 100);
+    // Cooldown on fire component should be blocknumber + (resources added * multiplier):
+    assertEq(
+      coolDownComponent.getValue(entitiesAtPosition[0]),
+      block.number + uint256(resHalf1) * FIRE_BURNTIME_MULTIPLIER
+    );
+    // 1st half of the resources has been burnt
+    assertEq(resourceComponent.getValue(entitiesAtPosition[0]), resHalf1);
     // Creator should be set
     assertEq(uint256(creatorComponent.getValue(entitiesAtPosition[0])[0]), entity);
     // Check stats are updated
-    assertEq(statsComponent.getValue(entity).burnt, 100);
+    assertEq(statsComponent.getValue(entity).burnt, resHalf1);
 
     // Fast forward past player cool down block
-    vm.roll(66);
+    vm.roll(block.number + GENERIC_ACTION_COOLDOWN + 1);
 
-    // 66 block later...
     // Add to the existing fire
-    FireSystem(system(FireSystemID)).executeTyped(entity, 500);
-    // 100 - 100
+    FireSystem(system(FireSystemID)).executeTyped(entity, resHalf2);
+    // init resources - 1st half - 2nd half
     assertEq(resourceComponent.getValue(entity), 0);
-    // 950 - 50
-    assertEq(energyComponent.getValue(entity), 900);
-    // Cooldown on fire component should be cooldownblock + (resources added * 10):
-    // 1001 + 1000 = 2001
-    assertEq(coolDownComponent.getValue(entitiesAtPosition[0]), 2001);
-    // 200 resources have been burnt
-    assertEq(resourceComponent.getValue(entitiesAtPosition[0]), 200);
-    // Creator should be set
-    assertEq(int256(creatorComponent.getValue(entitiesAtPosition[0]).length), 2);
+    // init energy - previous cost - this cost
+    assertEq(energyComponent.getValue(entity), INITIAL_ENERGY - 2 * COST_TO_MAKE_FIRE);
+    // Cooldown on fire component should be cooldownblock + (resources added * FIRE_BURNTIME_MULTIPLIER):
+    assertEq(
+      coolDownComponent.getValue(entitiesAtPosition[0]),
+      1 + uint256(initialResources) * FIRE_BURNTIME_MULTIPLIER
+    );
+    // all init resources have been burnt
+    assertEq(resourceComponent.getValue(entitiesAtPosition[0]), initialResources);
+    // Creator should not have changed
+    assertEq(uint256(creatorComponent.getValue(entitiesAtPosition[0])[0]), entity);
     // Check stats are updated
-    assertEq(statsComponent.getValue(entity).burnt, 200);
+    assertEq(statsComponent.getValue(entity).burnt, initialResources);
   }
 }

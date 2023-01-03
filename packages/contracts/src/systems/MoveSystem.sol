@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
-import { WORLD_HEIGHT, WORLD_WIDTH, MAX_DISTANCE, MAX_INACTIVITY } from "../config.sol";
+import { WORLD_HEIGHT, WORLD_WIDTH, MAX_DISTANCE, MAX_INACTIVITY, GENERIC_ACTION_COOLDOWN } from "../config.sol";
 import { EntityType, Direction } from "../types.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
@@ -75,7 +75,7 @@ contract MoveSystem is System {
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     energyComponent.set(player, energyComponent.getValue(player) - energyInput);
-    coolDownComponent.set(player, block.number + 10);
+    coolDownComponent.set(player, block.number + GENERIC_ACTION_COOLDOWN);
   }
 
   function updateStats(uint256 entity, int32 steps) private {

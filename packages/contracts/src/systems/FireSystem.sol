@@ -5,7 +5,7 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { EntityType } from "../types.sol";
-import { MINIMUM_FIRE_SIZE, FIRE_BURNTIME_MULTIPLIER, COST_TO_MAKE_FIRE, MAX_INACTIVITY } from "../config.sol";
+import { MINIMUM_FIRE_SIZE, FIRE_BURNTIME_MULTIPLIER, COST_TO_MAKE_FIRE, MAX_INACTIVITY, GENERIC_ACTION_COOLDOWN } from "../config.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
@@ -76,7 +76,7 @@ contract FireSystem is System {
     entityTypeComponent.set(newFire, uint32(EntityType.Fire));
     seedComponent.set(newFire, makeSeedValue(newFire));
     // Cooldown = current block + resources to burn * FIRE_BURNTIME_MULTIPLIER
-    coolDownComponent.set(newFire, block.number + resourceInput * FIRE_BURNTIME_MULTIPLIER);
+    coolDownComponent.set(newFire, block.number + uint256(resourceInput) * FIRE_BURNTIME_MULTIPLIER);
     // Resources burnt in this fire
     resourceComponent.set(newFire, resourceInput);
     uint256[] memory creatorArray = new uint256[](1);
@@ -94,7 +94,7 @@ contract FireSystem is System {
       ? coolDownComponent.getValue(fire)
       : block.number;
     // Cooldown = current block + resources to burn * FIRE_BURNTIME_MULTIPLIER
-    coolDownComponent.set(fire, currentCoolDownBlock + resourceInput * FIRE_BURNTIME_MULTIPLIER);
+    coolDownComponent.set(fire, currentCoolDownBlock + uint256(resourceInput) * FIRE_BURNTIME_MULTIPLIER);
     // Add to resources burnt in this fire
     resourceComponent.set(fire, resourceComponent.getValue(fire) + resourceInput);
 
@@ -115,7 +115,7 @@ contract FireSystem is System {
 
     resourceComponent.set(player, resourceComponent.getValue(player) - resourceInput);
     energyComponent.set(player, energyComponent.getValue(player) - COST_TO_MAKE_FIRE);
-    coolDownComponent.set(player, block.number + 10);
+    coolDownComponent.set(player, block.number + GENERIC_ACTION_COOLDOWN);
   }
 
   function updateStats(uint256 player, uint32 resourceInput) private {

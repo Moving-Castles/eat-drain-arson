@@ -7,23 +7,12 @@ import { INITIAL_ENERGY, INITIAL_RESOURCE } from "../../config.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { PlaySystem, ID as PlaySystemID } from "../../systems/PlaySystem.sol";
 import { GatherSystem, ID as GatherSystemID } from "../../systems/GatherSystem.sol";
-import { PositionComponent, ID as PositionComponentID, Coord } from "../../components/PositionComponent.sol";
-import { ResourceComponent, ID as ResourceComponentID } from "../../components/ResourceComponent.sol";
-import { EntityTypeComponent, ID as EntityTypeComponentID } from "../../components/EntityTypeComponent.sol";
-import { CannibalComponent, ID as CannibalComponentID } from "../../components/CannibalComponent.sol";
-import { EnergyComponent, ID as EnergyComponentID } from "../../components/EnergyComponent.sol";
+import { Coord } from "../../components/PositionComponent.sol";
 
 contract CannibalMechanicsTest is MudTest {
   function testExecute() public {
     uint256 alice = 1;
     uint256 bob = 2;
-
-    // Initialize components
-    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
-    PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
-    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
-    CannibalComponent cannibalComponent = CannibalComponent(getAddressById(components, CannibalComponentID));
-    EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
 
     // Spawn Alice
     SpawnSystem(system(SpawnSystemID)).executeTyped(alice);
@@ -52,6 +41,10 @@ contract CannibalMechanicsTest is MudTest {
 
     // Bob should be dead
     assertEq(entityTypeComponent.getValue(bob), uint32(EntityType.Corpse));
+
+    // Hack to prevent Alice from dying
+    vm.prank(system(SpawnSystemID));
+    deathComponent.set(alice, block.number + 10);
 
     // Alice gathers Bob's corpse
     GatherSystem(system(GatherSystemID)).executeTyped(alice, 50);
