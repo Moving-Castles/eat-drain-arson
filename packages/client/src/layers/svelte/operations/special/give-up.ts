@@ -1,12 +1,26 @@
 import { get } from "svelte/store";
-import { network } from "../../stores/network";
-import { player, playerEnergy } from "../../stores/player";
-import { directToLog, getOperationTale, LogEntryType } from "../../stores/narrative";
+import { Operation, OperationCategory } from "../types";
+import { network } from "../../modules/network";
+import { player } from "../../modules/player";
+import { Directions } from "../../utils/space";
 
-export function giveUp() {
-  // Spend all available energy moving in a random direction
-  get(network).api?.move(get(playerEnergy) || 0, 0);
-  directToLog(getOperationTale("give up", "lore"), LogEntryType.Banter);
-
-  return true;
-}
+export const giveUp: Operation = {
+  name: "give up",
+  category: OperationCategory.Special,
+  metadata: {
+    description: "What is the point to it all, anyways",
+    lore: [
+      "Shame to lose it all here. Cursed be the one that robs a corpse they haven’t killed themselves!",
+      "Tell all the animals.",
+      "“!Eternity! ٩(｡•́‿•̀｡)۶",
+      "And you shall go down with me!",
+    ],
+    errorMessage: "You failed to give up...",
+  },
+  costs: [],
+  requirement: () => true,
+  execute: () => {
+    // Spend all energy
+    return get(network).api?.move(get(player).energy || 0, Directions.South);
+  },
+};

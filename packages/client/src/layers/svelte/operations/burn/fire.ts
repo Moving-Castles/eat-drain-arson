@@ -1,19 +1,33 @@
 import { get } from "svelte/store";
-import { network } from "../../stores/network";
-import { player, playerEnergy } from "../../stores/player";
-import { directToLog, LogEntryType, getOperationTale } from "../../stores/narrative";
+import { Operation, OperationCategory } from "../types";
+import { checkCosts } from "../utils";
+import { network } from "../../modules/network";
+import { player } from "../../modules/player";
 
-export function fire() {
-  if ((get(playerEnergy) || 0) < 50) {
-    directToLog(getOperationTale("fire", "insufficient_energy"), LogEntryType.Failure);
-    return false;
-  }
-  if ((get(player).resource || 0) >= 500) {
-    get(network).api?.burn(500);
-    directToLog(getOperationTale("fire", "lore"), LogEntryType.Banter);
+export const fire: Operation = {
+  name: "fire",
+  category: OperationCategory.Burn,
+  metadata: {
+    description: "This will keep me warm me at night",
+    lore: [
+      "Let’s hope that tonight’s light attracts the fat moths, not the hungry ones.",
+      "There's no smoke without fire, and smoke is just what this flea leather needs. Isn’t that right, Lewis?",
+      "From the debris to the stars.",
+      "Fire fire, burning bright throughout the night, bless me, bless me for I am your strongest warrior.",
+    ],
+    errorMessage: "Can't make fire",
+  },
+  costs: [
+    {
+      energy: 50,
+      resource: 500,
+    },
+  ],
+  requirement: (costs) => {
+    if (!checkCosts(costs, get(player))) return false;
     return true;
-  } else {
-    directToLog(getOperationTale("fire", "insufficient_sludge"), LogEntryType.Failure);
-    return false;
-  }
-}
+  },
+  execute: () => {
+    return get(network).api?.burn(500);
+  },
+};

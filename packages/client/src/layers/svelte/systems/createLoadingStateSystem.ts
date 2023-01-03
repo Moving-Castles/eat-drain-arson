@@ -1,6 +1,6 @@
 import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
-import { ready, loadingMessage } from "../stores/network";
+import { ready, loadingMessage } from "../modules/network";
 
 export function createLoadingStateSystem(network: NetworkLayer) {
   const {

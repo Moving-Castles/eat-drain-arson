@@ -1,7 +1,7 @@
 import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
-import { entities, indexToID } from "../stores/entities";
-import { addToLog, EventCategory } from "../stores/narrative";
+import { entities, indexToID } from "../modules/entities";
+import { addToLog, EventCategory } from "../modules/narrator";
 
 export function createEnergySystem(network: NetworkLayer) {
   const {

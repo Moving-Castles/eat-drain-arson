@@ -1,16 +1,32 @@
-import { get } from "svelte/store";
-import { network } from "../../stores/network";
-import { player, playerEnergy } from "../../stores/player";
-import { directToLog, LogEntryType, getOperationTale } from "../../stores/narrative";
 import { getRandomInt } from "../../utils/ui";
+import { get } from "svelte/store";
+import { Operation, OperationCategory } from "../types";
+import { checkCosts } from "../utils";
+import { network } from "../../modules/network";
+import { player } from "../../modules/player";
 
-export function gallop() {
-  if ((get(playerEnergy) || 0) >= 50) {
-    get(network).api?.move(50, getRandomInt(1, 8));
-    directToLog(getOperationTale("gallop", "lore"), LogEntryType.Banter);
+export const gallop: Operation = {
+  name: "gallop",
+  category: OperationCategory.Move,
+  metadata: {
+    description: "Move 5 step in random direction",
+    lore: [
+      "You leave a trail of blood.",
+      "Warm hearths for the sullen secret art, a lake of sludge to drown your heart",
+      "One day you may touch the happy isles.",
+    ],
+    errorMessage: "Movement failed: not enough energy",
+  },
+  costs: [
+    {
+      energy: 50,
+    },
+  ],
+  requirement: (costs) => {
+    if (!checkCosts(costs, get(player))) return false;
     return true;
-  } else {
-    directToLog("You do not have enough energy to do this", LogEntryType.Failure);
-    return false;
-  }
-}
+  },
+  execute: () => {
+    return get(network).api?.move(50, getRandomInt(1, 8));
+  },
+};

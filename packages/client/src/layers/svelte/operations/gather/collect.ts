@@ -1,16 +1,36 @@
 import { get } from "svelte/store";
-import { network } from "../../stores/network";
-import { player, playerEnergy } from "../../stores/player";
-import { directToLog, getOperationTale, LogEntryType } from "../../stores/narrative";
+import { Operation, OperationCategory } from "../types";
+import { checkCosts } from "../utils";
+import { network } from "../../modules/network";
+import { player } from "../../modules/player";
 
-export function collect() {
-  if ((get(playerEnergy) || 0) >= 50) {
-    get(network).api?.gather(50);
-    directToLog(getOperationTale("collect", "lore"), LogEntryType.Banter);
+export const collect: Operation = {
+  name: "collect",
+  category: OperationCategory.Gather,
+  metadata: {
+    description: "All I see are shrubs, leftovers and other bits",
+    lore: [
+      "fiberoptic shards cut your skin.",
+      "you hum the old song as you scoop. ",
+      `Frothproxy & twilight “|o|” / 
+      He was the Old Wanderer / 
+      The Stackdigger / 
+      He took my twilight boi away/ 
+      (˃̩̩̥ɷ˂̩̩̥)
+      Oh, the old Stackdigger!”, you cry; the smog is so thick you cough, you swallow, you throw up. What a waste of sludge.`,
+    ],
+    errorMessage: "Gather failed: not enough energy",
+  },
+  costs: [
+    {
+      energy: 50,
+    },
+  ],
+  requirement: (costs) => {
+    if (!checkCosts(costs, get(player))) return false;
     return true;
-  } else {
-    // directToLog("You do not have enough energy to do this", LogEntryType.Failure);
-    console.log("not enough energy");
-    return false;
-  }
-}
+  },
+  execute: () => {
+    return get(network).api?.gather(50);
+  },
+};

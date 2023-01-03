@@ -1,16 +1,27 @@
 import { get } from "svelte/store";
-import { network } from "../../stores/network";
-import { player, playerEnergy } from "../../stores/player";
-import { directToLog, getOperationTale, LogEntryType } from "../../stores/narrative";
+import { Operation, OperationCategory } from "../types";
+import { checkCosts } from "../utils";
+import { network } from "../../modules/network";
+import { player } from "../../modules/player";
 
-export function feast() {
-  if ((get(player).resource || 0) >= 50) {
-    get(network).api?.consume(50);
-    directToLog(getOperationTale("feast", "lore"), LogEntryType.Banter);
+export const feast: Operation = {
+  name: "feast",
+  category: OperationCategory.Consume,
+  metadata: {
+    description: "Deep gulps, if you throw up, dw, just drink it again <3",
+    lore: ["For another day on this earth!", "Weather, walk with me!", "In deep they rest, glory to those who rest!"],
+    errorMessage: "Consume failed: not enough resource",
+  },
+  costs: [
+    {
+      resource: 50,
+    },
+  ],
+  requirement: (costs) => {
+    if (!checkCosts(costs, get(player))) return false;
     return true;
-  } else {
-    // directToLog(getOperationTale('feast', 'failure'), LogEntryType.Failure);
-    console.log("Feast: not enough resource");
-    return false;
-  }
-}
+  },
+  execute: () => {
+    return get(network).api?.consume(50);
+  },
+};

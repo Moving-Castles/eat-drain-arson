@@ -1,27 +1,22 @@
-import { Coord } from "@latticexyz/recs";
 import { get } from "svelte/store";
-import { player, playerEnergy } from "../../stores/player";
-import { entities, EntityType } from "../../stores/entities";
-import { directToLog, LogEntryType } from "../../stores/narrative";
+import { player } from "../../modules/player";
+import { EntityType } from "../../modules/entities";
+import { Operation, OperationCategory } from "../types";
+import { checkForType } from "../utils";
 
-function checkForType(gridPosition: Coord, type: EntityType) {
-  const entity = Object.values(get(entities)).find(
-    (e) => (e.position?.x || 0) == gridPosition.x && (e.position?.y || 0) == gridPosition.y && e.entityType == type
-  );
-  return entity;
-}
-
-export function drained() {
-  directToLog("You ask yourself if someone has drained this soil before..");
-  const terrainInLocation = checkForType(get(player).position, EntityType.Terrain);
-  if (!terrainInLocation) {
-    directToLog("Still something left...", LogEntryType.Success);
-    return false;
-  }
-  if ((terrainInLocation.resource || 0) > 0) {
-    directToLog("Still something left...", LogEntryType.Success);
-    return false;
-  }
-  directToLog("No more sludge here.", LogEntryType.Failure);
-  return true;
-}
+export const drained: Operation = {
+  name: "drained?",
+  category: OperationCategory.Gate,
+  metadata: {
+    description: "Has someone already drained all the sludge in this soil?",
+    positiveMessage: "Nothing left.",
+    negativeMessage: "Some sludge left.",
+    errorMessage: "Gate failed",
+  },
+  costs: [],
+  requirement: () => {
+    const terrainInLocation = checkForType(get(player).position, EntityType.Terrain);
+    return !terrainInLocation || (terrainInLocation.resource || 0) > 0 ? false : true;
+  },
+  execute: () => false,
+};

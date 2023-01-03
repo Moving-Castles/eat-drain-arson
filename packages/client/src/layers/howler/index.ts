@@ -2,7 +2,7 @@ import { Howl } from "howler";
 import { soundLibrary } from "./sound-library";
 import { sample } from "lodash";
 import { writable, get } from "svelte/store";
-import { userSettings } from "../svelte/stores/ui";
+import { userSettings } from "../svelte/modules/ui";
 
 export const music = writable(new Howl({ src: "" }));
 export const fx = writable(new Howl({ src: "" }));

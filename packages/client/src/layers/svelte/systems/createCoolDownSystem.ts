@@ -1,6 +1,6 @@
 import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
-import { entities, indexToID } from "../stores/entities";
+import { entities, indexToID } from "../modules/entities";
 
 export function createCoolDownSystem(network: NetworkLayer) {
   const {

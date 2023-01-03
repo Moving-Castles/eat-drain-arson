@@ -2,8 +2,8 @@
   import { startEnvironmentSoundSystem, startMelodySoundSystem, startHarmonySoundSystem } from "../howler";
   import { onMount } from "svelte";
   import { bootGame } from "./boot";
-  import UIContainer from "./lib/ui/UIContainer.svelte";
-  import UIMenu from "./lib/ui/UIMenu.svelte";
+  import UIContainer from "./lib/UIContainer.svelte";
+  import UIMenu from "./lib/UIMenu.svelte";
   import {
     createPositionSystem,
     createEnergySystem,
@@ -19,7 +19,20 @@
     createPlayingSystem,
     createDeathSystem,
   } from "./systems";
-  import { network as networkStore, blockNumber, startBlock } from "./stores/network";
+  import { network as networkStore, blockNumber, startBlock } from "./modules/network";
+  import { transactions, receipts, activeTransactions } from "./modules/network";
+
+  $: {
+    console.log("___ Transactions store: ", $transactions);
+  }
+
+  $: {
+    console.log("___ Receipts store: ", $receipts);
+  }
+
+  $: {
+    console.log("___ activeTransactions:", $activeTransactions);
+  }
 
   onMount(async () => {
     const layers = await bootGame();
@@ -41,8 +54,9 @@
 
     networkStore.set(layers.network);
 
-    layers.network.txReduced$.subscribe((x) => {
-      console.log("TX", x);
+    layers.network.txReduced$.subscribe((tx) => {
+      console.log("TX:", tx);
+      // transactions.update((ts) => [tx, ...ts]);
     });
 
     startEnvironmentSoundSystem();

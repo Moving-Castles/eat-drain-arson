@@ -75,23 +75,23 @@ export async function createNetworkLayer(config: GameConfig) {
   }
 
   function move(energyInput: number, direction: number) {
-    systems["system.Move"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput, direction);
+    return systems["system.Move"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput, direction);
   }
 
   function gather(energyInput: number) {
-    systems["system.Gather"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
+    return systems["system.Gather"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
   }
 
   function consume(resourceInput: number) {
-    systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
+    return systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
   }
 
   function burn(resourceInput: number) {
-    systems["system.Fire"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
+    return systems["system.Fire"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
   }
 
   function play(energyInput: number) {
-    systems["system.Play"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
+    return systems["system.Play"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
   }
 
   // --- CONTEXT --------------------------------------------------------------------

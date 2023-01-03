@@ -1,15 +1,31 @@
 import { get } from "svelte/store";
-import { network } from "../../stores/network";
-import { player, playerEnergy } from "../../stores/player";
-import { directToLog, LogEntryType, getOperationTale } from "../../stores/narrative";
+import { Operation, OperationCategory } from "../types";
+import { checkCosts } from "../utils";
+import { network } from "../../modules/network";
+import { player } from "../../modules/player";
 
-export function drain() {
-  if ((get(playerEnergy) || 0) >= 200) {
-    get(network).api?.gather(200);
-    directToLog(getOperationTale("drain", "lore"), LogEntryType.Banter);
+export const drain: Operation = {
+  name: "drain",
+  category: OperationCategory.Gather,
+  metadata: {
+    description: "Keep collecting before we run out",
+    lore: [
+      "Your tool hits something hard: some kind of fossilised relic in yellow and black, sth valuable, maybe commemorating sth. It’s covered in tooth marks. You give it a small lick. ",
+      "Get sth to eat, dig a hole, find shelter. You feel really fucking lonely",
+      "Take half/leave half, cut out one eye, give it a wash, leave it, they demand a sacrifice.",
+    ],
+    errorMessage: "Gather failed: not enough energy",
+  },
+  costs: [
+    {
+      energy: 200,
+    },
+  ],
+  requirement: (costs) => {
+    if (!checkCosts(costs, get(player))) return false;
     return true;
-  } else {
-    directToLog("You do not have enough energy to do this", LogEntryType.Failure);
-    return false;
-  }
-}
+  },
+  execute: () => {
+    return get(network).api?.gather(200);
+  },
+};
