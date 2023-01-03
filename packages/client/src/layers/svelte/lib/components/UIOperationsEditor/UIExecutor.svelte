@@ -7,14 +7,16 @@
   import { playSound } from "../../../../howler";
   import {
     progress,
-    sequencerActive,
+    sequencerState,
     activeOperationIndex,
     operationDuration,
     sequence,
     startSequencer,
     stopSequencer,
     clearSequencer,
-  } from "../../../modules/sequencer";
+    State,
+    StateString,
+  } from "../../../modules/sequencer/index";
   import { OperationCategory, OperationCategoryString } from "../../../operations/types";
   export const ID = "ui-executor";
 
@@ -51,13 +53,14 @@
 
 <div class="ui-executor">
   <!-- Shown if player is in cooldown -->
-  {#if !$sequencerActive && ($player.coolDownBlock || 0) > $blockNumber}
+  {#if $sequencerState !== State.Running && ($player.coolDownBlock || 0) > $blockNumber}
     <div class="cooldown-overlay">
       <div>
         In cooldown for <strong>{($player.coolDownBlock || 0) - $blockNumber}</strong> seconds
       </div>
     </div>
   {/if}
+  <div class="state">{StateString[$sequencerState]}</div>
 
   <!-- GRID -->
   {#if $sequence.length > 0}
@@ -67,7 +70,7 @@
           use:tooltip
           title={sequenceElement.operation.metadata.description}
           class="slot {OperationCategoryString[sequenceElement.operation.category]}"
-          class:active={$sequencerActive && $activeOperationIndex === index}
+          class:active={$sequencerState === State.Running && $activeOperationIndex === index}
           class:failure={!$sequence[index].success}
         >
           <div class="operation-name">
@@ -93,15 +96,15 @@
 
   <!-- CONTROLS -->
   <div class="sequencer-controls">
-    {#if $sequencerActive}
+    {#if $sequencerState == State.Running}
       <button class="action failure" on:click={stop}>Stop</button>
     {/if}
-    {#if !$sequencerActive}
-      {#if $sequence.length > 0}
-        <button class="action failure" on:click={clear}>Clear</button>
-        <button class="action success" on:click={start}>Start</button>
-      {/if}
+
+    {#if $sequencerState == State.Ready}
+      <button class="action failure" on:click={clear}>Clear</button>
+      <button class="action success" on:click={start}>Start</button>
     {/if}
+
     <button class="action warning" class:big={$sequence.length === 0} on:click={edit}>Edit</button>
   </div>
 </div>
@@ -256,5 +259,9 @@
   progress::-webkit-progress-value {
     background: grey;
     border-radius: 0;
+  }
+
+  .state {
+    color: red;
   }
 </style>

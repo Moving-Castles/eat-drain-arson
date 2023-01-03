@@ -10,10 +10,11 @@
     SequenceElement,
     emptySequenceElement,
     SEQUENCER_LENGTH,
-    submitSequence,
+    loadSequencer,
     stopSequencer,
-    sequencerActive,
-  } from "../../../modules/sequencer";
+    sequencerState,
+    State,
+  } from "../../../modules/sequencer/index";
 
   const categories = [...new Set(operations.map((op) => op.category))];
 
@@ -29,7 +30,7 @@
   function submit() {
     playSound("selectTwo", "ui");
     // Remove empty sequence elements before submitting
-    submitSequence(localSequence.filter((item) => item.operation.name !== "+"));
+    loadSequencer(localSequence.filter((item) => item.operation.name !== "+"));
     uiState.alter("compulsions", "active", false);
   }
 
@@ -79,7 +80,7 @@
       <div class="information">Click <strong>operations</strong> below to add to sequencer.</div>
     {:else}
       <button class="action warning" on:click={clear}>Clear sequence</button>
-      {#if !$sequencerActive}
+      {#if $sequencerState !== State.Running}
         <button class="action success" on:click={submit}>Submit sequence</button>
       {:else}
         <button class="action failure" on:click={stop}>Stop current sequence</button>

@@ -1,6 +1,6 @@
 import { derived, writable, get } from "svelte/store";
 import { network, blockNumber } from "../network";
-import { entities, Entity } from "../entities";
+import { entities, Entity, Player } from "../entities";
 
 import { Directions } from "../../utils/space";
 
@@ -57,7 +57,10 @@ export function activityToVerb(activity: Activities) {
 // --- STORES -----------------------------------------------------------------
 
 export const playerAddress = derived(network, ($network) => $network.network?.connectedAddress.get() || "0x0");
-export const player = derived([entities, playerAddress], ([$entities, $playerAddress]) => $entities[$playerAddress]);
+export const player = derived(
+  [entities, playerAddress],
+  ([$entities, $playerAddress]) => $entities[$playerAddress] as Player
+);
 export const playerActivity = writable(Activities.Idle);
 export const playerDirection = writable(Directions.Random);
 export const playerEnergy = derived([player, blockNumber], ([$player, $blockNumber]) =>
@@ -76,7 +79,7 @@ export const dead = derived(playerEnergy, ($playerEnergy) => $playerEnergy < 1);
  * @param $blockNumber
  * @returns
  */
-export function calculateEnergy($player: Entity, $blockNumber: number) {
+export function calculateEnergy($player: Player, $blockNumber: number) {
   if (parseInt(String($player.death)) <= $blockNumber) {
     return 0;
   }
@@ -84,7 +87,7 @@ export function calculateEnergy($player: Entity, $blockNumber: number) {
   return parseInt(String($player.death)) - $blockNumber;
 }
 
-export function calculateHeartbeats(player: Entity, blockNumber: number) {
+export function calculateHeartbeats(player: Player, blockNumber: number) {
   const energy = calculateEnergy(player, blockNumber);
   const lifespan = parseInt(String(player.death)) - parseInt(String(player.birth));
   if (energy < 1) {

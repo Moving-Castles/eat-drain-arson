@@ -1,7 +1,7 @@
 import { Coord } from "@latticexyz/utils";
 import { writable, get, derived } from "svelte/store";
 import { network, blockNumber } from "../network";
-import { calculateEnergy } from "../player";
+import { player, calculateEnergy } from "../player";
 import { uniq } from "lodash";
 import { seedToName } from "../../utils/name";
 
@@ -118,12 +118,12 @@ export const fires = derived(entities, ($entities) =>
 
 export const terrains = derived(
   entities,
-  ($entities) => Object.values($entities).filter((e) => e.entityType == EntityType.Terrain) as ArrayLike<Entity>
+  ($entities) => Object.values($entities).filter((e) => e.entityType == EntityType.Terrain) as ArrayLike<Terrain>
 );
 
 export const corpses = derived(
   entities,
-  ($entities) => Object.values($entities).filter((e) => e.entityType == EntityType.Corpse) as ArrayLike<Entity>
+  ($entities) => Object.values($entities).filter((e) => e.entityType == EntityType.Corpse) as ArrayLike<Corpse>
 );
 
 // Objects
@@ -162,7 +162,7 @@ export const indexToID = (index: number) => {
  * @param Array of player names
  * @returns formatted string of names
  */
-export function playerList(players: string[]) {
+export function playerList(players: string[]): string {
   const playerNames = players.map((p) => (get(entities)[p] ? seedToName(get(entities)[p].seed) : "not-found"));
 
   for (let i = 0; i < playerNames.length; i++) {

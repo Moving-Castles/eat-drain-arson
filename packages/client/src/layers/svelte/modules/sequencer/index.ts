@@ -1,26 +1,52 @@
 import { writable, get } from "svelte/store";
 import { tweened } from "svelte/motion";
 import { Operation, OperationCategory } from "../../operations/types";
-import { blockNumber, transactions, receipts } from "../network";
+import { ContractReceipt, ContractTransaction } from "ethers";
+import { blockNumber } from "../network";
 import { player, playerActivity, Activities, categoryToActivity } from "../player";
-import { uiState } from "../ui";
-import { EntityType } from "../entities";
-import { playSound } from "../../../howler";
-import { ContractReceipt } from "ethers";
 
-// --- STORES -----------------------------------------------------------------
+// --- TYPES -----------------------------------------------------------------
 
 export type SequenceElement = {
   operation: Operation;
   success: boolean;
 };
 
-enum SequencerState {
-  Inactive,
-  Executing,
-  Waiting,
+export enum State {
+  Empty,
+  Ready,
+  StartingUp,
+  ShuttingDown,
+  Running,
   Error,
 }
+
+enum Event {
+  Start,
+  Run,
+  Stop,
+  Load,
+  Clear,
+  Finish,
+  Error,
+}
+
+export const StateString = {
+  [State.Empty]: "Empty",
+  [State.Ready]: "Ready",
+  [State.StartingUp]: "Starting up",
+  [State.ShuttingDown]: "Shutting down",
+  [State.Running]: "running",
+  [State.Error]: "Error",
+};
+
+// --- STORES -----------------------------------------------------------------
+
+export const sequence = writable([] as SequenceElement[]);
+export const sequencerState = writable(State.Empty);
+export const activeOperationIndex = writable(0);
+export const progress = tweened(0);
+export const operationDuration = writable(0);
 
 // --- CONSTANTS -----------------------------------------------------------------
 
@@ -41,129 +67,210 @@ export const emptySequenceElement: SequenceElement = {
 
 export const SEQUENCER_LENGTH = 7;
 
-// --- STORES -----------------------------------------------------------------
+// --- ..... -----------------------------------------------------------------
 
-export const sequence = writable([] as SequenceElement[]);
-export const sequencerActive = writable(false);
-export const activeOperationIndex = writable(0);
-export const progress = tweened(0);
-export const operationDuration = writable(0);
-
-let oldCoolDownBlock = 0;
-let turnCounter = 0;
-let blockDelay = 0;
-
-export function submitSequence(newSequence: SequenceElement[]) {
-  sequence.set(newSequence);
-}
-
-export function startSequencer() {
-  turnCounter = 0;
-  sequencerActive.set(true);
-}
-
-export function stopSequencer() {
-  sequencerActive.set(false);
-
-  // Reset success states
-  sequence.update((s) => {
-    for (let i = 0; i < s.length; i++) {
-      s[i].success = true;
-    }
-    return s;
-  });
-}
-
-export function clearSequencer() {
-  sequence.set([]);
-}
-
-async function executeOperation(sequenceElement: SequenceElement) {
-  if (sequenceElement) {
-    playSound("eventGood", "ui");
-    console.log("====> executing operation:", sequenceElement.operation.name);
-
-    // Check operation requirements
-    if (!sequenceElement.operation.requirement(sequenceElement.operation.costs)) return false;
-
-    // Execute
-    const tx = await sequenceElement.operation.execute();
-
-    if (tx === false) return false;
-    console.log(tx);
-
-    const receipt: ContractReceipt = await tx.wait();
-    console.log(receipt);
-
-    return true;
-  } else {
-    stopSequencer();
-    return false;
+export function transition(state: State, event: Event) {
+  switch (state) {
+    case State.Empty:
+      return emptyState(event);
+    case State.Ready:
+      return readyState(event);
+    case State.StartingUp:
+      return startingUpState(event);
+    case State.Running:
+      return runningState(event);
+    case State.Executing:
+      return executingState(event);
+    case State.ShuttingDown:
+      return shuttingDownState(event);
+    default:
+      return false;
   }
 }
 
+// __ Empty
+// => Load
+function emptyState(event: Event) {
+  switch (event) {
+    case Event.Load:
+      sequencerState.set(State.Ready);
+      return true;
+    default:
+      console.error("Invalid event:", event);
+      return false;
+  }
+}
+
+// __ Ready
+// => Clear
+// => Start
+function readyState(event: Event) {
+  switch (event) {
+    case Event.Clear:
+      sequencerState.set(State.Empty);
+      return true;
+    case Event.Start:
+      sequencerState.set(State.StartingUp);
+      return true;
+    default:
+      console.error("Invalid event:", event);
+      return false;
+  }
+}
+
+// __ StartingUp
+// => Run
+function startingUpState(event: Event) {
+  switch (event) {
+    case Event.Run:
+      sequencerState.set(State.Running);
+      return true;
+    default:
+      console.error("Invalid event:", event);
+      return false;
+  }
+}
+
+// __ ShuttingDown
+// => Finish
+function shuttingDownState(event: Event) {
+  switch (event) {
+    case Event.Finish:
+      sequencerState.set(State.Ready);
+      return true;
+    default:
+      console.error("Invalid event:", event);
+      return false;
+  }
+}
+
+// __ Running
+// => Stop
+// => Execute
+function runningState(event: Event) {
+  switch (event) {
+    case Event.Stop:
+      sequencerState.set(State.ShuttingDown);
+      return true;
+    default:
+      console.error("Invalid event:", event);
+      return false;
+  }
+}
+
+// --- API -----------------------------------------------------------------
+
+export function loadSequencer(newSequence: SequenceElement[]) {
+  if (transition(get(sequencerState), Event.Load)) {
+    sequence.set(newSequence);
+  }
+}
+
+export function startSequencer() {
+  if (transition(get(sequencerState), Event.Start)) {
+    startListener();
+  }
+}
+
+export function stopSequencer() {
+  if (transition(get(sequencerState), Event.Stop)) {
+    stopListener();
+  }
+}
+
+export function clearSequencer() {
+  if (transition(get(sequencerState), Event.Clear)) {
+    sequence.set([]);
+  }
+}
+
+// --- FUNCTIONS -----------------------------------------------------------------
+
+async function startListener() {
+  console.log("Starting listener...");
+  transition(get(sequencerState), Event.Run);
+}
+
+async function stopListener() {
+  console.log("Stopping listener...");
+  transition(get(sequencerState), Event.Finish);
+}
+
+let oldCoolDownBlock = 0;
+let turnCounter = 0;
+let activeTransactions: ContractTransaction[] = [];
+
 blockNumber.subscribe(async (newBlock) => {
-  if (get(player)) {
-    // If the player be dead
-    if (get(player).entityType == EntityType.Corpse) {
-      uiState.alter("executor", "hidden", true);
-      uiState.alter("compulsions", "hidden", true);
-      uiState.close("executor");
-      uiState.close("compulsions");
-      return;
-    }
+  if (!get(player)) return false;
 
-    // If cooldown block changed
-    if (get(player).coolDownBlock !== oldCoolDownBlock) {
-      // Block to cooldown is (current block + 1) - cooldown block
-      operationDuration.set((get(player).coolDownBlock || 0) - newBlock + 1);
-      // Tween value down from operationDuration ...
-      progress.set(get(operationDuration), { duration: 0 });
-      // ... to 0 over operationDuration seconds
-      progress.set(0, { duration: get(operationDuration) * 1000 });
-      // Store cooldown block for future reference
-      oldCoolDownBlock = get(player).coolDownBlock || 0;
-    }
+  // !! TODO: Move somewhere else
+  // If cooldown block changed
+  if (get(player).coolDownBlock !== oldCoolDownBlock) {
+    // Blocks to cooldown is (current block + 1) - cooldown block
+    operationDuration.set((get(player).coolDownBlock || 0) - newBlock + 1);
+    // Tween value down from operationDuration ...
+    progress.set(get(operationDuration), { duration: 0 });
+    // ... to 0 over operationDuration seconds
+    progress.set(0, { duration: get(operationDuration) * 1000 });
+    // Store cooldown block for future reference
+    oldCoolDownBlock = get(player).coolDownBlock || 0;
+  }
 
-    // Set player state to idle if:
-    // – the sequencer is not active
-    // - Cooldown period is over
-    if (!get(sequencerActive) && newBlock > (get(player).coolDownBlock || 0)) {
-      playerActivity.set(Activities.Idle);
-    }
+  // !! TODO: Move somewhere else
+  // Set player state to idle if:
+  // – the sequencer is not running
+  // - Cooldown period is over
+  const playerIdle = get(sequencerState) !== State.Running && newBlock > (get(player).coolDownBlock || 0);
 
-    // Execute the next operation if
-    // – Sequencer is active
-    // - Cooldown period is over
-    // - Arbitrary block delay
-    if (get(sequencerActive) && newBlock > (get(player).coolDownBlock || 0) && blockDelay % 4 == 0) {
-      activeOperationIndex.set(turnCounter % get(sequence).length);
+  if (playerIdle) {
+    playerActivity.set(Activities.Idle);
+  }
 
-      const currentSequenceElement = get(sequence)[get(activeOperationIndex)];
-      const outcome = await executeOperation(currentSequenceElement);
+  // Execute the next operation if
+  // – Sequencer is running
+  // - Cooldown period is over
+  // - The last transaction has been confirmed
+  const executeNext =
+    get(sequencerState) === State.Running &&
+    newBlock > (get(player).coolDownBlock || 0) &&
+    activeTransactions.length === 0;
 
-      if (currentSequenceElement.operation.category === OperationCategory.Gate) {
-        // If current operation is a gate
-        // – proceed if returning true
-        // – start from beginning if return false
-        turnCounter = outcome ? turnCounter + 1 : 0;
+  if (executeNext) {
+    // Get current sequence element
+    activeOperationIndex.set(turnCounter % get(sequence).length);
+    const sequenceElement = get(sequence)[get(activeOperationIndex)];
+
+    if (sequenceElement.operation.category === OperationCategory.Gate) {
+      // For gates we only check the requirements
+      // Proceed if true, start from beginning if false
+      turnCounter = sequenceElement.operation.requirement(sequenceElement.operation.costs) ? turnCounter + 1 : 0;
+    } else {
+      // Check operation requirements
+      if (sequenceElement.operation.requirement(sequenceElement.operation.costs)) {
+        const tx = await sequenceElement.operation.execute();
+
+        if (tx) {
+          activeTransactions.push(tx);
+
+          const receipt: ContractReceipt = await tx.wait();
+
+          // Remove transaction from activeTransactions
+          activeTransactions = activeTransactions.filter((tx) => tx.hash !== receipt.transactionHash);
+
+          // !! TODO: Move somewhere else
+          // Set player activity
+          // if (outcome) {
+          //   playerActivity.set(categoryToActivity(currentSequenceElement.operation.category));
+          // }
+        } else {
+          console.error("transaction failed");
+        }
       } else {
-        turnCounter++;
+        // ...
+        console.error("Operation: requirements failed");
       }
 
-      sequence.update((s) => {
-        if (s[get(activeOperationIndex)].operation.category !== OperationCategory.Gate) {
-          s[get(activeOperationIndex)].success = outcome;
-        }
-        return s;
-      });
-
-      // Set player activity
-      // if (outcome) {
-      //   playerActivity.set(categoryToActivity(currentSequenceElement.operation.category));
-      // }
+      turnCounter++;
     }
-
-    blockDelay++;
   }
 });
