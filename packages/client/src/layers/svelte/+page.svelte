@@ -1,4 +1,5 @@
 <script lang="ts">
+  import "./app.css";
   import { startEnvironmentSoundSystem, startMelodySoundSystem, startHarmonySoundSystem } from "../howler";
   import { onMount } from "svelte";
   import { bootGame } from "./boot";

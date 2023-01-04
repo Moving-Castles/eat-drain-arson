@@ -9,7 +9,8 @@
     "// use yarn dev when developing with a locally linked version of MUD": "",
     "dev": "vite --force",
     "// use yarn start when developing with MUD packages from npm or yalc": "",
-    "start": "rimraf ../../.parcel-cache && rimraf .parcel-cache && yarn parcel index.html --port 3000",
+    "start": "vite --port 3000",
+    "// start": "rimraf ../../.parcel-cache && rimraf .parcel-cache && yarn parcel index.html --port 3000",
     "// note: must use MUD packages from npm or yalc to build for production": "",
     "build": "rimraf dist && rimraf ../../.parcel-cache && rimraf .parcel-cache && parcel build index.html",
     "prod": "yarn serve dist",
@@ -51,6 +52,8 @@
   "devDependencies": {
     "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@sveltejs/vite-plugin-svelte": "^2.0.2",
+    "@sveltejs/adapter-auto": "^1.0.0",
+    "@sveltejs/kit": "^1.0.1",
     "@tsconfig/svelte": "^3.0.0",
     "@types/howler": "^2.2.7",
     "@types/jest": "^27.4.1",
@@ -72,10 +75,10 @@
     "process": "^0.11.10",
     "serve": "^14.1.2",
     "svelte": "^3.55.0",
-    "svelte-preprocess": "^5.0.0",
     "ts-jest": "^29.0.3",
     "tslib": "^2.4.1",
     "typescript": "^4.9.4",
     "vite": "^4.0.4"
-  }
+  },
+  "type": "module"
 }

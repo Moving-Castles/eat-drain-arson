@@ -19,10 +19,8 @@
   onMount(async () => {
     ctx = canvasEl.getContext("2d");
     perlin = await createPerlin();
-
     for (let y = 0; y <= 100; y++) {
       for (let x = 0; x <= 100; x++) {
-        s;
         paintPixel(x, y, perlin(x, y, 0, 20));
       }
     }

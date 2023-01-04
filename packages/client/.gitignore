@@ -1,5 +1,7 @@
 node_modules
 dist
 .parcel-cache
+.svelte-kit
 .yarn/install-state.gz
 .DS_Store
+yarn-error.log
