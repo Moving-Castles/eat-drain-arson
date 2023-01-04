@@ -2,13 +2,14 @@
 
 _a tragicomic npc survival sim_
 
-----
+---
 
 To start local chain and client:
+
 ```
-yarn && yarn start
+yarn && yarn dev
 ```
 
-----
+---
 
 https://movingcastles.world/

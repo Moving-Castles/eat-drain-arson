@@ -1,3 +1,6 @@
+components/=./src/components
+systems/=./src/systems
+libraries/=./src/libraries
 memmove/=../../node_modules/memmove/src/
 gsn=../../node_modules/@opengsn/contracts/src/
 ds-test/=../../node_modules/ds-test/src/
