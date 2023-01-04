@@ -4,7 +4,8 @@ import { player } from "../../modules/player";
 import { fires } from "../../modules/entities";
 import { isEmpty } from "lodash";
 import { transformationToDirection, positionsToTransformation, directionalPathfind } from "../../utils/space";
-import { Operation, OperationCategory } from "../types";
+import type { Operation } from "../types";
+import { OperationCategory } from "../types";
 import { checkCosts } from "../utils";
 
 export const goTowardsFire: Operation = {

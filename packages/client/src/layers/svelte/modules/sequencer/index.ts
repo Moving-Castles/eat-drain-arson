@@ -1,9 +1,10 @@
 import { writable, get } from "svelte/store";
 import { tweened } from "svelte/motion";
-import { Operation, OperationCategory } from "../../operations/types";
-import { ContractReceipt, ContractTransaction } from "ethers";
+import type { Operation } from "../../operations/types";
+import { OperationCategory } from "../../operations/types";
+import type { ContractReceipt, ContractTransaction } from "ethers";
 import { blockNumber } from "../network";
-import { player, playerActivity, Activities, categoryToActivity } from "../player";
+import { player, playerActivity, Activities } from "../player";
 
 // --- TYPES -----------------------------------------------------------------
 

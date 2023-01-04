@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { Coord } from "@latticexyz/utils";
-  import { createPerlin, Perlin } from "@latticexyz/noise";
+  import type { Coord } from "@latticexyz/utils";
+  import type { GridTile } from "./index";
+  import type { Perlin  } from "@latticexyz/noise";
+  import { createPerlin } from "@latticexyz/noise";
   import { onMount } from "svelte";
   import UIGridTile from "./UIGridTile.svelte";
-  import { GridTile } from "./index";
   import { entities, EntityType } from "../../../modules/entities";
   import { Activities, player, playerActivity, playerDirection } from "../../../modules/player";
   import { blockNumber } from "../../../modules/network";

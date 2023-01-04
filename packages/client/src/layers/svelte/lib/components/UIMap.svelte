@@ -2,7 +2,8 @@
   import { onMount } from "svelte";
   import { entities, EntityType } from "../../modules/entities";
   import { player, playerAddress } from "../../modules/player";
-  import { createPerlin, Perlin } from "@latticexyz/noise";
+  import type { Perlin } from "@latticexyz/noise";
+  import { createPerlin } from "@latticexyz/noise";
 
   let canvasEl: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;

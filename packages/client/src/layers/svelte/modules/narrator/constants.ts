@@ -1,4 +1,4 @@
-import { Narration } from "./types";
+import type { Narration } from "./index";
 
 export const banter: Narration = {
   main: [

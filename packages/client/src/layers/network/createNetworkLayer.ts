@@ -9,9 +9,10 @@ import {
 } from "@latticexyz/std-client";
 import { createFaucetService } from "@latticexyz/network";
 import { defineLoadingStateComponent, defineStatsComponent } from "./components";
-import { SystemTypes } from "contracts/types/SystemTypes";
+import type { SystemTypes } from "contracts/types/SystemTypes";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
-import { GameConfig, getNetworkConfig } from "./config";
+import type { GameConfig } from "./config";
+import { getNetworkConfig } from "./config";
 import { BigNumber, utils } from "ethers";
 
 /**

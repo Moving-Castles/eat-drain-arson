@@ -1,6 +1,7 @@
 import { get } from "svelte/store";
 import { player } from "../../modules/player";
-import { Operation, OperationCategory } from "../types";
+import type { Operation } from "../types";
+import { OperationCategory } from "../types";
 
 export const sludgeRich: Operation = {
   name: "sludge rich?",

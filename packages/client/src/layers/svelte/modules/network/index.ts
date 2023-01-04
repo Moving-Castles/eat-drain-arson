@@ -1,5 +1,5 @@
 import { writable, derived } from "svelte/store";
-import { NetworkLayer } from "../../../network";
+import type { NetworkLayer } from "../../../network";
 import type { ContractReceipt } from "ethers";
 
 // --- STORES -----------------------------------------------------------------

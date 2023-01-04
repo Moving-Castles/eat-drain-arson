@@ -1,4 +1,4 @@
-import { ComponentUpdate } from "@latticexyz/recs";
+import type { ComponentUpdate } from "@latticexyz/recs";
 
 export function cannibalism(update: ComponentUpdate, isSelf: boolean) {
   console.log("cannibalsm", update);

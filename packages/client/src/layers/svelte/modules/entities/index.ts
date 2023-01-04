@@ -1,4 +1,4 @@
-import { Coord } from "@latticexyz/utils";
+import type { Coord } from "@latticexyz/utils";
 import { writable, get, derived } from "svelte/store";
 import { network, blockNumber } from "../network";
 import { player, calculateEnergy } from "../player";

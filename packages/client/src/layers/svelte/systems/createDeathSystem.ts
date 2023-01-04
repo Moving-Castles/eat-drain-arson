@@ -1,5 +1,5 @@
-import { defineComponentSystem, ComponentUpdate } from "@latticexyz/recs";
-import { NetworkLayer } from "../../network";
+import { defineComponentSystem } from "@latticexyz/recs";
+import type { NetworkLayer } from "../../network";
 import { entities, indexToID } from "../modules/entities";
 
 export function createDeathSystem(network: NetworkLayer) {

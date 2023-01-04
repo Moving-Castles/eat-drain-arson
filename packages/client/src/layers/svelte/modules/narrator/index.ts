@@ -1,5 +1,5 @@
 import { writable, get } from "svelte/store";
-import { ComponentUpdate } from "@latticexyz/recs";
+import type { ComponentUpdate } from "@latticexyz/recs";
 import { blockNumber } from "../network";
 import { playerAddress } from "../player";
 import { indexToID, entities, EntityType } from "../entities";

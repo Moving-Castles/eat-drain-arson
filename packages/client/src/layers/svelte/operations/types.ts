@@ -1,4 +1,4 @@
-import { ContractTransaction } from "ethers";
+import type { ContractTransaction } from "ethers";
 
 type Metadata = {
   description: string;

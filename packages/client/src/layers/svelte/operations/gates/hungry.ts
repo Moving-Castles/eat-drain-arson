@@ -1,5 +1,6 @@
 import { get } from "svelte/store";
-import { Operation, OperationCategory } from "../types";
+import type { Operation } from "../types";
+import { OperationCategory } from "../types";
 import { player } from "../../modules/player";
 
 export const hungry: Operation = {

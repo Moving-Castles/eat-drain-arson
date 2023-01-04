@@ -1,7 +1,8 @@
 import { get } from "svelte/store";
 import { player } from "../../modules/player";
 import { EntityType } from "../../modules/entities";
-import { Operation, OperationCategory } from "../types";
+import type { Operation } from "../types";
+import { OperationCategory } from "../types";
 import { checkForType } from "../utils";
 
 export const byFire: Operation = {

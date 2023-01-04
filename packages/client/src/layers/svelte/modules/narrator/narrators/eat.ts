@@ -1,4 +1,4 @@
-import { ComponentUpdate } from "@latticexyz/recs";
+import type { ComponentUpdate } from "@latticexyz/recs";
 import { sample } from "lodash";
 
 const secondPersonActions = ["You absorbed ", "You ate "];

@@ -1,4 +1,5 @@
-import { SoundLibrary } from "../types";
+import type { SoundLibrary } from "../types";
+
 import { ui } from "./ui";
 import { play } from "./play";
 import { misc } from "./misc";

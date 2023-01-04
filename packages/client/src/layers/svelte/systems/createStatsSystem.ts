@@ -1,6 +1,7 @@
 import { defineComponentSystem } from "@latticexyz/recs";
-import { NetworkLayer } from "../../network";
-import { entities, indexToID, StatsType } from "../modules/entities";
+import type { NetworkLayer } from "../../network";
+import type { StatsType } from "../modules/entities";
+import { entities, indexToID } from "../modules/entities";
 import { addToLog, EventCategory } from "../modules/narrator";
 
 export function createStatsSystem(network: NetworkLayer) {

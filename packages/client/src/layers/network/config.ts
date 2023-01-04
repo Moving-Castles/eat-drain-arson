@@ -1,4 +1,4 @@
-import { SetupContractConfig } from "@latticexyz/std-client";
+import type { SetupContractConfig } from "@latticexyz/std-client";
 
 export type GameConfig = {
   worldAddress: string;

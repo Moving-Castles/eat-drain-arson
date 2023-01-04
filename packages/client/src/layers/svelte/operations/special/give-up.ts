@@ -1,5 +1,6 @@
 import { get } from "svelte/store";
-import { Operation, OperationCategory } from "../types";
+import type { Operation } from "../types";
+import { OperationCategory } from "../types";
 import { network } from "../../modules/network";
 import { player } from "../../modules/player";
 import { Directions } from "../../utils/space";

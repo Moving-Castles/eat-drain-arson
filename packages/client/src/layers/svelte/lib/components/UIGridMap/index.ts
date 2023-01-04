@@ -1,6 +1,6 @@
-import { Coord } from "@latticexyz/utils";
-import { Entity } from "../../../../modules/entities";
-import { TerrainType } from "../../../../utils/space";
+import type { Coord } from "@latticexyz/utils";
+import type { Entity } from "../../../../modules/entities";
+import type { TerrainType } from "../../../../utils/space";
 
 export interface GridTile {
   direction: string;

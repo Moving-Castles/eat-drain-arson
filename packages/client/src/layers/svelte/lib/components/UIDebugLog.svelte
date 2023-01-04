@@ -1,6 +1,6 @@
 <script lang="ts">
   import { entities } from "../../modules/entities";
-  import { player, playerAddress, playerList } from "../../modules/player";
+  import { player, playerAddress } from "../../modules/player";
   import { seedToName } from "../../utils/name";
   import { shortenAddress } from "../../utils/ui";
   import { blockNumber } from "../../modules/network";
@@ -52,9 +52,6 @@
       {/if}
       {#if value.resource}
         / r: {value.resource}
-      {/if}
-      {#if value.entityType == EntityType.Fire}
-        / => {playerList(value.creator)}
       {/if}
     </div>
   {/each}

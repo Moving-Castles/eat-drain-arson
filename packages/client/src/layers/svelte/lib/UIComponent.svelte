@@ -1,6 +1,6 @@
 <script lang="ts">
   import UIComponentTitleBar from "./UIComponentTitleBar.svelte";
-  import { UIComponentPlacement, UIComponentOptions } from "../modules/ui/config";
+  import type { UIComponentPlacement, UIComponentOptions } from "../modules/ui/config";
   import { fade } from "svelte/transition";
   import { uiState, speed, activeComponent } from "../modules/ui";
 

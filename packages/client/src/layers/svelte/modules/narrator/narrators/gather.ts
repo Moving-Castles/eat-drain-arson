@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { ComponentUpdate } from "@latticexyz/recs";
+import type { ComponentUpdate } from "@latticexyz/recs";
 import { seedToName } from "../../../utils/name";
 import { indexToID, entities } from "../../entities";
 // import { sample } from "lodash";

@@ -1,6 +1,7 @@
 import { derived, writable, get } from "svelte/store";
 import { network, blockNumber } from "../network";
-import { entities, Entity, Player } from "../entities";
+import type { Entity, Player } from "../entities";
+import { entities } from "../entities";
 
 import { Directions } from "../../utils/space";
 

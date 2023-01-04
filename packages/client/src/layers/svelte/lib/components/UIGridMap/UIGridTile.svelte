@@ -1,9 +1,11 @@
 <script lang="ts">
   import { get } from "svelte/store";
-  import { GridTile, TileOverlays } from "./index";
+  import type { GridTile } from "./index";
+  import type { Entity } from "../../../modules/entities";
+  import { TileOverlays } from "./index";
   import { TerrainType, terrainTypeToString, directionToString } from "../../../utils/space";
   import { player } from "../../../modules/player";
-  import { entities, Entity, EntityType } from "../../../modules/entities";
+  import { entities, EntityType } from "../../../modules/entities";
   import { seedToName, seedToMaskTileOverlay } from "../../../utils/name";
   import { tooltip } from "../UIToolTip/index";
   import { fireString, fireStatusClass } from "../UIFires/index";

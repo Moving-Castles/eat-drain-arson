@@ -1,5 +1,5 @@
 import { createNetworkLayer } from "../network";
-import { Layers } from "../../types";
+import type { Layers } from "../../types";
 import { Wallet } from "ethers";
 
 export async function bootGame() {

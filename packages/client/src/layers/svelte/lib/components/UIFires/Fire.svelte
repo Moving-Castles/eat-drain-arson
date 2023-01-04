@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { Entity } from "../../../modules/entities";
+  import type { Entity} from "../../../modules/entities";
   import { blockNumber } from "../../../modules/network";
-  import { playerList } from "../../../modules/player";
   import { seedToFireName } from "../../../utils/name";
   import { fade } from "svelte/transition";
   export let address: string;
@@ -21,7 +20,6 @@
     <div class="fire-resource">
       remaining burntime: <strong>{Math.max((value.coolDownBlock || 0) - $blockNumber, 0)}</strong> seconds
     </div>
-    <div class="fire-creators">arsonists: <strong>{playerList(value.creator || [])}</strong></div>
   </div>
 </div>
 

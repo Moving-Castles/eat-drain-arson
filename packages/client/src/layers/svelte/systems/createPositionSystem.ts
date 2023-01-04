@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import { defineComponentSystem } from "@latticexyz/recs";
-import { NetworkLayer } from "../../network";
+import type { NetworkLayer } from "../../network";
 import { entities, indexToID } from "../modules/entities";
 import { positionsToTransformation, transformationToDirection } from "../utils/space";
 import { playerDirection, playerAddress } from "../modules/player";

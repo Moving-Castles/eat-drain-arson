@@ -1,4 +1,4 @@
-import { ComponentUpdate } from "@latticexyz/recs";
+import type { ComponentUpdate } from "@latticexyz/recs";
 import { get } from "svelte/store";
 import { indexToID, entities } from "../../entities";
 import { seedToName } from "../../../utils/name";

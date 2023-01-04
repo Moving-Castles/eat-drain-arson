@@ -1,5 +1,4 @@
 import { writable, derived, get } from "svelte/store";
-import { playerList } from "../../../modules/player";
 import { blockNumber } from "../../../modules/network";
 
 export const fireString = (v) => {
@@ -19,9 +18,6 @@ export const fireString = (v) => {
     }
     if ($value.resource) {
       str += ` / resources: ${$value.resource}`;
-    }
-    if ($value.creator) {
-      str += ` / creators: ${playerList($value.creator)}`;
     }
 
     return str;

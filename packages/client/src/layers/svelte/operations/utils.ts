@@ -1,8 +1,9 @@
-import { get } from "svelte/store";
 import type { Cost } from "./types";
+import type { Entity } from "../modules/entities";
 import type { Coord } from "@latticexyz/utils";
+import { get } from "svelte/store";
 import { operations } from "./index";
-import { Entity, entities, EntityType } from "../modules/entities";
+import { entities, EntityType } from "../modules/entities";
 
 export const checkCosts = (costs: Cost[], player: Entity) => {
   for (const [key, value] of Object.entries(costs)) {
