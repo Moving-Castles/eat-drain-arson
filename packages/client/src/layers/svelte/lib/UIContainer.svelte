@@ -8,6 +8,18 @@
   import UILoading from "./components/UILoading.svelte";
 </script>
 
+<div class="ui-container no-padding">
+  <div class="ui-container-center">
+    {#each Object.values($uiState) as { id, active, title, options, grid, component } (id)}
+      {#if options?.center}
+        <UIComponent {id} {active} {title} {options} {grid}>
+          <svelte:component this={component} />
+        </UIComponent>
+      {/if}
+    {/each}
+  </div>
+</div>
+
 <div class="ui-container">
   {#if !$player}
     <span />
@@ -24,7 +36,7 @@
         <UISpawn />
       </UIComponent>
     {:else}
-      {#each Object.values($uiState) as { id, active, title, options, grid, component } (id)}
+      {#each Object.values($uiState).filter((i) => !i.options?.center) as { id, active, title, options, grid, component } (id)}
         <UIComponent {id} {active} {title} {options} {grid}>
           <svelte:component this={component} />
         </UIComponent>
@@ -40,7 +52,6 @@
     top: 0;
     width: 100vw;
     height: 100vh;
-    background: var(--background);
     color: var(--foreground);
     padding: 24px;
     display: grid;
@@ -51,12 +62,24 @@
     gap: var(--row-gap);
   }
 
+  .ui-container.no-padding {
+    padding: 0;
+  }
+
+  .ui-container-center {
+    grid-column: 1 / 2;
+    grid-row: 1 / span 3;
+    z-index: -1;
+  }
+
   .ui-container-inner {
     position: relative;
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-column: 1 / 2;
+    grid-row: 2 / span 1;
+    grid-template-columns: 1fr 60% 1fr;
     grid-template-rows: repeat(9, minmax(0, 1fr));
     grid-template-areas:
       "tl tm tr"

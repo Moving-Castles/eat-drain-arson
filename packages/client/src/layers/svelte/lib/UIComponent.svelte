@@ -34,14 +34,14 @@
   <div
     style:z-index={options?.layer}
     class="ui-component col-{grid?.col?.[0]}-{grid?.col?.[1]} row-{grid?.row?.[0]}-{grid?.row?.[1]} {area}"
-    on:mouseenter={handleMouseEnter}
-    on:mouseleave={handleMouseLeave}
-    on:introend={() => uiState.alter(id, "delay", 0)}
     class:fluid={options?.fluid}
     class:box={!options?.bare}
     class:backed={!options?.bare}
     class:blend={options?.layer === 0}
     class:span={options?.span}
+    on:mouseenter={handleMouseEnter}
+    on:mouseleave={handleMouseLeave}
+    on:introend={() => uiState.alter(id, "delay", 0)}
     in:fade={{ duration: $speed, delay: options?.delay }}
     out:fade={{ duration: $speed }}
   >
@@ -51,7 +51,12 @@
     {/if}
 
     <!-- Body -->
-    <div class="ui-component-inner" class:no-padding={options?.layer === 0} class:no-scroll={options?.noscroll}>
+    <div
+      class="ui-component-inner"
+      class:no-padding={options?.layer === 0 || options?.bare}
+      class:no-scroll={options?.noscroll || options?.bare}
+      class:bare={!options?.bare}
+    >
       <slot />
     </div>
   </div>

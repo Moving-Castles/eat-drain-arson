@@ -14,10 +14,10 @@
   let w: Number;
   let h: Number;
   let shortest: Number;
-  let unit = 5;
+  let unit = 7;
 
   const CLOSEST_ZOOM = 3;
-  const FURTHEST_ZOOM = 21;
+  const FURTHEST_ZOOM = 49;
 
   function checkForType(gridPosition: Coord, type: EntityType) {
     let entity = Object.values($entities).find(
@@ -75,13 +75,13 @@
   }
 
   blockNumber.subscribe(() => {
-    updateGrid($player.position);
+    if ($player) updateGrid($player.position);
   });
 
   onMount(async () => {
     perlin = await createPerlin();
     initGrid();
-    updateGrid($player.position);
+    if ($player) updateGrid($player.position);
   });
 
   $: shortest = Math.min(w, h);
@@ -89,37 +89,41 @@
   function handleZoom(e) {
     if (e.key === "-" && unit < FURTHEST_ZOOM) {
       unit += 2;
+      console.log(unit);
       grid = [];
       initGrid();
     }
     if (e.key === "=" && unit > CLOSEST_ZOOM) {
       unit -= 2;
+      console.log(unit);
       grid = [];
       initGrid();
     }
   }
 </script>
 
-<svelte:window on:keypress={handleZoom} />
+<svelte:window on:keypress={handleZoom} bind:innerHeight={h} />
 
-<div style="--rows: {unit}; --cols: {unit}" class="ui-grid-map" bind:clientWidth={w} bind:clientHeight={h}>
-  <div class="grid-container overlay map" style:max-width="{shortest}px" style:max-height="{shortest}px">
-    <!-- Shown if player is moving -->
-    {#if $playerActivity == Activities.Moving && ($player.coolDownBlock || 0) > $blockNumber}
-      <div class="cooldown-overlay">
-        <div>
-          <strong>{seedToName($player.seed || 0)}</strong> is moving
-          <strong>{directionToString($playerDirection)}</strong>.<br />
-          Arriving in <strong>{($player.coolDownBlock || 0) - $blockNumber}</strong> seconds
+{#if $player}
+  <div style="--rows: {unit}; --cols: {unit}" class="ui-grid-map" bind:clientWidth={w}>
+    <div class="grid-container overlay map" style:max-width="{shortest}px" style:max-height="{shortest}px">
+      <!-- Shown if player is moving -->
+      {#if $playerActivity == Activities.Moving && ($player.coolDownBlock || 0) > $blockNumber}
+        <div class="cooldown-overlay">
+          <div>
+            <strong>{seedToName($player.seed || 0)}</strong> is moving
+            <strong>{directionToString($playerDirection)}</strong>.<br />
+            Arriving in <strong>{($player.coolDownBlock || 0) - $blockNumber}</strong> seconds
+          </div>
         </div>
-      </div>
-    {/if}
+      {/if}
 
-    {#each grid as tile}
-      <UIGridTile {tile} />
-    {/each}
+      {#each grid as tile}
+        <UIGridTile {tile} />
+      {/each}
+    </div>
   </div>
-</div>
+{/if}
 
 <style>
   .ui-grid-map {
