@@ -2,7 +2,7 @@
   import UIDied from "../UIDied.svelte";
   import { playSound } from "../../../howler";
   import UIMetric from "./UIMetric.svelte";
-  import { Activities, activityToVerb, player, playerActivity, playerEnergy, dead } from "../../modules/player";
+  import { Activities, activityToVerb, player, playerActivity, dead } from "../../modules/player";
   import { seedToName, seedToMask } from "../../utils/name";
   import { EntityType } from "../../modules/entities";
   import { Howl } from "howler";
@@ -57,7 +57,7 @@
   </div>
 
   <div class="resources">
-    <UIMetric label="Energy" key="energy" value={playerEnergy} />
+    <UIMetric label="Energy" key="energy" />
     <UIMetric label="Sludge" key="resource" />
   </div>
 

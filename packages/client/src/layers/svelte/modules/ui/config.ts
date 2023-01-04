@@ -165,7 +165,7 @@ export const initialState = () => ({
     id: "leaderboard",
     title: "Leaderboard",
     component: UILeaderBoard,
-    active: false,
+    active: true,
     options: {
       fluid: true,
       delay: makeDelay(),
@@ -182,7 +182,7 @@ export const initialState = () => ({
     id: "survival",
     title: "Survival",
     component: UISurvivalLeaderBoard,
-    active: true,
+    active: false,
     options: {
       fluid: true,
       delay: makeDelay(),
