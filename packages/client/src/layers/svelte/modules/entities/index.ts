@@ -81,6 +81,26 @@ export type Fire = {
 
 export type Entity = Player | Terrain | Fire | Corpse | Ghost;
 
+export type Players = {
+  [index: string]: Player;
+};
+
+export type Terrains = {
+  [index: string]: Terrain;
+};
+
+export type Fires = {
+  [index: string]: Fire;
+};
+
+export type Corpses = {
+  [index: string]: Corpse;
+};
+
+export type Ghosts = {
+  [index: string]: Ghost;
+};
+
 export type Entities = {
   [index: string]: Entity;
 };
@@ -89,63 +109,39 @@ export type Entities = {
 
 export const entities = writable({} as Entities);
 
-// Arrays
 export const players = derived([entities, blockNumber], ([$entities, $blockNumber]) => {
-  let ps = Object.values($entities).filter(
-    (e) => e.entityType == EntityType.Player || e.entityType == EntityType.Corpse
-  ) as ArrayLike<Entity>;
+  let ps = Object.entries($entities).filter(
+    ([k, e]) => e.entityType == EntityType.Player || e.entityType == EntityType.Corpse
+  );
 
   // Now double check for each one if they are dead
-  ps = ps.map((p) => {
-    const energy = calculateEnergy(p, $blockNumber);
+  ps = ps.map(([k, e]) => {
+    const energy = calculateEnergy(e, $blockNumber);
     if (energy < 1) {
-      p.entityType = EntityType.Corpse;
-    } else if (p.entityType == EntityType.Corpse && energy > 0) {
+      e.entityType = EntityType.Corpse;
+    } else if (e.entityType == EntityType.Corpse && energy > 0) {
       // Looks like you respawned, Padawan...
-      p.entityType = EntityType.Player;
+      e.entityType = EntityType.Player;
     }
-    return p;
+    return [k, e];
   });
 
-  return ps;
+  return Object.fromEntries(ps);
 });
 
-export const fires = derived(entities, ($entities) =>
-  Object.values($entities).filter((e) => {
-    return e.entityType == EntityType.Fire;
-  })
-);
-
-export const terrains = derived(
-  entities,
-  ($entities) => Object.values($entities).filter((e) => e.entityType == EntityType.Terrain) as ArrayLike<Terrain>
-);
-
-export const corpses = derived(
-  entities,
-  ($entities) => Object.values($entities).filter((e) => e.entityType == EntityType.Corpse) as ArrayLike<Corpse>
-);
-
-// Objects
-export const playersV2 = derived(
-  entities,
-  ($entities) =>
-    Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Player)) as Entities
-);
-
-export const firesV2 = derived(
+export const fires = derived(
   entities,
   ($entities) =>
     Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Fire)) as Entities
 );
 
-export const terrainsV2 = derived(
+export const terrains = derived(
   entities,
   ($entities) =>
     Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Terrain)) as Entities
 );
 
-export const corpsesV2 = derived(
+export const corpses = derived(
   entities,
   ($entities) =>
     Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Corpse)) as Entities
