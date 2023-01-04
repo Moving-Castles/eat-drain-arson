@@ -2,6 +2,7 @@ import { get } from "svelte/store";
 import { network } from "../../modules/network";
 import { player } from "../../modules/player";
 import { fires } from "../../modules/entities";
+import { isEmpty } from "lodash";
 import { transformationToDirection, positionsToTransformation, directionalPathfind } from "../../utils/space";
 import { Operation, OperationCategory } from "../types";
 import { checkCosts } from "../utils";
@@ -25,17 +26,17 @@ export const goTowardsFire: Operation = {
   ],
   requirement: (costs) => {
     if (!checkCosts(costs, get(player))) return false;
-    if (get(fires).length < 1) return false;
+    if (!isEmpty(get(fires))) return false;
     return true;
   },
   execute: () => {
     const paths = [];
 
-    for (let i = 0; i < get(fires).length; i++) {
+    Object.entries(get(fires)).forEach((f) => {
       // Get path between player and fire
-      const path = directionalPathfind(get(player).position, get(fires)[i].position);
+      const path = directionalPathfind(get(player).position, f.position);
       paths.push({ path: path, distance: path.length });
-    }
+    });
 
     paths.sort((a, b) => a.distance - b.distance);
 

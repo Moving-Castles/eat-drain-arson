@@ -19,7 +19,7 @@
   };
 
   const rankedPlayers = derived([players, category], ([$players, $category]) => {
-    const arr = [...$players];
+    const arr = [...Object.values($players)];
     if (arr.every((p) => p?.stats)) {
       arr.sort((a, b) => b.stats[mappings[$category]] - a.stats[mappings[$category]]);
     }

@@ -14,7 +14,7 @@
   let i = 0;
 
   const rankedPlayers = derived([players, blockNumber], ([$players, $blockNumber]) => {
-    const arr = [...$players];
+    const arr = [...Object.values($players)];
     arr.sort((a, b) => {
       return calculateHeartbeats(b, $blockNumber) - calculateHeartbeats(a, $blockNumber);
     });

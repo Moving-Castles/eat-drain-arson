@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { firesV2, EntityType } from "../../../modules/entities";
+  import { fires, EntityType } from "../../../modules/entities";
   import { blockNumber } from "../../../modules/network";
 
   import Fire from "./Fire.svelte";
 
   const remaining = (fire: EntityType.Fire) => Math.max((fire.coolDownBlock || 0) - $blockNumber, 0);
 
-  let sortedFires = [...sorted(Object.entries($firesV2))];
+  let sortedFires = [...sorted(Object.entries($fires))];
 
   function sorted(entries) {
     let result = [...entries];
@@ -23,11 +23,11 @@
     return result;
   }
 
-  $: sortedFires = [...sorted(Object.entries($firesV2))];
+  $: sortedFires = [...sorted(Object.entries($fires))];
 </script>
 
 <div class="ui-fires">
-  {#if Object.entries($firesV2)?.length < 1}
+  {#if Object.entries($fires)?.length < 1}
     No fires in sight...
   {/if}
 
