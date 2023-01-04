@@ -8,14 +8,13 @@ export async function bootGame() {
   const params = new URLSearchParams(window.location.search);
   const worldAddress = params.get("worldAddress");
   let privateKey = params.get("burnerWalletPrivateKey");
-  const chainIdString = params.get("chainId");
-  const jsonRpc = params.get("rpc") || undefined;
-  const wsRpc = params.get("wsRpc") || undefined; // || (jsonRpc && jsonRpc.replace("http", "ws"));
+  const chainId = Number(params.get("chainId")) || 31337;
+  const jsonRpc = params.get("rpc") ?? "http://localhost:8545";
+  const wsRpc = params.get("wsRpc") ?? "ws://localhost:8545";
   const snapshotServiceUrl = params.get("snapshot") || undefined;
   const faucetServiceUrl = params.get("faucet") || undefined;
   const devMode = params.get("dev") === "true";
-  const initialBlockNumberString = params.get("initialBlockNumber");
-  const initialBlockNumber = initialBlockNumberString ? parseInt(initialBlockNumberString) : 0;
+  const initialBlockNumber = Number(params.get("initialBlockNumber")) || 0;
 
   if (!privateKey) {
     privateKey = localStorage.getItem("burnerWallet") || Wallet.createRandom().privateKey;
@@ -23,11 +22,11 @@ export async function bootGame() {
   }
 
   let networkLayerConfig;
-  if (worldAddress && privateKey && chainIdString && jsonRpc) {
+  if (worldAddress && privateKey && chainId && jsonRpc) {
     networkLayerConfig = {
       worldAddress,
       privateKey,
-      chainId: parseInt(chainIdString),
+      chainId,
       jsonRpc,
       wsRpc,
       snapshotServiceUrl,
