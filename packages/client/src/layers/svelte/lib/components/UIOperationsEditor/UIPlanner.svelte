@@ -3,9 +3,10 @@
   import { playSound } from "../../../../howler";
   import { tooltip } from "../UIToolTip/index";
   import { operations } from "../../../operations/";
-  import type { Operation, OperationCategoryString } from "../../../operations/types";
+  import type { Operation } from "../../../operations/types";
+  import { OperationCategoryString } from "../../../operations/types";
   import { uiState } from "../../../modules/ui";
-  import type { SequenceElement } from "../../../modules/sequencer/index"
+  import type { SequenceElement } from "../../../modules/sequencer/index";
   import {
     sequence,
     emptySequenceElement,

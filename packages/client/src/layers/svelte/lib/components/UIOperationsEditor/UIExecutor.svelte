@@ -17,7 +17,9 @@
     State,
     StateString,
   } from "../../../modules/sequencer/index";
-  import { OperationCategory, OperationCategoryString } from "../../../operations/types";
+  import type { OperationCategory } from "../../../operations/types";
+  import { OperationCategoryString } from "../../../operations/types";
+
   export const ID = "ui-executor";
 
   function start() {
