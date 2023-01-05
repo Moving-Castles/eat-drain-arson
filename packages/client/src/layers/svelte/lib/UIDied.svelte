@@ -1,13 +1,13 @@
 <script lang="ts">
   import UISpawn from "./components/UISpawn.svelte";
   import { blockNumber } from "../modules/network";
-  import { player, playerEnergy, heartbeats } from "../modules/player";
+  import { heartbeats } from "../modules/player";
 </script>
 
 <div class="ui-died">
   <div class="">
-    <p>
-      You survived for {$heartbeats} heartbeats
+    <p class="inner">
+      You died
     </p>
     <UISpawn />
   </div>
@@ -22,5 +22,6 @@
     align-items: center;
     backdrop-filter: gray(1);
     -webkit-backdrop-filter: gray(1);
+    text-align: center;
   }
 </style>

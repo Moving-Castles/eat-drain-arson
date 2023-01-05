@@ -1,20 +1,20 @@
 <script lang="ts">
   import { blockNumber } from "../modules/network";
-  import { player, playerEnergy, heartbeats } from "../modules/player";
+  import { player } from "../modules/player";
 
   const BLOCKS_IN_DAY = 600;
 
   let clockTime: number;
 
+  $: console.log($player.energy)
   $: clockTime = Math.floor(($blockNumber - $player.birth) / BLOCKS_IN_DAY);
 </script>
 
 <div class="ui-clock">
   {#key clockTime}
     <div>
-      block: <span class="ch-4">{$blockNumber}</span> / death:
-      <span class="ch-4">{parseInt(String($player.death))}</span>
-      / energy: <span class="ch-4">{$playerEnergy}</span>
+      block: <span class="ch-4">{$blockNumber}</span>
+      / energy: <span class="ch-4">{$player.energy}</span>
     </div>
   {/key}
 </div>

@@ -70,7 +70,7 @@ export const playerEnergy = derived([player, blockNumber], ([$player, $blockNumb
 export const heartbeats = derived([player, blockNumber], ([$player, $blockNumber]) =>
   $player && $blockNumber ? calculateHeartbeats($player, $blockNumber) : 0
 );
-export const dead = derived(playerEnergy, ($playerEnergy) => $playerEnergy < 1);
+export const dead = derived(player, ($player) => $player.energy < 1);
 
 // --- FUNCTIONS -----------------------------------------------------------------
 

@@ -1,8 +1,8 @@
 // Components
 import UITextLog from "../../lib/components/UITextLog.svelte";
 import UIAvatar from "../../lib/components/UIAvatar.svelte";
-import UIMap from "../../lib/components/UIMap.svelte";
-import UIGridMap from "../../lib/components/UIGridMap/UIGridMap.svelte";
+// import UIGridMap from "../../lib/components/UIGridMap/UIGridMap.svelte";
+import UI3DMap from "../../lib/components/UI3DMap/UI3DMap.svelte";
 import UIView from "../../lib/components/UIView.svelte";
 import UIDebugLog from "../../lib/components/UIDebugLog.svelte";
 import UILeaderBoard from "../../lib/components/UILeaderBoards/UILeaderBoard.svelte";
@@ -23,6 +23,7 @@ export type UIComponentOptions = {
   layer?: number;
   noscroll?: boolean;
   span?: boolean;
+  center?: boolean;
 };
 
 export type UIComponentPlacement = {
@@ -48,19 +49,19 @@ export const initialState = () => ({
     id: "avatar",
     title: "Avatar",
     component: UIAvatar,
+    active: true,
     grid: {
-      col: [2, 3],
-      row: [1, 10],
+      col: [3, 4],
+      row: [1, 6],
     },
     options: {
       bare: true,
       persistent: true,
-      layer: 0,
+      layer: 1,
       fluid: true,
       noscroll: true,
       span: true,
     },
-    active: true,
     hidden: false,
   }),
   // OPS PLANNER
@@ -100,17 +101,21 @@ export const initialState = () => ({
   "grid-map": initialise({
     id: "grid-map",
     title: "Soil",
-    component: UIGridMap,
+    component: UI3DMap,
     active: true,
     options: {
-      fluid: true,
+      // fluid: false,
+      bare: true,
+      persistent: true,
+      layer: -1,
       delay: makeDelay(),
       noscroll: true,
+      center: true,
     },
     hidden: false,
     grid: {
-      col: [3, 4],
-      row: [5, 10],
+      col: [2, 3],
+      row: [1, 10],
     },
   }),
   // FIRES
@@ -127,21 +132,6 @@ export const initialState = () => ({
     grid: {
       col: [2, 3],
       row: [6, 10],
-    },
-  }),
-  // MAP
-  map: initialise({
-    id: "map",
-    title: "Map",
-    component: UIMap,
-    active: false,
-    options: {
-      delay: 0,
-    },
-    hidden: true,
-    grid: {
-      col: [1, 2],
-      row: [7, 10],
     },
   }),
   "debug-log": initialise({
@@ -165,7 +155,7 @@ export const initialState = () => ({
     id: "leaderboard",
     title: "Leaderboard",
     component: UILeaderBoard,
-    active: false,
+    active: true,
     options: {
       fluid: true,
       delay: makeDelay(),
@@ -182,7 +172,7 @@ export const initialState = () => ({
     id: "survival",
     title: "Survival",
     component: UISurvivalLeaderBoard,
-    active: true,
+    active: false,
     options: {
       fluid: true,
       delay: makeDelay(),
@@ -208,7 +198,7 @@ export const initialState = () => ({
     },
     grid: {
       col: [3, 4],
-      row: [1, 5],
+      row: [6, 10],
     },
     hidden: false,
   }),

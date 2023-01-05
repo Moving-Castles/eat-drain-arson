@@ -2,7 +2,7 @@
   import UIDied from "../UIDied.svelte";
   import { playSound } from "../../../howler";
   import UIMetric from "./UIMetric.svelte";
-  import { Activities, activityToVerb, player, playerActivity, playerEnergy, dead } from "../../modules/player";
+  import { Activities, activityToVerb, player, playerActivity, dead } from "../../modules/player";
   import { seedToName, seedToMask } from "../../utils/name";
   import { EntityType } from "../../modules/entities";
   import { Howl } from "howler";
@@ -57,28 +57,28 @@
   </div>
 
   <div class="resources">
-    <UIMetric label="Energy" key="energy" value={playerEnergy} />
+    <UIMetric label="Energy" key="energy" />
     <UIMetric label="Sludge" key="resource" />
   </div>
 
   <div class="ui-avatar-video">
     <!-- CHARACTER -->
     {#if $player.entityType == EntityType.Corpse}
-      <video src={"/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted />
+      <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted />
     {:else if $playerActivity === Activities.Moving}
-      <video src={"/animations/" + seedToMask($player.seed) + "/Walk.mp4"} autoplay muted loop />
+      <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Walk.mp4"} autoplay muted loop />
     {:else if $playerActivity === Activities.Eating}
-      <video src={"/animations/" + seedToMask($player.seed) + "/Eat.mp4"} autoplay muted loop />
+      <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Eat.mp4"} autoplay muted loop />
     {:else if $playerActivity === Activities.Gathering}
-      <video src={"/animations/" + seedToMask($player.seed) + "/Gather.mp4"} autoplay muted loop />
+      <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Gather.mp4"} autoplay muted loop />
     {:else if $playerActivity === Activities.Burning}
-      <video src={"/animations/" + seedToMask($player.seed) + "/Fire.mp4"} autoplay muted loop />
+      <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Fire.mp4"} autoplay muted loop />
     {:else if $playerActivity === Activities.Playing}
-      <video src={"/animations/" + seedToMask($player.seed) + "/Play.mp4"} autoplay muted loop />
+      <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Play.mp4"} autoplay muted loop />
     {:else if $playerActivity === Activities.Dead}
-      <video src={"/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted />
+      <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted />
     {:else}
-      <video src={"/animations/" + seedToMask($player.seed) + "/Idle.mp4"} autoplay muted loop />
+      <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Idle.mp4"} autoplay muted loop />
     {/if}
   </div>
 
