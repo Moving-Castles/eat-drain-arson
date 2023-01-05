@@ -1,3 +1,6 @@
+import type { SystemTypes } from "contracts/types/SystemTypes";
+import type { GameConfig } from "./config";
+
 import { createWorld } from "@latticexyz/recs";
 import { setupDevSystems } from "./setup";
 import {
@@ -9,9 +12,7 @@ import {
 } from "@latticexyz/std-client";
 import { createFaucetService } from "@latticexyz/network";
 import { defineLoadingStateComponent, defineStatsComponent } from "./components";
-import type { SystemTypes } from "contracts/types/SystemTypes";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
-import type { GameConfig } from "./config";
 import { getNetworkConfig } from "./config";
 import { BigNumber, utils } from "ethers";
 
