@@ -1,11 +1,16 @@
 <script lang="ts">
   import { Canvas } from "@threlte/core";
   import Map from "./Map.svelte";
+  import Stats from "./GUI/Stats.svelte";
 </script>
 
 <div class="ui-3d-map">
   <Canvas>
     <Map />
+
+    {#if import.meta.env.DEV}
+      <Stats />
+    {/if}
   </Canvas>
 </div>
 

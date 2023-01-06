@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Stats from "../3D/GUI/Stats.svelte";
   import { Canvas, T, PerspectiveCamera, OrbitControls } from "@threlte/core";
   import { Vector3 } from "three";
 
@@ -6,6 +7,7 @@
 </script>
 
 <Canvas>
+  <Stats />
   <PerspectiveCamera lookAt={new Vector3(0, 100, 0)} position={{ x: 10 }} fov={80}>
     <OrbitControls enableDamping enableZoom={false} enablePan={false} minPolarAngle={1} maxPolarAngle={1} />
   </PerspectiveCamera>

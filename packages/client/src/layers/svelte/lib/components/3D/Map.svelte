@@ -38,7 +38,6 @@
    * Update grid based on the chain
    */
   blockNumber.subscribe(async () => {
-    console.log($player.position);
     if ($player) {
       grid = await updateGrid($player.position, grid);
       ready = true;

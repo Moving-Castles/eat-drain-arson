@@ -265,5 +265,7 @@
 
   .state {
     color: red;
+    text-align: center;
+    padding: 1rem 0;
   }
 </style>
