@@ -3,13 +3,13 @@ pragma solidity >=0.8.0;
 import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
-import { EntityCategory } from "../types.sol";
+import { EntityType } from "../types.sol";
 import { WORLD_HEIGHT, WORLD_WIDTH, INITIAL_ENERGY, INITIAL_RESOURCE, MAX_INACTIVITY } from "../config.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
-import { EntityCategoryComponent, ID as EntityCategoryComponentID } from "../components/EntityCategoryComponent.sol";
+import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 import { SeedComponent, ID as SeedComponentID } from "../components/SeedComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
@@ -37,11 +37,9 @@ contract SpawnSystem is System {
     resourceComponent.set(entity, INITIAL_RESOURCE);
   }
 
-  function setEntityCategory(uint256 entity) private {
-    EntityCategoryComponent entityCategoryComponent = EntityCategoryComponent(
-      getAddressById(components, EntityCategoryComponentID)
-    );
-    entityCategoryComponent.set(entity, uint32(EntityCategory.Player));
+  function setEntityType(uint256 entity) private {
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    entityTypeComponent.set(entity, uint32(EntityType.Player));
   }
 
   function setCoolDown(uint256 entity) private {
@@ -99,7 +97,7 @@ contract SpawnSystem is System {
     setSeedValue(entity);
     setEnergy(entity);
     setResources(entity);
-    setEntityCategory(entity);
+    setEntityType(entity);
     setCoolDown(entity);
     setBirth(entity);
     setDeath(entity);

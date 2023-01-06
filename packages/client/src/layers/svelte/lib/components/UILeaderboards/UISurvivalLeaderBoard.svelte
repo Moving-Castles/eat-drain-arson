@@ -7,7 +7,7 @@
   import { players } from "../../../modules/entities";
   import { category } from "../../../modules/ui";
   import { seedToName } from "../../../utils/name";
-  import { EntityCategory } from "../../../modules/entities";
+  import { EntityType } from "../../../modules/entities";
 
   export let autoplay = 2500;
   // let interval;
@@ -33,8 +33,7 @@
   <div class="players">
     {#each $rankedPlayers as player, i (player.seed + i)}
       <div animate:flip={{ duration: 400, easing }} class="ui-stat-row">
-        <span class:dead={player.entityCategory == EntityCategory.Corpse} class="ui-stat-player"
-          >{seedToName(player.seed)}</span
+        <span class:dead={player.entityType == EntityType.Corpse} class="ui-stat-player">{seedToName(player.seed)}</span
         >
       </div>
     {/each}

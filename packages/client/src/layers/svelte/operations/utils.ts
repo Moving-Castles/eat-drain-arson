@@ -3,7 +3,7 @@ import type { Entity } from "../modules/entities";
 import type { Coord } from "@latticexyz/utils";
 import { get } from "svelte/store";
 import { operations } from "./index";
-import { entities, EntityCategory } from "../modules/entities";
+import { entities, EntityType } from "../modules/entities";
 
 export const checkCosts = (costs: Cost[], player: Entity) => {
   for (const [key, value] of Object.entries(costs)) {
@@ -12,9 +12,9 @@ export const checkCosts = (costs: Cost[], player: Entity) => {
   return true;
 };
 
-export const checkForType = (gridPosition: Coord, type: EntityCategory) => {
+export const checkForType = (gridPosition: Coord, type: EntityType) => {
   const entity = Object.values(get(entities)).find(
-    (e) => (e.position?.x || 0) == gridPosition.x && (e.position?.y || 0) == gridPosition.y && e.entityCategory == type
+    (e) => (e.position?.x || 0) == gridPosition.x && (e.position?.y || 0) == gridPosition.y && e.entityType == type
   );
   return entity;
 };

@@ -4,7 +4,7 @@
   import UIMetric from "./UIMetric.svelte";
   import { Activities, activityToVerb, player, playerActivity, dead } from "../../modules/player";
   import { seedToName, seedToMask } from "../../utils/name";
-  import { EntityCategory } from "../../modules/entities";
+  import { EntityType } from "../../modules/entities";
   import { Howl } from "howler";
 
   let activitySound: Howl;
@@ -41,14 +41,14 @@
 <div class="ui-avatar">
   <div
     class="ui-avatar-header"
-    class:overlay={$player.entityCategory == EntityCategory.Corpse}
-    class:corpse={$player.entityCategory == EntityCategory.Corpse}
+    class:overlay={$player.entityType == EntityType.Corpse}
+    class:corpse={$player.entityType == EntityType.Corpse}
   >
     <div class="name">
       {seedToName($player.seed)}
     </div>
     <div class="activity">
-      {#if $player.entityCategory == EntityCategory.Corpse}
+      {#if $player.entityType == EntityType.Corpse}
         (dead)
       {:else}
         ({activityToVerb($playerActivity)})
@@ -63,7 +63,7 @@
 
   <div class="ui-avatar-video">
     <!-- CHARACTER -->
-    {#if $player.entityCategory == EntityCategory.Corpse}
+    {#if $player.entityType == EntityType.Corpse}
       <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted />
     {:else if $playerActivity === Activities.Moving}
       <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Walk.mp4"} autoplay muted loop />

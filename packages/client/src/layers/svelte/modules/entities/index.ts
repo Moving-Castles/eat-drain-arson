@@ -7,7 +7,7 @@ import { seedToName } from "../../utils/name";
 
 // --- TYPES -----------------------------------------------------------------
 
-export enum EntityCategory {
+export enum EntityType {
   Player,
   Terrain,
   Fire,
@@ -23,7 +23,7 @@ export type StatsCategory = {
 };
 
 export type Player = {
-  entityCategory: EntityCategory.Player;
+  entityType: EntityType.Player;
   position: Coord;
   coolDownBlock: number;
   energy: number;
@@ -37,7 +37,7 @@ export type Player = {
 };
 
 export type Corpse = {
-  entityCategory: EntityCategory.Corpse;
+  entityType: EntityType.Corpse;
   position: Coord;
   coolDownBlock: number;
   energy: number;
@@ -51,7 +51,7 @@ export type Corpse = {
 };
 
 export type Ghost = {
-  entityCategory: EntityCategory.Ghost;
+  entityType: EntityType.Ghost;
   position: Coord;
   coolDownBlock: number;
   energy: number;
@@ -65,13 +65,13 @@ export type Ghost = {
 };
 
 export type Terrain = {
-  entityCategory: EntityCategory.Terrain;
+  entityType: EntityType.Terrain;
   position: Coord;
   resource: number;
 };
 
 export type Fire = {
-  entityCategory: EntityCategory.Fire;
+  entityType: EntityType.Fire;
   position: Coord;
   coolDownBlock?: number;
   creator: string[];
@@ -111,17 +111,17 @@ export const entities = writable({} as Entities);
 
 export const players = derived([entities, blockNumber], ([$entities, $blockNumber]) => {
   let ps = Object.entries($entities).filter(
-    ([k, e]) => e.entityCategory == EntityCategory.Player || e.entityCategory == EntityCategory.Corpse
+    ([k, e]) => e.entityType == EntityType.Player || e.entityType == EntityType.Corpse
   );
 
   // Now double check for each one if they are dead
   ps = ps.map(([k, e]) => {
     const energy = calculateEnergy(e, $blockNumber);
     if (energy < 1) {
-      e.entityCategory = EntityCategory.Corpse;
-    } else if (e.entityCategory == EntityCategory.Corpse && energy > 0) {
+      e.entityType = EntityType.Corpse;
+    } else if (e.entityType == EntityType.Corpse && energy > 0) {
       // Looks like you respawned, Padawan...
-      e.entityCategory = EntityCategory.Player;
+      e.entityType = EntityType.Player;
     }
     return [k, e];
   });
@@ -132,25 +132,19 @@ export const players = derived([entities, blockNumber], ([$entities, $blockNumbe
 export const fires = derived(
   entities,
   ($entities) =>
-    Object.fromEntries(
-      Object.entries($entities).filter(([v, e]) => e.entityCategory == EntityCategory.Fire)
-    ) as Entities
+    Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Fire)) as Entities
 );
 
 export const terrains = derived(
   entities,
   ($entities) =>
-    Object.fromEntries(
-      Object.entries($entities).filter(([v, e]) => e.entityCategory == EntityCategory.Terrain)
-    ) as Entities
+    Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Terrain)) as Entities
 );
 
 export const corpses = derived(
   entities,
   ($entities) =>
-    Object.fromEntries(
-      Object.entries($entities).filter(([v, e]) => e.entityCategory == EntityCategory.Corpse)
-    ) as Entities
+    Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Corpse)) as Entities
 );
 
 // --- FUNCTIONS -----------------------------------------------------------------

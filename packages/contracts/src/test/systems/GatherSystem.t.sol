@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
-import { EntityCategory } from "../../types.sol";
+import { EntityType } from "../../types.sol";
 import { INITIAL_ENERGY, INITIAL_RESOURCE, SPAWN_RESOURCE_PER_POSITION } from "../../config.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { Perlin } from "noise/Perlin.sol";
@@ -13,7 +13,7 @@ import { GatherSystem, ID as GatherSystemID } from "../../systems/GatherSystem.s
 import { PositionComponent, ID as PositionComponentID, Coord } from "../../components/PositionComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../../components/ResourceComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../../components/EnergyComponent.sol";
-import { EntityCategoryComponent, ID as EntityCategoryComponentID } from "../../components/EntityCategoryComponent.sol";
+import { EntityTypeComponent, ID as EntityTypeComponentID } from "../../components/EntityTypeComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../../components/StatsComponent.sol";
 
 contract GatherSystemTest is MudTest {
@@ -24,9 +24,7 @@ contract GatherSystemTest is MudTest {
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
-    EntityCategoryComponent entityCategoryComponent = EntityCategoryComponent(
-      getAddressById(components, EntityCategoryComponentID)
-    );
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
 
     // Spawn player
@@ -57,11 +55,7 @@ contract GatherSystemTest is MudTest {
     Coord memory currentPosition = positionComponent.getValue(entity);
     QueryFragment[] memory fragments = new QueryFragment[](2);
     fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(currentPosition));
-    fragments[1] = QueryFragment(
-      QueryType.HasValue,
-      entityCategoryComponent,
-      abi.encode(uint32(EntityCategory.Terrain))
-    );
+    fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(uint32(EntityType.Terrain)));
     uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
     assertEq(entitiesAtPosition.length, 1);
     // Terrain component should have SPAWN_RESOURCE_PER_POSITION - resourceToExtract

@@ -3,13 +3,13 @@ pragma solidity >=0.8.0;
 import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById } from "solecs/utils.sol";
-import { EntityCategory } from "../types.sol";
+import { EntityType } from "../types.sol";
 import { PLAYING_DURATION, MAX_INACTIVITY } from "../config.sol";
 
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 import { PlayingComponent, ID as PlayingComponentID } from "../components/PlayingComponent.sol";
-import { EntityCategoryComponent, ID as EntityCategoryComponentID } from "../components/EntityCategoryComponent.sol";
+import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
 import { DeathComponent, ID as DeathComponentID } from "../components/DeathComponent.sol";
 
@@ -19,23 +19,18 @@ contract PlaySystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function checkRequirements(uint256 player, uint32 energyInput) private {
-    EntityCategoryComponent entityCategoryComponent = EntityCategoryComponent(
-      getAddressById(components, EntityCategoryComponentID)
-    );
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
 
     // Require entity to be player
-    require(
-      entityCategoryComponent.getValue(player) == uint32(EntityCategory.Player),
-      "only (a living) player can play."
-    );
+    require(entityTypeComponent.getValue(player) == uint32(EntityType.Player), "only (a living) player can play.");
     // Require cooldown period to be over
     require(coolDownComponent.getValue(player) < block.number, "in cooldown period");
     // Require the player to not be past its death block
     if (deathComponent.getValue(player) <= block.number) {
-      entityCategoryComponent.set(player, uint32(EntityCategory.Corpse));
+      entityTypeComponent.set(player, uint32(EntityType.Corpse));
       coolDownComponent.set(player, 0);
       energyComponent.set(player, 0);
       require(false, "death block past. you are dead");
@@ -63,13 +58,11 @@ contract PlaySystem is System {
 
   function checkIfDead(uint256 player) private {
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
-    EntityCategoryComponent entityCategoryComponent = EntityCategoryComponent(
-      getAddressById(components, EntityCategoryComponentID)
-    );
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
 
     if (energyComponent.getValue(player) <= 0) {
-      entityCategoryComponent.set(player, uint32(EntityCategory.Corpse));
+      entityTypeComponent.set(player, uint32(EntityType.Corpse));
       coolDownComponent.set(player, 0);
     }
   }

@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
-import { EntityCategory } from "../../types.sol";
+import { EntityType } from "../../types.sol";
 import { INITIAL_ENERGY, INITIAL_RESOURCE } from "../../config.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { PlaySystem, ID as PlaySystemID } from "../../systems/PlaySystem.sol";
@@ -40,7 +40,7 @@ contract CannibalMechanicsTest is MudTest {
     vm.roll(2000);
 
     // Bob should be dead
-    assertEq(entityCategoryComponent.getValue(bob), uint32(EntityCategory.Corpse));
+    assertEq(entityTypeComponent.getValue(bob), uint32(EntityType.Corpse));
 
     // Hack to prevent Alice from dying
     vm.prank(system(SpawnSystemID));

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { player } from "../modules/player";
-  import { EntityCategory } from "../modules/entities";
+  import { EntityType } from "../modules/entities";
   import UISurvivalCounter from "./UISurvivalCounter.svelte";
   import UISpawn from "./components/UISpawn.svelte";
 </script>
@@ -8,7 +8,7 @@
 <div class="ui-taskbar">
   <div>
     <UISurvivalCounter />
-    <!-- {#if $player.entityCategory == EntityCategory.Corpse}
+    <!-- {#if $player.entityType == EntityType.Corpse}
       <UISpawn />
     {:else}
       <UISurvivalCounter />

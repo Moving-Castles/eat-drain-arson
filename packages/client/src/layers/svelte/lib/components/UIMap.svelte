@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { entities, EntityCategory } from "../../modules/entities";
+  import { entities, EntityType } from "../../modules/entities";
   import { player, playerAddress } from "../../modules/player";
   import type { Perlin } from "@latticexyz/noise";
   import { createPerlin } from "@latticexyz/noise";
@@ -34,14 +34,14 @@
       <div
         class="marker"
         class:self={address === $playerAddress}
-        class:terrain={value.entityCategory == EntityCategory.Terrain}
-        class:fire={value.entityCategory == EntityCategory.Fire}
+        class:terrain={value.entityType == EntityType.Terrain}
+        class:fire={value.entityType == EntityType.Fire}
         style={"left: " +
           value.position?.x +
           "px; top: " +
           value.position?.y +
           "px; opacity: " +
-          (value.entityCategory == EntityCategory.Terrain ? 1 - value.resource / 100 : 1) +
+          (value.entityType == EntityType.Terrain ? 1 - value.resource / 100 : 1) +
           ";"}
       />
     {/each}

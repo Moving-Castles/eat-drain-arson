@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
-import { EntityCategory } from "../../types.sol";
+import { EntityType } from "../../types.sol";
 import { INITIAL_ENERGY, FIRE_BURNTIME_MULTIPLIER, COST_TO_MAKE_FIRE, MINIMUM_FIRE_SIZE, GENERIC_ACTION_COOLDOWN } from "../../config.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
@@ -40,7 +40,7 @@ contract FireSystemTest is MudTest {
     Coord memory currentPosition = positionComponent.getValue(entity);
     QueryFragment[] memory fragments = new QueryFragment[](2);
     fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(currentPosition));
-    fragments[1] = QueryFragment(QueryType.HasValue, entityCategoryComponent, abi.encode(EntityCategory.Fire));
+    fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(EntityType.Fire));
     uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
     assertEq(entitiesAtPosition.length, 1);
     // Cooldown on fire component should be blocknumber + (resources added * multiplier):

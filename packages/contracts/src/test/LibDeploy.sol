@@ -19,7 +19,7 @@ import { ISystem } from "solecs/interfaces/ISystem.sol";
 import { PositionComponent, ID as PositionComponentID } from "components/PositionComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "components/EnergyComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "components/ResourceComponent.sol";
-import { EntityCategoryComponent, ID as EntityCategoryComponentID } from "components/EntityCategoryComponent.sol";
+import { EntityTypeComponent, ID as EntityTypeComponentID } from "components/EntityTypeComponent.sol";
 import { SeedComponent, ID as SeedComponentID } from "components/SeedComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "components/CoolDownComponent.sol";
 import { CreatorComponent, ID as CreatorComponentID } from "components/CreatorComponent.sol";
@@ -75,8 +75,8 @@ library LibDeploy {
       comp = new ResourceComponent(address(result.world));
       console.log(address(comp));
 
-      console.log("Deploying EntityCategoryComponent");
-      comp = new EntityCategoryComponent(address(result.world));
+      console.log("Deploying EntityTypeComponent");
+      comp = new EntityTypeComponent(address(result.world));
       console.log(address(comp));
 
       console.log("Deploying SeedComponent");
@@ -136,7 +136,7 @@ library LibDeploy {
     authorizeWriter(components, PositionComponentID, address(system));
     authorizeWriter(components, EnergyComponentID, address(system));
     authorizeWriter(components, ResourceComponentID, address(system));
-    authorizeWriter(components, EntityCategoryComponentID, address(system));
+    authorizeWriter(components, EntityTypeComponentID, address(system));
     authorizeWriter(components, SeedComponentID, address(system));
     authorizeWriter(components, CoolDownComponentID, address(system));
     authorizeWriter(components, CreatorComponentID, address(system));
@@ -154,7 +154,7 @@ library LibDeploy {
     authorizeWriter(components, EnergyComponentID, address(system));
     authorizeWriter(components, CoolDownComponentID, address(system));
     authorizeWriter(components, StatsComponentID, address(system));
-    authorizeWriter(components, EntityCategoryComponentID, address(system));
+    authorizeWriter(components, EntityTypeComponentID, address(system));
     authorizeWriter(components, ResourceComponentID, address(system));
     authorizeWriter(components, DeathComponentID, address(system));
     console.log(address(system));
@@ -177,7 +177,7 @@ library LibDeploy {
     authorizeWriter(components, ResourceComponentID, address(system));
     authorizeWriter(components, SeedComponentID, address(system));
     authorizeWriter(components, CoolDownComponentID, address(system));
-    authorizeWriter(components, EntityCategoryComponentID, address(system));
+    authorizeWriter(components, EntityTypeComponentID, address(system));
     authorizeWriter(components, StatsComponentID, address(system));
     authorizeWriter(components, BirthComponentID, address(system));
     authorizeWriter(components, CannibalComponentID, address(system));
@@ -191,7 +191,7 @@ library LibDeploy {
     authorizeWriter(components, ResourceComponentID, address(system));
     authorizeWriter(components, EnergyComponentID, address(system));
     authorizeWriter(components, CoolDownComponentID, address(system));
-    authorizeWriter(components, EntityCategoryComponentID, address(system));
+    authorizeWriter(components, EntityTypeComponentID, address(system));
     authorizeWriter(components, StatsComponentID, address(system));
     authorizeWriter(components, CannibalComponentID, address(system));
     authorizeWriter(components, DeathComponentID, address(system));
@@ -205,7 +205,7 @@ library LibDeploy {
     authorizeWriter(components, ResourceComponentID, address(system));
     authorizeWriter(components, EnergyComponentID, address(system));
     authorizeWriter(components, CoolDownComponentID, address(system));
-    authorizeWriter(components, EntityCategoryComponentID, address(system));
+    authorizeWriter(components, EntityTypeComponentID, address(system));
     authorizeWriter(components, CreatorComponentID, address(system));
     authorizeWriter(components, StatsComponentID, address(system));
     authorizeWriter(components, DeathComponentID, address(system));
@@ -216,7 +216,7 @@ library LibDeploy {
     world.registerSystem(address(system), PlaySystemID);
     authorizeWriter(components, EnergyComponentID, address(system));
     authorizeWriter(components, CoolDownComponentID, address(system));
-    authorizeWriter(components, EntityCategoryComponentID, address(system));
+    authorizeWriter(components, EntityTypeComponentID, address(system));
     authorizeWriter(components, PlayingComponentID, address(system));
     authorizeWriter(components, StatsComponentID, address(system));
     authorizeWriter(components, ResourceComponentID, address(system));

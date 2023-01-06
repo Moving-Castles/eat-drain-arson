@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import { player } from "../../modules/player";
-import { EntityCategory } from "../../modules/entities";
+import { EntityType } from "../../modules/entities";
 import type { Operation } from "../types";
 import { OperationCategory } from "../types";
 import { checkForType } from "../utils";
@@ -16,7 +16,7 @@ export const byFire: Operation = {
   },
   costs: [],
   requirement: () => {
-    return checkForType(get(player).position, EntityCategory.Fire) ? true : false;
+    return checkForType(get(player).position, EntityType.Fire) ? true : false;
   },
   execute: () => false,
 };

@@ -1,5 +1,5 @@
 import type { ComponentUpdate } from "@latticexyz/recs";
-import type { EntityCategory } from "../modules/entities";
+import type { EntityType } from "../modules/entities";
 import type { NetworkLayer } from "../../network";
 import { defineComponentSystem } from "@latticexyz/recs";
 import { entities, indexToID } from "../modules/entities";

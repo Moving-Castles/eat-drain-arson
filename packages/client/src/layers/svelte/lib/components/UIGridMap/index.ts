@@ -1,7 +1,7 @@
 import type { Coord } from "@latticexyz/utils";
 import type { Entity } from "../../../modules/entities";
 import type { Perlin } from "@latticexyz/noise";
-import { EntityCategory } from "../../../modules/entities";
+import { EntityType } from "../../../modules/entities";
 import { TerrainCategory } from "../../../utils/space";
 import { createPerlin } from "@latticexyz/noise";
 import { checkForType } from "../../../operations/utils";
@@ -79,12 +79,11 @@ export async function updateGrid(centerPosition: Coord, grid: GridTile[]) {
     grid[i].coordinates.y = (centerPosition?.y || 0) + grid[i].transformation.y;
     grid[i].perlinFactor = perlin(grid[i].coordinates.x, grid[i].coordinates.y, 0, 20);
     grid[i].terrain = perlinToTerrainCategory(grid[i].perlinFactor);
-    grid[i].fire = checkForType(grid[i].coordinates, EntityCategory.Fire);
+    grid[i].fire = checkForType(grid[i].coordinates, EntityType.Fire);
     grid[i].other =
-      checkForType(grid[i].coordinates, EntityCategory.Player) ||
-      checkForType(grid[i].coordinates, EntityCategory.Corpse);
-    grid[i].corpse = checkForType(grid[i].coordinates, EntityCategory.Corpse);
-    grid[i].mined = checkForType(grid[i].coordinates, EntityCategory.Terrain);
+      checkForType(grid[i].coordinates, EntityType.Player) || checkForType(grid[i].coordinates, EntityType.Corpse);
+    grid[i].corpse = checkForType(grid[i].coordinates, EntityType.Corpse);
+    grid[i].mined = checkForType(grid[i].coordinates, EntityType.Terrain);
     grid[i].resource = grid[i].mined == undefined ? 100 : grid[i].mined.resource;
   }
 

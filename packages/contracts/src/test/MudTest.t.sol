@@ -14,7 +14,7 @@ import { console } from "forge-std/console.sol";
 import { PositionComponent, ID as PositionComponentID } from "../components/PositionComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
-import { EntityCategoryComponent, ID as EntityCategoryComponentID } from "../components/EntityCategoryComponent.sol";
+import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { SeedComponent, ID as SeedComponentID } from "../components/SeedComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 import { CreatorComponent, ID as CreatorComponentID } from "../components/CreatorComponent.sol";
@@ -41,7 +41,7 @@ contract MudTest is DSTest {
   PositionComponent positionComponent;
   EnergyComponent energyComponent;
   ResourceComponent resourceComponent;
-  EntityCategoryComponent entityCategoryComponent;
+  EntityTypeComponent entityTypeComponent;
   SeedComponent seedComponent;
   CoolDownComponent coolDownComponent;
   CreatorComponent creatorComponent;
@@ -72,7 +72,7 @@ contract MudTest is DSTest {
     positionComponent = PositionComponent(component(PositionComponentID));
     energyComponent = EnergyComponent(component(EnergyComponentID));
     resourceComponent = ResourceComponent(component(ResourceComponentID));
-    entityCategoryComponent = EntityCategoryComponent(component(EntityCategoryComponentID));
+    entityTypeComponent = EntityTypeComponent(component(EntityTypeComponentID));
     seedComponent = SeedComponent(component(SeedComponentID));
     creatorComponent = CreatorComponent(component(CreatorComponentID));
     coolDownComponent = CoolDownComponent(component(CoolDownComponentID));

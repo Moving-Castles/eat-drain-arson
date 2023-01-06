@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import { player } from "../../modules/player";
-import { EntityCategory } from "../../modules/entities";
+import { EntityType } from "../../modules/entities";
 import type { Operation } from "../types";
 import { OperationCategory } from "../types";
 import { checkForType } from "../utils";
@@ -16,7 +16,7 @@ export const drained: Operation = {
   },
   costs: [],
   requirement: () => {
-    const terrainInLocation = checkForType(get(player).position, EntityCategory.Terrain);
+    const terrainInLocation = checkForType(get(player).position, EntityType.Terrain);
     return !terrainInLocation || (terrainInLocation.resource || 0) > 0 ? false : true;
   },
   execute: () => false,

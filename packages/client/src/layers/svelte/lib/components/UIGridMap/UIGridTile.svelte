@@ -5,7 +5,7 @@
   import { TileOverlays } from "./index";
   import { TerrainCategory, terrainCategoryToString, directionToString } from "../../../utils/space";
   import { player } from "../../../modules/player";
-  import { entities, EntityCategory } from "../../../modules/entities";
+  import { entities, EntityType } from "../../../modules/entities";
   import { seedToName, seedToMaskTileOverlay } from "../../../utils/name";
   import { tooltip } from "../UIToolTip/index";
   import { fireString, fireStatusClass } from "../UIFires/index";
@@ -43,7 +43,7 @@
     return (
       tile.transformation.x == 0 &&
       tile.transformation.y == 0 &&
-      ($player.entityCategory == EntityCategory.Player || $player.entityCategory == EntityCategory.Corpse)
+      ($player.entityType == EntityType.Player || $player.entityType == EntityType.Corpse)
     );
   }
 
@@ -60,13 +60,13 @@
     (tile: GridTile) => {
       if (isPlayerTile(tile)) {
         return `${TileOverlays.Player} ${seedToMaskTileOverlay($player.seed || 0)} ${
-          $player.entityCategory == EntityCategory.Corpse ? TileOverlays.CorpseMask : ""
+          $player.entityType == EntityType.Corpse ? TileOverlays.CorpseMask : ""
         }`;
       }
     },
     // Player corpse
     (tile: GridTile) => {
-      if (tile.transformation.x == 0 && tile.transformation.y == 0 && $player.entityCategory == EntityCategory.Corpse) {
+      if (tile.transformation.x == 0 && tile.transformation.y == 0 && $player.entityType == EntityType.Corpse) {
         return TileOverlays.Corpse;
       }
     },

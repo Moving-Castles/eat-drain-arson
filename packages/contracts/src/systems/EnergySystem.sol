@@ -3,14 +3,14 @@ pragma solidity >=0.8.0;
 import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
-import { EntityCategory } from "../types.sol";
+import { EntityType } from "../types.sol";
 import { RESOURCE_TO_ENERGY_CONVERSION_RATE, MAX_INACTIVITY, GENERIC_ACTION_COOLDOWN } from "../config.sol";
 
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
-import { EntityCategoryComponent, ID as EntityCategoryComponentID } from "../components/EntityCategoryComponent.sol";
+import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { DeathComponent, ID as DeathComponentID } from "../components/DeathComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Energy"));
@@ -19,26 +19,21 @@ contract EnergySystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function checkRequirements(uint256 player, uint32 resourceInput) private {
-    EntityCategoryComponent entityCategoryComponent = EntityCategoryComponent(
-      getAddressById(components, EntityCategoryComponentID)
-    );
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
 
     // Require entity to be a player
-    require(
-      entityCategoryComponent.getValue(player) == uint32(EntityCategory.Player),
-      "only (a living) player can eat."
-    );
+    require(entityTypeComponent.getValue(player) == uint32(EntityType.Player), "only (a living) player can eat.");
 
     // Require cooldown period to be over
     require(coolDownComponent.getValue(player) < block.number, "in cooldown period");
 
     // Require the player to not be past its death block
     if (deathComponent.getValue(player) <= block.number) {
-      entityCategoryComponent.set(player, uint32(EntityCategory.Corpse));
+      entityTypeComponent.set(player, uint32(EntityType.Corpse));
       coolDownComponent.set(player, 0);
       energyComponent.set(player, 0);
       require(false, "death block past. you are dead");

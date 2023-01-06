@@ -3,7 +3,7 @@
     "PositionComponent",
     "EnergyComponent",
     "ResourceComponent",
-    "EntityCategoryComponent",
+    "EntityTypeComponent",
     "SeedComponent",
     "CoolDownComponent",
     "CreatorComponent",
@@ -25,7 +25,7 @@
         "EnergyComponent",
         "CoolDownComponent",
         "StatsComponent",
-        "EntityCategoryComponent",
+        "EntityTypeComponent",
         "ResourceComponent",
         "DeathComponent"
       ]
@@ -42,7 +42,7 @@
         "ResourceComponent",
         "SeedComponent",
         "CoolDownComponent",
-        "EntityCategoryComponent",
+        "EntityTypeComponent",
         "StatsComponent",
         "BirthComponent",
         "CannibalComponent",
@@ -56,7 +56,7 @@
         "ResourceComponent",
         "EnergyComponent",
         "CoolDownComponent",
-        "EntityCategoryComponent",
+        "EntityTypeComponent",
         "StatsComponent",
         "CannibalComponent",
         "DeathComponent"
@@ -70,7 +70,7 @@
         "ResourceComponent",
         "EnergyComponent",
         "CoolDownComponent",
-        "EntityCategoryComponent",
+        "EntityTypeComponent",
         "CreatorComponent",
         "StatsComponent",
         "DeathComponent"
@@ -81,7 +81,7 @@
       "writeAccess": [
         "EnergyComponent",
         "CoolDownComponent",
-        "EntityCategoryComponent",
+        "EntityTypeComponent",
         "PlayingComponent",
         "StatsComponent",
         "ResourceComponent",
