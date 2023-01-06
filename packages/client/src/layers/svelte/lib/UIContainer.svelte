@@ -1,6 +1,6 @@
 <script lang="ts">
-  // import UI3DMap from "./components/UIGridMap/3D/UI3DMap.svelte";
-  import UI3DMap from "./components/UIGridMap/UIGridMap.svelte";
+  import UI3DMap from "./components/UIGridMap/3D/UI3DMap.svelte";
+  // import UI3DMap from "./components/UIGridMap/UIGridMap.svelte";
   import { uiState } from "../modules/ui";
   import { ready } from "../modules/network";
   import { player } from "../modules/player";

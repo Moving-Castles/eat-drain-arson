@@ -1,11 +1,11 @@
 <script lang="ts">
   import { Canvas } from "@threlte/core";
-  import Scene from "./Scene.svelte";
+  import Map from "./Map.svelte";
 </script>
 
 <div class="ui-3d-map">
   <Canvas>
-    <Scene />
+    <Map />
   </Canvas>
 </div>
 

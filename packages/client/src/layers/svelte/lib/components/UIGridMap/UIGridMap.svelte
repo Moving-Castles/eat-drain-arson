@@ -44,6 +44,8 @@
     grid = initGrid(unit);
     if ($player) {
       grid = await updateGrid($player.position, grid);
+
+      console.log(grid);
     }
   });
 

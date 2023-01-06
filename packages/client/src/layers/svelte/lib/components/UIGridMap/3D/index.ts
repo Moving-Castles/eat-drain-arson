@@ -21,4 +21,4 @@ export const textureSources = {
   "ruins-3": "/src/public/images/tiles/ruins/3.png",
   "ruins-4": "/src/public/images/tiles/ruins/4.png",
 };
-export const textures = writable([] as Texture[]);
+export const textures = writable({} as Texture[]);
