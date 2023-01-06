@@ -3,9 +3,9 @@
   import type { GridTile } from "./index";
   import type { Entity } from "../../../modules/entities";
   import { TileOverlays } from "./index";
-  import { TerrainType, terrainTypeToString, directionToString } from "../../../utils/space";
+  import { TerrainCategory, terrainCategoryToString, directionToString } from "../../../utils/space";
   import { player } from "../../../modules/player";
-  import { entities, EntityType } from "../../../modules/entities";
+  import { entities, EntityCategory } from "../../../modules/entities";
   import { seedToName, seedToMaskTileOverlay } from "../../../utils/name";
   import { tooltip } from "../UIToolTip/index";
   import { fireString, fireStatusClass } from "../UIFires/index";
@@ -30,11 +30,11 @@
 
   function backgroundImageClass(tile: GridTile) {
     switch (tile.terrain) {
-      case TerrainType.Dust:
+      case TerrainCategory.Dust:
         return "dust-" + (((tile.coordinates.x + tile.coordinates.y) % 4) + 1);
-      case TerrainType.Debris:
+      case TerrainCategory.Debris:
         return "debris-" + (((tile.coordinates.x + tile.coordinates.y) % 4) + 1);
-      case TerrainType.Ruins:
+      case TerrainCategory.Ruins:
         return "ruins-" + (((tile.coordinates.x + tile.coordinates.y) % 4) + 1);
     }
   }
@@ -43,7 +43,7 @@
     return (
       tile.transformation.x == 0 &&
       tile.transformation.y == 0 &&
-      ($player.entityType == EntityType.Player || $player.entityType == EntityType.Corpse)
+      ($player.entityCategory == EntityCategory.Player || $player.entityCategory == EntityCategory.Corpse)
     );
   }
 
@@ -60,13 +60,13 @@
     (tile: GridTile) => {
       if (isPlayerTile(tile)) {
         return `${TileOverlays.Player} ${seedToMaskTileOverlay($player.seed || 0)} ${
-          $player.entityType == EntityType.Corpse ? TileOverlays.CorpseMask : ""
+          $player.entityCategory == EntityCategory.Corpse ? TileOverlays.CorpseMask : ""
         }`;
       }
     },
     // Player corpse
     (tile: GridTile) => {
-      if (tile.transformation.x == 0 && tile.transformation.y == 0 && $player.entityType == EntityType.Corpse) {
+      if (tile.transformation.x == 0 && tile.transformation.y == 0 && $player.entityCategory == EntityCategory.Corpse) {
         return TileOverlays.Corpse;
       }
     },
@@ -85,7 +85,7 @@
     offset: { x: 10, y: 10 },
   }}
   title="
-    {terrainTypeToString(tile.terrain)}<br>
+    {terrainCategoryToString(tile.terrain)}<br>
     x:{tile.coordinates.x} y:{tile.coordinates.y}<br>
     sludge: {tile.resource}<br>
     extraction speed: {tile.perlinFactor.toFixed(2)}

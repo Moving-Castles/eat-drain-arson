@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { fires, EntityType } from "../../../modules/entities";
+  import { fires, EntityCategory } from "../../../modules/entities";
   import { blockNumber } from "../../../modules/network";
 
   import Fire from "./Fire.svelte";
 
-  const remaining = (fire: EntityType.Fire) => Math.max((fire.coolDownBlock || 0) - $blockNumber, 0);
+  const remaining = (fire: EntityCategory.Fire) => Math.max((fire.coolDownBlock || 0) - $blockNumber, 0);
 
   let sortedFires = [...sorted(Object.entries($fires))];
 

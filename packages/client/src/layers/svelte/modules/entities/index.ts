@@ -7,7 +7,7 @@ import { seedToName } from "../../utils/name";
 
 // --- TYPES -----------------------------------------------------------------
 
-export enum EntityType {
+export enum EntityCategory {
   Player,
   Terrain,
   Fire,
@@ -15,7 +15,7 @@ export enum EntityType {
   Ghost,
 }
 
-export type StatsType = {
+export type StatsCategory = {
   traveled: number;
   gathered: number;
   burnt: number;
@@ -23,13 +23,13 @@ export type StatsType = {
 };
 
 export type Player = {
-  entityType: EntityType.Player;
+  entityCategory: EntityCategory.Player;
   position: Coord;
   coolDownBlock: number;
   energy: number;
   resource: number;
   seed: number;
-  stats: StatsType;
+  stats: StatsCategory;
   birth: number;
   death: number;
   cannibal: string[];
@@ -37,13 +37,13 @@ export type Player = {
 };
 
 export type Corpse = {
-  entityType: EntityType.Corpse;
+  entityCategory: EntityCategory.Corpse;
   position: Coord;
   coolDownBlock: number;
   energy: number;
   resource: number;
   seed: number;
-  stats: StatsType;
+  stats: StatsCategory;
   birth: number;
   death: number;
   cannibal: string[];
@@ -51,13 +51,13 @@ export type Corpse = {
 };
 
 export type Ghost = {
-  entityType: EntityType.Ghost;
+  entityCategory: EntityCategory.Ghost;
   position: Coord;
   coolDownBlock: number;
   energy: number;
   resource: number;
   seed: number;
-  stats: StatsType;
+  stats: StatsCategory;
   birth: number;
   death: number;
   cannibal: string[];
@@ -65,13 +65,13 @@ export type Ghost = {
 };
 
 export type Terrain = {
-  entityType: EntityType.Terrain;
+  entityCategory: EntityCategory.Terrain;
   position: Coord;
   resource: number;
 };
 
 export type Fire = {
-  entityType: EntityType.Fire;
+  entityCategory: EntityCategory.Fire;
   position: Coord;
   coolDownBlock?: number;
   creator: string[];
@@ -111,17 +111,17 @@ export const entities = writable({} as Entities);
 
 export const players = derived([entities, blockNumber], ([$entities, $blockNumber]) => {
   let ps = Object.entries($entities).filter(
-    ([k, e]) => e.entityType == EntityType.Player || e.entityType == EntityType.Corpse
+    ([k, e]) => e.entityCategory == EntityCategory.Player || e.entityCategory == EntityCategory.Corpse
   );
 
   // Now double check for each one if they are dead
   ps = ps.map(([k, e]) => {
     const energy = calculateEnergy(e, $blockNumber);
     if (energy < 1) {
-      e.entityType = EntityType.Corpse;
-    } else if (e.entityType == EntityType.Corpse && energy > 0) {
+      e.entityCategory = EntityCategory.Corpse;
+    } else if (e.entityCategory == EntityCategory.Corpse && energy > 0) {
       // Looks like you respawned, Padawan...
-      e.entityType = EntityType.Player;
+      e.entityCategory = EntityCategory.Player;
     }
     return [k, e];
   });
@@ -132,19 +132,25 @@ export const players = derived([entities, blockNumber], ([$entities, $blockNumbe
 export const fires = derived(
   entities,
   ($entities) =>
-    Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Fire)) as Entities
+    Object.fromEntries(
+      Object.entries($entities).filter(([v, e]) => e.entityCategory == EntityCategory.Fire)
+    ) as Entities
 );
 
 export const terrains = derived(
   entities,
   ($entities) =>
-    Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Terrain)) as Entities
+    Object.fromEntries(
+      Object.entries($entities).filter(([v, e]) => e.entityCategory == EntityCategory.Terrain)
+    ) as Entities
 );
 
 export const corpses = derived(
   entities,
   ($entities) =>
-    Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Corpse)) as Entities
+    Object.fromEntries(
+      Object.entries($entities).filter(([v, e]) => e.entityCategory == EntityCategory.Corpse)
+    ) as Entities
 );
 
 // --- FUNCTIONS -----------------------------------------------------------------

@@ -5,7 +5,7 @@
   import { shortenAddress } from "../../utils/ui";
   import { blockNumber } from "../../modules/network";
   import { speed, fragSpeed } from "../../modules/ui";
-  import { EntityType } from "../../modules/entities";
+  import { EntityCategory } from "../../modules/entities";
   import { fade } from "svelte/transition";
 
   const SECONDS_IN_DAY = 86400;
@@ -30,21 +30,21 @@
   <hr />
   {#each Object.entries($entities) as [address, value], i}
     <div transition:fade={{ duration: $speed + $fragSpeed * i }} class:player={address === $playerAddress}>
-      {#if value.entityType == EntityType.Player}
+      {#if value.entityCategory == EntityCategory.Player}
         <strong>👺 {seedToName($entities[address].seed)}</strong>
       {/if}
-      {#if value.entityType == EntityType.Terrain}
+      {#if value.entityCategory == EntityCategory.Terrain}
         <strong>🗺️ {shortenAddress(address)}</strong>
       {/if}
-      {#if value.entityType == EntityType.Fire}
+      {#if value.entityCategory == EntityCategory.Fire}
         <strong>🔥 {shortenAddress(address)}</strong>
       {/if}
-      {#if value.entityType == EntityType.Corpse}
+      {#if value.entityCategory == EntityCategory.Corpse}
         <strong>💀 {seedToName($entities[address].seed)}</strong>
       {/if}
       / x:{value.position?.x}
       / y: {value.position?.y}
-      {#if value.entityType == EntityType.Player}
+      {#if value.entityCategory == EntityCategory.Player}
         / e: {value.energy}
       {/if}
       {#if value.coolDownBlock}

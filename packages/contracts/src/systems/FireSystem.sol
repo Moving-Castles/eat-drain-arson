@@ -4,14 +4,14 @@ import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
-import { EntityType } from "../types.sol";
+import { EntityCategory } from "../types.sol";
 import { MINIMUM_FIRE_SIZE, FIRE_BURNTIME_MULTIPLIER, COST_TO_MAKE_FIRE, MAX_INACTIVITY, GENERIC_ACTION_COOLDOWN } from "../config.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
-import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
+import { EntityCategoryComponent, ID as EntityCategoryComponentID } from "../components/EntityCategoryComponent.sol";
 import { CreatorComponent, ID as CreatorComponentID } from "../components/CreatorComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
 import { SeedComponent, ID as SeedComponentID } from "../components/SeedComponent.sol";
@@ -23,19 +23,24 @@ contract FireSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function checkRequirements(uint256 player, uint32 resourceInput) private {
-    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    EntityCategoryComponent entityCategoryComponent = EntityCategoryComponent(
+      getAddressById(components, EntityCategoryComponentID)
+    );
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
 
     // Require entity to be a player
-    require(entityTypeComponent.getValue(player) == uint32(EntityType.Player), "only (a living) player can burn.");
+    require(
+      entityCategoryComponent.getValue(player) == uint32(EntityCategory.Player),
+      "only (a living) player can burn."
+    );
     // Require cooldown period to be over
     require(coolDownComponent.getValue(player) < block.number, "in cooldown period");
     // Require the player to not be past its death block
     if (deathComponent.getValue(player) <= block.number) {
-      entityTypeComponent.set(player, uint32(EntityType.Corpse));
+      entityCategoryComponent.set(player, uint32(EntityCategory.Corpse));
       coolDownComponent.set(player, 0);
       energyComponent.set(player, 0);
       require(false, "death block past. you are dead");
@@ -54,18 +59,22 @@ contract FireSystem is System {
 
   function checkForFire(Coord memory position) private view returns (uint256[] memory) {
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
-    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    EntityCategoryComponent entityCategoryComponent = EntityCategoryComponent(
+      getAddressById(components, EntityCategoryComponentID)
+    );
 
     QueryFragment[] memory fragments = new QueryFragment[](2);
     fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(position));
-    fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(EntityType.Fire));
+    fragments[1] = QueryFragment(QueryType.HasValue, entityCategoryComponent, abi.encode(EntityCategory.Fire));
     uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
     return entitiesAtPosition;
   }
 
   function createNewFire(uint256 player, Coord memory position, uint32 resourceInput) private {
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
-    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    EntityCategoryComponent entityCategoryComponent = EntityCategoryComponent(
+      getAddressById(components, EntityCategoryComponentID)
+    );
     SeedComponent seedComponent = SeedComponent(getAddressById(components, SeedComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
@@ -73,7 +82,7 @@ contract FireSystem is System {
 
     uint256 newFire = world.getUniqueEntityId();
     positionComponent.set(newFire, position);
-    entityTypeComponent.set(newFire, uint32(EntityType.Fire));
+    entityCategoryComponent.set(newFire, uint32(EntityCategory.Fire));
     seedComponent.set(newFire, makeSeedValue(newFire));
     // Cooldown = current block + resources to burn * FIRE_BURNTIME_MULTIPLIER
     coolDownComponent.set(newFire, block.number + uint256(resourceInput) * FIRE_BURNTIME_MULTIPLIER);
@@ -127,11 +136,13 @@ contract FireSystem is System {
 
   function checkIfDead(uint256 player) private {
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
-    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    EntityCategoryComponent entityCategoryComponent = EntityCategoryComponent(
+      getAddressById(components, EntityCategoryComponentID)
+    );
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
 
     if (energyComponent.getValue(player) <= 0) {
-      entityTypeComponent.set(player, uint32(EntityType.Corpse));
+      entityCategoryComponent.set(player, uint32(EntityCategory.Corpse));
       coolDownComponent.set(player, 0);
     }
   }

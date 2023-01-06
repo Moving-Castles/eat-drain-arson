@@ -7,12 +7,12 @@ import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { Perlin } from "noise/Perlin.sol";
 import { ABDKMath64x64 as Math } from "abdk-libraries-solidity/ABDKMath64x64.sol";
 import { SPAWN_RESOURCE_PER_POSITION, MAX_INACTIVITY, GENERIC_ACTION_COOLDOWN } from "../config.sol";
-import { EntityType } from "../types.sol";
+import { EntityCategory } from "../types.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
-import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
+import { EntityCategoryComponent, ID as EntityCategoryComponentID } from "../components/EntityCategoryComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
 import { CannibalComponent, ID as CannibalComponentID } from "../components/CannibalComponent.sol";
 import { DeathComponent, ID as DeathComponentID } from "../components/DeathComponent.sol";
@@ -24,27 +24,34 @@ contract GatherSystem is System {
 
   function checkForEntity(Coord memory position, uint32 typeOfEntity) private view returns (uint256[] memory) {
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
-    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    EntityCategoryComponent entityCategoryComponent = EntityCategoryComponent(
+      getAddressById(components, EntityCategoryComponentID)
+    );
 
     QueryFragment[] memory fragments = new QueryFragment[](2);
     fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(position));
-    fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(typeOfEntity));
+    fragments[1] = QueryFragment(QueryType.HasValue, entityCategoryComponent, abi.encode(typeOfEntity));
     return LibQuery.query(fragments);
   }
 
   function checkRequirements(uint256 player, uint32 energyInput) private {
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
-    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    EntityCategoryComponent entityCategoryComponent = EntityCategoryComponent(
+      getAddressById(components, EntityCategoryComponentID)
+    );
     DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
 
     // Require entity to be player
-    require(entityTypeComponent.getValue(player) == uint32(EntityType.Player), "only (a living) player can gather.");
+    require(
+      entityCategoryComponent.getValue(player) == uint32(EntityCategory.Player),
+      "only (a living) player can gather."
+    );
     // Require cooldown period to be over
     require(coolDownComponent.getValue(player) < block.number, "in cooldown period");
     // Require the player to not be past its death block
     if (deathComponent.getValue(player) <= block.number) {
-      entityTypeComponent.set(player, uint32(EntityType.Corpse));
+      entityCategoryComponent.set(player, uint32(EntityCategory.Corpse));
       coolDownComponent.set(player, 0);
       energyComponent.set(player, 0);
       require(false, "death block past. you are dead");
@@ -69,13 +76,15 @@ contract GatherSystem is System {
   function cannabalize(uint256 player, uint256 corpse) private {
     CannibalComponent cannibalComponent = CannibalComponent(getAddressById(components, CannibalComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
-    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    EntityCategoryComponent entityCategoryComponent = EntityCategoryComponent(
+      getAddressById(components, EntityCategoryComponentID)
+    );
 
     // Transfer all resources from corpse to player
     resourceComponent.set(player, resourceComponent.getValue(player) + resourceComponent.getValue(corpse));
     resourceComponent.set(corpse, 0);
     // Turn corpse into ghost
-    entityTypeComponent.set(corpse, uint32(EntityType.Ghost));
+    entityCategoryComponent.set(corpse, uint32(EntityCategory.Ghost));
 
     // Add corpse to player's cannibal list
     uint256[] memory currentCannibalArray = cannibalComponent.getValue(player);
@@ -89,11 +98,13 @@ contract GatherSystem is System {
 
   function gather(uint256 player, Coord memory position, uint32 energyInput) private returns (uint32) {
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
-    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    EntityCategoryComponent entityCategoryComponent = EntityCategoryComponent(
+      getAddressById(components, EntityCategoryComponentID)
+    );
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
 
     // Check for terrain component in current location
-    uint256[] memory terrainAtPosition = checkForEntity(position, uint32(EntityType.Terrain));
+    uint256[] memory terrainAtPosition = checkForEntity(position, uint32(EntityCategory.Terrain));
 
     uint32 resourceToExtract = getResourcesToExtract(position, energyInput);
 
@@ -107,7 +118,7 @@ contract GatherSystem is System {
       // Create new terrain block at position
       uint256 newTerrainEntity = world.getUniqueEntityId();
       positionComponent.set(newTerrainEntity, position);
-      entityTypeComponent.set(newTerrainEntity, uint32(EntityType.Terrain));
+      entityCategoryComponent.set(newTerrainEntity, uint32(EntityCategory.Terrain));
       resourceComponent.set(newTerrainEntity, SPAWN_RESOURCE_PER_POSITION - resourceToExtract);
     } else {
       // The position HAS been gathered before,
@@ -148,11 +159,13 @@ contract GatherSystem is System {
 
   function checkIfDead(uint256 player) private {
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
-    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    EntityCategoryComponent entityCategoryComponent = EntityCategoryComponent(
+      getAddressById(components, EntityCategoryComponentID)
+    );
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
 
     if (energyComponent.getValue(player) <= 0) {
-      entityTypeComponent.set(player, uint32(EntityType.Corpse));
+      entityCategoryComponent.set(player, uint32(EntityCategory.Corpse));
       coolDownComponent.set(player, 0);
     }
   }
@@ -172,10 +185,10 @@ contract GatherSystem is System {
     Coord memory playerPosition = positionComponent.getValue(entity);
 
     // Require there to not be a fire in position
-    require(checkForEntity(playerPosition, uint32(EntityType.Fire)).length == 0, "can not gather in fire");
+    require(checkForEntity(playerPosition, uint32(EntityCategory.Fire)).length == 0, "can not gather in fire");
 
     // Check for corpses in current location
-    uint256[] memory corpsesAtPosition = checkForEntity(playerPosition, uint32(EntityType.Corpse));
+    uint256[] memory corpsesAtPosition = checkForEntity(playerPosition, uint32(EntityCategory.Corpse));
 
     if (corpsesAtPosition.length > 0) {
       cannabalize(entity, corpsesAtPosition[0]);

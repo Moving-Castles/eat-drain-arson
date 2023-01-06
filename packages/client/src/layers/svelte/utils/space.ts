@@ -1,6 +1,6 @@
 import type { Coord } from "@latticexyz/utils";
 
-export enum TerrainType {
+export enum TerrainCategory {
   Dust,
   Debris,
   Ruins,
@@ -18,10 +18,10 @@ export enum Directions {
   NorthWest,
 }
 
-export function terrainTypeToString(terrainType: TerrainType) {
-  if (terrainType === TerrainType.Dust) return "dust";
-  if (terrainType === TerrainType.Debris) return "debris";
-  if (terrainType === TerrainType.Ruins) return "ruins";
+export function terrainCategoryToString(terrainCategory: TerrainCategory) {
+  if (terrainCategory === TerrainCategory.Dust) return "dust";
+  if (terrainCategory === TerrainCategory.Debris) return "debris";
+  if (terrainCategory === TerrainCategory.Ruins) return "ruins";
 }
 
 export function positionsToTransformation(from: Coord, to: Coord) {

@@ -1,8 +1,6 @@
 // Components
 import UITextLog from "../../lib/components/UITextLog.svelte";
 import UIAvatar from "../../lib/components/UIAvatar.svelte";
-// import UIGridMap from "../../lib/components/UIGridMap/UIGridMap.svelte";
-import UI3DMap from "../../lib/components/UI3DMap/UI3DMap.svelte";
 import UIView from "../../lib/components/UIView.svelte";
 import UIDebugLog from "../../lib/components/UIDebugLog.svelte";
 import UILeaderBoard from "../../lib/components/UILeaderBoards/UILeaderBoard.svelte";
@@ -92,31 +90,10 @@ export const initialState = () => ({
       muted: false,
     },
     grid: {
-      row: [1, 6],
+      row: [1, 10],
       col: [1, 2],
     },
     hidden: false,
-  }),
-  // GRID MAP
-  "grid-map": initialise({
-    id: "grid-map",
-    title: "Soil",
-    component: UI3DMap,
-    active: true,
-    options: {
-      // fluid: false,
-      bare: true,
-      persistent: true,
-      layer: -1,
-      delay: makeDelay(),
-      noscroll: true,
-      center: true,
-    },
-    hidden: false,
-    grid: {
-      col: [2, 3],
-      row: [1, 10],
-    },
   }),
   // FIRES
   fires: initialise({
@@ -155,7 +132,7 @@ export const initialState = () => ({
     id: "leaderboard",
     title: "Leaderboard",
     component: UILeaderBoard,
-    active: true,
+    active: false,
     options: {
       fluid: true,
       delay: makeDelay(),

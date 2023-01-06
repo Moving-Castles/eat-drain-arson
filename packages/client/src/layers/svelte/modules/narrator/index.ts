@@ -2,7 +2,7 @@ import { writable, get } from "svelte/store";
 import type { ComponentUpdate } from "@latticexyz/recs";
 import { blockNumber } from "../network";
 import { playerAddress } from "../player";
-import { indexToID, entities, EntityType } from "../entities";
+import { indexToID, entities, EntityCategory } from "../entities";
 // import { getOperation } from "../../operations/utils";
 import { movement, birth, death, gather, eat, fire, cannibalism, play } from "./narrators";
 export { banter } from "./constants";
@@ -104,7 +104,7 @@ export function addToLog(update: ComponentUpdate, category: EventCategory) {
   // HACK: Avoid writing the first updates to the log
   if (get(logReady)) {
     const isSelf = indexToID(update.entity) == get(playerAddress);
-    const entityType = get(entities)[indexToID(update.entity)].entityType;
+    const entityCategory = get(entities)[indexToID(update.entity)].entityCategory;
 
     // --- Movement
     // --- Reacts to changes to the position component
@@ -116,7 +116,7 @@ export function addToLog(update: ComponentUpdate, category: EventCategory) {
     // --- Gather
     // --- Reacts to increases to the resource component
     // ---
-    if (category === EventCategory.Gather && entityType == EntityType.Player) {
+    if (category === EventCategory.Gather && entityCategory == EntityCategory.Player) {
       write(gather(update, isSelf), LogEntryType.Success);
     }
 

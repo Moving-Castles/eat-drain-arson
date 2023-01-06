@@ -3,7 +3,7 @@
     "PositionComponent",
     "EnergyComponent",
     "ResourceComponent",
-    "EntityTypeComponent",
+    "EntityCategoryComponent",
     "SeedComponent",
     "CoolDownComponent",
     "CreatorComponent",
@@ -16,9 +16,7 @@
   "systems": [
     {
       "name": "ComponentDevSystem",
-      "writeAccess": [
-        "*"
-      ]
+      "writeAccess": ["*"]
     },
     {
       "name": "MoveSystem",
@@ -27,20 +25,14 @@
         "EnergyComponent",
         "CoolDownComponent",
         "StatsComponent",
-        "EntityTypeComponent",
+        "EntityCategoryComponent",
         "ResourceComponent",
         "DeathComponent"
       ]
     },
     {
       "name": "EnergySystem",
-      "writeAccess": [
-        "EnergyComponent",
-        "ResourceComponent",
-        "CoolDownComponent",
-        "StatsComponent",
-        "DeathComponent"
-      ]
+      "writeAccess": ["EnergyComponent", "ResourceComponent", "CoolDownComponent", "StatsComponent", "DeathComponent"]
     },
     {
       "name": "SpawnSystem",
@@ -50,7 +42,7 @@
         "ResourceComponent",
         "SeedComponent",
         "CoolDownComponent",
-        "EntityTypeComponent",
+        "EntityCategoryComponent",
         "StatsComponent",
         "BirthComponent",
         "CannibalComponent",
@@ -64,7 +56,7 @@
         "ResourceComponent",
         "EnergyComponent",
         "CoolDownComponent",
-        "EntityTypeComponent",
+        "EntityCategoryComponent",
         "StatsComponent",
         "CannibalComponent",
         "DeathComponent"
@@ -78,7 +70,7 @@
         "ResourceComponent",
         "EnergyComponent",
         "CoolDownComponent",
-        "EntityTypeComponent",
+        "EntityCategoryComponent",
         "CreatorComponent",
         "StatsComponent",
         "DeathComponent"
@@ -89,7 +81,7 @@
       "writeAccess": [
         "EnergyComponent",
         "CoolDownComponent",
-        "EntityTypeComponent",
+        "EntityCategoryComponent",
         "PlayingComponent",
         "StatsComponent",
         "ResourceComponent",

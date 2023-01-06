@@ -35,7 +35,10 @@ export async function createNetworkLayer(config: GameConfig) {
     Name: defineStringComponent(world, { id: "Name", metadata: { contractId: "component.Name" } }),
     CoolDown: defineNumberComponent(world, { id: "CoolDown", metadata: { contractId: "component.CoolDown" } }),
     Seed: defineNumberComponent(world, { id: "Seed", metadata: { contractId: "component.Seed" } }),
-    EntityType: defineNumberComponent(world, { id: "EntityType", metadata: { contractId: "component.EntityType" } }),
+    EntityCategory: defineNumberComponent(world, {
+      id: "EntityCategory",
+      metadata: { contractId: "component.EntityCategory" },
+    }),
     Creator: defineNumberComponent(world, { id: "Creator", metadata: { contractId: "component.Creator" } }),
     Stats: defineStatsComponent(world),
     Birth: defineNumberComponent(world, { id: "Birth", metadata: { contractId: "component.Birth" } }),

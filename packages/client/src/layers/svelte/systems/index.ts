@@ -3,7 +3,7 @@ export { createEnergySystem } from "./createEnergySystem";
 export { createResourceSystem } from "./createResourceSystem";
 export { createCoolDownSystem } from "./createCoolDownSystem";
 export { createSeedSystem } from "./createSeedSystem";
-export { createEntityTypeSystem } from "./createEntityTypeSystem";
+export { createEntityCategorySystem } from "./createEntityCategorySystem";
 export { createCreatorSystem } from "./createCreatorSystem";
 export { createStatsSystem } from "./createStatsSystem";
 export { createBirthSystem } from "./createBirthSystem";

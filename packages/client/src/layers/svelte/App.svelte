@@ -10,7 +10,7 @@
     createResourceSystem,
     createCoolDownSystem,
     createSeedSystem,
-    createEntityTypeSystem,
+    createEntityCategorySystem,
     createCreatorSystem,
     createStatsSystem,
     createBirthSystem,
@@ -43,7 +43,7 @@
     createResourceSystem(layers.network);
     createCoolDownSystem(layers.network);
     createSeedSystem(layers.network);
-    createEntityTypeSystem(layers.network);
+    createEntityCategorySystem(layers.network);
     createCreatorSystem(layers.network);
     createStatsSystem(layers.network);
     createBirthSystem(layers.network);
