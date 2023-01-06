@@ -2,14 +2,14 @@ import { getRandomInt } from "../../utils/ui";
 import { get } from "svelte/store";
 import type { Operation } from "../types";
 import {} from "../types";
-import { OperationCategory } from "../types";
+import { OperationType } from "../types";
 import { checkCosts } from "../utils";
 import { network } from "../../modules/network";
 import { player } from "../../modules/player";
 
 export const stumble: Operation = {
   name: "stumble",
-  category: OperationCategory.Move,
+  category: OperationType.Move,
   metadata: {
     description: "Move 3 step in random direction",
     lore: ["Are there others out there?", "Better than to stay and be absorbed.", "You still dream of the others."],

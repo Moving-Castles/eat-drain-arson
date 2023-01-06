@@ -17,8 +17,8 @@
     State,
     StateString,
   } from "../../../modules/sequencer/index";
-  import type { OperationCategory } from "../../../operations/types";
-  import { OperationCategoryString } from "../../../operations/types";
+
+  import { OperationType, OperationTypeString } from "../../../operations/types";
 
   export const ID = "ui-executor";
 
@@ -71,7 +71,7 @@
         <div
           use:tooltip
           title={sequenceElement.operation.metadata.description}
-          class="slot {OperationCategoryString[sequenceElement.operation.category]}"
+          class="slot {OperationTypeString[sequenceElement.operation.category]}"
           class:active={$sequencerState === State.Running && $activeOperationIndex === index}
           class:failure={!$sequence[index].success}
         >
@@ -79,7 +79,7 @@
             {sequenceElement.operation.name}
           </div>
 
-          {#if $activeOperationIndex === index && sequenceElement.operation.category !== OperationCategory.Empty}
+          {#if $activeOperationIndex === index && sequenceElement.operation.category !== OperationType.Empty}
             <div class="operation-progress">
               {#if ($player.coolDownBlock || 0) - $blockNumber > 0 && $progress > 0}
                 <div class="progress-bar">

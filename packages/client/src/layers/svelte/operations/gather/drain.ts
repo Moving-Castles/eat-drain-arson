@@ -1,13 +1,13 @@
 import { get } from "svelte/store";
 import type { Operation } from "../types";
-import { OperationCategory } from "../types";
+import { OperationType } from "../types";
 import { checkCosts } from "../utils";
 import { network } from "../../modules/network";
 import { player } from "../../modules/player";
 
 export const drain: Operation = {
   name: "drain",
-  category: OperationCategory.Gather,
+  category: OperationType.Gather,
   metadata: {
     description: "Keep collecting before we run out",
     lore: [

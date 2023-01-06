@@ -102,7 +102,7 @@
   .tile-overlay {
     width: 100%;
     height: 100%;
-    pointer-events: none;
+    /* pointer-events: none; */
     background-size: contain;
     background-position: center;
     position: absolute;

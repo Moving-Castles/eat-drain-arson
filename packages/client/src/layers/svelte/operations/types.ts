@@ -14,14 +14,14 @@ export type Cost = {
 
 export type Operation = {
   name: string;
-  category: OperationCategory;
+  category: OperationType;
   metadata: Metadata;
   costs: Cost[];
   requirement: (costs: Cost[]) => boolean;
   execute: () => Promise<ContractTransaction> | false;
 };
 
-export enum OperationCategory {
+export enum OperationType {
   Empty,
   Move,
   Gather,
@@ -32,12 +32,12 @@ export enum OperationCategory {
   Special,
 }
 
-export const OperationCategoryString = {
-  [OperationCategory.Empty]: "empty",
-  [OperationCategory.Move]: "move",
-  [OperationCategory.Gather]: "gather",
-  [OperationCategory.Consume]: "consume",
-  [OperationCategory.Burn]: "burn",
-  [OperationCategory.Play]: "play",
-  [OperationCategory.Special]: "special",
+export const OperationTypeString = {
+  [OperationType.Empty]: "empty",
+  [OperationType.Move]: "move",
+  [OperationType.Gather]: "gather",
+  [OperationType.Consume]: "consume",
+  [OperationType.Burn]: "burn",
+  [OperationType.Play]: "play",
+  [OperationType.Special]: "special",
 };

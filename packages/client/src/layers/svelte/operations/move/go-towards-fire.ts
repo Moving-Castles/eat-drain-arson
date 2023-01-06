@@ -5,12 +5,12 @@ import { fires } from "../../modules/entities";
 import { isEmpty } from "lodash";
 import { transformationToDirection, positionsToTransformation, directionalPathfind } from "../../utils/space";
 import type { Operation } from "../types";
-import { OperationCategory } from "../types";
+import { OperationType } from "../types";
 import { checkCosts } from "../utils";
 
 export const goTowardsFire: Operation = {
   name: "go towards fire",
-  category: OperationCategory.Move,
+  category: OperationType.Move,
   metadata: {
     description: "Move 3 step in random direction",
     lore: [

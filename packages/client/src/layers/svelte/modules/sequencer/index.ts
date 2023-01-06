@@ -1,7 +1,7 @@
 import { writable, get } from "svelte/store";
 import { tweened } from "svelte/motion";
 import type { Operation } from "../../operations/types";
-import { OperationCategory } from "../../operations/types";
+import { OperationType } from "../../operations/types";
 import type { ContractReceipt, ContractTransaction } from "ethers";
 import { blockNumber } from "../network";
 import { player, playerActivity, Activities } from "../player";
@@ -54,7 +54,7 @@ export const operationDuration = writable(0);
 export const emptySequenceElement: SequenceElement = {
   operation: {
     name: "+",
-    category: OperationCategory.Empty,
+    category: OperationType.Empty,
     metadata: {
       description: "",
       errorMessage: "",
@@ -241,7 +241,7 @@ blockNumber.subscribe(async (newBlock) => {
     activeOperationIndex.set(turnCounter % get(sequence).length);
     const sequenceElement = get(sequence)[get(activeOperationIndex)];
 
-    if (sequenceElement.operation.category === OperationCategory.Gate) {
+    if (sequenceElement.operation.category === OperationType.Gate) {
       // For gates we only check the requirements
       // Proceed if true, start from beginning if false
       turnCounter = sequenceElement.operation.requirement(sequenceElement.operation.costs) ? turnCounter + 1 : 0;

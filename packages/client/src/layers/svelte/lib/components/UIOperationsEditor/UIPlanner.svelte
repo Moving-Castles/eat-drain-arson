@@ -4,7 +4,7 @@
   import { tooltip } from "../UIToolTip/index";
   import { operations } from "../../../operations/";
   import type { Operation } from "../../../operations/types";
-  import { OperationCategoryString } from "../../../operations/types";
+  import { OperationTypeString } from "../../../operations/types";
   import { uiState } from "../../../modules/ui";
   import type { SequenceElement } from "../../../modules/sequencer/index";
   import {
@@ -64,7 +64,7 @@
   <div class="operation-grid">
     {#each localSequence as sequenceElement}
       <div class="slot-container">
-        <div class="slot {OperationCategoryString[sequenceElement.operation.category]}">
+        <div class="slot {OperationTypeString[sequenceElement.operation.category]}">
           <div class="operation-info">
             <div class="operation-name">
               {sequenceElement.operation.name}
@@ -107,7 +107,7 @@
             on:mouseenter={() => {
               playSound("cursor", "ui");
             }}
-            class="operation {OperationCategoryString[operation.category]} action-filled"
+            class="operation {OperationTypeString[operation.category]} action-filled"
             on:click={() => {
               add(operation);
             }}

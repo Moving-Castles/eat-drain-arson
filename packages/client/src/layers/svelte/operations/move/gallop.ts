@@ -2,14 +2,14 @@ import { getRandomInt } from "../../utils/ui";
 import { get } from "svelte/store";
 import type { Operation } from "../types";
 import {} from "../types";
-import { OperationCategory } from "../types";
+import { OperationType } from "../types";
 import { checkCosts } from "../utils";
 import { network } from "../../modules/network";
 import { player } from "../../modules/player";
 
 export const gallop: Operation = {
   name: "gallop",
-  category: OperationCategory.Move,
+  category: OperationType.Move,
   metadata: {
     description: "Move 5 step in random direction",
     lore: [

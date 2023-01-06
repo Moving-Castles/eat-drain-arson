@@ -1,13 +1,13 @@
 import { get } from "svelte/store";
 import type { Operation } from "../types";
-import { OperationCategory } from "../types";
+import { OperationType } from "../types";
 import { checkCosts } from "../utils";
 import { network } from "../../modules/network";
 import { player } from "../../modules/player";
 
 export const eat: Operation = {
   name: "eat",
-  category: OperationCategory.Consume,
+  category: OperationType.Consume,
   metadata: {
     description: "Decent portion, like grandma used to make it.",
     lore: [

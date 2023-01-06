@@ -1,13 +1,13 @@
 import { get } from "svelte/store";
 import type { Operation } from "../types";
-import { OperationCategory } from "../types";
+import { OperationType } from "../types";
 import { checkCosts } from "../utils";
 import { network } from "../../modules/network";
 import { player } from "../../modules/player";
 
 export const feast: Operation = {
   name: "feast",
-  category: OperationCategory.Consume,
+  category: OperationType.Consume,
   metadata: {
     description: "Deep gulps, if you throw up, dw, just drink it again <3",
     lore: ["For another day on this earth!", "Weather, walk with me!", "In deep they rest, glory to those who rest!"],

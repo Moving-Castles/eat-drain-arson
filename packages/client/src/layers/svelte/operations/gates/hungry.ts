@@ -1,11 +1,11 @@
 import { get } from "svelte/store";
 import type { Operation } from "../types";
-import { OperationCategory } from "../types";
+import { OperationType } from "../types";
 import { player } from "../../modules/player";
 
 export const hungry: Operation = {
   name: "hungry?",
-  category: OperationCategory.Gate,
+  category: OperationType.Gate,
   metadata: {
     description: "Are you hungry?",
     positiveMessage: "You are hungry.",

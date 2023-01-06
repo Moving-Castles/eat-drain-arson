@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import type { Operation } from "../types";
-import { OperationCategory } from "../types";
+import { OperationType } from "../types";
 import { checkCosts } from "../utils";
 import { network } from "../../modules/network";
 import { player } from "../../modules/player";
@@ -8,7 +8,7 @@ import { Directions } from "../../utils/space";
 
 export const southWest: Operation = {
   name: "south-west",
-  category: OperationCategory.Move,
+  category: OperationType.Move,
   metadata: {
     description: "Move south west",
     errorMessage: "Movement failed: not enough energy",

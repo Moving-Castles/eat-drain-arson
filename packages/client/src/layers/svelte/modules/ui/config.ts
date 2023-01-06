@@ -1,6 +1,6 @@
 // Components
 import UITextLog from "../../lib/components/UITextLog.svelte";
-import UIAvatar from "../../lib/components/UIAvatar.svelte";
+import UIAvatar from "../../lib/components/UIAvatar/UIAvatar.svelte";
 import UIView from "../../lib/components/UIView.svelte";
 import UIDebugLog from "../../lib/components/UIDebugLog.svelte";
 import UILeaderBoard from "../../lib/components/UILeaderBoards/UILeaderBoard.svelte";

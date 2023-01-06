@@ -1,13 +1,13 @@
 import { get } from "svelte/store";
 import type { Operation } from "../types";
-import { OperationCategory } from "../types";
+import { OperationType } from "../types";
 import { checkCosts } from "../utils";
 import { network } from "../../modules/network";
 import { player } from "../../modules/player";
 
 export const fire: Operation = {
   name: "fire",
-  category: OperationCategory.Burn,
+  category: OperationType.Burn,
   metadata: {
     description: "This will keep me warm me at night",
     lore: [

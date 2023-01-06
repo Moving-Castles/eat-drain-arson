@@ -1,18 +1,24 @@
 <script lang="ts">
-  import { initGrid, updateGrid } from "../index";
+  import type { GridTile } from "../UIGridMap/index";
+  import { initGrid, updateGrid } from "../UIGridMap/index";
   import { textureSources, textures } from "./index";
   import { size } from "lodash";
-  import type { GridTile } from "../index";
+  import { DEG2RAD } from "three/src/math/MathUtils";
   import { T, TransformableObject, useTexture, useFrame } from "@threlte/core";
-  import { player } from "../../../../modules/player";
-  import { blockNumber } from "../../../../modules/network";
-  import Tile from "./Tile.svelte";
+  import { player } from "../../../modules/player";
+  import { blockNumber } from "../../../modules/network";
   import { onMount, tick } from "svelte";
 
+  /**
+   * 3D Objects
+   */
+  import Tile from "./Tile.svelte";
+  import Player from "./Player.svelte";
+
   let grid: GridTile[] = [];
-  let rotation = 0;
+  let rotation = DEG2RAD * 45;
   let unit = 49;
-  let zoom = 49;
+  let zoom = 240;
   let ready = false;
   let loaded = false;
   let texturesLoaded = 0;
@@ -23,7 +29,6 @@
   $textures = useTexture(textureSources, {
     onLoad: (e) => {
       texturesLoaded++;
-      console.log(texturesLoaded);
     },
   });
 
@@ -33,6 +38,7 @@
    * Update grid based on the chain
    */
   blockNumber.subscribe(async () => {
+    console.log($player.position);
     if ($player) {
       grid = await updateGrid($player.position, grid);
       ready = true;
@@ -40,11 +46,11 @@
   });
 
   function handleZoom(e) {
-    if (e.key === "-") {
-      zoom -= 1;
+    if (e.key === "-" && zoom > 40) {
+      zoom -= 10;
     }
-    if (e.key === "=") {
-      zoom += 1;
+    if (e.key === "=" && zoom < 240) {
+      zoom += 10;
     }
   }
 
@@ -55,29 +61,32 @@
     grid = initGrid(unit);
     if ($player) {
       grid = await updateGrid($player.position, grid);
+      console.log($player.position);
       ready = true;
     }
   });
 
-  useFrame(() => (rotation += 0.002));
+  // useFrame(() => (rotation += 0.002));
 </script>
 
 <svelte:window on:keypress={handleZoom} />
 
-<T.Group rotation.z={rotation}>
-  <T.OrthographicCamera {zoom} far={4000} let:ref={cam} position={[0, 15, 10]} makeDefault>
+<T.Group rotation.y={rotation}>
+  <T.OrthographicCamera {zoom} near={0.001} far={4000} let:ref={cam} position={[0, 10, 20]} makeDefault>
     <TransformableObject object={cam} lookAt={{ y: 1 }} />
   </T.OrthographicCamera>
 </T.Group>
 
+<Player />
+
 {#if loaded && ready}
-  <T.Group>
-    {#each grid as tile}
+  <T.Group rotation.x={DEG2RAD * -90}>
+    {#each grid as tile (`${tile.transformation.x}-${tile.transformation.y}`)}
       <Tile {tile} />
     {/each}
   </T.Group>
 {/if}
 
-<T.DirectionalLight position={[0, 10, 10]} castShadow />
-<T.DirectionalLight position={[0, 10, -10]} intensity={0.2} />
-<T.AmbientLight intensity={0.5} />
+<!-- <T.DirectionalLight position={[10, 10, 10]} intensity={0.2} look castShadow /> -->
+<!-- <T.DirectionalLight position={[0, 10, -10]} intensity={0.2} /> -->
+<!-- <T.AmbientLight intensity={1} /> -->

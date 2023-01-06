@@ -22,13 +22,11 @@
   function handleZoom(e) {
     if (e.key === "-" && unit < FURTHEST_ZOOM) {
       unit += 2;
-      console.log(unit);
       grid = [];
       grid = initGrid(unit);
     }
     if (e.key === "=" && unit > CLOSEST_ZOOM) {
       unit -= 2;
-      console.log(unit);
       grid = [];
       grid = initGrid(unit);
     }
@@ -44,8 +42,6 @@
     grid = initGrid(unit);
     if ($player) {
       grid = await updateGrid($player.position, grid);
-
-      console.log(grid);
     }
   });
 

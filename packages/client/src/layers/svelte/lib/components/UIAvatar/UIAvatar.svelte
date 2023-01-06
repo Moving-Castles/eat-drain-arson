@@ -1,10 +1,11 @@
 <script lang="ts">
-  import UIDied from "../UIDied.svelte";
-  import { playSound } from "../../../howler";
-  import UIMetric from "./UIMetric.svelte";
-  import { Activities, activityToVerb, player, playerActivity, dead } from "../../modules/player";
-  import { seedToName, seedToMask } from "../../utils/name";
-  import { EntityType } from "../../modules/entities";
+  import UIDied from "../../UIDied.svelte";
+  import UI3DAvatar from "./UI3DAvatar.svelte";
+  import { playSound } from "../../../../howler";
+  import UIMetric from "../UIMetric.svelte";
+  import { Activities, activityToVerb, player, playerActivity, dead } from "../../../modules/player";
+  import { seedToName, seedToMask } from "../../../utils/name";
+  import { EntityType } from "../../../modules/entities";
   import { Howl } from "howler";
 
   let activitySound: Howl;
@@ -56,13 +57,16 @@
     </div>
   </div>
 
+  <div class="ui-avatar-3d">
+    <UI3DAvatar />
+  </div>
+
   <div class="resources">
     <UIMetric label="Energy" key="energy" />
     <UIMetric label="Sludge" key="resource" />
   </div>
 
-  <div class="ui-avatar-video">
-    <!-- CHARACTER -->
+  <!-- <div class="ui-avatar-video">
     {#if $player.entityType == EntityType.Corpse}
       <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted />
     {:else if $playerActivity === Activities.Moving}
@@ -80,7 +84,7 @@
     {:else}
       <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Idle.mp4"} autoplay muted loop />
     {/if}
-  </div>
+  </div> -->
 
   {#if $dead}
     <div class="ui-overlay">
@@ -101,6 +105,12 @@
     text-align: center;
     width: 100%;
     grid-column: 1 / 3;
+  }
+
+  .ui-avatar-3d {
+    position: relative;
+    height: 100%;
+    width: 100%;
   }
 
   .ui-avatar {
