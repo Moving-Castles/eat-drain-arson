@@ -63,6 +63,12 @@
     // startMelodySoundSystem();
     startHarmonySoundSystem();
 
+    console.log('layers.network.systemCallStreams["system.Move"]', layers.network.systemCallStreams["system.Move"]);
+
+    layers.network.systemCallStreams["system.Move"].subscribe((v: any) => {
+      console.log("v", v);
+    });
+
     layers.network.network.blockNumber$.subscribe((x) => {
       blockNumber.set(x);
       if ($startBlock == 0) {
