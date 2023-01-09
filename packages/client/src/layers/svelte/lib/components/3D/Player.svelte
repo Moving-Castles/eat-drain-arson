@@ -13,4 +13,6 @@
   });
 </script>
 
-<Character />
+<T.Group scale={0.2}>
+  <Character />
+</T.Group>

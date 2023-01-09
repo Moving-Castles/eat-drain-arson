@@ -15,13 +15,23 @@
   import Tile from "./Tile.svelte";
   import Player from "./Player.svelte";
 
+  let w: number = 0;
+  let h: number = 0;
+
+  const INITIAL_ROTATION = DEG2RAD * 45;
+
   let grid: GridTile[] = [];
-  let rotation = DEG2RAD * 45;
+  let rotation = INITIAL_ROTATION;
   let unit = 49;
-  let zoom = 240;
+  let zoom = 1000;
   let ready = false;
   let loaded = false;
   let texturesLoaded = 0;
+  let offsetY = 1;
+
+  let x = 0;
+  let y = 10 + offsetY / 4;
+  let z = 20;
 
   /**
    * Preload textures
@@ -33,6 +43,7 @@
   });
 
   $: loaded = texturesLoaded === size(textureSources);
+  $: y = 10 + offsetY / 4;
 
   /**
    * Update grid based on the chain
@@ -48,7 +59,7 @@
     if (e.key === "-" && zoom > 40) {
       zoom -= 10;
     }
-    if (e.key === "=" && zoom < 240) {
+    if (e.key === "=" && zoom < 500) {
       zoom += 10;
     }
   }
@@ -65,14 +76,28 @@
     }
   });
 
-  // useFrame(() => (rotation += 0.002));
+  const onMouseMove = (e) => {
+    const offsetX = e.clientX / w + 0.5;
+    offsetY = e.clientY / h + 0.5;
+
+    rotation = INITIAL_ROTATION * offsetX;
+  };
 </script>
 
-<svelte:window on:keypress={handleZoom} />
+<svelte:window on:keypress={handleZoom} on:mousemove={onMouseMove} bind:innerWidth={w} bind:innerHeight={h} />
 
 <T.Group rotation.y={rotation}>
-  <T.OrthographicCamera {zoom} near={0.001} far={4000} let:ref={cam} position={[0, 10, 20]} makeDefault>
-    <TransformableObject object={cam} lookAt={{ y: 1 }} />
+  <T.OrthographicCamera
+    {zoom}
+    near={0.001}
+    far={4000}
+    let:ref={cam}
+    position.x={x}
+    position.y={y}
+    position.z={z}
+    makeDefault
+  >
+    <TransformableObject object={cam} lookAt={{ y: 0.2 }} />
   </T.OrthographicCamera>
 </T.Group>
 
@@ -86,6 +111,6 @@
   </T.Group>
 {/if}
 
-<!-- <T.DirectionalLight position={[10, 10, 10]} intensity={0.2} look castShadow /> -->
-<!-- <T.DirectionalLight position={[0, 10, -10]} intensity={0.2} /> -->
+<T.DirectionalLight position.x={x} position.y={y} position.z={z} intensity={1} look castShadow />
+<!-- <T.DirectionalLight position={[0, 10, -10]} intensity={1} /> -->
 <!-- <T.AmbientLight intensity={1} /> -->
