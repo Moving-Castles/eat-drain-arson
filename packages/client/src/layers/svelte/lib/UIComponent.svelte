@@ -53,6 +53,7 @@
     <!-- Body -->
     <div
       class="ui-component-inner"
+      style:background-color={options?.background}
       class:no-padding={options?.layer === 0 || options?.bare}
       class:no-scroll={options?.noscroll || options?.bare}
       class:bare={!options?.bare}

@@ -102,58 +102,58 @@
   .tile-overlay {
     width: 100%;
     height: 100%;
-    /* pointer-events: none; */
+    pointer-events: none;
     background-size: contain;
     background-position: center;
     position: absolute;
   }
 
   .tile-overlay.empty {
-    background-image: url("../../../../../public/images/tiles/overlays/empty.png");
+    background-image: url("../../../../../public/images/tiles/overlays/xs/empty.png");
   }
 
   .tile-overlay.corpse {
-    background-image: url("../../../../../public/images/tiles/overlays/corpse.png");
+    background-image: url("../../../../../public/images/tiles/overlays/xs/corpse.png");
   }
 
   .tile-overlay.mined-1 {
-    background-image: url("../../../../../public/images/tiles/overlays/mined-1.png");
+    background-image: url("../../../../../public/images/tiles/overlays/xs/mined-1.png");
   }
 
   .tile-overlay.mined-2 {
-    background-image: url("../../../../../public/images/tiles/overlays/mined-2.png");
+    background-image: url("../../../../../public/images/tiles/overlays/xs/mined-2.png");
   }
 
   .tile-overlay.mined-3 {
-    background-image: url("../../../../../public/images/tiles/overlays/mined-3.png");
+    background-image: url("../../../../../public/images/tiles/overlays/xs/mined-3.png");
   }
 
   .tile-overlay.map {
-    background-image: url("../../../../../public/images/tiles/overlays/map.png");
+    background-image: url("../../../../../public/images/tiles/overlays/xs/map.png");
     mix-blend-mode: multiply;
   }
 
   .tile-overlay.mask.corpse {
     filter: grayscale(1);
-    /* background-image: url("../../../../../../public/images/masks/0.png"); */
+    /* background-image: url("../../../../../../public/images/masks/xs/0.png"); */
   }
   .tile-overlay.mask.mask-0 {
-    background-image: url("../../../../../public/images/masks/0.png");
+    background-image: url("../../../../../public/images/masks/xs/0.png");
   }
   .tile-overlay.mask.mask-1 {
-    background-image: url("../../../../../public/images/masks/1.png");
+    background-image: url("../../../../../public/images/masks/xs/1.png");
   }
   .tile-overlay.mask.mask-2 {
-    background-image: url("../../../../../public/images/masks/2.png");
+    background-image: url("../../../../../public/images/masks/xs/2.png");
   }
   .tile-overlay.mask.mask-3 {
-    background-image: url("../../../../../public/images/masks/3.png");
+    background-image: url("../../../../../public/images/masks/xs/3.png");
   }
   .tile-overlay.fire.fire-on {
-    background-image: url("../../../../../public/images/fire/on.gif");
+    background-image: url("../../../../../public/images/fire/xs/on.png");
   }
   .tile-overlay.fire.fire-off {
-    background-image: url("../../../../../public/images/fire/off.png");
+    background-image: url("../../../../../public/images/fire/xs/off.png");
   }
 
   .grid-tile {
@@ -176,51 +176,51 @@
   }
 
   .dust-1 {
-    background-image: url("../../../../../public/images/tiles/dust/1.png");
+    background-image: url("../../../../../public/images/tiles/dust/xs/1.png");
   }
 
   .dust-2 {
-    background-image: url("../../../../../public/images/tiles/dust/2.png");
+    background-image: url("../../../../../public/images/tiles/dust/xs/2.png");
   }
 
   .dust-3 {
-    background-image: url("../../../../../public/images/tiles/dust/3.png");
+    background-image: url("../../../../../public/images/tiles/dust/xs/3.png");
   }
 
   .dust-4 {
-    background-image: url("../../../../../public/images/tiles/dust/4.png");
+    background-image: url("../../../../../public/images/tiles/dust/xs/4.png");
   }
 
   .debris-1 {
-    background-image: url("../../../../../public/images/tiles/debris/1.png");
+    background-image: url("../../../../../public/images/tiles/debris/xs/1.png");
   }
 
   .debris-2 {
-    background-image: url("../../../../../public/images/tiles/debris/2.png");
+    background-image: url("../../../../../public/images/tiles/debris/xs/2.png");
   }
 
   .debris-3 {
-    background-image: url("../../../../../public/images/tiles/debris/3.png");
+    background-image: url("../../../../../public/images/tiles/debris/xs/3.png");
   }
 
   .debris-4 {
-    background-image: url("../../../../../public/images/tiles/debris/4.png");
+    background-image: url("../../../../../public/images/tiles/debris/xs/4.png");
   }
 
   .ruins-1 {
-    background-image: url("../../../../../public/images/tiles/ruins/1.png");
+    background-image: url("../../../../../public/images/tiles/ruins/xs/1.png");
   }
 
   .ruins-2 {
-    background-image: url("../../../../../public/images/tiles/ruins/2.png");
+    background-image: url("../../../../../public/images/tiles/ruins/xs/2.png");
   }
 
   .ruins-3 {
-    background-image: url("../../../../../public/images/tiles/ruins/3.png");
+    background-image: url("../../../../../public/images/tiles/ruins/xs/3.png");
   }
 
   .ruins-4 {
-    background-image: url("../../../../../public/images/tiles/ruins/4.png");
+    background-image: url("../../../../../public/images/tiles/ruins/xs/4.png");
   }
 
   .icon {

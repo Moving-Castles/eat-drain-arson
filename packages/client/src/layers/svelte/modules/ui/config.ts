@@ -8,6 +8,7 @@ import UISurvivalLeaderBoard from "../../lib/components/UILeaderBoards/UISurviva
 import UIFires from "../../lib/components/UIFires/UIFires.svelte";
 import UIPlanner from "../../lib/components/UIOperationsEditor/UIPlanner.svelte";
 import UIExecutor from "../../lib/components/UIOperationsEditor/UIExecutor.svelte";
+import UIGridMap from "../../lib/components/UIGridMap/UIGridMap.svelte";
 
 // --- TYPES -----------------------------------------------------------------
 
@@ -22,6 +23,7 @@ export type UIComponentOptions = {
   noscroll?: boolean;
   span?: boolean;
   center?: boolean;
+  background?: string;
 };
 
 export type UIComponentPlacement = {
@@ -166,12 +168,31 @@ export const initialState = () => ({
     id: "executor",
     title: "Compulsions",
     component: UIExecutor,
-    active: true,
+    active: false,
     options: {
       muted: false,
       persistent: true,
       fluid: true,
       delay: makeDelay(),
+    },
+    grid: {
+      col: [3, 4],
+      row: [6, 10],
+    },
+    hidden: false,
+  }),
+  //
+  miniMap: initialise({
+    id: "minimap",
+    title: "Map",
+    component: UIGridMap,
+    active: true,
+    options: {
+      muted: false,
+      persistent: false,
+      fluid: true,
+      delay: makeDelay(),
+      background: "#000",
     },
     grid: {
       col: [3, 4],

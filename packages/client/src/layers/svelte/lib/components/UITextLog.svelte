@@ -17,13 +17,11 @@
       logReady.set(true);
       directToLog("It is night.");
       directToLog("  ");
-      directToLog("gwkhkwhk!!!!!");
+      directToLog("rrrrrrr!!!!!");
       directToLog("  ");
-      directToLog("k - for kill");
-      directToLog("w - for walk");
-      directToLog("g - for gather");
+      directToLog("r - for a random move");
       directToLog("  ");
-      directToLog("kwgggwk?????");
+      directToLog("rrrrrrr?????");
       directToLog("  ");
       directToLog("You hear something in the darkness...");
     }, 2000);

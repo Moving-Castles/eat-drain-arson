@@ -14,6 +14,8 @@
    */
   import Tile from "./Tile.svelte";
   import Player from "./Player.svelte";
+  import Compass from "./Compass.svelte";
+  import Particles from "./Particles.svelte";
 
   let w: number = 0;
   let h: number = 0;
@@ -23,7 +25,7 @@
   let grid: GridTile[] = [];
   let rotation = INITIAL_ROTATION;
   let unit = 49;
-  let zoom = 1000;
+  let zoom = 1500;
   let ready = false;
   let loaded = false;
   let texturesLoaded = 0;
@@ -56,10 +58,10 @@
   });
 
   function handleZoom(e) {
-    if (e.key === "-" && zoom > 40) {
+    if (e.key === "-" && zoom > 110) {
       zoom -= 10;
     }
-    if (e.key === "=" && zoom < 500) {
+    if (e.key === "=" && zoom < 1500) {
       zoom += 10;
     }
   }
@@ -71,10 +73,12 @@
     grid = initGrid(unit);
     if ($player) {
       grid = await updateGrid($player.position, grid);
-      console.log($player.position);
+
       ready = true;
     }
   });
+
+  $: console.log(zoom);
 
   const onMouseMove = (e) => {
     const offsetX = e.clientX / w + 0.5;
@@ -92,25 +96,38 @@
     near={0.001}
     far={4000}
     let:ref={cam}
-    position.x={x}
+    position.x={0}
     position.y={y}
-    position.z={z}
+    position.z={10}
     makeDefault
   >
-    <TransformableObject object={cam} lookAt={{ y: 0.2 }} />
+    <TransformableObject object={cam} lookAt={{ y: 0.12 }} />
   </T.OrthographicCamera>
 </T.Group>
 
-<Player />
+<!-- <Compass /> -->
 
 {#if loaded && ready}
-  <T.Group rotation.x={DEG2RAD * -90}>
+  <Player />
+
+  <Particles />
+
+  <T.Group>
     {#each grid as tile (`${tile.transformation.x}-${tile.transformation.y}`)}
       <Tile {tile} />
     {/each}
   </T.Group>
 {/if}
 
-<T.DirectionalLight position.x={x} position.y={y} position.z={z} intensity={1} look castShadow />
-<!-- <T.DirectionalLight position={[0, 10, -10]} intensity={1} /> -->
-<!-- <T.AmbientLight intensity={1} /> -->
+<T.SpotLight
+  position.x={0}
+  position.y={5}
+  position.z={0}
+  intensity={0.3}
+  angle={0.9}
+  penumbra={0.3}
+  lookAt={{ x: 0, y: 0, z: 0 }}
+  castShadow
+/>
+<!-- <T.DirectionalLight position.x={x} position.y={y} position.z={z} intensity={1} look castShadow /> -->
+<!-- <T.AmbientLight intensity={0.5} /> -->

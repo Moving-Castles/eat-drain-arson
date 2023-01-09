@@ -51,8 +51,6 @@
 
   .close {
     all: unset;
-    color: var(--foreground);
-    background: var(--background);
     cursor: pointer;
   }
 </style>

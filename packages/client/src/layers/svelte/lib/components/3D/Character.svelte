@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { onDestroy } from "svelte";
-  import { T, InteractiveObject } from "@threlte/core";
   import { GLTF, useGltfAnimations } from "@threlte/extras";
+  import { PointLight, Mesh, MeshBasicMaterial, SphereGeometry } from "three";
 
-  let currentActionKey = "Pickup";
+  let currentActionKey = !Math.round(Math.random()) ? "Idle1" : "Idle2";
+
   let available = true;
 
   const { gltf, actions } = useGltfAnimations(({ actions }) => {
@@ -12,6 +12,29 @@
     // set the initial animation
     actions[currentActionKey]?.play();
   });
+
+  const light = new PointLight(0xffff99, 1.2, 10);
+  const sphereMesh = new Mesh(
+    new SphereGeometry(0.5),
+    new MeshBasicMaterial({ color: 0xffff99, transparent: true, opacity: 0 })
+  );
+  sphereMesh.attach(light);
+  sphereMesh.position.y += 1.8;
+  sphereMesh.position.z += 0.6;
+  sphereMesh.position.x += 0.5;
+
+  $: {
+    if ($gltf?.scene) {
+      $gltf.scene.traverse((node) => {
+        // node.receiveShadow = true;
+        node.castShadow = true;
+
+        if (node.name === "LeftHand") {
+          node.attach(sphereMesh);
+        }
+      });
+    }
+  }
 
   function transitionTo(nextActionKey: string, duration = 1) {
     available = false;
@@ -77,4 +100,4 @@
 
 <svelte:window on:keypress={handleKeyPress} />
 
-<GLTF bind:gltf={$gltf} url="/src/public/models/Animations_02.glb" useDraco />
+<GLTF bind:gltf={$gltf} url="/src/public/models/Animations_v2.glb" useDraco />

@@ -9,13 +9,13 @@
   import { directionToString } from "../../../utils/space";
   import { seedToName } from "../../../utils/name";
 
+  const CLOSEST_ZOOM = 3;
+  const FURTHEST_ZOOM = 36;
+
   let w: Number;
   let h: Number;
   let shortest: Number;
   let unit = 7;
-
-  const CLOSEST_ZOOM = 3;
-  const FURTHEST_ZOOM = 49;
 
   let grid: GridTile[] = [];
 
