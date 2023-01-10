@@ -1,10 +1,14 @@
 import type { Coord } from "@latticexyz/utils";
 import type { Entity } from "../../../modules/entities";
 import type { Perlin } from "@latticexyz/noise";
+import { seedToMaskTileOverlay } from "../../../utils/name";
 import { EntityType } from "../../../modules/entities";
+import { player } from "../../../modules/player";
 import { TerrainCategory } from "../../../utils/space";
 import { createPerlin } from "@latticexyz/noise";
 import { checkForType } from "../../../operations/utils";
+import { fireStatusClass } from "../UIFires/index";
+import { get } from "svelte/store";
 
 let perlin: Perlin;
 
@@ -37,6 +41,28 @@ export enum TileOverlays {
   Other = "mask other",
   Player = "mask player",
   CorpseMask = "mask corpse",
+  Corpse = "corpse",
+  // Fire
+  FireOff = "fire-off",
+  FireOn = "fire-on",
+}
+
+// In order from low to high
+export enum TileTextureKeys {
+  // Gathering
+  Empty = "empty",
+  Depleted = "mined-3",
+  Extracted = "mined-2",
+  Dug = "mined-1",
+  // Masks
+  Thief = "mask-0",
+  Scavenger = "mask-1",
+  Hunter = "mask-2",
+  Mage = "mask-3",
+  // Players
+  Other = "other",
+  Player = "player",
+  CorpseMask = "corpse",
   Corpse = "corpse",
   // Fire
   FireOff = "fire-off",
@@ -90,3 +116,46 @@ export async function updateGrid(centerPosition: Coord, grid: GridTile[]) {
   grid = [...grid];
   return grid;
 }
+
+export function isPlayerTile(tile: GridTile) {
+  return tile.transformation.x == 0 && tile.transformation.y == 0;
+}
+export function makeConditions(myEnum) {
+  return [
+    // Mined
+    (tile: GridTile) => (tile.resource == 0 ? myEnum.Empty : null),
+    (tile: GridTile) => (tile.resource < 33 && tile.resource > 0 ? myEnum.Depleted : null),
+    (tile: GridTile) => (tile.resource < 66 && tile.resource >= 33 ? myEnum.Extracted : null),
+    (tile: GridTile) => (tile.resource < 100 && tile.resource >= 66 ? myEnum.Dug : null),
+    // Other player
+    (tile: GridTile) =>
+      tile.other !== undefined ? `${myEnum.Other} ${seedToMaskTileOverlay(tile.other?.seed || 0)}` : null,
+    (tile: GridTile) => (tile.other !== undefined ? seedToMaskTileOverlay(tile.other?.seed || 0) : null),
+    // Player
+    (tile: GridTile) => {
+      if (isPlayerTile(tile)) {
+        return `${myEnum.Player} ${seedToMaskTileOverlay(get(player).seed || 0)} ${
+          get(player).entityType == EntityType.Corpse ? myEnum.CorpseMask : ""
+        }`;
+      }
+    },
+    (tile: GridTile) => {
+      if (isPlayerTile(tile)) {
+        return seedToMaskTileOverlay(get(player).seed || 0);
+      }
+    },
+    // Player corpse
+    (tile: GridTile) => {
+      if (tile.transformation.x == 0 && tile.transformation.y == 0 && get(player).entityType == EntityType.Corpse) {
+        return myEnum.Corpse;
+      }
+    },
+    // Corpse
+    (tile: GridTile) => (tile.corpse !== undefined ? myEnum.Corpse : null),
+    // Fire
+    (tile: GridTile) => (tile.fire !== undefined ? fireStatusClass(tile.fire) : null),
+  ];
+}
+
+export const conditions = makeConditions(TileOverlays);
+export const textureConditions = makeConditions(TileTextureKeys);

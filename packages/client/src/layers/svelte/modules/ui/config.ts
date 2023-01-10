@@ -56,7 +56,7 @@ export const initialState = () => ({
     },
     options: {
       bare: true,
-      persistent: true,
+      persistent: false,
       layer: 1,
       fluid: true,
       noscroll: true,
@@ -171,7 +171,7 @@ export const initialState = () => ({
     active: false,
     options: {
       muted: false,
-      persistent: true,
+      persistent: false,
       fluid: true,
       delay: makeDelay(),
     },
@@ -182,7 +182,7 @@ export const initialState = () => ({
     hidden: false,
   }),
   //
-  miniMap: initialise({
+  minimap: initialise({
     id: "minimap",
     title: "Map",
     component: UIGridMap,

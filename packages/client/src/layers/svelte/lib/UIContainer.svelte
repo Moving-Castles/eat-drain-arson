@@ -10,13 +10,15 @@
   import UILoading from "./components/UILoading.svelte";
 </script>
 
+<!-- The game layer -->
 <div class="ui-container no-padding">
   <div class="ui-container-center">
     <UI3DMap />
   </div>
 </div>
 
-<div class="ui-container">
+<!-- The UI layer -->
+<div class="ui-container ">
   {#if !$player}
     <span />
   {:else}
@@ -68,14 +70,14 @@
     z-index: -1;
   }
 
-  .ui-container-inner {
+  .mobile .ui-container-inner {
     position: relative;
     width: 100%;
     height: 100%;
     display: grid;
     grid-column: 1 / 2;
     grid-row: 2 / span 1;
-    grid-template-columns: 240px 1fr 240px;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: repeat(9, minmax(0, 1fr));
     grid-template-areas:
       "tl tm tr"
@@ -90,5 +92,26 @@
     align-items: start;
     column-gap: var(--col-gap);
     row-gap: var(--row-gap);
+  }
+
+  @media screen and (min-width: 640px) {
+    .ui-container-inner {
+      display: grid;
+      grid-column: 1 / 2;
+      grid-row: 2 / span 1;
+      grid-template-columns: 240px 1fr 240px;
+      grid-template-rows: repeat(9, minmax(0, 1fr));
+      grid-template-areas:
+        "tl tm tr"
+        "tl tm tr"
+        "tl tm tr"
+        "ml mm mr"
+        "ml mm mr"
+        "ml mm mr"
+        "bl bm br"
+        "bl bm br"
+        "bl bm br";
+      align-items: start;
+    }
   }
 </style>

@@ -6,7 +6,7 @@
 
   let clockTime: number;
 
-  $: console.log($player.energy)
+  $: console.log($player.energy);
   $: clockTime = Math.floor(($blockNumber - $player.birth) / BLOCKS_IN_DAY);
 </script>
 
@@ -22,6 +22,7 @@
 <style>
   .ui-clock {
     border: 1px solid white;
+    background-color: var(--background);
     padding: var(--padding-button);
   }
 

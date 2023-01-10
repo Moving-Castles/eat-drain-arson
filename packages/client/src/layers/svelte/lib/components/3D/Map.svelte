@@ -21,11 +21,13 @@
   let h: number = 0;
 
   const INITIAL_ROTATION = DEG2RAD * 45;
+  const ZOOM_LEVELS = [1500, 700, 320, 240, 180, 110, 40];
 
   let grid: GridTile[] = [];
   let rotation = INITIAL_ROTATION;
   let unit = 49;
-  let zoom = 1500;
+  let zoomIndex = 0;
+  let zoom = ZOOM_LEVELS[zoomIndex];
   let ready = false;
   let loaded = false;
   let texturesLoaded = 0;
@@ -58,13 +60,15 @@
   });
 
   function handleZoom(e) {
-    if (e.key === "-" && zoom > 110) {
-      zoom -= 10;
+    if (e.key === "-" && zoomIndex < ZOOM_LEVELS.length - 1) {
+      zoomIndex++;
     }
-    if (e.key === "=" && zoom < 1500) {
-      zoom += 10;
+    if (e.key === "=" && zoomIndex > 0) {
+      zoomIndex--;
     }
   }
+
+  $: zoom = ZOOM_LEVELS[zoomIndex];
 
   /**
    * Init
@@ -77,8 +81,6 @@
       ready = true;
     }
   });
-
-  $: console.log(zoom);
 
   const onMouseMove = (e) => {
     const offsetX = e.clientX / w + 0.5;
@@ -93,8 +95,8 @@
 <T.Group viewportAware rotation.y={rotation}>
   <T.OrthographicCamera
     {zoom}
-    near={10}
-    far={20}
+    near={1}
+    far={200}
     let:ref={cam}
     position.x={0}
     position.y={y}

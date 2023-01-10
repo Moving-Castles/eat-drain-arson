@@ -1,5 +1,6 @@
 <script lang="ts">
-  import type { GridTile } from "../index";
+  import type { GridTile } from "../UIGridMap/index";
+  import { textureConditions } from "../UIGridMap/index";
   import { TerrainCategory } from "../../../utils/space";
   import { T } from "@threlte/core";
   import { textures } from "./index";
@@ -11,17 +12,23 @@
   export let tile: GridTile;
 
   let map;
+  let tileTextureKeys = [];
 
   const textureKey = () => {
+    const randomAddition = Math.floor(Math.random() * 4);
     switch (tile.terrain) {
       case TerrainCategory.Dust:
-        return "dust-" + (((tile.coordinates.x + tile.coordinates.y) % 4) + 1);
+        return "dust-" + (((tile.coordinates.x + tile.coordinates.y + randomAddition) % 4) + 1);
       case TerrainCategory.Debris:
-        return "debris-" + (((tile.coordinates.x + tile.coordinates.y) % 4) + 1);
+        return "debris-" + (((tile.coordinates.x + tile.coordinates.y + randomAddition) % 4) + 1);
       case TerrainCategory.Ruins:
-        return "ruins-" + (((tile.coordinates.x + tile.coordinates.y) % 4) + 1);
+        return "ruins-" + (((tile.coordinates.x + tile.coordinates.y + randomAddition) % 4) + 1);
     }
   };
+
+  $: {
+    tileTextureKeys = textureConditions.map((c) => c(tile)).filter((o) => !!o);
+  }
 
   map = $textures[textureKey()];
 </script>
@@ -35,7 +42,11 @@
 >
   <T.Mesh receiveShadow>
     <T.PlaneGeometry args={[1, 1]} />
-    <T.MeshBasicMaterial wireframe={DEV} side={DoubleSide} color="#999999" {map} />
+    <!-- Base texture -->
+    <T.MeshBasicMaterial wireframe={DEV} side={DoubleSide} {map} />
+    {#each tileTextureKeys as key, i (key + i)}
+      <T.MeshBasicMaterial wireframe={DEV} side={DoubleSide} map={$textures[key]} />
+    {/each}
   </T.Mesh>
 
   <T.Group rotation.z={DEG2RAD * -45 - DEG2RAD * 180}>

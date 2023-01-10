@@ -224,8 +224,8 @@ span.ripple {
   position: absolute;
   width: 100%;
   background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  /* backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px); */
   height: 100%;
   top: 0;
   left: 0;

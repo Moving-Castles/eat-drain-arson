@@ -101,5 +101,5 @@
 
 <svelte:window on:keypress={handleKeyPress} />
 
-<!-- <GLTF bind:gltf={$gltf} url="/src/public/models/sample.glb" useDraco /> -->
+<!-- <GLTF bind:gltf={$gltf} url="/models/sample.glb" useDraco /> -->
 <Compass scale={5} />
