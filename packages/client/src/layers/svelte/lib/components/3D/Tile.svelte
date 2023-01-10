@@ -35,7 +35,7 @@
 >
   <T.Mesh receiveShadow>
     <T.PlaneGeometry args={[1, 1]} />
-    <T.MeshStandardMaterial wireframe={DEV} side={DoubleSide} color="#999999" {map} />
+    <T.MeshBasicMaterial wireframe={DEV} side={DoubleSide} color="#999999" {map} />
   </T.Mesh>
 
   <T.Group rotation.z={DEG2RAD * -45 - DEG2RAD * 180}>

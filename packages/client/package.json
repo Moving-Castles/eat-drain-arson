@@ -10,6 +10,7 @@
     "start": "vite --port 3000 --force",
     "// note: must use MUD packages from npm or yalc to build for production": "",
     "prod": "yarn serve dist",
+    "build": "vite build",
     "check:circdepen": "dpdm ./src/index.ts"
   },
   "staticFiles": {

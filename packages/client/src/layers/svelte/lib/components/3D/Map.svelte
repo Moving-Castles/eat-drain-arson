@@ -90,11 +90,11 @@
 
 <svelte:window on:keypress={handleZoom} on:mousemove={onMouseMove} bind:innerWidth={w} bind:innerHeight={h} />
 
-<T.Group rotation.y={rotation}>
+<T.Group viewportAware rotation.y={rotation}>
   <T.OrthographicCamera
     {zoom}
-    near={0.001}
-    far={4000}
+    near={10}
+    far={20}
     let:ref={cam}
     position.x={0}
     position.y={y}
@@ -110,8 +110,6 @@
 {#if loaded && ready}
   <Player />
 
-  <Particles />
-
   <T.Group>
     {#each grid as tile (`${tile.transformation.x}-${tile.transformation.y}`)}
       <Tile {tile} />
@@ -119,7 +117,7 @@
   </T.Group>
 {/if}
 
-<T.SpotLight
+<!-- <T.SpotLight
   position.x={0}
   position.y={5}
   position.z={0}
@@ -128,6 +126,6 @@
   penumbra={0.3}
   lookAt={{ x: 0, y: 0, z: 0 }}
   castShadow
-/>
+/> -->
 <!-- <T.DirectionalLight position.x={x} position.y={y} position.z={z} intensity={1} look castShadow /> -->
-<!-- <T.AmbientLight intensity={0.5} /> -->
+<T.AmbientLight intensity={0.5} />

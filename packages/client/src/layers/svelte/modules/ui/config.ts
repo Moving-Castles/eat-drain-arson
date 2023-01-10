@@ -49,7 +49,7 @@ export const initialState = () => ({
     id: "avatar",
     title: "Avatar",
     component: UIAvatar,
-    active: true,
+    active: false,
     grid: {
       col: [3, 4],
       row: [1, 6],
