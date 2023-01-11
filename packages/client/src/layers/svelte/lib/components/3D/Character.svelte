@@ -1,17 +1,25 @@
 <script lang="ts">
   import Compass from "./Compass.svelte";
+  import { T } from "@threlte/core";
   import { GLTF, useGltfAnimations } from "@threlte/extras";
+  import { MeshBasicMaterial } from "three";
   // import { PointLight, Mesh, MeshBasicMaterial, SphereGeometry } from "three";
 
-  let currentActionKey = !Math.round(Math.random()) ? "1.ConeAction" : "1.ConeAction";
+  let currentActionKey = "SuzanneAction";
 
   let available = true;
 
   const { gltf, actions } = useGltfAnimations(({ actions }) => {
     // Uncomment to see all the different possible action keys
-    // console.log(actions);
+    console.log(actions[currentActionKey]);
     // set the initial animation
-    // actions[currentActionKey]?.play();
+    actions[currentActionKey]?.play();
+
+    console.log(gltf);
+
+    // gltf?.scene.traverse((node) => {
+    //   node.castShadow = true;
+    // });
   });
 
   // const light = new PointLight(0xffff99, 1.2, 10);
@@ -66,7 +74,6 @@
       case "w":
         walk();
       default:
-        // console.log(e.key);
         break;
     }
   }
@@ -101,5 +108,7 @@
 
 <svelte:window on:keypress={handleKeyPress} />
 
-<!-- <GLTF bind:gltf={$gltf} url="/models/sample.glb" useDraco /> -->
-<Compass scale={5} />
+<T.Group scale={3} position.y={10}>
+  <GLTF bind:gltf={$gltf} url="/models/simple-animation.glb" useDraco />
+</T.Group>
+<!-- <Compass scale={5} /> -->

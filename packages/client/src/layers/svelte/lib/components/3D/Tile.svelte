@@ -44,10 +44,17 @@
     <T.PlaneGeometry args={[1, 1]} />
     <!-- Base texture -->
     <T.MeshBasicMaterial wireframe={DEV} side={DoubleSide} {map} />
-    {#each tileTextureKeys as key, i (key + i)}
-      <T.MeshBasicMaterial wireframe={DEV} side={DoubleSide} map={$textures[key]} />
-    {/each}
   </T.Mesh>
+
+  {#each tileTextureKeys as key, i (key + i)}
+    <T.Group position.z={(i + 1) * 0.6}>
+      <T.Mesh receiveShadow>
+        <T.PlaneGeometry args={[1, 1]} />
+        <!-- Base texture -->
+        <T.MeshBasicMaterial wireframe={DEV} side={DoubleSide} map={$textures[key]} />
+      </T.Mesh>
+    </T.Group>
+  {/each}
 
   <T.Group rotation.z={DEG2RAD * -45 - DEG2RAD * 180}>
     {#if DEV}

@@ -120,42 +120,64 @@ export async function updateGrid(centerPosition: Coord, grid: GridTile[]) {
 export function isPlayerTile(tile: GridTile) {
   return tile.transformation.x == 0 && tile.transformation.y == 0;
 }
-export function makeConditions(myEnum) {
-  return [
-    // Mined
-    (tile: GridTile) => (tile.resource == 0 ? myEnum.Empty : null),
-    (tile: GridTile) => (tile.resource < 33 && tile.resource > 0 ? myEnum.Depleted : null),
-    (tile: GridTile) => (tile.resource < 66 && tile.resource >= 33 ? myEnum.Extracted : null),
-    (tile: GridTile) => (tile.resource < 100 && tile.resource >= 66 ? myEnum.Dug : null),
-    // Other player
-    (tile: GridTile) =>
-      tile.other !== undefined ? `${myEnum.Other} ${seedToMaskTileOverlay(tile.other?.seed || 0)}` : null,
-    (tile: GridTile) => (tile.other !== undefined ? seedToMaskTileOverlay(tile.other?.seed || 0) : null),
-    // Player
-    (tile: GridTile) => {
-      if (isPlayerTile(tile)) {
-        return `${myEnum.Player} ${seedToMaskTileOverlay(get(player).seed || 0)} ${
-          get(player).entityType == EntityType.Corpse ? myEnum.CorpseMask : ""
-        }`;
-      }
-    },
-    (tile: GridTile) => {
-      if (isPlayerTile(tile)) {
-        return seedToMaskTileOverlay(get(player).seed || 0);
-      }
-    },
-    // Player corpse
-    (tile: GridTile) => {
-      if (tile.transformation.x == 0 && tile.transformation.y == 0 && get(player).entityType == EntityType.Corpse) {
-        return myEnum.Corpse;
-      }
-    },
-    // Corpse
-    (tile: GridTile) => (tile.corpse !== undefined ? myEnum.Corpse : null),
-    // Fire
-    (tile: GridTile) => (tile.fire !== undefined ? fireStatusClass(tile.fire) : null),
-  ];
-}
 
-export const conditions = makeConditions(TileOverlays);
-export const textureConditions = makeConditions(TileTextureKeys);
+/**
+ * Conditions for the 2D maps' tiles
+ */
+export const conditions = [
+  // Mined
+  (tile: GridTile) => (tile.resource == 0 ? TileOverlays.Empty : null),
+  (tile: GridTile) => (tile.resource < 33 && tile.resource > 0 ? TileOverlays.Depleted : null),
+  (tile: GridTile) => (tile.resource < 66 && tile.resource >= 33 ? TileOverlays.Extracted : null),
+  (tile: GridTile) => (tile.resource < 100 && tile.resource >= 66 ? TileOverlays.Dug : null),
+  // Other player
+  (tile: GridTile) =>
+    tile.other !== undefined ? `${TileOverlays.Other} ${seedToMaskTileOverlay(tile.other?.seed || 0)}` : null,
+  // Player
+  (tile: GridTile) => {
+    if (isPlayerTile(tile)) {
+      return `${TileOverlays.Player} ${seedToMaskTileOverlay(get(player).seed || 0)} ${
+        get(player).entityType == EntityType.Corpse ? TileOverlays.CorpseMask : ""
+      }`;
+    }
+  },
+  // Player corpse
+  (tile: GridTile) => {
+    if (tile.transformation.x == 0 && tile.transformation.y == 0 && get(player).entityType == EntityType.Corpse) {
+      return TileOverlays.Corpse;
+    }
+  },
+  // Corpse
+  (tile: GridTile) => (tile.corpse !== undefined ? TileOverlays.Corpse : null),
+  // Fire
+  (tile: GridTile) => (tile.fire !== undefined ? fireStatusClass(tile.fire) : null),
+];
+
+/**
+ * Conditions for the tiles' 3D textures
+ */
+export const textureConditions = [
+  // Mined
+  (tile: GridTile) => (tile.resource == 0 ? TileTextureKeys.Empty : null),
+  (tile: GridTile) => (tile.resource < 33 && tile.resource > 0 ? TileTextureKeys.Depleted : null),
+  (tile: GridTile) => (tile.resource < 66 && tile.resource >= 33 ? TileTextureKeys.Extracted : null),
+  (tile: GridTile) => (tile.resource < 100 && tile.resource >= 66 ? TileTextureKeys.Dug : null),
+  // Other player
+  (tile: GridTile) => (tile.other !== undefined ? seedToMaskTileOverlay(tile.other?.seed || 0) : null),
+  // Player
+  (tile: GridTile) => {
+    if (isPlayerTile(tile)) {
+      return seedToMaskTileOverlay(get(player).seed || 0);
+    }
+  },
+  // Player corpse
+  (tile: GridTile) => {
+    if (tile.transformation.x == 0 && tile.transformation.y == 0 && get(player).entityType == EntityType.Corpse) {
+      return TileTextureKeys.Corpse;
+    }
+  },
+  // Corpse
+  (tile: GridTile) => (tile.corpse !== undefined ? TileTextureKeys.Corpse : null),
+  // Fire
+  (tile: GridTile) => (tile.fire !== undefined ? fireStatusClass(tile.fire) : null),
+];
