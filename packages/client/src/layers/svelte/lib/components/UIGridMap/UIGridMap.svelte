@@ -23,12 +23,12 @@
     if (e.key === "-" && unit < FURTHEST_ZOOM) {
       unit += 2;
       grid = [];
-      grid = initGrid(unit);
+      grid = initGrid(unit, true);
     }
     if (e.key === "=" && unit > CLOSEST_ZOOM) {
       unit -= 2;
       grid = [];
-      grid = initGrid(unit);
+      grid = initGrid(unit, true);
     }
   }
 
@@ -39,9 +39,9 @@
   });
 
   onMount(async () => {
-    grid = initGrid(unit);
+    grid = initGrid(unit, true);
     if ($player) {
-      grid = await updateGrid($player.position, grid);
+      grid = await updateGrid($player.position, grid, true);
     }
   });
 

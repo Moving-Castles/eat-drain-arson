@@ -4,7 +4,7 @@
   import { textureSources, textures } from "./index";
   import { size } from "lodash";
   import { DEG2RAD } from "three/src/math/MathUtils";
-  import { T, TransformableObject, useTexture, useFrame } from "@threlte/core";
+  import { T, TransformableObject, useTexture } from "@threlte/core";
   import { player } from "../../../modules/player";
   import { blockNumber } from "../../../modules/network";
   import { onMount, tick } from "svelte";
@@ -12,21 +12,20 @@
   /**
    * 3D Objects
    */
-  import Tile from "./Tile.svelte";
+  import Base from "./Tiles/Base.svelte";
   import Player from "./Player.svelte";
-  import Compass from "./Compass.svelte";
-  import Particles from "./Particles.svelte";
 
   let w: number = 0;
   let h: number = 0;
+  let UNIT: number = 3;
 
   const INITIAL_ROTATION = DEG2RAD * 45;
-  const ZOOM_LEVELS = [1500, 700, 320, 240, 180, 110, 40];
+  const ZOOM_LEVELS = [1500, 1200, 900, 700, 320, 240, 180, 110, 40];
 
   let grid: GridTile[] = [];
   let rotation = INITIAL_ROTATION;
   let unit = 49;
-  let zoomIndex = 0;
+  let zoomIndex = 4;
   let zoom = ZOOM_LEVELS[zoomIndex];
   let ready = false;
   let loaded = false;
@@ -60,11 +59,16 @@
   });
 
   function handleZoom(e) {
-    if (e.key === "-" && zoomIndex < ZOOM_LEVELS.length - 1) {
-      zoomIndex++;
+    if (Number(e.key) > 0 && Number(e.key) < ZOOM_LEVELS.length) {
+      zoomIndex = Number(e.key);
     }
-    if (e.key === "=" && zoomIndex > 0) {
-      zoomIndex--;
+    if (e.key === "-") {
+      // zoomIndex++;
+      UNIT--;
+    }
+    if (e.key === "=") {
+      // zoomIndex--;
+      UNIT++;
     }
   }
 
@@ -88,6 +92,12 @@
 
     rotation = INITIAL_ROTATION * offsetX;
   };
+
+  const withinScope = (tile: GridTile) =>
+    tile.transformation.x > -UNIT &&
+    tile.transformation.x < UNIT &&
+    tile.transformation.y > -UNIT &&
+    tile.transformation.y < UNIT;
 </script>
 
 <svelte:window on:keypress={handleZoom} on:mousemove={onMouseMove} bind:innerWidth={w} bind:innerHeight={h} />
@@ -100,10 +110,10 @@
     let:ref={cam}
     position.x={0}
     position.y={y}
-    position.z={10}
+    position.z={z}
     makeDefault
   >
-    <TransformableObject object={cam} lookAt={{ y: 0.12 }} />
+    <TransformableObject object={cam} lookAt={{ y: 0 }} />
   </T.OrthographicCamera>
 </T.Group>
 
@@ -112,22 +122,24 @@
 {#if loaded && ready}
   <Player />
 
+  {#each Array.from(Array(100).keys()) as i (i)}
+    <T.Group position.x={Math.floor(Math.random() * 20) - 10} position.z={Math.floor(Math.random() * 20) - 10}>
+      <Player />
+    </T.Group>
+  {/each}
+
+  <!-- BASE LAYER -->
+  <!-- Holds textures -->
   <T.Group>
     {#each grid as tile (`${tile.transformation.x}-${tile.transformation.y}`)}
-      <Tile {tile} />
+      {#if withinScope(tile)}
+        <Base {tile} />
+      {/if}
     {/each}
   </T.Group>
+
+  <!-- PLAYER LAYER -->
+  <!-- Holds players -->
 {/if}
 
-<!-- <T.SpotLight
-  position.x={0}
-  position.y={5}
-  position.z={0}
-  intensity={0.3}
-  angle={0.9}
-  penumbra={0.3}
-  lookAt={{ x: 0, y: 0, z: 0 }}
-  castShadow
-/> -->
-<!-- <T.DirectionalLight position.x={x} position.y={y} position.z={z} intensity={1} look castShadow /> -->
-<T.AmbientLight intensity={0.5} />
+<T.AmbientLight intensity={1} />

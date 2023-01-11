@@ -5,21 +5,20 @@
   import { MeshBasicMaterial } from "three";
   // import { PointLight, Mesh, MeshBasicMaterial, SphereGeometry } from "three";
 
-  let currentActionKey = "SuzanneAction";
+  let currentActionKey = "walk";
 
   let available = true;
 
   const { gltf, actions } = useGltfAnimations(({ actions }) => {
     // Uncomment to see all the different possible action keys
-    console.log(actions[currentActionKey]);
+    console.log(actions);
     // set the initial animation
     actions[currentActionKey]?.play();
-
-    console.log(gltf);
-
-    // gltf?.scene.traverse((node) => {
-    //   node.castShadow = true;
-    // });
+    if ($gltf?.scene) {
+      $gltf.scene.traverse((node) => {
+        console.log(node);
+      });
+    }
   });
 
   // const light = new PointLight(0xffff99, 1.2, 10);
@@ -108,7 +107,4 @@
 
 <svelte:window on:keypress={handleKeyPress} />
 
-<T.Group scale={3} position.y={10}>
-  <GLTF bind:gltf={$gltf} url="/models/simple-animation.glb" useDraco />
-</T.Group>
-<!-- <Compass scale={5} /> -->
+<GLTF bind:gltf={$gltf} url="/models/NewBodies_110123_03.glb" useDraco />

@@ -15,7 +15,7 @@
   });
 </script>
 
-<T.Group scale={0.16} rotation.y={NORTH}>
+<T.Group scale={0.15} rotation.y={NORTH - DEG2RAD * (45 + 90)}>
   <Character />
 
   <!-- Local floor -->

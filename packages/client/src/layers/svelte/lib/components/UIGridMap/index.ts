@@ -97,7 +97,7 @@ export function initGrid(unit: number) {
   return grid;
 }
 
-export async function updateGrid(centerPosition: Coord, grid: GridTile[]) {
+export async function updateGrid(centerPosition: Coord, grid: GridTile[], mock = false) {
   perlin = await createPerlin();
 
   for (let i = 0; i < grid.length; i++) {
@@ -113,7 +113,6 @@ export async function updateGrid(centerPosition: Coord, grid: GridTile[]) {
     grid[i].resource = grid[i].mined == undefined ? 100 : grid[i].mined.resource;
   }
 
-  grid = [...grid];
   return grid;
 }
 
