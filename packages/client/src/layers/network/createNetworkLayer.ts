@@ -51,7 +51,7 @@ export async function createNetworkLayer(config: GameConfig) {
   const { txQueue, systems, txReduced$, network, startSync, encoders, systemCallStreams } = await setupMUDNetwork<
     typeof components,
     SystemTypes
-  >(getNetworkConfig(config), world, components, SystemAbis);
+  >(getNetworkConfig(config), world, components, SystemAbis, { fetchSystemCalls: true });
 
   // Faucet setup
   const faucet = config.faucetServiceUrl ? createFaucetService(config.faucetServiceUrl) : undefined;

@@ -63,10 +63,9 @@
     // startMelodySoundSystem();
     startHarmonySoundSystem();
 
-    console.log('layers.network.systemCallStreams["system.Move"]', layers.network.systemCallStreams["system.Move"]);
-
-    layers.network.systemCallStreams["system.Move"].subscribe((v: any) => {
-      console.log("v", v);
+    layers.network.systemCallStreams["system.Move"].subscribe((systemCall) => {
+      if (systemCall.tx.hash !== tx.hash) return;
+      console.log("systemCall", systemCall);
     });
 
     layers.network.network.blockNumber$.subscribe((x) => {
