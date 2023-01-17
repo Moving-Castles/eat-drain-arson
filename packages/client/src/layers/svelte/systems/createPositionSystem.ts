@@ -22,12 +22,12 @@ export function createPositionSystem(network: NetworkLayer) {
       return value;
     });
 
-    if (from) {
-      addToLog(update, EventCategory.Move);
-      // If this is the player, set current direction
-      if (indexToID(update.entity) == get(playerAddress)) {
-        playerDirection.set(transformationToDirection(positionsToTransformation(from, to)));
-      }
-    }
+    // if (from) {
+    //   addToLog(update, EventCategory.Move);
+    //   // If this is the player, set current direction
+    //   if (indexToID(update.entity) == get(playerAddress)) {
+    //     playerDirection.set(transformationToDirection(positionsToTransformation(from, to)));
+    //   }
+    // }
   });
 }

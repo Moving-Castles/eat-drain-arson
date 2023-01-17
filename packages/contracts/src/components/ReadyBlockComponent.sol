@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity >=0.8.0;
+pragma solidity >=0.8.17;
 import "std-contracts/components/Uint256Component.sol";
 
-uint256 constant ID = uint256(keccak256("component.Playing"));
+uint256 constant ID = uint256(keccak256("component.ReadyBlock"));
 
-contract PlayingComponent is Uint256Component {
+contract ReadyBlockComponent is Uint256Component {
   constructor(address world) Uint256Component(world, ID) {}
 }

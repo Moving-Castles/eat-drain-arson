@@ -10,6 +10,8 @@
 
   const SECONDS_IN_DAY = 86400;
 
+  $: console.log($entities);
+
   let clockTime: number;
   $: clockTime = Math.floor((($blockNumber % 3600) / 3600) * SECONDS_IN_DAY);
 
@@ -25,34 +27,25 @@
 
 <div class="ui-debug-log">
   <div>Blocknumber: <strong>{$blockNumber}</strong></div>
-  <div class="clock-time">World time: {formatTime(clockTime)}</div>
-  <div>Cooldown block: {$player.coolDownBlock}</div>
+  <!-- <div class="clock-time">World time: {formatTime(clockTime)}</div> -->
+  <!-- <div>Cooldown block: {$player.coolDownBlock}</div> -->
   <hr />
   {#each Object.entries($entities) as [address, value], i}
     <div transition:fade={{ duration: $speed + $fragSpeed * i }} class:player={address === $playerAddress}>
-      {#if value.entityType == EntityType.Player}
+      <!-- {#if value.entityType == EntityType.Player}
         <strong>👺 {seedToName($entities[address].seed)}</strong>
-      {/if}
-      {#if value.entityType == EntityType.Terrain}
-        <strong>🗺️ {shortenAddress(address)}</strong>
+      {/if} -->
+      <strong>🗺️ {shortenAddress(address)}</strong>
+      <!-- <strong>🗺️ {shortenAddress(address)}</strong>
       {/if}
       {#if value.entityType == EntityType.Fire}
         <strong>🔥 {shortenAddress(address)}</strong>
       {/if}
       {#if value.entityType == EntityType.Corpse}
         <strong>💀 {seedToName($entities[address].seed)}</strong>
-      {/if}
+      {/if} -->
       / x:{value.position?.x}
       / y: {value.position?.y}
-      {#if value.entityType == EntityType.Player}
-        / e: {value.energy}
-      {/if}
-      {#if value.coolDownBlock}
-        / cdb: {value.coolDownBlock}
-      {/if}
-      {#if value.resource}
-        / r: {value.resource}
-      {/if}
     </div>
   {/each}
 </div>

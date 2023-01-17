@@ -49,11 +49,12 @@ export const initialState = () => ({
     id: "avatar",
     title: "Avatar",
     component: UIAvatar,
-    active: true,
+    active: false,
     grid: {
       col: [3, 4],
       row: [1, 6],
     },
+    hidden: true,
     options: {
       bare: true,
       persistent: true,
@@ -74,6 +75,7 @@ export const initialState = () => ({
       fluid: true,
       layer: 10,
     },
+    hidden: true,
     grid: {
       col: [1, 4],
       row: [1, 10],
@@ -85,17 +87,17 @@ export const initialState = () => ({
     id: "memory",
     title: "Memory",
     component: UITextLog,
-    active: true,
+    active: false,
     options: {
       fluid: true,
       delay: makeDelay(),
       muted: false,
     },
+    hidden: true,
     grid: {
       row: [1, 10],
       col: [1, 2],
     },
-    hidden: false,
   }),
   // FIRES
   fires: initialise({
@@ -117,13 +119,13 @@ export const initialState = () => ({
     id: "debug-log",
     title: "Debug Log",
     component: UIDebugLog,
-    active: false,
+    active: true,
     options: {
       fluid: true,
       layer: 2,
       delay: 0,
     },
-    hidden: true,
+    hidden: false,
     grid: {
       col: [3, 4],
       row: [5, 10],
@@ -161,7 +163,7 @@ export const initialState = () => ({
       col: [1, 2],
       row: [6, 10],
     },
-    hidden: false,
+    hidden: true,
   }),
   //
   executor: initialise({
@@ -179,14 +181,14 @@ export const initialState = () => ({
       col: [3, 4],
       row: [6, 10],
     },
-    hidden: false,
+    hidden: true,
   }),
   //
   miniMap: initialise({
     id: "minimap",
     title: "Map",
     component: UIGridMap,
-    active: true,
+    active: false,
     options: {
       muted: false,
       persistent: false,
@@ -198,7 +200,7 @@ export const initialState = () => ({
       col: [3, 4],
       row: [6, 10],
     },
-    hidden: false,
+    hidden: true,
   }),
   //
   view: initialise({

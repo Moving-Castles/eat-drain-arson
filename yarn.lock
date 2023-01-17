@@ -2402,10 +2402,36 @@
     validate-npm-package-name "^4.0.0"
     yargs "^17.6.0"
 
-"@netlify/edge-bundler@8.1.2", "@netlify/edge-bundler@^8.1.2":
+"@netlify/edge-bundler@8.1.2":
   version "8.1.2"
   resolved "https://registry.yarnpkg.com/@netlify/edge-bundler/-/edge-bundler-8.1.2.tgz#9af553640659d7dc2210302e4dd4718e0cb000af"
   integrity sha512-ODaWypy/vIEm8bDAUIT9P4x4EeK6M+P0/M+D4aHuxenrCBk1v37fIiz251jVnte8z2Obqrb+PG4et98oX+gOPw==
+  dependencies:
+    "@import-maps/resolve" "^1.0.1"
+    ajv "^8.11.2"
+    ajv-errors "^3.0.0"
+    better-ajv-errors "^1.2.0"
+    common-path-prefix "^3.0.0"
+    del "^7.0.0"
+    env-paths "^3.0.0"
+    execa "^6.0.0"
+    find-up "^6.3.0"
+    get-port "^6.1.2"
+    glob-to-regexp "^0.4.1"
+    jsonc-parser "^3.2.0"
+    node-fetch "^3.1.1"
+    node-stream-zip "^1.15.0"
+    p-retry "^5.1.1"
+    p-wait-for "^4.1.0"
+    path-key "^4.0.0"
+    semver "^7.3.5"
+    tmp-promise "^3.0.3"
+    uuid "^9.0.0"
+
+"@netlify/edge-bundler@^8.1.2":
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/@netlify/edge-bundler/-/edge-bundler-8.2.1.tgz#231e843319eff26310c86597ae055452bfec907c"
+  integrity sha512-RHr/ZCVJXxW7+qCJqzAzoah2RbZfcUmiWKsFw0P8pM9AZTf0uMr/VJCY8dtQH6OPMZkxR8MefNG40VShCv0G4Q==
   dependencies:
     "@import-maps/resolve" "^1.0.1"
     ajv "^8.11.2"
@@ -6658,9 +6684,9 @@ dpdm@^3.10.0:
     typescript "^4.9.4"
     yargs "^17.6.2"
 
-"ds-test@https://github.com/dapphub/ds-test.git#9310e879db8ba3ea6d5c6489a579118fd264a3f5":
+"ds-test@git+https://github.com/dapphub/ds-test.git#9310e879db8ba3ea6d5c6489a579118fd264a3f5":
   version "0.0.0"
-  resolved "https://github.com/dapphub/ds-test.git#9310e879db8ba3ea6d5c6489a579118fd264a3f5"
+  resolved "git+https://github.com/dapphub/ds-test.git#9310e879db8ba3ea6d5c6489a579118fd264a3f5"
 
 "ds-test@https://github.com/dapphub/ds-test.git#c7a36fb236f298e04edf28e2fee385b80f53945f":
   version "0.0.0"
@@ -8090,13 +8116,13 @@ for-in@^1.0.2:
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
   integrity sha512-7EwmXrOjyL+ChxMhmG5lnW9MPt1aIeZEwKhQzoBUdTV0N3zuwWDZYVJatDvZ2OyzPUvdIAZDsCetk3coyMfcnQ==
 
+"forge-std@git+https://github.com/foundry-rs/forge-std.git#6b4ca42943f093642bac31783b08aa52a5a6ff64":
+  version "0.0.0"
+  resolved "git+https://github.com/foundry-rs/forge-std.git#6b4ca42943f093642bac31783b08aa52a5a6ff64"
+
 "forge-std@https://github.com/foundry-rs/forge-std.git#4d36e3f7e2168c8155c641eb0f80e85cd584bd1c":
   version "0.0.0"
   resolved "https://github.com/foundry-rs/forge-std.git#4d36e3f7e2168c8155c641eb0f80e85cd584bd1c"
-
-"forge-std@https://github.com/foundry-rs/forge-std.git#6b4ca42943f093642bac31783b08aa52a5a6ff64":
-  version "0.0.0"
-  resolved "https://github.com/foundry-rs/forge-std.git#6b4ca42943f093642bac31783b08aa52a5a6ff64"
 
 form-data-encoder@^2.1.2:
   version "2.1.4"
@@ -14737,9 +14763,9 @@ solidity-comments-extractor@^0.0.7:
   resolved "https://registry.yarnpkg.com/solidity-comments-extractor/-/solidity-comments-extractor-0.0.7.tgz#99d8f1361438f84019795d928b931f4e5c39ca19"
   integrity sha512-wciNMLg/Irp8OKGrh3S2tfvZiZ0NEyILfcRCXCD4mp7SgK/i9gzLfhY2hY7VMCQJ3kH9UB9BzNdibIVMchzyYw==
 
-"solmate@https://github.com/Rari-Capital/solmate.git#9cf1428245074e39090dceacb0c28b1f684f584c":
+"solmate@git+https://github.com/Rari-Capital/solmate.git#9cf1428245074e39090dceacb0c28b1f684f584c":
   version "6.5.0"
-  resolved "https://github.com/Rari-Capital/solmate.git#9cf1428245074e39090dceacb0c28b1f684f584c"
+  resolved "git+https://github.com/Rari-Capital/solmate.git#9cf1428245074e39090dceacb0c28b1f684f584c"
 
 sonic-boom@^3.1.0:
   version "3.2.1"

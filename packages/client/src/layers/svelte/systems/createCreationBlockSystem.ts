@@ -4,18 +4,18 @@ import type { NetworkLayer } from "../../network";
 import { defineComponentSystem } from "@latticexyz/recs";
 import { entities, indexToID } from "../modules/entities";
 
-export function createBirthSystem(network: NetworkLayer) {
+export function createCreationBlockSystem(network: NetworkLayer) {
   const {
     world,
-    components: { Birth },
+    components: { CreationBlock },
   } = network;
 
-  defineComponentSystem(world, Birth, (update) => {
-    console.log("==> Birth system: ", update);
-    const birth = update.value[0]?.value;
+  defineComponentSystem(world, CreationBlock, (update) => {
+    console.log("==> CreationBlock system: ", update);
+    const creationBlock = update.value[0]?.value;
     entities.update((value) => {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};
-      value[indexToID(update.entity)].birth = birth;
+      value[indexToID(update.entity)].creationBlock = creationBlock;
       return value;
     });
   });

@@ -1,12 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.0;
 
-enum EntityType {
-  Player,
-  Terrain,
-  Fire,
-  Corpse,
-  Ghost
+struct Coord {
+  int32 x;
+  int32 y;
 }
 
 //  | 8 | 1 | 2 |

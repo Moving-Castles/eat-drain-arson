@@ -8,10 +8,11 @@ import {
   setupMUDNetwork,
   defineCoordComponent,
   defineNumberComponent,
+  defineBoolComponent,
   defineStringComponent,
 } from "@latticexyz/std-client";
 import { createFaucetService } from "@latticexyz/network";
-import { defineLoadingStateComponent, defineStatsComponent } from "./components";
+import { defineLoadingStateComponent, defineInventoryComponent } from "./components";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { getNetworkConfig } from "./config";
 import { BigNumber, utils } from "ethers";
@@ -31,20 +32,20 @@ export async function createNetworkLayer(config: GameConfig) {
     LoadingState: defineLoadingStateComponent(world),
     Position: defineCoordComponent(world, { id: "Position", metadata: { contractId: "component.Position" } }),
     Energy: defineNumberComponent(world, { id: "Energy", metadata: { contractId: "component.Energy" } }),
-    Resource: defineNumberComponent(world, { id: "Resource", metadata: { contractId: "component.Resource" } }),
-    Name: defineStringComponent(world, { id: "Name", metadata: { contractId: "component.Name" } }),
-    CoolDown: defineNumberComponent(world, { id: "CoolDown", metadata: { contractId: "component.CoolDown" } }),
-    Seed: defineNumberComponent(world, { id: "Seed", metadata: { contractId: "component.Seed" } }),
-    EntityType: defineNumberComponent(world, {
-      id: "EntityType",
-      metadata: { contractId: "component.EntityType" },
+    Matter: defineNumberComponent(world, { id: "Matter", metadata: { contractId: "component.Matter" } }),
+    Control: defineStringComponent(world, { id: "Control", metadata: { contractId: "component.Control" } }),
+    CreationBlock: defineNumberComponent(world, {
+      id: "CreationBlock",
+      metadata: { contractId: "component.CreationBlock" },
     }),
-    Creator: defineNumberComponent(world, { id: "Creator", metadata: { contractId: "component.Creator" } }),
-    Stats: defineStatsComponent(world),
-    Birth: defineNumberComponent(world, { id: "Birth", metadata: { contractId: "component.Birth" } }),
-    Death: defineNumberComponent(world, { id: "Death", metadata: { contractId: "component.Death" } }),
-    Cannibal: defineNumberComponent(world, { id: "Cannibal", metadata: { contractId: "component.Cannibal" } }),
-    Playing: defineNumberComponent(world, { id: "Playing", metadata: { contractId: "component.Playing" } }),
+    ExpirationBlock: defineNumberComponent(world, {
+      id: "ExpirationBlock",
+      metadata: { contractId: "component.ExpirationBlock" },
+    }),
+    ReadyBlock: defineNumberComponent(world, { id: "ReadyBlock", metadata: { contractId: "component.ReadyBlock" } }),
+    Portable: defineBoolComponent(world, { id: "Portable", metadata: { contractId: "component.Portable" } }),
+    Inventory: defineNumberComponent(world, { id: "Inventory", metadata: { contractId: "component.Inventory" } }),
+    // Inventory: defineInventoryComponent(world),
   };
 
   // --- SETUP ----------------------------------------------------------------------
@@ -80,23 +81,29 @@ export async function createNetworkLayer(config: GameConfig) {
   }
 
   function move(energyInput: number, direction: number) {
-    return systems["system.Move"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput, direction);
+    return false;
+    // return systems["system.Move"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput, direction);
   }
 
   function gather(energyInput: number) {
-    return systems["system.Gather"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
+    return false;
+
+    // return systems["system.Gather"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
   }
 
   function consume(resourceInput: number) {
-    return systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
+    return false;
+    // return systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
   }
 
   function burn(resourceInput: number) {
-    return systems["system.Fire"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
+    return false;
+    // return systems["system.Fire"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
   }
 
   function play(energyInput: number) {
-    return systems["system.Play"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
+    return false;
+    // return systems["system.Play"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
   }
 
   // --- CONTEXT --------------------------------------------------------------------

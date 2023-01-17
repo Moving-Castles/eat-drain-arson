@@ -10,11 +10,11 @@
   import UILoading from "./components/UILoading.svelte";
 </script>
 
-<div class="ui-container no-padding">
+<!-- <div class="ui-container no-padding">
   <div class="ui-container-center">
     <UI3DMap />
   </div>
-</div>
+</div> -->
 
 <div class="ui-container">
   {#if !$player}

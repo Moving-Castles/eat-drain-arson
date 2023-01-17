@@ -1,91 +1,31 @@
 {
   "components": [
+    "ControlComponent",
     "PositionComponent",
     "EnergyComponent",
-    "ResourceComponent",
-    "EntityTypeComponent",
-    "SeedComponent",
-    "CoolDownComponent",
-    "CreatorComponent",
-    "StatsComponent",
-    "BirthComponent",
-    "CannibalComponent",
-    "PlayingComponent",
-    "DeathComponent"
+    "CreationBlockComponent",
+    "ReadyBlockComponent",
+    "InventoryComponent",
+    "MatterComponent",
+    "PortableComponent"
   ],
   "systems": [
     {
       "name": "ComponentDevSystem",
-      "writeAccess": ["*"]
-    },
-    {
-      "name": "MoveSystem",
       "writeAccess": [
-        "PositionComponent",
-        "EnergyComponent",
-        "CoolDownComponent",
-        "StatsComponent",
-        "EntityTypeComponent",
-        "ResourceComponent",
-        "DeathComponent"
+        "*"
       ]
-    },
-    {
-      "name": "EnergySystem",
-      "writeAccess": ["EnergyComponent", "ResourceComponent", "CoolDownComponent", "StatsComponent", "DeathComponent"]
     },
     {
       "name": "SpawnSystem",
       "writeAccess": [
+        "ControlComponent",
         "PositionComponent",
         "EnergyComponent",
-        "ResourceComponent",
-        "SeedComponent",
-        "CoolDownComponent",
-        "EntityTypeComponent",
-        "StatsComponent",
-        "BirthComponent",
-        "CannibalComponent",
-        "DeathComponent"
-      ]
-    },
-    {
-      "name": "GatherSystem",
-      "writeAccess": [
-        "PositionComponent",
-        "ResourceComponent",
-        "EnergyComponent",
-        "CoolDownComponent",
-        "EntityTypeComponent",
-        "StatsComponent",
-        "CannibalComponent",
-        "DeathComponent"
-      ]
-    },
-    {
-      "name": "FireSystem",
-      "writeAccess": [
-        "SeedComponent",
-        "PositionComponent",
-        "ResourceComponent",
-        "EnergyComponent",
-        "CoolDownComponent",
-        "EntityTypeComponent",
-        "CreatorComponent",
-        "StatsComponent",
-        "DeathComponent"
-      ]
-    },
-    {
-      "name": "PlaySystem",
-      "writeAccess": [
-        "EnergyComponent",
-        "CoolDownComponent",
-        "EntityTypeComponent",
-        "PlayingComponent",
-        "StatsComponent",
-        "ResourceComponent",
-        "DeathComponent"
+        "CreationBlockComponent",
+        "ReadyBlockComponent",
+        "InventoryComponent",
+        "PortableComponent"
       ]
     }
   ]

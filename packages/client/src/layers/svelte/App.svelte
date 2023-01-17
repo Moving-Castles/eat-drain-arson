@@ -5,7 +5,9 @@
   import UIContainer from "./lib/UIContainer.svelte";
   import UIMenu from "./lib/UIMenu.svelte";
   import {
+    createLoadingStateSystem,
     createPositionSystem,
+    createCreationBlockSystem,
     createEnergySystem,
     createResourceSystem,
     createCoolDownSystem,
@@ -13,44 +15,47 @@
     createEntityTypeSystem,
     createCreatorSystem,
     createStatsSystem,
-    createBirthSystem,
     createCannibalSystem,
-    createLoadingStateSystem,
     createPlayingSystem,
     createDeathSystem,
   } from "./systems";
   import { network as networkStore, blockNumber, startBlock } from "./modules/network";
+  import { entities } from "./modules/entities";
+  import { player } from "./modules/player";
   import { transactions, receipts, activeTransactions } from "./modules/network";
 
-  $: {
-    console.log("___ Transactions store: ", $transactions);
-  }
+  $: console.log("$entities", $entities);
+  $: console.log("$player", $player);
 
-  $: {
-    console.log("___ Receipts store: ", $receipts);
-  }
+  // $: {
+  //   console.log("___ Transactions store: ", $transactions);
+  // }
 
-  $: {
-    console.log("___ activeTransactions:", $activeTransactions);
-  }
+  // $: {
+  //   console.log("___ Receipts store: ", $receipts);
+  // }
+
+  // $: {
+  //   console.log("___ activeTransactions:", $activeTransactions);
+  // }
 
   onMount(async () => {
     const layers = await bootGame();
 
     // ---- Systems
-    createPositionSystem(layers.network);
-    createEnergySystem(layers.network);
-    createResourceSystem(layers.network);
-    createCoolDownSystem(layers.network);
-    createSeedSystem(layers.network);
-    createEntityTypeSystem(layers.network);
-    createCreatorSystem(layers.network);
-    createStatsSystem(layers.network);
-    createBirthSystem(layers.network);
-    createCannibalSystem(layers.network);
     createLoadingStateSystem(layers.network);
-    createPlayingSystem(layers.network);
-    createDeathSystem(layers.network);
+    createPositionSystem(layers.network);
+    createCreationBlockSystem(layers.network);
+    // createEnergySystem(layers.network);
+    // createResourceSystem(layers.network);
+    // createCoolDownSystem(layers.network);
+    // createSeedSystem(layers.network);
+    // createEntityTypeSystem(layers.network);
+    // createCreatorSystem(layers.network);
+    // createStatsSystem(layers.network);
+    // createCannibalSystem(layers.network);
+    // createPlayingSystem(layers.network);
+    // createDeathSystem(layers.network);
 
     networkStore.set(layers.network);
 
@@ -59,11 +64,12 @@
       // transactions.update((ts) => [tx, ...ts]);
     });
 
-    startEnvironmentSoundSystem();
+    // startEnvironmentSoundSystem();
     // startMelodySoundSystem();
-    startHarmonySoundSystem();
+    // startHarmonySoundSystem();
 
     layers.network.network.blockNumber$.subscribe((x) => {
+      console.log(x);
       blockNumber.set(x);
       if ($startBlock == 0) {
         startBlock.set(x);

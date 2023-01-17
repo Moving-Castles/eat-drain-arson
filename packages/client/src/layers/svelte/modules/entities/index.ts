@@ -24,6 +24,7 @@ export type StatsCategory = {
 
 export type Player = {
   entityType: EntityType.Player;
+  creationBlock: number;
   position: Coord;
   coolDownBlock: number;
   energy: number;
@@ -38,6 +39,7 @@ export type Player = {
 
 export type Corpse = {
   entityType: EntityType.Corpse;
+  creationBlock: number;
   position: Coord;
   coolDownBlock: number;
   energy: number;
@@ -52,6 +54,7 @@ export type Corpse = {
 
 export type Ghost = {
   entityType: EntityType.Ghost;
+  creationBlock: number;
   position: Coord;
   coolDownBlock: number;
   energy: number;
@@ -66,12 +69,14 @@ export type Ghost = {
 
 export type Terrain = {
   entityType: EntityType.Terrain;
+  creationBlock: number;
   position: Coord;
   resource: number;
 };
 
 export type Fire = {
   entityType: EntityType.Fire;
+  creationBlock: number;
   position: Coord;
   coolDownBlock?: number;
   creator: string[];
