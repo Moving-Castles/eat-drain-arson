@@ -27,6 +27,18 @@
         "InventoryComponent",
         "PortableComponent"
       ]
+    },
+    {
+      "name": "MoveSystem",
+      "writeAccess": [
+        "ControlComponent",
+        "PositionComponent",
+        "EnergyComponent",
+        "CreationBlockComponent",
+        "ReadyBlockComponent",
+        "InventoryComponent",
+        "PortableComponent"
+      ]
     }
   ]
 }

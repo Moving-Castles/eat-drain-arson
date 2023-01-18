@@ -15,16 +15,16 @@ import { InventoryComponent, ID as InventoryComponentID } from "../components/In
 
 library LibInventory {
   /**
-   * @notice  add an item to an inventory
-   * @param   _components  world components
-   * @param   _entity  holder of the inventory
-   * @param   _item  item to add
+   * Add an item to an inventory
+   *
+   * @param _components World components
+   * @param _entity Holder of the inventory
+   * @param _item Item to add
    */
-  function addToInventory(IUint256Component _components, uint256 _entity, uint256 _item) public {
+  function addToInventory(IUint256Component _components, uint256 _entity, uint256 _item) internal {
     PortableComponent portableComponent = PortableComponent(getAddressById(_components, PortableComponentID));
     InventoryComponent inventoryComponent = InventoryComponent(getAddressById(_components, InventoryComponentID));
 
-    // require(, "entity does not have an inventory");
     require(portableComponent.has(_item), "item can not be added to inventory");
 
     if (inventoryComponent.has(_entity)) {

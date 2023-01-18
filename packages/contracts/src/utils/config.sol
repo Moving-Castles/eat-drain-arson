@@ -16,7 +16,7 @@ uint32 constant MINIMUM_FIRE_SIZE = 500;
 uint32 constant FIRE_BURNTIME_MULTIPLIER = 10;
 uint32 constant COST_TO_MAKE_FIRE = 50;
 // --- MOVE
-int32 constant MAX_DISTANCE = 5;
+uint32 constant STEP_COST = 10;
 // --- PLAY
 uint32 constant PLAYING_DURATION = 20;
 // --- COOLDOWN
