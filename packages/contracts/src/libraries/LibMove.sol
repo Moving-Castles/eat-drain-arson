@@ -12,7 +12,6 @@ import { Direction } from "../utils/types.sol";
 import { STEP_COST, WORLD_HEIGHT, WORLD_WIDTH } from "../utils/config.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
-import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 
 library LibMove {
   /**

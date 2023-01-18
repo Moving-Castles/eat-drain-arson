@@ -24,11 +24,11 @@ library LibCooldown {
   }
 
   /**
-   * Check if the entity's block is passed and it is allowed to act
+   * Check if the entity'cooldown period is passed and it is allowed to act
    *
    * @param _components World components
    * @param _entity Entity
-   * @return boolean False if still in cooldown
+   * @return
    */
   function isReady(IUint256Component _components, uint256 _entity) internal view returns (bool) {
     ReadyBlockComponent readyBlockComponent = ReadyBlockComponent(getAddressById(_components, ReadyBlockComponentID));

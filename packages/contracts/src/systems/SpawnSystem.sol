@@ -8,8 +8,6 @@ import { LibInventory } from "../libraries/LibInventory.sol";
 import { LibCore } from "../libraries/LibCore.sol";
 import { LibMove } from "../libraries/LibMove.sol";
 
-import { ControlComponent, ID as ControlComponentID } from "../components/ControlComponent.sol";
-
 uint256 constant ID = uint256(keccak256("system.Spawn"));
 
 contract SpawnSystem is System {

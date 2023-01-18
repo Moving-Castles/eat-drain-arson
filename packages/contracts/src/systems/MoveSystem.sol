@@ -11,10 +11,6 @@ import { LibMove } from "../libraries/LibMove.sol";
 import { LibCore } from "../libraries/LibCore.sol";
 import { LibCooldown } from "../libraries/LibCooldown.sol";
 
-import { ControlComponent, ID as ControlComponentID } from "../components/ControlComponent.sol";
-import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
-import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
-
 uint256 constant ID = uint256(keccak256("system.Move"));
 
 contract MoveSystem is System {
