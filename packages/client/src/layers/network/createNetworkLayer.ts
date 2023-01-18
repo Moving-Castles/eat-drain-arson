@@ -1,18 +1,21 @@
 import type { SystemTypes } from "contracts/types/SystemTypes";
 import type { GameConfig } from "./config";
-
 import { createWorld } from "@latticexyz/recs";
 import { setupDevSystems } from "./setup";
-import {
-  createActionSystem,
-  setupMUDNetwork,
-  defineCoordComponent,
-  defineNumberComponent,
-  defineBoolComponent,
-  defineStringComponent,
-} from "@latticexyz/std-client";
+import { createActionSystem, setupMUDNetwork } from "@latticexyz/std-client";
 import { createFaucetService } from "@latticexyz/network";
-import { defineLoadingStateComponent, defineInventoryComponent } from "./components";
+import {
+  defineLoadingStateComponent,
+  defineInventoryComponent,
+  defineCreationBlockComponent,
+  defineControlComponent,
+  defineEnergyComponent,
+  defineExpirationBlockComponent,
+  defineMatterComponent,
+  definePortableComponent,
+  definePositionComponent,
+  defineReadyBlockComponent,
+} from "./components";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { getNetworkConfig } from "./config";
 import { BigNumber, utils } from "ethers";
@@ -30,22 +33,15 @@ export async function createNetworkLayer(config: GameConfig) {
   // --- COMPONENTS -----------------------------------------------------------------
   const components = {
     LoadingState: defineLoadingStateComponent(world),
-    Position: defineCoordComponent(world, { id: "Position", metadata: { contractId: "component.Position" } }),
-    Energy: defineNumberComponent(world, { id: "Energy", metadata: { contractId: "component.Energy" } }),
-    Matter: defineNumberComponent(world, { id: "Matter", metadata: { contractId: "component.Matter" } }),
-    Control: defineStringComponent(world, { id: "Control", metadata: { contractId: "component.Control" } }),
-    CreationBlock: defineNumberComponent(world, {
-      id: "CreationBlock",
-      metadata: { contractId: "component.CreationBlock" },
-    }),
-    ExpirationBlock: defineNumberComponent(world, {
-      id: "ExpirationBlock",
-      metadata: { contractId: "component.ExpirationBlock" },
-    }),
-    ReadyBlock: defineNumberComponent(world, { id: "ReadyBlock", metadata: { contractId: "component.ReadyBlock" } }),
-    Portable: defineBoolComponent(world, { id: "Portable", metadata: { contractId: "component.Portable" } }),
-    Inventory: defineNumberComponent(world, { id: "Inventory", metadata: { contractId: "component.Inventory" } }),
-    // Inventory: defineInventoryComponent(world),
+    Position: definePositionComponent(world),
+    Energy: defineEnergyComponent(world),
+    Matter: defineMatterComponent(world),
+    Control: defineControlComponent(world),
+    CreationBlock: defineCreationBlockComponent(world),
+    ExpirationBlock: defineExpirationBlockComponent(world),
+    ReadyBlock: defineReadyBlockComponent(world),
+    Portable: definePortableComponent(world),
+    Inventory: defineInventoryComponent(world),
   };
 
   // --- SETUP ----------------------------------------------------------------------

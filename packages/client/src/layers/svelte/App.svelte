@@ -9,15 +9,11 @@
     createPositionSystem,
     createCreationBlockSystem,
     createEnergySystem,
-    createResourceSystem,
-    createCoolDownSystem,
-    createSeedSystem,
-    createEntityTypeSystem,
-    createCreatorSystem,
-    createStatsSystem,
-    createCannibalSystem,
-    createPlayingSystem,
-    createDeathSystem,
+    createInventorySystem,
+    createMatterSystem,
+    createReadyBlockSystem,
+    createControlSystem,
+    createPortableSystem,
   } from "./systems";
   import { network as networkStore, blockNumber, startBlock } from "./modules/network";
   import { entities } from "./modules/entities";
@@ -27,18 +23,6 @@
   $: console.log("$entities", $entities);
   $: console.log("$player", $player);
 
-  // $: {
-  //   console.log("___ Transactions store: ", $transactions);
-  // }
-
-  // $: {
-  //   console.log("___ Receipts store: ", $receipts);
-  // }
-
-  // $: {
-  //   console.log("___ activeTransactions:", $activeTransactions);
-  // }
-
   onMount(async () => {
     const layers = await bootGame();
 
@@ -46,16 +30,12 @@
     createLoadingStateSystem(layers.network);
     createPositionSystem(layers.network);
     createCreationBlockSystem(layers.network);
-    // createEnergySystem(layers.network);
-    // createResourceSystem(layers.network);
-    // createCoolDownSystem(layers.network);
-    // createSeedSystem(layers.network);
-    // createEntityTypeSystem(layers.network);
-    // createCreatorSystem(layers.network);
-    // createStatsSystem(layers.network);
-    // createCannibalSystem(layers.network);
-    // createPlayingSystem(layers.network);
-    // createDeathSystem(layers.network);
+    createReadyBlockSystem(layers.network);
+    createEnergySystem(layers.network);
+    createMatterSystem(layers.network);
+    createInventorySystem(layers.network);
+    createControlSystem(layers.network);
+    createPortableSystem(layers.network);
 
     networkStore.set(layers.network);
 

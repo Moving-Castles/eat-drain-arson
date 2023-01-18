@@ -3,21 +3,19 @@ import type { NetworkLayer } from "../../network";
 import { entities, indexToID } from "../modules/entities";
 import { addToLog, EventCategory } from "../modules/narrator";
 
-export function createCannibalSystem(network: NetworkLayer) {
+export function createInventorySystem(network: NetworkLayer) {
   const {
     world,
-    components: { Cannibal },
+    components: { Inventory },
   } = network;
 
-  defineComponentSystem(world, Cannibal, (update) => {
-    console.log("==> Cannibal system: ", update);
-    const cannibal: string[] = update.value[0]?.value;
+  defineComponentSystem(world, Inventory, (update) => {
+    console.log("==> Inventory system: ", update);
+    const inventory: string[] = update.value[0]?.value;
     entities.update((value) => {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};
-      value[indexToID(update.entity)].cannibal = cannibal;
+      value[indexToID(update.entity)].inventory = inventory;
       return value;
     });
-
-    addToLog(update, EventCategory.Cannibalism);
   });
 }

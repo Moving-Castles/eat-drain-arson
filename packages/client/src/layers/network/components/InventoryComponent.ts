@@ -5,7 +5,7 @@ export function defineInventoryComponent(world: World) {
   return defineComponent(
     world,
     {
-      item: Type.StringArray,
+      value: Type.StringArray,
     },
     {
       id: "Inventory",

@@ -15,142 +15,80 @@ export enum EntityType {
   Ghost,
 }
 
-export type StatsCategory = {
-  traveled: number;
-  gathered: number;
-  burnt: number;
-  eaten: number;
-};
-
-export type Player = {
-  entityType: EntityType.Player;
+export type Entity = {
   creationBlock: number;
-  position: Coord;
-  coolDownBlock: number;
+  readyBlock: number;
+  inventory: string[];
+  matter: number;
   energy: number;
-  resource: number;
-  seed: number;
-  stats: StatsCategory;
-  birth: number;
-  death: number;
-  cannibal: string[];
-  playing: number;
-};
-
-export type Corpse = {
-  entityType: EntityType.Corpse;
-  creationBlock: number;
   position: Coord;
-  coolDownBlock: number;
-  energy: number;
-  resource: number;
-  seed: number;
-  stats: StatsCategory;
-  birth: number;
-  death: number;
-  cannibal: string[];
-  playing: number;
-};
-
-export type Ghost = {
-  entityType: EntityType.Ghost;
-  creationBlock: number;
-  position: Coord;
-  coolDownBlock: number;
-  energy: number;
-  resource: number;
-  seed: number;
-  stats: StatsCategory;
-  birth: number;
-  death: number;
-  cannibal: string[];
-  playing: number;
-};
-
-export type Terrain = {
-  entityType: EntityType.Terrain;
-  creationBlock: number;
-  position: Coord;
-  resource: number;
-};
-
-export type Fire = {
-  entityType: EntityType.Fire;
-  creationBlock: number;
-  position: Coord;
-  coolDownBlock?: number;
-  creator: string[];
-  resource: number;
-  seed: number;
-};
-
-export type Entity = Player | Terrain | Fire | Corpse | Ghost;
-
-export type Players = {
-  [index: string]: Player;
-};
-
-export type Terrains = {
-  [index: string]: Terrain;
-};
-
-export type Fires = {
-  [index: string]: Fire;
-};
-
-export type Corpses = {
-  [index: string]: Corpse;
-};
-
-export type Ghosts = {
-  [index: string]: Ghost;
+  control: boolean;
+  portable: boolean;
 };
 
 export type Entities = {
   [index: string]: Entity;
 };
 
+// export type Players = {
+//   [index: string]: Player;
+// };
+
+// export type Terrains = {
+//   [index: string]: Terrain;
+// };
+
+// export type Fires = {
+//   [index: string]: Fire;
+// };
+
+// export type Corpses = {
+//   [index: string]: Corpse;
+// };
+
+// export type Ghosts = {
+//   [index: string]: Ghost;
+// };
+
 // --- STORES -----------------------------------------------------------------
 
 export const entities = writable({} as Entities);
 
-export const players = derived([entities, blockNumber], ([$entities, $blockNumber]) => {
-  let ps = Object.entries($entities).filter(
-    ([k, e]) => e.entityType == EntityType.Player || e.entityType == EntityType.Corpse
-  );
+// export const players = derived([entities, blockNumber], ([$entities, $blockNumber]) => {
+//   let ps = Object.entries($entities).filter(
+//     ([k, e]) => e.entityType == EntityType.Player || e.entityType == EntityType.Corpse
+//   );
 
-  // Now double check for each one if they are dead
-  ps = ps.map(([k, e]) => {
-    const energy = calculateEnergy(e, $blockNumber);
-    if (energy < 1) {
-      e.entityType = EntityType.Corpse;
-    } else if (e.entityType == EntityType.Corpse && energy > 0) {
-      // Looks like you respawned, Padawan...
-      e.entityType = EntityType.Player;
-    }
-    return [k, e];
-  });
+//   // Now double check for each one if they are dead
+//   ps = ps.map(([k, e]) => {
+//     const energy = calculateEnergy(e, $blockNumber);
+//     if (energy < 1) {
+//       e.entityType = EntityType.Corpse;
+//     } else if (e.entityType == EntityType.Corpse && energy > 0) {
+//       // Looks like you respawned, Padawan...
+//       e.entityType = EntityType.Player;
+//     }
+//     return [k, e];
+//   });
 
-  return Object.fromEntries(ps);
-});
+//   return Object.fromEntries(ps);
+// });
 
-export const fires = derived(
-  entities,
-  ($entities) =>
-    Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Fire)) as Entities
-);
+export const players = derived(entities, ($entities) => $entities as Entities);
 
-export const terrains = derived(
-  entities,
-  ($entities) =>
-    Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Terrain)) as Entities
-);
+export const fires = derived(entities, ($entities) => $entities as Entities);
 
-export const corpses = derived(
-  entities,
-  ($entities) =>
-    Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Corpse)) as Entities
-);
+// export const terrains = derived(
+//   entities,
+//   ($entities) =>
+//     Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Terrain)) as Entities
+// );
+
+// export const corpses = derived(
+//   entities,
+//   ($entities) =>
+//     Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Corpse)) as Entities
+// );
 
 // --- FUNCTIONS -----------------------------------------------------------------
 

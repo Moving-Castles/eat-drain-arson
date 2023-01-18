@@ -3,24 +3,24 @@ import type { NetworkLayer } from "../../network";
 import { entities, indexToID } from "../modules/entities";
 import { addToLog, EventCategory } from "../modules/narrator";
 
-export function createEnergySystem(network: NetworkLayer) {
+export function createMatterSystem(network: NetworkLayer) {
   const {
     world,
-    components: { Energy },
+    components: { Matter },
   } = network;
 
-  defineComponentSystem(world, Energy, (update) => {
-    console.log("==> Energy system: ", update);
-    const oldEnergy = update.value[1]?.value;
-    const energy = update.value[0]?.value;
+  defineComponentSystem(world, Matter, (update) => {
+    console.log("==> Matter system: ", update);
+    const oldMatter = update.value[1]?.value || 0;
+    const matter = update.value[0]?.value || 0;
     entities.update((value) => {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};
-      value[indexToID(update.entity)].energy = energy;
+      value[indexToID(update.entity)].matter = matter;
       return value;
     });
 
-    // if (energy > oldEnergy) {
-    //   addToLog(update, EventCategory.Eat);
+    // if (matter > oldMatter) {
+    //   addToLog(update, EventCategory.Gather);
     // }
   });
 }
