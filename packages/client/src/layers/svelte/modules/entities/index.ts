@@ -18,13 +18,13 @@ export enum EntityType {
 export type Entity = {
   creationBlock: number;
   readyBlock: number;
-  inventory: string[];
   matter: number;
   energy: number;
   position: Coord;
-  control: string;
   portable: boolean;
   carryingCapacity: number;
+  core: boolean;
+  carriedBy: string;
 };
 
 export type Entities = {

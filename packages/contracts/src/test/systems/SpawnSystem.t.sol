@@ -26,12 +26,15 @@ contract SpawnSystemTest is MudTest {
     // --- CreationBlock
     assertEq(creationBlockComponent.getValue(addressToEntity(alice)), 1);
 
+    // --- Core
+    assertTrue(coreComponent.getValue(addressToEntity(alice)));
+
     // --- Portable
     assertTrue(portableComponent.getValue(addressToEntity(alice)));
 
-    // --- Control
-    assertTrue(controlComponent.has(addressToEntity(alice)));
-    uint256 baseEntity = controlComponent.getValue(addressToEntity(alice));
+    // --- Get base entity
+    assertTrue(carriedByComponent.has(addressToEntity(alice)));
+    uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
     console.log("___ BASE ENTITY:");
     console.log(baseEntity);
 
@@ -42,14 +45,14 @@ contract SpawnSystemTest is MudTest {
     assertEq(carryingCapacityComponent.getValue(baseEntity), DEFAULT_CARRYING_CAPACITY);
 
     // --- Inventory
-    assertTrue(inventoryComponent.has(baseEntity));
-    uint256[] memory inventory = inventoryComponent.getValue(baseEntity);
-    assertEq(inventory.length, 1);
-    assertEq(inventory[0], addressToEntity(alice));
-    for (uint256 i = 0; i < inventory.length; i++) {
-      console.log("___ INVENTORY:");
-      console.log(inventory[i]);
-    }
+    // assertTrue(inventoryComponent.has(baseEntity));
+    // uint256[] memory inventory = inventoryComponent.getValue(baseEntity);
+    // assertEq(inventory.length, 1);
+    // assertEq(inventory[0], addressToEntity(alice));
+    // for (uint256 i = 0; i < inventory.length; i++) {
+    //   console.log("___ INVENTORY:");
+    //   console.log(inventory[i]);
+    // }
   }
 
   function testRevertRespawn() public {

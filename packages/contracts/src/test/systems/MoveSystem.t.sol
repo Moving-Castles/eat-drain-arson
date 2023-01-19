@@ -20,8 +20,8 @@ contract MoveSystemTest is MudTest {
     vm.stopPrank();
 
     // --- Get base entity
-    assertTrue(controlComponent.has(addressToEntity(alice)));
-    uint256 baseEntity = controlComponent.getValue(addressToEntity(alice));
+    assertTrue(carriedByComponent.has(addressToEntity(alice)));
+    uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
     console.log("___ BASE ENTITY:");
     console.log(baseEntity);
 

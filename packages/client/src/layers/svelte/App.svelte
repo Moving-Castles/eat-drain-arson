@@ -9,10 +9,10 @@
     createPositionSystem,
     createCreationBlockSystem,
     createEnergySystem,
-    createInventorySystem,
     createMatterSystem,
     createReadyBlockSystem,
-    createControlSystem,
+    createCoreSystem,
+    createCarriedBySystem,
     createPortableSystem,
     createCarryingCapacitySystem,
   } from "./systems";
@@ -28,10 +28,10 @@
     createReadyBlockSystem(layers.network);
     createEnergySystem(layers.network);
     createMatterSystem(layers.network);
-    createInventorySystem(layers.network);
-    createControlSystem(layers.network);
     createPortableSystem(layers.network);
     createCarryingCapacitySystem(layers.network);
+    createCarriedBySystem(layers.network);
+    createCoreSystem(layers.network);
 
     networkStore.set(layers.network);
 

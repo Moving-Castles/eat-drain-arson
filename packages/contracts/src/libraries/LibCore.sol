@@ -10,13 +10,12 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
 import { INITIAL_ENERGY } from "../utils/config.sol";
 
-import { ControlComponent, ID as ControlComponentID } from "../components/ControlComponent.sol";
+import { CoreComponent, ID as CoreComponentID } from "../components/CoreComponent.sol";
 import { CreationBlockComponent, ID as CreationBlockComponentID } from "../components/CreationBlockComponent.sol";
 import { ReadyBlockComponent, ID as ReadyBlockComponentID } from "../components/ReadyBlockComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { PortableComponent, ID as PortableComponentID } from "../components/PortableComponent.sol";
-import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
-import { InventoryComponent, ID as InventoryComponentID } from "../components/InventoryComponent.sol";
+import { CarriedByComponent, ID as CarriedByComponentID } from "../components/CarriedByComponent.sol";
 
 library LibCore {
   /**
@@ -26,7 +25,7 @@ library LibCore {
    * @param _coreEntity Entity Id. Should be address of the owner/controller of the Core
    */
   function spawn(IUint256Component _components, uint256 _coreEntity) internal {
-    // !! TODO: access control
+    CoreComponent coreComponent = CoreComponent(getAddressById(_components, CoreComponentID));
     ReadyBlockComponent readyBlockComponent = ReadyBlockComponent(getAddressById(_components, ReadyBlockComponentID));
     EnergyComponent energyComponent = EnergyComponent(getAddressById(_components, EnergyComponentID));
     PortableComponent portableComponent = PortableComponent(getAddressById(_components, PortableComponentID));
@@ -34,6 +33,7 @@ library LibCore {
       getAddressById(_components, CreationBlockComponentID)
     );
 
+    coreComponent.set(_coreEntity);
     creationBlockComponent.set(_coreEntity, block.number);
     readyBlockComponent.set(_coreEntity, block.number);
     energyComponent.set(_coreEntity, INITIAL_ENERGY);
@@ -48,8 +48,8 @@ library LibCore {
    * @return bool does core with this Id exist?
    */
   function isSpawned(IUint256Component _components, uint256 _coreEntity) internal view returns (bool) {
-    ControlComponent controlComponent = ControlComponent(getAddressById(_components, ControlComponentID));
-    return controlComponent.has(_coreEntity);
+    CoreComponent coreComponent = CoreComponent(getAddressById(_components, CoreComponentID));
+    return coreComponent.has(_coreEntity);
   }
 
   /**
@@ -60,9 +60,8 @@ library LibCore {
    * @return unsigned ID of the base entity
    */
   function getControlledEntity(IUint256Component _components, uint256 _coreEntity) internal view returns (uint256) {
-    ControlComponent controlComponent = ControlComponent(getAddressById(_components, ControlComponentID));
-    require(controlComponent.has(_coreEntity), "entity is not a core");
-    return controlComponent.getValue(_coreEntity);
+    CarriedByComponent carriedByComponent = CarriedByComponent(getAddressById(_components, CarriedByComponentID));
+    return carriedByComponent.getValue(_coreEntity);
   }
 
   /**
@@ -73,8 +72,8 @@ library LibCore {
    * @param _baseEntity Base entity
    */
   function setControlledEntity(IUint256Component _components, uint256 _coreEntity, uint256 _baseEntity) internal {
-    ControlComponent controlComponent = ControlComponent(getAddressById(_components, ControlComponentID));
-    controlComponent.set(_coreEntity, _baseEntity);
+    CarriedByComponent carriedByComponent = CarriedByComponent(getAddressById(_components, CarriedByComponentID));
+    carriedByComponent.set(_coreEntity, _baseEntity);
   }
 
   /**

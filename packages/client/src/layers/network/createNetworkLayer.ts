@@ -6,9 +6,7 @@ import { createActionSystem, setupMUDNetwork } from "@latticexyz/std-client";
 import { createFaucetService } from "@latticexyz/network";
 import {
   defineLoadingStateComponent,
-  defineInventoryComponent,
   defineCreationBlockComponent,
-  defineControlComponent,
   defineEnergyComponent,
   defineExpirationBlockComponent,
   defineMatterComponent,
@@ -16,6 +14,8 @@ import {
   definePositionComponent,
   defineReadyBlockComponent,
   defineCarryingCapacityComponent,
+  defineCarriedByComponent,
+  defineCoreComponent,
 } from "./components";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { getNetworkConfig } from "./config";
@@ -37,13 +37,13 @@ export async function createNetworkLayer(config: GameConfig) {
     Position: definePositionComponent(world),
     Energy: defineEnergyComponent(world),
     Matter: defineMatterComponent(world),
-    Control: defineControlComponent(world),
     CreationBlock: defineCreationBlockComponent(world),
     ExpirationBlock: defineExpirationBlockComponent(world),
     ReadyBlock: defineReadyBlockComponent(world),
     Portable: definePortableComponent(world),
-    Inventory: defineInventoryComponent(world),
     CarryingCapacity: defineCarryingCapacityComponent(world),
+    CarriedBy: defineCarriedByComponent(world),
+    Core: defineCoreComponent(world),
   };
 
   // --- SETUP ----------------------------------------------------------------------

@@ -11,45 +11,30 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { LibArray } from "./LibArray.sol";
 
 import { PortableComponent, ID as PortableComponentID } from "../components/PortableComponent.sol";
-import { InventoryComponent, ID as InventoryComponentID } from "../components/InventoryComponent.sol";
+import { CarriedByComponent, ID as CarriedByComponentID } from "../components/CarriedByComponent.sol";
 import { CarryingCapacityComponent, ID as CarryingCapacityComponentID } from "../components/CarryingCapacityComponent.sol";
 
 library LibInventory {
   /**
    * Add an item to an inventory
    *
-   * @param _components World components
-   * @param _entity Holder of the inventory
-   * @param _item Item to add
+   * @param _components world components
+   * @param _entity holder of the inventory
+   * @param _item item to add
    */
   function addToInventory(IUint256Component _components, uint256 _entity, uint256 _item) internal {
     PortableComponent portableComponent = PortableComponent(getAddressById(_components, PortableComponentID));
-    InventoryComponent inventoryComponent = InventoryComponent(getAddressById(_components, InventoryComponentID));
+    CarriedByComponent carriedByComponent = CarriedByComponent(getAddressById(_components, CarriedByComponentID));
     CarryingCapacityComponent carryingCapacityComponent = CarryingCapacityComponent(
       getAddressById(_components, CarryingCapacityComponentID)
     );
 
     require(carryingCapacityComponent.has(_entity), "LibInventory: Entity has no carrying capacity");
-    require(portableComponent.has(_item), "LibInventory: Item can not be added to inventory");
+    require(portableComponent.has(_item), "LibInventory: Item is not portable");
 
-    if (inventoryComponent.has(_entity)) {
-      uint256 inventoryLength = inventoryComponent.getValue(_entity).length;
-      require(inventoryLength <= carryingCapacityComponent.getValue(_entity), "LibInventory: Inventory is full");
+    // @todo check that there is room in the inventory
 
-      uint256[] memory oldArray = inventoryComponent.getValue(_entity);
-      uint256[] memory newArray = new uint256[](inventoryLength + 1);
-
-      for (uint256 i = 0; i < inventoryLength; i++) {
-        newArray[i] = oldArray[i];
-      }
-
-      newArray[inventoryLength] = _item;
-      inventoryComponent.set(_entity, newArray);
-    } else {
-      uint256[] memory tempArray = new uint256[](1);
-      tempArray[0] = _item;
-      inventoryComponent.set(_entity, tempArray);
-    }
+    carriedByComponent.set(_item, _entity);
   }
 
   /**

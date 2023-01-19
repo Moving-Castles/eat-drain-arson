@@ -24,7 +24,7 @@ library LibCooldown {
   }
 
   /**
-   * Check if the entity'cooldown period is passed and it is allowed to act
+   * Check if the entity's cooldown period is over
    *
    * @param _components World components
    * @param _entity Entity

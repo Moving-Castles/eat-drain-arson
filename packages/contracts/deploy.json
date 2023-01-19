@@ -1,14 +1,14 @@
 {
   "components": [
-    "ControlComponent",
+    "CoreComponent",
     "PositionComponent",
     "EnergyComponent",
     "CreationBlockComponent",
     "ReadyBlockComponent",
-    "InventoryComponent",
     "MatterComponent",
     "PortableComponent",
-    "CarryingCapacityComponent"
+    "CarryingCapacityComponent",
+    "CarriedByComponent"
   ],
   "systems": [
     {
@@ -20,24 +20,24 @@
     {
       "name": "SpawnSystem",
       "writeAccess": [
-        "ControlComponent",
+        "CoreComponent",
         "PositionComponent",
         "EnergyComponent",
         "CreationBlockComponent",
         "ReadyBlockComponent",
-        "InventoryComponent",
         "PortableComponent",
-        "CarryingCapacityComponent"
+        "CarryingCapacityComponent",
+        "CarriedByComponent"
       ]
     },
     {
       "name": "MoveSystem",
       "writeAccess": [
-        "ControlComponent",
+        "CoreComponent",
         "PositionComponent",
         "EnergyComponent",
         "ReadyBlockComponent",
-        "InventoryComponent"
+        "CarriedByComponent"
       ]
     }
   ]

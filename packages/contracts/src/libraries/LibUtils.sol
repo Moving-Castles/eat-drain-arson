@@ -10,6 +10,4 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
 import { INITIAL_ENERGY } from "../utils/config.sol";
 
-import { ControlComponent, ID as ControlComponentID } from "../components/ControlComponent.sol";
-
 library LibUtils {}

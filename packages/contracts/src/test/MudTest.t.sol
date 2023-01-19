@@ -16,10 +16,10 @@ import { PositionComponent, ID as PositionComponentID } from "../components/Posi
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { CreationBlockComponent, ID as CreationBlockComponentID } from "../components/CreationBlockComponent.sol";
 import { ReadyBlockComponent, ID as ReadyBlockComponentID } from "../components/ReadyBlockComponent.sol";
-import { ControlComponent, ID as ControlComponentID } from "../components/ControlComponent.sol";
 import { PortableComponent, ID as PortableComponentID } from "../components/PortableComponent.sol";
-import { InventoryComponent, ID as InventoryComponentID } from "../components/InventoryComponent.sol";
 import { CarryingCapacityComponent, ID as CarryingCapacityComponentID } from "../components/CarryingCapacityComponent.sol";
+import { CoreComponent, ID as CoreComponentID } from "../components/CoreComponent.sol";
+import { CarriedByComponent, ID as CarriedByComponentID } from "../components/CarriedByComponent.sol";
 
 contract MudTest is DSTest {
   Cheats internal immutable vm = Cheats(HEVM_ADDRESS);
@@ -39,10 +39,10 @@ contract MudTest is DSTest {
   EnergyComponent energyComponent;
   CreationBlockComponent creationBlockComponent;
   ReadyBlockComponent readyBlockComponent;
-  ControlComponent controlComponent;
   PortableComponent portableComponent;
-  InventoryComponent inventoryComponent;
   CarryingCapacityComponent carryingCapacityComponent;
+  CoreComponent coreComponent;
+  CarriedByComponent carriedByComponent;
 
   function component(uint256 id) public view returns (address) {
     return getAddressById(components, id);
@@ -66,10 +66,10 @@ contract MudTest is DSTest {
     energyComponent = EnergyComponent(component(EnergyComponentID));
     creationBlockComponent = CreationBlockComponent(component(CreationBlockComponentID));
     readyBlockComponent = ReadyBlockComponent(component(ReadyBlockComponentID));
-    controlComponent = ControlComponent(component(ControlComponentID));
     portableComponent = PortableComponent(component(PortableComponentID));
-    inventoryComponent = InventoryComponent(component(InventoryComponentID));
     carryingCapacityComponent = CarryingCapacityComponent(component(CarryingCapacityComponentID));
+    coreComponent = CoreComponent(getAddressById(components, CoreComponentID));
+    carriedByComponent = CarriedByComponent(getAddressById(components, CarriedByComponentID));
   }
 
   modifier prank(address prankster) {
