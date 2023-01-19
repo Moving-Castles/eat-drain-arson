@@ -41,6 +41,18 @@ library LibCore {
   }
 
   /**
+   * Checks if a core with this id exists
+   *
+   * @param _components world components
+   * @param _coreEntity core entity Id
+   * @return bool does core with this Id exist?
+   */
+  function isSpawned(IUint256Component _components, uint256 _coreEntity) internal view returns (bool) {
+    ControlComponent controlComponent = ControlComponent(getAddressById(_components, ControlComponentID));
+    return controlComponent.has(_coreEntity);
+  }
+
+  /**
    * Get the base entity controlled by a core
    *
    * @param _components World components
@@ -66,22 +78,31 @@ library LibCore {
   }
 
   /**
-   * Subtract energy
+   * Decrease energy
    *
    * @param _components World components
    * @param _coreEntity Core entity
-   * @param _energyCost Energy to subtract
+   * @param _amount Amount to decrease by
    * @return bool False if the core does not have enough energy
    */
-  function subtractEnergy(
-    IUint256Component _components,
-    uint256 _coreEntity,
-    uint32 _energyCost
-  ) internal returns (bool) {
+  function decreaseEnergy(IUint256Component _components, uint256 _coreEntity, uint32 _amount) internal returns (bool) {
     EnergyComponent energyComponent = EnergyComponent(getAddressById(_components, EnergyComponentID));
     uint32 currentEnergy = energyComponent.getValue(_coreEntity);
-    if (currentEnergy < _energyCost) return false;
-    energyComponent.set(_coreEntity, currentEnergy - _energyCost);
+    if (currentEnergy < _amount) return false;
+    energyComponent.set(_coreEntity, currentEnergy - _amount);
     return true;
+  }
+
+  /**
+   * Increase energy
+   *
+   * @param _components World components
+   * @param _coreEntity Core entity
+   * @param _amount Amount to increase by
+   */
+  function increaseEnergy(IUint256Component _components, uint256 _coreEntity, uint32 _amount) internal {
+    EnergyComponent energyComponent = EnergyComponent(getAddressById(_components, EnergyComponentID));
+    uint32 currentEnergy = energyComponent.getValue(_coreEntity);
+    energyComponent.set(_coreEntity, currentEnergy + _amount);
   }
 }

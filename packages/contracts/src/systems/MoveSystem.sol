@@ -17,18 +17,20 @@ contract MoveSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 _coreEntity, uint32 _direction) = abi.decode(arguments, (uint256, uint32));
+    uint32 _direction = abi.decode(arguments, (uint32));
+    uint256 coreEntity = addressToEntity(msg.sender);
 
-    require(LibCooldown.isReady(components, _coreEntity), "in cooldown");
-    require(LibCore.subtractEnergy(components, _coreEntity, STEP_COST), "not enough energy");
+    require(LibCore.isSpawned(components, coreEntity), "MoveSystem: entity does not exist");
+    require(LibCooldown.isReady(components, coreEntity), "MoveSystem: entity is in cooldown");
+    require(LibCore.decreaseEnergy(components, coreEntity, STEP_COST), "MoveSystem: not enough energy");
 
-    uint256 baseEntity = LibCore.getControlledEntity(components, _coreEntity);
+    uint256 baseEntity = LibCore.getControlledEntity(components, coreEntity);
     LibMove.step(components, baseEntity, Direction(_direction));
 
-    LibCooldown.setReadyBlock(components, _coreEntity, STEP_COST);
+    LibCooldown.setReadyBlock(components, coreEntity, STEP_COST);
   }
 
-  function executeTyped(uint256 _entity, uint32 _direction) public returns (bytes memory) {
-    return execute(abi.encode(_entity, _direction));
+  function executeTyped(uint32 _direction) public returns (bytes memory) {
+    return execute(abi.encode(_direction));
   }
 }

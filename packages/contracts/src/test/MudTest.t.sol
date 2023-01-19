@@ -60,7 +60,6 @@ contract MudTest is DSTest {
     eve = utils.getNextUserAddress();
 
     // Initialize components
-
     positionComponent = PositionComponent(component(PositionComponentID));
     energyComponent = EnergyComponent(component(EnergyComponentID));
     creationBlockComponent = CreationBlockComponent(component(CreationBlockComponentID));
@@ -68,5 +67,11 @@ contract MudTest is DSTest {
     controlComponent = ControlComponent(component(ControlComponentID));
     portableComponent = PortableComponent(component(PortableComponentID));
     inventoryComponent = InventoryComponent(component(InventoryComponentID));
+  }
+
+  modifier prank(address prankster) {
+    vm.startPrank(prankster);
+    _;
+    vm.stopPrank();
   }
 }

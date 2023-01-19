@@ -3,35 +3,35 @@ pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
+import { addressToEntity } from "solecs/utils.sol";
 import { WORLD_HEIGHT, WORLD_WIDTH, INITIAL_RESOURCE, INITIAL_ENERGY } from "../../utils/config.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { Coord } from "../../components/PositionComponent.sol";
 
 contract SpawnSystemTest is MudTest {
-  function testExecute() public {
-    uint256 coreEntity = 666;
-
-    console.log("___ CORE ENTITY:");
-    console.log(coreEntity);
+  function testSpawn() public {
+    setUp();
 
     // --- Spawn core
-    SpawnSystem(system(SpawnSystemID)).executeTyped(coreEntity);
+    vm.startPrank(alice);
+    SpawnSystem(system(SpawnSystemID)).executeTyped();
+    vm.stopPrank();
 
     // --- Energy
-    assertEq(energyComponent.getValue(coreEntity), INITIAL_ENERGY);
+    assertEq(energyComponent.getValue(addressToEntity(alice)), INITIAL_ENERGY);
 
     // --- ReadyBlock
-    assertEq(readyBlockComponent.getValue(coreEntity), 1);
+    assertEq(readyBlockComponent.getValue(addressToEntity(alice)), 1);
 
     // --- CreationBlock
-    assertEq(creationBlockComponent.getValue(coreEntity), 1);
+    assertEq(creationBlockComponent.getValue(addressToEntity(alice)), 1);
 
-    // // --- Portable
-    assertTrue(portableComponent.getValue(coreEntity));
+    // --- Portable
+    assertTrue(portableComponent.getValue(addressToEntity(alice)));
 
-    // // --- Control
-    assertTrue(controlComponent.has(coreEntity));
-    uint256 baseEntity = controlComponent.getValue(coreEntity);
+    // --- Control
+    assertTrue(controlComponent.has(addressToEntity(alice)));
+    uint256 baseEntity = controlComponent.getValue(addressToEntity(alice));
     console.log("___ BASE ENTITY:");
     console.log(baseEntity);
 
@@ -42,10 +42,22 @@ contract SpawnSystemTest is MudTest {
     assertTrue(inventoryComponent.has(baseEntity));
     uint256[] memory inventory = inventoryComponent.getValue(baseEntity);
     assertEq(inventory.length, 1);
-    assertEq(inventory[0], coreEntity);
+    assertEq(inventory[0], addressToEntity(alice));
     for (uint256 i = 0; i < inventory.length; i++) {
       console.log("___ INVENTORY:");
       console.log(inventory[i]);
     }
+  }
+
+  function testRevertRespawn() public {
+    setUp();
+    SpawnSystem spawnSystem = SpawnSystem(system(SpawnSystemID));
+    // Spawn core
+    vm.startPrank(alice);
+    spawnSystem.executeTyped();
+    // Try to respawn
+    vm.expectRevert(bytes("SpawnSystem: entity with this ID already exists"));
+    spawnSystem.executeTyped();
+    vm.stopPrank();
   }
 }

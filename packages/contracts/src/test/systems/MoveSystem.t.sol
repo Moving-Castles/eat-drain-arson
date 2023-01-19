@@ -3,25 +3,25 @@ pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
+import { addressToEntity } from "solecs/utils.sol";
 import { STEP_COST, WORLD_HEIGHT, WORLD_WIDTH, INITIAL_RESOURCE, INITIAL_ENERGY } from "../../utils/config.sol";
 import { MoveSystem, ID as MoveSystemID } from "../../systems/MoveSystem.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { Coord } from "../../components/PositionComponent.sol";
 import { Direction } from "../../utils/types.sol";
 
-contract SpawnSystemTest is MudTest {
-  function testExecute() public {
-    uint256 coreEntity = 666;
+contract MoveSystemTest is MudTest {
+  function testStep() public {
+    setUp();
 
-    console.log("___ CORE ENTITY:");
-    console.log(coreEntity);
-
-    // --- Spawn
-    SpawnSystem(system(SpawnSystemID)).executeTyped(coreEntity);
+    // --- Spawn core
+    vm.startPrank(alice);
+    SpawnSystem(system(SpawnSystemID)).executeTyped();
+    vm.stopPrank();
 
     // --- Get base entity
-    assertTrue(controlComponent.has(coreEntity));
-    uint256 baseEntity = controlComponent.getValue(coreEntity);
+    assertTrue(controlComponent.has(addressToEntity(alice)));
+    uint256 baseEntity = controlComponent.getValue(addressToEntity(alice));
     console.log("___ BASE ENTITY:");
     console.log(baseEntity);
 
@@ -31,7 +31,11 @@ contract SpawnSystemTest is MudTest {
     console.logInt(initialPosition.x);
     console.logInt(initialPosition.y);
 
-    MoveSystem(system(MoveSystemID)).executeTyped(coreEntity, uint32(Direction.North));
+    vm.roll(2);
+
+    vm.startPrank(alice);
+    MoveSystem(system(MoveSystemID)).executeTyped(uint32(Direction.North));
+    vm.stopPrank();
 
     // --- New position
     Coord memory newPosition = positionComponent.getValue(baseEntity);
@@ -40,14 +44,40 @@ contract SpawnSystemTest is MudTest {
     console.logInt(newPosition.y);
 
     // --- ReadyBlock
-    uint256 rB = readyBlockComponent.getValue(coreEntity);
+    uint256 rB = readyBlockComponent.getValue(addressToEntity(alice));
+    assertEq(rB, STEP_COST + 2);
     console.log("___READY BLOCK:");
     console.log(rB);
 
     // --- Energy
-    assertEq(energyComponent.getValue(coreEntity), INITIAL_ENERGY - STEP_COST);
+    assertEq(energyComponent.getValue(addressToEntity(alice)), INITIAL_ENERGY - STEP_COST);
+  }
 
-    vm.expectRevert(bytes("in cooldown"));
-    MoveSystem(system(MoveSystemID)).executeTyped(coreEntity, uint32(Direction.North));
+  function testRevertCooldown() public {
+    setUp();
+
+    SpawnSystem spawnSystem = SpawnSystem(system(SpawnSystemID));
+    MoveSystem moveSystem = MoveSystem(system(MoveSystemID));
+
+    // --- Spawn core
+    vm.startPrank(alice);
+    spawnSystem.executeTyped();
+
+    vm.roll(2);
+
+    moveSystem.executeTyped(uint32(Direction.North));
+
+    vm.expectRevert(bytes("MoveSystem: entity is in cooldown"));
+    moveSystem.executeTyped(uint32(Direction.South));
+    vm.stopPrank();
+  }
+
+  function testRevertUnspawned() public {
+    setUp();
+    MoveSystem moveSystem = MoveSystem(system(MoveSystemID));
+    vm.startPrank(alice);
+    vm.expectRevert(bytes("MoveSystem: entity does not exist"));
+    moveSystem.executeTyped(uint32(Direction.South));
+    vm.stopPrank();
   }
 }
