@@ -4,7 +4,7 @@ pragma solidity >=0.8.0;
 import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
 import { addressToEntity } from "solecs/utils.sol";
-import { STEP_COST, WORLD_HEIGHT, WORLD_WIDTH, INITIAL_RESOURCE, INITIAL_ENERGY } from "../../utils/config.sol";
+import { STEP_COST, WORLD_HEIGHT, WORLD_WIDTH, INITIAL_ENERGY } from "../../utils/config.sol";
 import { MoveSystem, ID as MoveSystemID } from "../../systems/MoveSystem.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { Coord } from "../../components/PositionComponent.sol";

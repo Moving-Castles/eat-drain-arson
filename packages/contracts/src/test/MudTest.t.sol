@@ -19,6 +19,7 @@ import { ReadyBlockComponent, ID as ReadyBlockComponentID } from "../components/
 import { ControlComponent, ID as ControlComponentID } from "../components/ControlComponent.sol";
 import { PortableComponent, ID as PortableComponentID } from "../components/PortableComponent.sol";
 import { InventoryComponent, ID as InventoryComponentID } from "../components/InventoryComponent.sol";
+import { CarryingCapacityComponent, ID as CarryingCapacityComponentID } from "../components/CarryingCapacityComponent.sol";
 
 contract MudTest is DSTest {
   Cheats internal immutable vm = Cheats(HEVM_ADDRESS);
@@ -41,6 +42,7 @@ contract MudTest is DSTest {
   ControlComponent controlComponent;
   PortableComponent portableComponent;
   InventoryComponent inventoryComponent;
+  CarryingCapacityComponent carryingCapacityComponent;
 
   function component(uint256 id) public view returns (address) {
     return getAddressById(components, id);
@@ -67,6 +69,7 @@ contract MudTest is DSTest {
     controlComponent = ControlComponent(component(ControlComponentID));
     portableComponent = PortableComponent(component(PortableComponentID));
     inventoryComponent = InventoryComponent(component(InventoryComponentID));
+    carryingCapacityComponent = CarryingCapacityComponent(component(CarryingCapacityComponentID));
   }
 
   modifier prank(address prankster) {

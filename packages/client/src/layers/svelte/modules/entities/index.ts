@@ -22,8 +22,9 @@ export type Entity = {
   matter: number;
   energy: number;
   position: Coord;
-  control: boolean;
+  control: string;
   portable: boolean;
+  carryingCapacity: number;
 };
 
 export type Entities = {

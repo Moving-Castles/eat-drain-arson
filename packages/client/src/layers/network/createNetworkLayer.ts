@@ -15,6 +15,7 @@ import {
   definePortableComponent,
   definePositionComponent,
   defineReadyBlockComponent,
+  defineCarryingCapacityComponent,
 } from "./components";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { getNetworkConfig } from "./config";
@@ -42,6 +43,7 @@ export async function createNetworkLayer(config: GameConfig) {
     ReadyBlock: defineReadyBlockComponent(world),
     Portable: definePortableComponent(world),
     Inventory: defineInventoryComponent(world),
+    CarryingCapacity: defineCarryingCapacityComponent(world),
   };
 
   // --- SETUP ----------------------------------------------------------------------

@@ -8,3 +8,4 @@ export { defineEnergyComponent } from "./EnergyComponent";
 export { defineMatterComponent } from "./MatterComponent";
 export { definePortableComponent } from "./PortableComponent";
 export { defineControlComponent } from "./ControlComponent";
+export { defineCarryingCapacityComponent } from "./CarryingCapacityComponent";

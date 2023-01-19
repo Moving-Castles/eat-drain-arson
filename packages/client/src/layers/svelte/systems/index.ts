@@ -7,3 +7,4 @@ export { createMatterSystem } from "./createMatterSystem";
 export { createLoadingStateSystem } from "./createLoadingStateSystem";
 export { createControlSystem } from "./createControlSystem";
 export { createPortableSystem } from "./createPortableSystem";
+export { createCarryingCapacitySystem } from "./createCarryingCapacitySystem";

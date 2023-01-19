@@ -14,14 +14,9 @@
     createReadyBlockSystem,
     createControlSystem,
     createPortableSystem,
+    createCarryingCapacitySystem,
   } from "./systems";
   import { network as networkStore, blockNumber, startBlock } from "./modules/network";
-  import { entities } from "./modules/entities";
-  import { player } from "./modules/player";
-  import { transactions, receipts, activeTransactions } from "./modules/network";
-
-  $: console.log("$entities", $entities);
-  $: console.log("$player", $player);
 
   onMount(async () => {
     const layers = await bootGame();
@@ -36,6 +31,7 @@
     createInventorySystem(layers.network);
     createControlSystem(layers.network);
     createPortableSystem(layers.network);
+    createCarryingCapacitySystem(layers.network);
 
     networkStore.set(layers.network);
 

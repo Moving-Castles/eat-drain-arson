@@ -12,6 +12,7 @@ import { LibArray } from "./LibArray.sol";
 
 import { PortableComponent, ID as PortableComponentID } from "../components/PortableComponent.sol";
 import { InventoryComponent, ID as InventoryComponentID } from "../components/InventoryComponent.sol";
+import { CarryingCapacityComponent, ID as CarryingCapacityComponentID } from "../components/CarryingCapacityComponent.sol";
 
 library LibInventory {
   /**
@@ -24,12 +25,16 @@ library LibInventory {
   function addToInventory(IUint256Component _components, uint256 _entity, uint256 _item) internal {
     PortableComponent portableComponent = PortableComponent(getAddressById(_components, PortableComponentID));
     InventoryComponent inventoryComponent = InventoryComponent(getAddressById(_components, InventoryComponentID));
+    CarryingCapacityComponent carryingCapacityComponent = CarryingCapacityComponent(
+      getAddressById(_components, CarryingCapacityComponentID)
+    );
 
-    require(portableComponent.has(_item), "item can not be added to inventory");
+    require(carryingCapacityComponent.has(_entity), "LibInventory: Entity has no carrying capacity");
+    require(portableComponent.has(_item), "LibInventory: Item can not be added to inventory");
 
     if (inventoryComponent.has(_entity)) {
       uint256 inventoryLength = inventoryComponent.getValue(_entity).length;
-      require(inventoryLength <= 10, "inventory is full");
+      require(inventoryLength <= carryingCapacityComponent.getValue(_entity), "LibInventory: Inventory is full");
 
       uint256[] memory oldArray = inventoryComponent.getValue(_entity);
       uint256[] memory newArray = new uint256[](inventoryLength + 1);
@@ -45,5 +50,20 @@ library LibInventory {
       tempArray[0] = _item;
       inventoryComponent.set(_entity, tempArray);
     }
+  }
+
+  /**
+   * Set inventory size for entity
+   *
+   * @param _components world components
+   * @param _entity holder of the inventory
+   * @param _size size of inventory
+   */
+  function setCarryingCapacity(IUint256Component _components, uint256 _entity, uint32 _size) internal {
+    CarryingCapacityComponent carryingCapacityComponent = CarryingCapacityComponent(
+      getAddressById(_components, CarryingCapacityComponentID)
+    );
+
+    carryingCapacityComponent.set(_entity, _size);
   }
 }

@@ -8,6 +8,8 @@ import { LibInventory } from "../libraries/LibInventory.sol";
 import { LibCore } from "../libraries/LibCore.sol";
 import { LibMove } from "../libraries/LibMove.sol";
 
+import { DEFAULT_CARRYING_CAPACITY } from "../utils/config.sol";
+
 uint256 constant ID = uint256(keccak256("system.Spawn"));
 
 contract SpawnSystem is System {
@@ -20,6 +22,8 @@ contract SpawnSystem is System {
     uint256 baseEntity = world.getUniqueEntityId();
     LibCore.spawn(components, coreEntity);
     LibCore.setControlledEntity(components, coreEntity, baseEntity);
+
+    LibInventory.setCarryingCapacity(components, baseEntity, DEFAULT_CARRYING_CAPACITY);
     LibInventory.addToInventory(components, baseEntity, coreEntity);
     LibMove.setRandomPosition(components, baseEntity);
   }

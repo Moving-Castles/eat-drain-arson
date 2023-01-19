@@ -4,7 +4,7 @@ pragma solidity >=0.8.0;
 import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
 import { addressToEntity } from "solecs/utils.sol";
-import { WORLD_HEIGHT, WORLD_WIDTH, INITIAL_RESOURCE, INITIAL_ENERGY } from "../../utils/config.sol";
+import { WORLD_HEIGHT, WORLD_WIDTH, INITIAL_ENERGY, DEFAULT_CARRYING_CAPACITY } from "../../utils/config.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { Coord } from "../../components/PositionComponent.sol";
 
@@ -37,6 +37,9 @@ contract SpawnSystemTest is MudTest {
 
     // --- Position
     Coord memory newPosition = positionComponent.getValue(baseEntity);
+
+    // --- Carrying capacity
+    assertEq(carryingCapacityComponent.getValue(baseEntity), DEFAULT_CARRYING_CAPACITY);
 
     // --- Inventory
     assertTrue(inventoryComponent.has(baseEntity));
