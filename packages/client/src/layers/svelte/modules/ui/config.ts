@@ -2,7 +2,7 @@
 import UITextLog from "../../lib/components/UITextLog.svelte";
 import UIAvatar from "../../lib/components/UIAvatar/UIAvatar.svelte";
 import UIView from "../../lib/components/UIView.svelte";
-import UIDebugLog from "../../lib/components/UIDebugLog.svelte";
+import UIDebugLog from "../../lib/components/UIDebug/UIDebugLog.svelte";
 import UILeaderBoard from "../../lib/components/UILeaderBoards/UILeaderBoard.svelte";
 import UISurvivalLeaderBoard from "../../lib/components/UILeaderBoards/UISurvivalLeaderBoard.svelte";
 import UIFires from "../../lib/components/UIFires/UIFires.svelte";
@@ -63,7 +63,6 @@ export const initialState = () => ({
       noscroll: true,
       span: true,
     },
-    hidden: false,
   }),
   // OPS PLANNER
   compulsions: initialise({
@@ -80,7 +79,6 @@ export const initialState = () => ({
       col: [1, 4],
       row: [1, 10],
     },
-    hidden: false,
   }),
   // TEXT LOG
   memory: initialise({
@@ -121,6 +119,7 @@ export const initialState = () => ({
     component: UIDebugLog,
     active: true,
     options: {
+      persistent: true,
       fluid: true,
       layer: 2,
       delay: 0,
@@ -128,7 +127,7 @@ export const initialState = () => ({
     hidden: false,
     grid: {
       col: [3, 4],
-      row: [5, 10],
+      row: [1, 10],
     },
   }),
   // LEADERBOARD

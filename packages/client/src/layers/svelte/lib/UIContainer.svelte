@@ -75,7 +75,7 @@
     display: grid;
     grid-column: 1 / 2;
     grid-row: 2 / span 1;
-    grid-template-columns: 240px 1fr 240px;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: repeat(9, minmax(0, 1fr));
     grid-template-areas:
       "tl tm tr"

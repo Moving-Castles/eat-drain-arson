@@ -1,5 +1,5 @@
 export function shortenAddress(s: string) {
-  return s ? s.slice(0, 4) + "..." + s.slice(-4) : "";
+  return s ? s.slice(0, 8) + "..." + s.slice(-8) : "";
 }
 
 export function getRandomInt(min: number, max: number) {
