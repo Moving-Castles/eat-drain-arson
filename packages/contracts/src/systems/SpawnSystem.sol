@@ -21,7 +21,6 @@ contract SpawnSystem is System {
 
     uint256 baseEntity = world.getUniqueEntityId();
     LibCore.spawn(components, coreEntity);
-    LibCore.setControlledEntity(components, coreEntity, baseEntity);
 
     LibInventory.setCarryingCapacity(components, baseEntity, DEFAULT_CARRYING_CAPACITY);
     LibInventory.addToInventory(components, baseEntity, coreEntity);

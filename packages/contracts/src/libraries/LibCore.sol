@@ -65,18 +65,6 @@ library LibCore {
   }
 
   /**
-   * Set the base entity controlled by a core
-   *
-   * @param _components World components
-   * @param _coreEntity Core entity
-   * @param _baseEntity Base entity
-   */
-  function setControlledEntity(IUint256Component _components, uint256 _coreEntity, uint256 _baseEntity) internal {
-    CarriedByComponent carriedByComponent = CarriedByComponent(getAddressById(_components, CarriedByComponentID));
-    carriedByComponent.set(_coreEntity, _baseEntity);
-  }
-
-  /**
    * Decrease energy
    *
    * @param _components World components
