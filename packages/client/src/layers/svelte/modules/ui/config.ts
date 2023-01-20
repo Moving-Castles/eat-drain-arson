@@ -168,7 +168,7 @@ export const initialState = () => ({
     id: "executor",
     title: "Compulsions",
     component: UIExecutor,
-    active: false,
+    active: true,
     options: {
       muted: false,
       persistent: false,

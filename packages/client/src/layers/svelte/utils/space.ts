@@ -53,6 +53,31 @@ export function directionToString(direction: Directions) {
   return "";
 }
 
+export function directionStringToTransformation(direction: string) {
+  switch (direction) {
+    // console.log(direction)
+    case directionToString(Directions.Random):
+      // TODO Get proper random dir
+      return Directions.Random;
+    case directionToString(Directions.North):
+      return { x: 0, y: -1 };
+    case directionToString(Directions.NorthEast):
+      return { x: 1, y: -1 };
+    case directionToString(Directions.East):
+      return { x: 1, y: 0 };
+    case directionToString(Directions.SouthEast):
+      return { x: 1, y: 1 };
+    case directionToString(Directions.South):
+      return { x: 0, y: 1 };
+    case directionToString(Directions.SouthWest):
+      return { x: -1, y: 1 };
+    case directionToString(Directions.West):
+      return { x: -1, y: 0 };
+    case directionToString(Directions.NorthWest):
+      return { x: -1, y: -1 };
+  }
+}
+
 export function getDirection(from: Coord, to: Coord) {
   if (!from || !to) return "";
   return directionToString(transformationToDirection(positionsToTransformation(from, to)));

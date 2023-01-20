@@ -8,7 +8,8 @@
   import { T, TransformableObject, useTexture } from "@threlte/core";
   import { player } from "../../../modules/player";
   import { blockNumber } from "../../../modules/network";
-  import { onMount, tick } from "svelte";
+  import { onMount } from "svelte";
+  import { playerPosition } from "../../../modules/sequencer/interpolation";
 
   /**
    * 3D Objects
@@ -101,25 +102,27 @@
 <svelte:window on:keypress={handleZoom} on:mousemove={onMouseMove} bind:innerWidth={w} bind:innerHeight={h} />
 
 <T.Group viewportAware rotation.y={rotation}>
-  <T.OrthographicCamera
-    {zoom}
-    near={1}
-    far={2000}
-    let:ref={cam}
-    position.x={$player?.position.x}
-    position.z={$player?.position.y}
-    position.y={10}
-    makeDefault
-  >
-    <TransformableObject
-      object={cam}
-      lookAt={{
-        y: 0,
-        x: $player?.position.x,
-        z: $player?.position.y,
-      }}
-    />
-  </T.OrthographicCamera>
+  {#if $player && $playerPosition?.x && $playerPosition?.y}
+    <T.OrthographicCamera
+      {zoom}
+      near={1}
+      far={2000}
+      let:ref={cam}
+      position.x={$playerPosition.x}
+      position.z={$playerPosition.y}
+      position.y={10}
+      makeDefault
+    >
+      <TransformableObject
+        object={cam}
+        lookAt={{
+          y: 0,
+          x: $player?.position.x,
+          z: $player?.position.y,
+        }}
+      />
+    </T.OrthographicCamera>
+  {/if}
 </T.Group>
 
 <!-- <Compass /> -->
@@ -131,10 +134,6 @@
   <!-- Holds textures -->
   <T.Group>
     {#each grid as tile (`${tile.coordinates.x}-${tile.coordinates.y}`)}
-      <!-- <T.Mesh position.x={tile.coordinates.x} position.z={tile.coordinates.y}>
-        <T.BoxGeometry args={[0.5, 0.5, 0.5]} />
-        <T.MeshBasicMaterial color="#00ff00" />
-      </T.Mesh> -->
       <Base {tile} />
     {/each}
   </T.Group>
@@ -142,10 +141,5 @@
   <!-- PLAYER LAYER -->
   <!-- Holds players -->
 {/if}
-
-<T.Mesh>
-  <T.BoxGeometry args={[1, 1, 1]} />
-  <T.MeshBasicMaterial color="#ff0000" />
-</T.Mesh>
 
 <T.AmbientLight intensity={1} />

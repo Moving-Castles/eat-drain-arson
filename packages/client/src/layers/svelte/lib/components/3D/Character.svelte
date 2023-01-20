@@ -3,9 +3,8 @@
   import { T } from "@threlte/core";
   import { GLTF, useGltfAnimations } from "@threlte/extras";
   import { MeshBasicMaterial } from "three";
-  // import { PointLight, Mesh, MeshBasicMaterial, SphereGeometry } from "three";
 
-  let currentActionKey = "walk";
+  let currentActionKey = "idle";
 
   console.log("play on playa");
 
@@ -13,7 +12,7 @@
 
   const { gltf, actions } = useGltfAnimations(({ actions }) => {
     // Uncomment to see all the different possible action keys
-    // console.log(actions);
+    console.log(actions);
     // set the initial animation
     actions[currentActionKey]?.play();
     if ($gltf?.scene) {
@@ -86,4 +85,5 @@
 
 <svelte:window on:keypress={handleKeyPress} />
 
+<!-- <GLTF bind:gltf={$gltf} url="/models/I_15_Animated.glb" useDraco /> -->
 <GLTF bind:gltf={$gltf} url="/models/NewBodies_110123_03.glb" useDraco />
