@@ -18,7 +18,7 @@
 </div>
 
 <!-- The UI layer -->
-<div class="ui-container ">
+<div class="ui-container">
   {#if !$player}
     <span />
   {:else}

@@ -7,42 +7,21 @@
 
   let currentActionKey = "walk";
 
+  console.log("play on playa");
+
   let available = true;
 
   const { gltf, actions } = useGltfAnimations(({ actions }) => {
     // Uncomment to see all the different possible action keys
-    console.log(actions);
+    // console.log(actions);
     // set the initial animation
     actions[currentActionKey]?.play();
     if ($gltf?.scene) {
-      $gltf.scene.traverse((node) => {
-        console.log(node);
-      });
+      // $gltf.scene.traverse((node) => {
+      //   console.log(node);
+      // });
     }
   });
-
-  // const light = new PointLight(0xffff99, 1.2, 10);
-  // const sphereMesh = new Mesh(
-  //   new SphereGeometry(0.5),
-  //   new MeshBasicMaterial({ color: 0xffff99, transparent: true, opacity: 0 })
-  // );
-  // sphereMesh.attach(light);
-  // sphereMesh.position.y += 1.8;
-  // sphereMesh.position.z += 0.6;
-  // sphereMesh.position.x += 0.5;
-
-  // $: {
-  //   if ($gltf?.scene) {
-  //     $gltf.scene.traverse((node) => {
-  //       // node.receiveShadow = true;
-  //       node.castShadow = true;
-
-  //       if (node.name === "LeftHand") {
-  //         node.attach(sphereMesh);
-  //       }
-  //     });
-  //   }
-  // }
 
   function transitionTo(nextActionKey: string, duration = 1) {
     available = false;

@@ -23,25 +23,25 @@
     if (e.key === "-" && unit < FURTHEST_ZOOM) {
       unit += 2;
       grid = [];
-      grid = initGrid(unit, true);
+      grid = initGrid(unit);
     }
     if (e.key === "=" && unit > CLOSEST_ZOOM) {
       unit -= 2;
       grid = [];
-      grid = initGrid(unit, true);
+      grid = initGrid(unit);
     }
   }
 
   blockNumber.subscribe(async () => {
     if ($player) {
-      grid = await updateGrid($player.position, grid);
+      grid = await updateGrid(grid);
     }
   });
 
   onMount(async () => {
-    grid = initGrid(unit, true);
+    grid = initGrid(unit);
     if ($player) {
-      grid = await updateGrid($player.position, grid, true);
+      grid = await updateGrid(grid);
     }
   });
 

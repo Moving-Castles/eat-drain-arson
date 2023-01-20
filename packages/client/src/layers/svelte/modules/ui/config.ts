@@ -186,7 +186,7 @@ export const initialState = () => ({
     id: "minimap",
     title: "Map",
     component: UIGridMap,
-    active: true,
+    active: false,
     options: {
       muted: false,
       persistent: false,

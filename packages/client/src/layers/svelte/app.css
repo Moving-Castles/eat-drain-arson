@@ -105,6 +105,14 @@ span.ripple {
   }
 }
 
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.pointer-events-auto {
+  pointer-events: auto;
+}
+
 .link {
   cursor: pointer;
   opacity: var(--muted-opacity);
@@ -124,7 +132,7 @@ span.ripple {
   height: 100%;
   background-size: cover;
   background-position: center;
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
 .overlay:before {

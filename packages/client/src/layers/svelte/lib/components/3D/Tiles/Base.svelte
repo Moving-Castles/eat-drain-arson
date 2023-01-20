@@ -9,8 +9,6 @@
   import { DoubleSide } from "three";
   import { Text } from "@threlte/extras";
   import { DEV } from "../../../../utils/ui";
-  
-  import Buildings from "./Buildings.svelte"
 
   export let tile: GridTile;
 
@@ -37,16 +35,14 @@
 </script>
 
 <T.Group
-  rotation.y={0}
   rotation.x={DEG2RAD * -90}
   rotation.z={DEG2RAD * -90}
-  position.x={tile.transformation.x}
-  position.z={tile.transformation.y}
+  rotation.y={0}
+  position.x={tile.coordinates.x}
+  position.z={tile.coordinates.y}
 >
   <T.Mesh receiveShadow>
     <T.PlaneGeometry args={[1, 1]} />
     <T.MeshBasicMaterial wireframe={DEV} side={DoubleSide} {map} />
   </T.Mesh>
-
-  <Buildings />
 </T.Group>

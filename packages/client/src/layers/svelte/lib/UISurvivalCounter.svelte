@@ -6,7 +6,6 @@
 
   let clockTime: number;
 
-  $: console.log($player.energy);
   $: clockTime = Math.floor(($blockNumber - $player.birth) / BLOCKS_IN_DAY);
 </script>
 

@@ -3,6 +3,7 @@
   import { initGrid, updateGrid } from "../UIGridMap/index";
   import { textureSources, textures } from "./index";
   import { size } from "lodash";
+  import type { Object3D } from "three";
   import { DEG2RAD } from "three/src/math/MathUtils";
   import { T, TransformableObject, useTexture } from "@threlte/core";
   import { player } from "../../../modules/player";
@@ -17,24 +18,21 @@
 
   let w: number = 0;
   let h: number = 0;
-  let UNIT: number = 3;
+  let UNIT: number = 5;
 
-  const INITIAL_ROTATION = DEG2RAD * 45;
-  const ZOOM_LEVELS = [1500, 1200, 900, 700, 320, 240, 180, 110, 40];
+  const INITIAL_ROTATION = DEG2RAD * 0;
+  const ZOOM_LEVELS = [1500, 1200, 900, 700, 320, 240, 180, 110, 20];
 
   let grid: GridTile[] = [];
   let rotation = INITIAL_ROTATION;
   let unit = 49;
-  let zoomIndex = 4;
+  let zoomIndex = 6;
   let zoom = ZOOM_LEVELS[zoomIndex];
   let ready = false;
   let loaded = false;
   let texturesLoaded = 0;
   let offsetY = 1;
-
-  let x = 0;
-  let y = 10 + offsetY / 4;
-  let z = 20;
+  let playerComponent: Object3D;
 
   /**
    * Preload textures
@@ -46,14 +44,13 @@
   });
 
   $: loaded = texturesLoaded === size(textureSources);
-  $: y = 10 + offsetY / 4;
 
   /**
    * Update grid based on the chain
    */
   blockNumber.subscribe(async () => {
-    if ($player) {
-      grid = await updateGrid($player.position, grid);
+    if ($player && $player.position) {
+      grid = await updateGrid(grid);
       ready = true;
     }
   });
@@ -63,34 +60,35 @@
       zoomIndex = Number(e.key);
     }
     if (e.key === "-") {
-      // zoomIndex++;
-      UNIT--;
+      zoomIndex++;
+      // UNIT--;
     }
     if (e.key === "=") {
-      // zoomIndex--;
-      UNIT++;
+      zoomIndex--;
+      // UNIT++;
     }
   }
 
   $: zoom = ZOOM_LEVELS[zoomIndex];
+  $: console.log(ZOOM_LEVELS[zoomIndex]);
 
   /**
    * Init
    */
   onMount(async () => {
-    grid = initGrid(unit);
-    if ($player) {
-      grid = await updateGrid($player.position, grid);
+    grid = await initGrid(unit);
+
+    if ($player && $player.position) {
+      grid = await updateGrid(grid);
 
       ready = true;
     }
   });
 
   const onMouseMove = (e) => {
-    const offsetX = e.clientX / w + 0.5;
-    offsetY = e.clientY / h + 0.5;
-
-    rotation = INITIAL_ROTATION * offsetX;
+    // const offsetX = e.clientX / w + 0.5;
+    // offsetY = e.clientY / h + 0.5;
+    // rotation = INITIAL_ROTATION * offsetX;
   };
 
   const withinScope = (tile: GridTile) =>
@@ -106,14 +104,21 @@
   <T.OrthographicCamera
     {zoom}
     near={1}
-    far={200}
+    far={2000}
     let:ref={cam}
-    position.x={0}
-    position.y={y}
-    position.z={z}
+    position.x={$player?.position.x}
+    position.z={$player?.position.y}
+    position.y={10}
     makeDefault
   >
-    <TransformableObject object={cam} lookAt={{ y: 0 }} />
+    <TransformableObject
+      object={cam}
+      lookAt={{
+        y: 0,
+        x: $player?.position.x,
+        z: $player?.position.y,
+      }}
+    />
   </T.OrthographicCamera>
 </T.Group>
 
@@ -122,24 +127,25 @@
 {#if loaded && ready}
   <Player />
 
-  {#each Array.from(Array(100).keys()) as i (i)}
-    <T.Group position.x={Math.floor(Math.random() * 20) - 10} position.z={Math.floor(Math.random() * 20) - 10}>
-      <Player />
-    </T.Group>
-  {/each}
-
   <!-- BASE LAYER -->
   <!-- Holds textures -->
   <T.Group>
-    {#each grid as tile (`${tile.transformation.x}-${tile.transformation.y}`)}
-      {#if withinScope(tile)}
-        <Base {tile} />
-      {/if}
+    {#each grid as tile (`${tile.coordinates.x}-${tile.coordinates.y}`)}
+      <!-- <T.Mesh position.x={tile.coordinates.x} position.z={tile.coordinates.y}>
+        <T.BoxGeometry args={[0.5, 0.5, 0.5]} />
+        <T.MeshBasicMaterial color="#00ff00" />
+      </T.Mesh> -->
+      <Base {tile} />
     {/each}
   </T.Group>
 
   <!-- PLAYER LAYER -->
   <!-- Holds players -->
 {/if}
+
+<T.Mesh>
+  <T.BoxGeometry args={[1, 1, 1]} />
+  <T.MeshBasicMaterial color="#ff0000" />
+</T.Mesh>
 
 <T.AmbientLight intensity={1} />

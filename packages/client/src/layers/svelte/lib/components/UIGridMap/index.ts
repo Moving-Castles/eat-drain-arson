@@ -15,6 +15,7 @@ let perlin: Perlin;
 export interface GridTile {
   direction: string;
   transformation: Coord;
+  position: Coord;
   coordinates: Coord;
   perlinFactor: number;
   terrain: TerrainCategory;
@@ -75,17 +76,47 @@ export function perlinToTerrainCategory(p: number) {
   return TerrainCategory.Ruins;
 }
 
+// function initGrid() {
+//   for (let y = -2; y <= 2; y++) {
+//     for (let x = -2; x <= 2; x++) {
+//       let newGridItem: GridItem = {
+//         direction: ".",
+//         transformation: { x: x, y: y },
+//         coordinates: { x: 0, y: 0 },
+//         perlinFactor: 0,
+//         terrain: TerrainType.Dust,
+//         resource: 100,
+//       };
+//       grid = [...grid, newGridItem];
+//     }
+//   }
+// }
+
+// function updateGrid(centerPosition: Coord) {
+//   for (let i = 0; i < grid.length; i++) {
+//     grid[i].coordinates.x = (centerPosition?.x || 0) + grid[i].transformation.x;
+//     grid[i].coordinates.y = (centerPosition?.y || 0) + grid[i].transformation.y;
+//     grid[i].perlinFactor = perlin(grid[i].coordinates.x, grid[i].coordinates.y, 0, 20);
+//     grid[i].terrain = perlinToTerrainType(grid[i].perlinFactor);
+//     grid[i].fire = checkForType(grid[i].coordinates, EntityType.Fire);
+//     grid[i].other = checkForType(grid[i].coordinates, EntityType.Player);
+//     grid[i].corpse = checkForType(grid[i].coordinates, EntityType.Corpse);
+//     grid[i].mined = checkForType(grid[i].coordinates, EntityType.Terrain);
+//     grid[i].resource = grid[i].mined == undefined ? 100 : grid[i].mined.resource;
+//   }
+// }
+
 export function initGrid(unit: number) {
   let grid = [] as GridTile[];
-  for (let y = 0; y <= unit - 1; y++) {
-    for (let x = 0; x <= unit - 1; x++) {
+  for (let y = 0; y <= unit; y++) {
+    for (let x = 0; x <= unit; x++) {
       const yVal = y - Math.floor(unit / 2);
       const xVal = x - Math.floor(unit / 2);
 
       const newGridTile: GridTile = {
         direction: ".",
         transformation: { x: xVal, y: yVal },
-        coordinates: { x: 0, y: 0 },
+        coordinates: { x, y },
         perlinFactor: 0,
         terrain: TerrainCategory.Dust,
         resource: 100,
@@ -97,12 +128,10 @@ export function initGrid(unit: number) {
   return grid;
 }
 
-export async function updateGrid(centerPosition: Coord, grid: GridTile[], mock = false) {
+export async function updateGrid(grid: GridTile[], mock = false) {
   perlin = await createPerlin();
 
   for (let i = 0; i < grid.length; i++) {
-    grid[i].coordinates.x = (centerPosition?.x || 0) + grid[i].transformation.x;
-    grid[i].coordinates.y = (centerPosition?.y || 0) + grid[i].transformation.y;
     grid[i].perlinFactor = perlin(grid[i].coordinates.x, grid[i].coordinates.y, 0, 20);
     grid[i].terrain = perlinToTerrainCategory(grid[i].perlinFactor);
     grid[i].fire = checkForType(grid[i].coordinates, EntityType.Fire);
