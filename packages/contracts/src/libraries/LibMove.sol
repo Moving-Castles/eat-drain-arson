@@ -45,28 +45,6 @@ library LibMove {
     PositionComponent positionComponent = PositionComponent(getAddressById(_components, PositionComponentID));
     Coord memory newPosition = positionComponent.getValue(_entity);
 
-    // if (_direction == Direction.North) {
-    //   if (newPosition.y > 0) newPosition.y -= 1;
-    // } else if (_direction == Direction.NorthEast) {
-    //   if (newPosition.y > 0) newPosition.y -= 1;
-    //   if (newPosition.x < WORLD_WIDTH) newPosition.x += 1;
-    // } else if (_direction == Direction.East) {
-    //   if (newPosition.x < WORLD_WIDTH) newPosition.x += 1;
-    // } else if (_direction == Direction.SouthEast) {
-    //   if (newPosition.y < WORLD_HEIGHT) newPosition.y += 1;
-    //   if (newPosition.x < WORLD_WIDTH) newPosition.x += 1;
-    // } else if (_direction == Direction.South) {
-    //   if (newPosition.y < WORLD_HEIGHT) newPosition.y += 1;
-    // } else if (_direction == Direction.SouthWest) {
-    //   if (newPosition.y < WORLD_HEIGHT) newPosition.y += 1;
-    //   if (newPosition.x > 0) newPosition.x -= 1;
-    // } else if (_direction == Direction.West) {
-    //   if (newPosition.x > 0) newPosition.x -= 1;
-    // } else if (_direction == Direction.NorthWest) {
-    //   if (newPosition.y > 0) newPosition.y -= 1;
-    //   if (newPosition.x > 0) newPosition.x -= 1;
-    // }
-
     if (_direction == Direction.North) {
       if (newPosition.y > 0) newPosition.y -= 1;
     } else if (_direction == Direction.NorthEast) {

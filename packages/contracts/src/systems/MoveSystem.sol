@@ -22,11 +22,12 @@ contract MoveSystem is System {
 
     require(LibCore.isSpawned(components, coreEntity), "MoveSystem: entity does not exist");
     require(LibCooldown.isReady(components, coreEntity), "MoveSystem: entity is in cooldown");
-    require(LibCore.decreaseEnergy(components, coreEntity, STEP_COST), "MoveSystem: not enough energy");
+    require(LibCore.checkEnergy(components, coreEntity, STEP_COST), "MoveSystem: not enough energy");
 
     uint256 baseEntity = LibCore.getControlledEntity(components, coreEntity);
     LibMove.step(components, baseEntity, Direction(_direction));
 
+    LibCore.decreaseEnergy(components, coreEntity, STEP_COST);
     LibCooldown.setReadyBlock(components, coreEntity, STEP_COST);
   }
 

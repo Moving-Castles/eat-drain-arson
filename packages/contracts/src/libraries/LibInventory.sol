@@ -8,8 +8,6 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
-import { LibArray } from "./LibArray.sol";
-
 import { PortableComponent, ID as PortableComponentID } from "../components/PortableComponent.sol";
 import { CarriedByComponent, ID as CarriedByComponentID } from "../components/CarriedByComponent.sol";
 import { CarryingCapacityComponent, ID as CarryingCapacityComponentID } from "../components/CarryingCapacityComponent.sol";

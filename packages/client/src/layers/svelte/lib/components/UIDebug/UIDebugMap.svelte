@@ -4,10 +4,13 @@
   import { entities } from "../../../modules/entities";
   import { playerAddress, player } from "../../../modules/player";
   import { addressToColor } from "../../../utils/ui";
-  import { chebyshev, positionsToTransformation, transformationToDirection } from "../../../utils/space";
-  import { network } from "../../../modules/network";
+
+  import TileInteract from "./UITileInteract.svelte";
 
   $: console.log($entities);
+
+  let selectedTileCoords: Coord;
+  let tileInteractActive = false;
 
   interface GridTile {
     direction: string;
@@ -33,14 +36,6 @@
     return grid;
   }
 
-  function move(targetPosition: Coord) {
-    if (chebyshev($entities[$player.carriedBy].position, targetPosition) === 1) {
-      $network.api.move(
-        transformationToDirection(positionsToTransformation($entities[$player.carriedBy].position, targetPosition))
-      );
-    }
-  }
-
   let grid: GridTile[] = [];
 
   onMount(async () => {
@@ -51,13 +46,23 @@
 
 <div class="ui-debug-map">
   <div class="map-container">
+    {#if tileInteractActive}
+      <TileInteract
+        {selectedTileCoords}
+        on:close={() => {
+          tileInteractActive = false;
+        }}
+      />
+    {/if}
+
     <!-- GRID -->
     {#each grid as tile}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
         class="tile"
         on:click={() => {
-          move({ x: tile.coordinates.x, y: tile.coordinates.y });
+          selectedTileCoords = tile.coordinates;
+          tileInteractActive = true;
         }}
       >
         <div>{tile.coordinates.x}:{tile.coordinates.y}</div>

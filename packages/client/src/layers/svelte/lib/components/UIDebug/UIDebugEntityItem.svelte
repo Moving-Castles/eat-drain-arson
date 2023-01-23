@@ -12,6 +12,11 @@
   export let entityId: string;
   export let entity: Entity;
 
+  // *** Core => has core components
+  // *** BaseEntity => has carrying capacity, has position
+  // *** Resource => has matter, ???
+  // *** SubstanceBlock => has substance component
+
   const type: EntityType = entity.core ? EntityType.Core : EntityType.BaseEntity;
 </script>
 
@@ -42,6 +47,8 @@
       <div class="coord">y:{entity.position?.y}</div>
     </div>
     <div class="carrying-capacity">Carrying capacity: {entity.carryingCapacity}</div>
+    <div class="matter">Matter: {entity.matter}</div>
+    <!-- <div class="matter">Substance: {entity.substance}</div> -->
     <div class="inventory">
       <hr />
       <div>Inventory</div>

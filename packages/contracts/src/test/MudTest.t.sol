@@ -20,6 +20,7 @@ import { PortableComponent, ID as PortableComponentID } from "../components/Port
 import { CarryingCapacityComponent, ID as CarryingCapacityComponentID } from "../components/CarryingCapacityComponent.sol";
 import { CoreComponent, ID as CoreComponentID } from "../components/CoreComponent.sol";
 import { CarriedByComponent, ID as CarriedByComponentID } from "../components/CarriedByComponent.sol";
+import { MatterComponent, ID as MatterComponentID } from "../components/MatterComponent.sol";
 
 contract MudTest is DSTest {
   Cheats internal immutable vm = Cheats(HEVM_ADDRESS);
@@ -43,6 +44,7 @@ contract MudTest is DSTest {
   CarryingCapacityComponent carryingCapacityComponent;
   CoreComponent coreComponent;
   CarriedByComponent carriedByComponent;
+  MatterComponent matterComponent;
 
   function component(uint256 id) public view returns (address) {
     return getAddressById(components, id);
@@ -70,6 +72,7 @@ contract MudTest is DSTest {
     carryingCapacityComponent = CarryingCapacityComponent(component(CarryingCapacityComponentID));
     coreComponent = CoreComponent(getAddressById(components, CoreComponentID));
     carriedByComponent = CarriedByComponent(getAddressById(components, CarriedByComponentID));
+    matterComponent = MatterComponent(getAddressById(components, MatterComponentID));
   }
 
   modifier prank(address prankster) {

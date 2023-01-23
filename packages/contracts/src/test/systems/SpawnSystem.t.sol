@@ -43,16 +43,6 @@ contract SpawnSystemTest is MudTest {
 
     // --- Carrying capacity
     assertEq(carryingCapacityComponent.getValue(baseEntity), DEFAULT_CARRYING_CAPACITY);
-
-    // --- Inventory
-    // assertTrue(inventoryComponent.has(baseEntity));
-    // uint256[] memory inventory = inventoryComponent.getValue(baseEntity);
-    // assertEq(inventory.length, 1);
-    // assertEq(inventory[0], addressToEntity(alice));
-    // for (uint256 i = 0; i < inventory.length; i++) {
-    //   console.log("___ INVENTORY:");
-    //   console.log(inventory[i]);
-    // }
   }
 
   function testRevertRespawn() public {

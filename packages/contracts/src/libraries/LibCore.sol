@@ -65,6 +65,25 @@ library LibCore {
   }
 
   /**
+   * Check energy
+   *
+   * @param _components World components
+   * @param _coreEntity Core entity
+   * @param _amount Amount to check against
+   * @return bool False if the core does not have enough energy
+   */
+  function checkEnergy(
+    IUint256Component _components,
+    uint256 _coreEntity,
+    uint32 _amount
+  ) internal view returns (bool) {
+    EnergyComponent energyComponent = EnergyComponent(getAddressById(_components, EnergyComponentID));
+    uint32 currentEnergy = energyComponent.getValue(_coreEntity);
+    if (currentEnergy < _amount) return false;
+    return true;
+  }
+
+  /**
    * Decrease energy
    *
    * @param _components World components

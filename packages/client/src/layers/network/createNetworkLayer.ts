@@ -20,6 +20,7 @@ import {
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { getNetworkConfig } from "./config";
 import { BigNumber, utils } from "ethers";
+import type { Coord } from "@latticexyz/utils";
 
 /**
  * The Network layer is the lowest layer in the client architecture.
@@ -82,10 +83,8 @@ export async function createNetworkLayer(config: GameConfig) {
     return systems["system.Move"].executeTyped(direction);
   }
 
-  function gather(energyInput: number) {
-    return false;
-
-    // return systems["system.Gather"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
+  function extract(extractionCoordinates: Coord) {
+    return systems["system.Extract"].executeTyped(extractionCoordinates);
   }
 
   function consume(resourceInput: number) {
@@ -113,7 +112,7 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: { spawn, move, gather, consume, burn, play },
+    api: { spawn, move, extract, consume, burn, play },
     dev: setupDevSystems(world, encoders, systems),
   };
 

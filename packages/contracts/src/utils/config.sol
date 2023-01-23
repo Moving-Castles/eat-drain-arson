@@ -7,8 +7,8 @@ int32 constant WORLD_WIDTH = 10;
 uint32 constant INITIAL_ENERGY = 100;
 uint32 constant DEFAULT_CARRYING_CAPACITY = 10;
 uint32 constant STEP_COST = 10;
-// --------
-uint32 constant SPAWN_RESOURCE_PER_POSITION = 100;
+uint32 constant EXTRACT_COST = 10;
+uint32 constant SPAWN_MATTER_PER_TILE = 100;
 // --- ENERGY
 uint32 constant RESOURCE_TO_ENERGY_CONVERSION_RATE = 5;
 // --- FIRE
