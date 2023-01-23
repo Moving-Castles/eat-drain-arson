@@ -33,30 +33,30 @@ contract ExtractSystem is System {
     Coord memory baseEntityPosition = LibBaseEntity.getPosition(components, baseEntity);
     require(LibMap.isAdjacent(baseEntityPosition, _extractionCoordinates), "ExtractSystem: tile not adjacent");
 
-    uint256 resourceEntity = LibResource.getAtCoordinate(components, _extractionCoordinates);
-
     /*
-     * If there is no resource entity:
-     * – create resource with SPAWN_MATTER_PER_TILE - EXTRACT_COST matter
+     * If there is a Resource entity:
+     * – check that there is at least EXTRACT_COST matter
+     * – decrease the matter balance of the resource block by EXTRACT_COST
      * – create substanceblock with  EXTRACT_COST matter
      *
-     * If there is one:
-     * – check that there is at least EXTRACT_COST matter
-     * – decrease the matter blance of the resource block by EXTRACT_COST
+     * If there is not (meaning the coordinates have not been extracted):
+     * – create resource with SPAWN_MATTER_PER_TILE - EXTRACT_COST matter
      * – create substanceblock with  EXTRACT_COST matter
      */
 
-    if (resourceEntity == 0) {
+    uint256 resourceEntity = LibResource.getAtCoordinate(components, _extractionCoordinates);
+
+    if (resourceEntity != 0) {
+      require(LibResource.checkMatter(components, resourceEntity, EXTRACT_COST), "ExtractSystem: not enough matter");
+      LibResource.decreaseMatter(components, resourceEntity, EXTRACT_COST);
+      LibSubstanceBlock.spawn(components, world.getUniqueEntityId(), _extractionCoordinates, EXTRACT_COST);
+    } else {
       LibResource.spawn(
         components,
         world.getUniqueEntityId(),
         _extractionCoordinates,
         SPAWN_MATTER_PER_TILE - EXTRACT_COST
       );
-      LibSubstanceBlock.spawn(components, world.getUniqueEntityId(), _extractionCoordinates, EXTRACT_COST);
-    } else {
-      require(LibResource.checkMatter(components, resourceEntity, EXTRACT_COST), "ExtractSystem: not enough matter");
-      LibResource.decreaseMatter(components, resourceEntity, EXTRACT_COST);
       LibSubstanceBlock.spawn(components, world.getUniqueEntityId(), _extractionCoordinates, EXTRACT_COST);
     }
 
