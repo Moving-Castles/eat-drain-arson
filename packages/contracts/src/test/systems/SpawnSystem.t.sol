@@ -62,7 +62,7 @@ contract SpawnSystemTest is MudTest {
     vm.startPrank(alice);
     spawnSystem.executeTyped();
     // Try to respawn
-    vm.expectRevert(bytes("SpawnSystem: entity with this ID already exists"));
+    vm.expectRevert(bytes("SpawnSystem: ID already exists"));
     spawnSystem.executeTyped();
     vm.stopPrank();
   }

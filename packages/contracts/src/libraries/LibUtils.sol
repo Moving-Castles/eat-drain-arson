@@ -10,4 +10,6 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
 import { INITIAL_ENERGY } from "../utils/config.sol";
 
-library LibUtils {}
+library LibUtils {
+  // @todo: random gen
+}

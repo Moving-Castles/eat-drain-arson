@@ -2,13 +2,14 @@
 import UITextLog from "../../lib/components/UITextLog.svelte";
 import UIAvatar from "../../lib/components/UIAvatar/UIAvatar.svelte";
 import UIView from "../../lib/components/UIView.svelte";
-import UIDebugLog from "../../lib/components/UIDebug/UIDebugLog.svelte";
 import UILeaderBoard from "../../lib/components/UILeaderBoards/UILeaderBoard.svelte";
 import UISurvivalLeaderBoard from "../../lib/components/UILeaderBoards/UISurvivalLeaderBoard.svelte";
 import UIFires from "../../lib/components/UIFires/UIFires.svelte";
 import UIPlanner from "../../lib/components/UIOperationsEditor/UIPlanner.svelte";
 import UIExecutor from "../../lib/components/UIOperationsEditor/UIExecutor.svelte";
 import UIGridMap from "../../lib/components/UIGridMap/UIGridMap.svelte";
+import UIDebugLog from "../../lib/components/UIDebug/UIDebugLog.svelte";
+import UIDebugMap from "../../lib/components/UIDebug/UIDebugMap.svelte";
 
 // --- TYPES -----------------------------------------------------------------
 
@@ -127,6 +128,23 @@ export const initialState = () => ({
     hidden: false,
     grid: {
       col: [3, 4],
+      row: [1, 10],
+    },
+  }),
+  "debug-map": initialise({
+    id: "debug-map",
+    title: "Debug Map",
+    component: UIDebugMap,
+    active: true,
+    options: {
+      persistent: true,
+      fluid: true,
+      layer: 2,
+      delay: 0,
+    },
+    hidden: false,
+    grid: {
+      col: [1, 3],
       row: [1, 10],
     },
   }),

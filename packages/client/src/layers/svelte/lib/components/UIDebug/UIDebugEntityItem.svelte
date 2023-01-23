@@ -26,7 +26,7 @@
   {#if type === EntityType.Core}
     <div class="control">Energy: {entity.energy}</div>
     <div class="control">
-      Control:
+      Carried by:
       <span style={"background:" + addressToColor(entity.carriedBy) + ";"}>
         {shortenAddress(entity.carriedBy)}
       </span>

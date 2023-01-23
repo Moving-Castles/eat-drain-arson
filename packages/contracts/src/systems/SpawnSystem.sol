@@ -17,11 +17,11 @@ contract SpawnSystem is System {
 
   function execute(bytes memory arguments) public returns (bytes memory) {
     uint256 coreEntity = addressToEntity(msg.sender);
-    require(!LibCore.isSpawned(components, coreEntity), "SpawnSystem: entity with this ID already exists");
-
     uint256 baseEntity = world.getUniqueEntityId();
-    LibCore.spawn(components, coreEntity);
 
+    require(!LibCore.isSpawned(components, coreEntity), "SpawnSystem: ID already exists");
+
+    LibCore.spawn(components, coreEntity);
     LibInventory.setCarryingCapacity(components, baseEntity, DEFAULT_CARRYING_CAPACITY);
     LibInventory.addToInventory(components, baseEntity, coreEntity);
     LibMove.setRandomPosition(components, baseEntity);

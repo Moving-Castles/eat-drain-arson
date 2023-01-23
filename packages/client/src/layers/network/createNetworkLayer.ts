@@ -78,7 +78,7 @@ export async function createNetworkLayer(config: GameConfig) {
     systems["system.Spawn"].executeTyped();
   }
 
-  function move(energyInput: number, direction: number) {
+  function move(direction: number) {
     return systems["system.Move"].executeTyped(direction);
   }
 

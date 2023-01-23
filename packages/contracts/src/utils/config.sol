@@ -2,8 +2,8 @@
 pragma solidity >=0.8.0;
 
 // --- SPAWN
-int32 constant WORLD_HEIGHT = 49;
-int32 constant WORLD_WIDTH = 49;
+int32 constant WORLD_HEIGHT = 10;
+int32 constant WORLD_WIDTH = 10;
 uint32 constant INITIAL_ENERGY = 100;
 uint32 constant DEFAULT_CARRYING_CAPACITY = 10;
 uint32 constant STEP_COST = 10;
