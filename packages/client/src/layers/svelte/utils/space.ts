@@ -7,7 +7,6 @@ export enum TerrainCategory {
 }
 
 export enum Directions {
-  Random,
   North,
   NorthEast,
   East,
@@ -37,11 +36,9 @@ export function transformationToDirection(t: Coord) {
   if (t.x == -1 && t.y == -1) return Directions.NorthWest;
   if (t.x == 0 && t.y == -1) return Directions.North;
   if (t.x == 1 && t.y == -1) return Directions.NorthEast;
-  return Directions.Random;
 }
 
 export function directionToString(direction: Directions) {
-  if (direction === Directions.Random) return "";
   if (direction === Directions.North) return "north";
   if (direction === Directions.NorthEast) return "north-east";
   if (direction === Directions.East) return "east";
@@ -54,32 +51,34 @@ export function directionToString(direction: Directions) {
 }
 
 export function directionStringToTransformation(direction: string) {
+  console.log(direction);
   switch (direction) {
-    // console.log(direction)
-    case directionToString(Directions.Random):
-      // TODO Get proper random dir
-      return Directions.Random;
-    case directionToString(Directions.North):
+    case "north":
       return { x: 0, y: -1 };
-    case directionToString(Directions.NorthEast):
+    case "north-east":
       return { x: 1, y: -1 };
-    case directionToString(Directions.East):
+    case "east":
       return { x: 1, y: 0 };
-    case directionToString(Directions.SouthEast):
+    case "south-east":
       return { x: 1, y: 1 };
-    case directionToString(Directions.South):
+    case "south":
       return { x: 0, y: 1 };
-    case directionToString(Directions.SouthWest):
+    case "south-west":
       return { x: -1, y: 1 };
-    case directionToString(Directions.West):
+    case "west":
       return { x: -1, y: 0 };
-    case directionToString(Directions.NorthWest):
+    case "north-west":
       return { x: -1, y: -1 };
+    default:
+      console.log(direction);
+      break;
   }
 }
 
 export function getDirection(from: Coord, to: Coord) {
   if (!from || !to) return "";
+  // console.log(from, to)
+  // debugger
   return directionToString(transformationToDirection(positionsToTransformation(from, to)));
 }
 

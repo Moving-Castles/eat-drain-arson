@@ -49,7 +49,7 @@ export const initialState = () => ({
     id: "avatar",
     title: "Avatar",
     component: UIAvatar,
-    active: false,
+    active: true,
     grid: {
       col: [3, 4],
       row: [1, 6],
@@ -67,7 +67,7 @@ export const initialState = () => ({
   // OPS PLANNER
   compulsions: initialise({
     id: "compulsions",
-    title: "Compulsions",
+    title: "Compulsion planner",
     component: UIPlanner,
     active: false,
     options: {
@@ -166,7 +166,7 @@ export const initialState = () => ({
   //
   executor: initialise({
     id: "executor",
-    title: "Compulsions",
+    title: "Compulsion executor",
     component: UIExecutor,
     active: true,
     options: {

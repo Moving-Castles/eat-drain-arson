@@ -4,6 +4,7 @@ import type { Operation } from "../../operations/types";
 import { OperationType } from "../../operations/types";
 import type { ContractReceipt, ContractTransaction } from "ethers";
 import { blockNumber } from "../network";
+import { directToLog } from "../../modules/narrator";
 import { player, playerActivity, Activities } from "../player";
 import { range } from "../../utils/maths";
 
@@ -38,7 +39,7 @@ export const StateString = {
   [State.Ready]: "Ready",
   [State.StartingUp]: "Starting up",
   [State.ShuttingDown]: "Shutting down",
-  [State.Running]: "running",
+  [State.Running]: "Running",
   [State.Error]: "Error",
 };
 
@@ -218,9 +219,9 @@ blockNumber.subscribe(async (newBlock) => {
     progress.set(0, { duration: get(operationDuration) * 1000 });
 
     // Tween value from 0 to 1
-    binaryProgress.set(0, { duration: 0 });
+    // binaryProgress.set(0, { duration: 0 });
     // ... to 1
-    binaryProgress.set(1, { duration: get(operationDuration) * 1000 });
+    // binaryProgress.set(1, { duration: get(operationDuration) * 1000 });
 
     // Store cooldown block for future reference
     oldCoolDownBlock = get(player).coolDownBlock || 0;

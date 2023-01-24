@@ -3,7 +3,6 @@
   import { textureConditions } from "../../UIGridMap/index";
   import { TerrainCategory } from "../../../../utils/space";
   import { T } from "@threlte/core";
-  import { GLTF } from "@threlte/extras";
   import { textures } from "../index";
   import { DEG2RAD } from "three/src/math/MathUtils";
   import { DoubleSide } from "three";
@@ -27,6 +26,10 @@
     }
   };
 
+  const revealStats = (e) => {
+    console.log(e.detail);
+  };
+
   $: {
     tileTextureKeys = textureConditions.map((c) => c(tile)).filter((o) => !!o);
   }
@@ -34,15 +37,13 @@
   map = $textures[textureKey()];
 </script>
 
-<T.Group
-  rotation.x={DEG2RAD * -90}
-  rotation.z={DEG2RAD * -90}
-  rotation.y={0}
-  position.x={tile.coordinates.x}
-  position.z={tile.coordinates.y}
->
-  <T.Mesh receiveShadow>
+<T.Group rotation.x={DEG2RAD * -90} rotation.y={0} position.x={tile.coordinates.x} position.z={tile.coordinates.y}>
+  {#if import.meta.env.DEV}
+    <Text position={[0, 10, 0]} text="{tile.coordinates.x}:{tile.coordinates.y}" color="#000" />
+  {/if}
+  <T.Mesh interactive on:click={revealStats} receiveShadow>
     <T.PlaneGeometry args={[1, 1]} />
     <T.MeshBasicMaterial wireframe={DEV} side={DoubleSide} {map} />
+    <!-- <T.MeshBasicMaterial wireframe={DEV} side={DoubleSide} color="#69c97e" /> -->
   </T.Mesh>
 </T.Group>

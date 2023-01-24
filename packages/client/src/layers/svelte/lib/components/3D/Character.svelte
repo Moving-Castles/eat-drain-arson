@@ -6,8 +6,6 @@
 
   let currentActionKey = "idle";
 
-  console.log("play on playa");
-
   let available = true;
 
   const { gltf, actions } = useGltfAnimations(({ actions }) => {

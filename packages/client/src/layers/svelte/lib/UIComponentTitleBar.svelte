@@ -36,6 +36,7 @@
     padding: var(--padding-button);
     font-size: var(--font-size);
     color: var(--foreground);
+    background-color: var(--background);
     height: var(--titlebar-height);
     font-weight: bold;
     display: flex;

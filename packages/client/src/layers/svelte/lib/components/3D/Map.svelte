@@ -6,7 +6,7 @@
   import type { Object3D } from "three";
   import { DEG2RAD } from "three/src/math/MathUtils";
   import { T, TransformableObject, useTexture } from "@threlte/core";
-  import { player } from "../../../modules/player";
+  import { player, others } from "../../../modules/player";
   import { blockNumber } from "../../../modules/network";
   import { onMount } from "svelte";
   import { playerPosition } from "../../../modules/sequencer/interpolation";
@@ -16,7 +16,11 @@
    */
   import Base from "./Tiles/Base.svelte";
   import Player from "./Player.svelte";
+  import Other from "./Other.svelte";
 
+  /**
+   * Setup
+   */
   let w: number = 0;
   let h: number = 0;
   let UNIT: number = 5;
@@ -71,7 +75,6 @@
   }
 
   $: zoom = ZOOM_LEVELS[zoomIndex];
-  $: console.log(ZOOM_LEVELS[zoomIndex]);
 
   /**
    * Init
@@ -102,14 +105,14 @@
 <svelte:window on:keypress={handleZoom} on:mousemove={onMouseMove} bind:innerWidth={w} bind:innerHeight={h} />
 
 <T.Group viewportAware rotation.y={rotation}>
-  {#if $player && $playerPosition?.x && $playerPosition?.y}
+  {#if $player}
     <T.OrthographicCamera
       {zoom}
       near={1}
       far={2000}
       let:ref={cam}
-      position.x={$playerPosition.x}
-      position.z={$playerPosition.y}
+      position.x={$player.position.x}
+      position.z={$player.position.y}
       position.y={10}
       makeDefault
     >
@@ -117,8 +120,8 @@
         object={cam}
         lookAt={{
           y: 0,
-          x: $player?.position.x,
-          z: $player?.position.y,
+          x: $player.position.x,
+          z: $player.position.y,
         }}
       />
     </T.OrthographicCamera>
@@ -130,8 +133,11 @@
 {#if loaded && ready}
   <Player />
 
+  {#each $others as [address, other] (address)}
+    <Other {address} {other} />
+  {/each}
+
   <!-- BASE LAYER -->
-  <!-- Holds textures -->
   <T.Group>
     {#each grid as tile (`${tile.coordinates.x}-${tile.coordinates.y}`)}
       <Base {tile} />

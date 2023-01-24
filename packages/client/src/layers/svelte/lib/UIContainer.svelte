@@ -99,7 +99,7 @@
       display: grid;
       grid-column: 1 / 2;
       grid-row: 2 / span 1;
-      grid-template-columns: 240px 1fr 240px;
+      grid-template-columns: 300px 1fr 300px;
       grid-template-rows: repeat(9, minmax(0, 1fr));
       grid-template-areas:
         "tl tm tr"

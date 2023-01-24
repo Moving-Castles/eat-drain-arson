@@ -2,7 +2,7 @@
   import { flip } from "svelte/animate";
   import { derived } from "svelte/store";
   import { cubicInOut as easing } from "svelte/easing";
-  import { players } from "../../../modules/entities";
+  import { players } from "../../../modules/player";
   import { category } from "../../../modules/ui";
   import { seedToName } from "../../../utils/name";
   import { EntityType } from "../../../modules/entities";
