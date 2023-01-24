@@ -43,14 +43,13 @@
   tweenedY.set($player.position.y);
 
   player.subscribe((newPlayerState) => {
-    console.log("Cooldown block, ", newPlayerState?.coolDownBlock);
-
     if (!!previousPlayerState && !isEqual(newPlayerState.position, previousPlayerState?.position)) {
       // Blocks to cooldown is (current block + 1) - cooldown block
       const duration = ($blockNumber + 1 - parseInt(newPlayerState.coolDownBlock)) * MS;
+      console.log("DURATION: ", duration);
       // Now assign a tweened to that property that you can use in the templates
-      tweenedX.set(newPlayerState.position.x, { duration });
-      tweenedY.set(newPlayerState.position.y, { duration });
+      tweenedX.set(newPlayerState.position.x, { duration: 10000 });
+      tweenedY.set(newPlayerState.position.y, { duration: 10000 });
     }
 
     previousPlayerState = { ...newPlayerState };
