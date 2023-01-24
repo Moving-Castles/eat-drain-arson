@@ -218,11 +218,6 @@ blockNumber.subscribe(async (newBlock) => {
     // ... to 0 over operationDuration seconds
     progress.set(0, { duration: get(operationDuration) * 1000 });
 
-    // Tween value from 0 to 1
-    // binaryProgress.set(0, { duration: 0 });
-    // ... to 1
-    // binaryProgress.set(1, { duration: get(operationDuration) * 1000 });
-
     // Store cooldown block for future reference
     oldCoolDownBlock = get(player).coolDownBlock || 0;
   }
@@ -264,6 +259,8 @@ blockNumber.subscribe(async (newBlock) => {
           activeTransactions.push(tx);
 
           const receipt: ContractReceipt = await tx.wait();
+
+          console.log("receipt", receipt);
 
           // Remove transaction from activeTransactions
           activeTransactions = activeTransactions.filter((tx) => tx.hash !== receipt.transactionHash);

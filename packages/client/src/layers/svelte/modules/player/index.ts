@@ -1,4 +1,5 @@
 import { derived, writable, get } from "svelte/store";
+import { tweened } from "svelte/motion";
 import { network, blockNumber } from "../network";
 import type { EntityType, Player } from "../entities";
 import { EntityType, entities } from "../entities";
@@ -102,6 +103,9 @@ export const heartbeats = derived([player, blockNumber], ([$player, $blockNumber
   $player && $blockNumber ? calculateHeartbeats($player, $blockNumber) : 0
 );
 export const dead = derived(player, ($player) => $player.energy < 1);
+// Interpolation
+export const tweenedX = tweened(get(player)?.position?.x || 0, { duration: 0 });
+export const tweenedY = tweened(get(player)?.position?.y || 0, { duration: 0 });
 
 // --- FUNCTIONS -----------------------------------------------------------------
 

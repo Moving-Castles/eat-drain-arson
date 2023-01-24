@@ -6,10 +6,10 @@
   import type { Object3D } from "three";
   import { DEG2RAD } from "three/src/math/MathUtils";
   import { T, TransformableObject, useTexture } from "@threlte/core";
-  import { player, others } from "../../../modules/player";
+  import { player, tweenedX, tweenedY, others } from "../../../modules/player";
   import { blockNumber } from "../../../modules/network";
   import { onMount } from "svelte";
-  import { playerPosition } from "../../../modules/sequencer/interpolation";
+  // import { playerPosition } from "../../../modules/sequencer/interpolation";
 
   /**
    * 3D Objects
@@ -111,8 +111,8 @@
       near={1}
       far={2000}
       let:ref={cam}
-      position.x={$player.position.x}
-      position.z={$player.position.y}
+      position.x={$tweenedX}
+      position.z={$tweenedY}
       position.y={10}
       makeDefault
     >
@@ -120,8 +120,8 @@
         object={cam}
         lookAt={{
           y: 0,
-          x: $player.position.x,
-          z: $player.position.y,
+          x: $tweenedX,
+          z: $tweenedY,
         }}
       />
     </T.OrthographicCamera>
