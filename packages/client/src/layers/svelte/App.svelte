@@ -5,52 +5,33 @@
   import UIContainer from "./lib/UIContainer.svelte";
   import UIMenu from "./lib/UIMenu.svelte";
   import {
-    createPositionSystem,
-    createEnergySystem,
-    createResourceSystem,
-    createCoolDownSystem,
-    createSeedSystem,
-    createEntityTypeSystem,
-    createCreatorSystem,
-    createStatsSystem,
-    createBirthSystem,
-    createCannibalSystem,
     createLoadingStateSystem,
-    createPlayingSystem,
-    createDeathSystem,
+    createPositionSystem,
+    createCreationBlockSystem,
+    createEnergySystem,
+    createMatterSystem,
+    createReadyBlockSystem,
+    createCoreSystem,
+    createCarriedBySystem,
+    createPortableSystem,
+    createCarryingCapacitySystem,
   } from "./systems";
   import { network as networkStore, blockNumber, startBlock } from "./modules/network";
-  import { transactions, receipts, activeTransactions } from "./modules/network";
-
-  $: {
-    console.log("___ Transactions store: ", $transactions);
-  }
-
-  $: {
-    console.log("___ Receipts store: ", $receipts);
-  }
-
-  $: {
-    console.log("___ activeTransactions:", $activeTransactions);
-  }
 
   onMount(async () => {
     const layers = await bootGame();
 
     // ---- Systems
-    createPositionSystem(layers.network);
-    createEnergySystem(layers.network);
-    createResourceSystem(layers.network);
-    createCoolDownSystem(layers.network);
-    createSeedSystem(layers.network);
-    createEntityTypeSystem(layers.network);
-    createCreatorSystem(layers.network);
-    createStatsSystem(layers.network);
-    createBirthSystem(layers.network);
-    createCannibalSystem(layers.network);
     createLoadingStateSystem(layers.network);
-    createPlayingSystem(layers.network);
-    createDeathSystem(layers.network);
+    createPositionSystem(layers.network);
+    createCreationBlockSystem(layers.network);
+    createReadyBlockSystem(layers.network);
+    createEnergySystem(layers.network);
+    createMatterSystem(layers.network);
+    createPortableSystem(layers.network);
+    createCarryingCapacitySystem(layers.network);
+    createCarriedBySystem(layers.network);
+    createCoreSystem(layers.network);
 
     networkStore.set(layers.network);
 
@@ -59,11 +40,12 @@
       // transactions.update((ts) => [tx, ...ts]);
     });
 
-    startEnvironmentSoundSystem();
+    // startEnvironmentSoundSystem();
     // startMelodySoundSystem();
-    startHarmonySoundSystem();
+    // startHarmonySoundSystem();
 
     layers.network.network.blockNumber$.subscribe((x) => {
+      console.log(x);
       blockNumber.set(x);
       if ($startBlock == 0) {
         startBlock.set(x);

@@ -1,91 +1,58 @@
 {
   "components": [
+    "CoreComponent",
     "PositionComponent",
     "EnergyComponent",
-    "ResourceComponent",
-    "EntityTypeComponent",
-    "SeedComponent",
-    "CoolDownComponent",
-    "CreatorComponent",
-    "StatsComponent",
-    "BirthComponent",
-    "CannibalComponent",
-    "PlayingComponent",
-    "DeathComponent"
+    "CreationBlockComponent",
+    "ReadyBlockComponent",
+    "MatterComponent",
+    "PortableComponent",
+    "CarryingCapacityComponent",
+    "CarriedByComponent",
+    "SubstanceComponent"
   ],
   "systems": [
     {
       "name": "ComponentDevSystem",
-      "writeAccess": ["*"]
-    },
-    {
-      "name": "MoveSystem",
       "writeAccess": [
-        "PositionComponent",
-        "EnergyComponent",
-        "CoolDownComponent",
-        "StatsComponent",
-        "EntityTypeComponent",
-        "ResourceComponent",
-        "DeathComponent"
+        "*"
       ]
-    },
-    {
-      "name": "EnergySystem",
-      "writeAccess": ["EnergyComponent", "ResourceComponent", "CoolDownComponent", "StatsComponent", "DeathComponent"]
     },
     {
       "name": "SpawnSystem",
       "writeAccess": [
+        "CoreComponent",
         "PositionComponent",
         "EnergyComponent",
-        "ResourceComponent",
-        "SeedComponent",
-        "CoolDownComponent",
-        "EntityTypeComponent",
-        "StatsComponent",
-        "BirthComponent",
-        "CannibalComponent",
-        "DeathComponent"
+        "CreationBlockComponent",
+        "ReadyBlockComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent",
+        "CarriedByComponent"
       ]
     },
     {
-      "name": "GatherSystem",
+      "name": "MoveSystem",
       "writeAccess": [
+        "CoreComponent",
         "PositionComponent",
-        "ResourceComponent",
         "EnergyComponent",
-        "CoolDownComponent",
-        "EntityTypeComponent",
-        "StatsComponent",
-        "CannibalComponent",
-        "DeathComponent"
+        "ReadyBlockComponent",
+        "CarriedByComponent"
       ]
     },
     {
-      "name": "FireSystem",
+      "name": "ExtractSystem",
       "writeAccess": [
-        "SeedComponent",
+        "CoreComponent",
         "PositionComponent",
-        "ResourceComponent",
         "EnergyComponent",
-        "CoolDownComponent",
-        "EntityTypeComponent",
-        "CreatorComponent",
-        "StatsComponent",
-        "DeathComponent"
-      ]
-    },
-    {
-      "name": "PlaySystem",
-      "writeAccess": [
-        "EnergyComponent",
-        "CoolDownComponent",
-        "EntityTypeComponent",
-        "PlayingComponent",
-        "StatsComponent",
-        "ResourceComponent",
-        "DeathComponent"
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent",
+        "SubstanceComponent",
+        "MatterComponent"
       ]
     }
   ]

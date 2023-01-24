@@ -1,20 +1,26 @@
 import type { SystemTypes } from "contracts/types/SystemTypes";
 import type { GameConfig } from "./config";
-
 import { createWorld } from "@latticexyz/recs";
 import { setupDevSystems } from "./setup";
-import {
-  createActionSystem,
-  setupMUDNetwork,
-  defineCoordComponent,
-  defineNumberComponent,
-  defineStringComponent,
-} from "@latticexyz/std-client";
+import { createActionSystem, setupMUDNetwork } from "@latticexyz/std-client";
 import { createFaucetService } from "@latticexyz/network";
-import { defineLoadingStateComponent, defineStatsComponent } from "./components";
+import {
+  defineLoadingStateComponent,
+  defineCreationBlockComponent,
+  defineEnergyComponent,
+  defineExpirationBlockComponent,
+  defineMatterComponent,
+  definePortableComponent,
+  definePositionComponent,
+  defineReadyBlockComponent,
+  defineCarryingCapacityComponent,
+  defineCarriedByComponent,
+  defineCoreComponent,
+} from "./components";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { getNetworkConfig } from "./config";
 import { BigNumber, utils } from "ethers";
+import type { Coord } from "@latticexyz/utils";
 
 /**
  * The Network layer is the lowest layer in the client architecture.
@@ -29,22 +35,16 @@ export async function createNetworkLayer(config: GameConfig) {
   // --- COMPONENTS -----------------------------------------------------------------
   const components = {
     LoadingState: defineLoadingStateComponent(world),
-    Position: defineCoordComponent(world, { id: "Position", metadata: { contractId: "component.Position" } }),
-    Energy: defineNumberComponent(world, { id: "Energy", metadata: { contractId: "component.Energy" } }),
-    Resource: defineNumberComponent(world, { id: "Resource", metadata: { contractId: "component.Resource" } }),
-    Name: defineStringComponent(world, { id: "Name", metadata: { contractId: "component.Name" } }),
-    CoolDown: defineNumberComponent(world, { id: "CoolDown", metadata: { contractId: "component.CoolDown" } }),
-    Seed: defineNumberComponent(world, { id: "Seed", metadata: { contractId: "component.Seed" } }),
-    EntityType: defineNumberComponent(world, {
-      id: "EntityType",
-      metadata: { contractId: "component.EntityType" },
-    }),
-    Creator: defineNumberComponent(world, { id: "Creator", metadata: { contractId: "component.Creator" } }),
-    Stats: defineStatsComponent(world),
-    Birth: defineNumberComponent(world, { id: "Birth", metadata: { contractId: "component.Birth" } }),
-    Death: defineNumberComponent(world, { id: "Death", metadata: { contractId: "component.Death" } }),
-    Cannibal: defineNumberComponent(world, { id: "Cannibal", metadata: { contractId: "component.Cannibal" } }),
-    Playing: defineNumberComponent(world, { id: "Playing", metadata: { contractId: "component.Playing" } }),
+    Position: definePositionComponent(world),
+    Energy: defineEnergyComponent(world),
+    Matter: defineMatterComponent(world),
+    CreationBlock: defineCreationBlockComponent(world),
+    ExpirationBlock: defineExpirationBlockComponent(world),
+    ReadyBlock: defineReadyBlockComponent(world),
+    Portable: definePortableComponent(world),
+    CarryingCapacity: defineCarryingCapacityComponent(world),
+    CarriedBy: defineCarriedByComponent(world),
+    Core: defineCoreComponent(world),
   };
 
   // --- SETUP ----------------------------------------------------------------------
@@ -76,27 +76,30 @@ export async function createNetworkLayer(config: GameConfig) {
 
   // --- API ------------------------------------------------------------------------
   function spawn() {
-    systems["system.Spawn"].executeTyped(BigNumber.from(network.connectedAddress.get()));
+    systems["system.Spawn"].executeTyped();
   }
 
-  function move(energyInput: number, direction: number) {
-    return systems["system.Move"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput, direction);
+  function move(direction: number) {
+    return systems["system.Move"].executeTyped(direction);
   }
 
-  function gather(energyInput: number) {
-    return systems["system.Gather"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
+  function extract(extractionCoordinates: Coord) {
+    return systems["system.Extract"].executeTyped(extractionCoordinates);
   }
 
   function consume(resourceInput: number) {
-    return systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
+    return false;
+    // return systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
   }
 
   function burn(resourceInput: number) {
-    return systems["system.Fire"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
+    return false;
+    // return systems["system.Fire"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
   }
 
   function play(energyInput: number) {
-    return systems["system.Play"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
+    return false;
+    // return systems["system.Play"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
   }
 
   // --- CONTEXT --------------------------------------------------------------------
@@ -109,7 +112,7 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: { spawn, move, gather, consume, burn, play },
+    api: { spawn, move, extract, consume, burn, play },
     dev: setupDevSystems(world, encoders, systems),
   };
 

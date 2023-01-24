@@ -2,13 +2,14 @@
 import UITextLog from "../../lib/components/UITextLog.svelte";
 import UIAvatar from "../../lib/components/UIAvatar/UIAvatar.svelte";
 import UIView from "../../lib/components/UIView.svelte";
-import UIDebugLog from "../../lib/components/UIDebugLog.svelte";
 import UILeaderBoard from "../../lib/components/UILeaderBoards/UILeaderBoard.svelte";
 import UISurvivalLeaderBoard from "../../lib/components/UILeaderBoards/UISurvivalLeaderBoard.svelte";
 import UIFires from "../../lib/components/UIFires/UIFires.svelte";
 import UIPlanner from "../../lib/components/UIOperationsEditor/UIPlanner.svelte";
 import UIExecutor from "../../lib/components/UIOperationsEditor/UIExecutor.svelte";
 import UIGridMap from "../../lib/components/UIGridMap/UIGridMap.svelte";
+import UIDebugLog from "../../lib/components/UIDebug/UIDebugLog.svelte";
+import UIDebugMap from "../../lib/components/UIDebug/UIDebugMap.svelte";
 
 // --- TYPES -----------------------------------------------------------------
 
@@ -49,11 +50,12 @@ export const initialState = () => ({
     id: "avatar",
     title: "Avatar",
     component: UIAvatar,
-    active: true,
+    active: false,
     grid: {
       col: [3, 4],
       row: [1, 6],
     },
+    hidden: true,
     options: {
       bare: true,
       persistent: true,
@@ -62,7 +64,6 @@ export const initialState = () => ({
       noscroll: true,
       span: true,
     },
-    hidden: false,
   }),
   // OPS PLANNER
   compulsions: initialise({
@@ -74,28 +75,28 @@ export const initialState = () => ({
       fluid: true,
       layer: 10,
     },
+    hidden: true,
     grid: {
       col: [1, 4],
       row: [1, 10],
     },
-    hidden: false,
   }),
   // TEXT LOG
   memory: initialise({
     id: "memory",
     title: "Memory",
     component: UITextLog,
-    active: true,
+    active: false,
     options: {
       fluid: true,
       delay: makeDelay(),
       muted: false,
     },
+    hidden: true,
     grid: {
       row: [1, 10],
       col: [1, 2],
     },
-    hidden: false,
   }),
   // FIRES
   fires: initialise({
@@ -117,16 +118,34 @@ export const initialState = () => ({
     id: "debug-log",
     title: "Debug Log",
     component: UIDebugLog,
-    active: false,
+    active: true,
     options: {
+      persistent: true,
       fluid: true,
       layer: 2,
       delay: 0,
     },
-    hidden: true,
+    hidden: false,
     grid: {
       col: [3, 4],
-      row: [5, 10],
+      row: [1, 10],
+    },
+  }),
+  "debug-map": initialise({
+    id: "debug-map",
+    title: "Debug Map",
+    component: UIDebugMap,
+    active: true,
+    options: {
+      persistent: true,
+      fluid: true,
+      layer: 2,
+      delay: 0,
+    },
+    hidden: false,
+    grid: {
+      col: [1, 3],
+      row: [1, 10],
     },
   }),
   // LEADERBOARD
@@ -161,7 +180,7 @@ export const initialState = () => ({
       col: [1, 2],
       row: [6, 10],
     },
-    hidden: false,
+    hidden: true,
   }),
   //
   executor: initialise({
@@ -179,14 +198,14 @@ export const initialState = () => ({
       col: [3, 4],
       row: [6, 10],
     },
-    hidden: false,
+    hidden: true,
   }),
   //
   miniMap: initialise({
     id: "minimap",
     title: "Map",
     component: UIGridMap,
-    active: true,
+    active: false,
     options: {
       muted: false,
       persistent: false,
@@ -198,7 +217,7 @@ export const initialState = () => ({
       col: [3, 4],
       row: [6, 10],
     },
-    hidden: false,
+    hidden: true,
   }),
   //
   view: initialise({

@@ -1,2 +1,11 @@
 export { defineLoadingStateComponent } from "./LoadingStateComponent";
-export { defineStatsComponent } from "./StatsComponent";
+export { defineExpirationBlockComponent } from "./ExpirationBlockComponent";
+export { defineCreationBlockComponent } from "./CreationBlockComponent";
+export { defineReadyBlockComponent } from "./ReadyBlockComponent";
+export { definePositionComponent } from "./PositionComponent";
+export { defineCarriedByComponent } from "./CarriedByComponent";
+export { defineEnergyComponent } from "./EnergyComponent";
+export { defineMatterComponent } from "./MatterComponent";
+export { definePortableComponent } from "./PortableComponent";
+export { defineCoreComponent } from "./CoreComponent";
+export { defineCarryingCapacityComponent } from "./CarryingCapacityComponent";

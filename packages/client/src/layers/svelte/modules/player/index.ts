@@ -63,7 +63,7 @@ export const player = derived(
   ([$entities, $playerAddress]) => $entities[$playerAddress] as Player
 );
 export const playerActivity = writable(Activities.Idle);
-export const playerDirection = writable(Directions.Random);
+export const playerDirection = writable(Directions.None);
 export const playerEnergy = derived([player, blockNumber], ([$player, $blockNumber]) =>
   $player ? calculateEnergy($player, $blockNumber) : 0
 );

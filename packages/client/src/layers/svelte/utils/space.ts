@@ -7,7 +7,6 @@ export enum TerrainCategory {
 }
 
 export enum Directions {
-  Random,
   North,
   NorthEast,
   East,
@@ -16,6 +15,7 @@ export enum Directions {
   SouthWest,
   West,
   NorthWest,
+  None,
 }
 
 export function terrainCategoryToString(terrainCategory: TerrainCategory) {
@@ -37,11 +37,10 @@ export function transformationToDirection(t: Coord) {
   if (t.x == -1 && t.y == -1) return Directions.NorthWest;
   if (t.x == 0 && t.y == -1) return Directions.North;
   if (t.x == 1 && t.y == -1) return Directions.NorthEast;
-  return Directions.Random;
+  return Directions.None;
 }
 
 export function directionToString(direction: Directions) {
-  if (direction === Directions.Random) return "";
   if (direction === Directions.North) return "north";
   if (direction === Directions.NorthEast) return "north-east";
   if (direction === Directions.East) return "east";
@@ -86,4 +85,13 @@ export function directionalPathfind(from: Coord, to: Coord) {
  */
 export function manhattan(a: Coord, b: Coord) {
   return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+}
+
+/**
+ * @param a Coordinate A
+ * @param b Coordinate B
+ * @returns Chebyshev distance from A to B (https://en.wikipedia.org/wiki/Chebyshev_distance)
+ */
+export function chebyshev(a: Coord, b: Coord) {
+  return Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
 }

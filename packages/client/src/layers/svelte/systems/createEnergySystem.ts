@@ -19,8 +19,8 @@ export function createEnergySystem(network: NetworkLayer) {
       return value;
     });
 
-    if (energy > oldEnergy) {
-      addToLog(update, EventCategory.Eat);
-    }
+    // if (energy > oldEnergy) {
+    //   addToLog(update, EventCategory.Eat);
+    // }
   });
 }
