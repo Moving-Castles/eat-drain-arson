@@ -4,7 +4,6 @@ import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
-import { Direction } from "../utils/types.sol";
 import { TRANSFER_COST } from "../utils/config.sol";
 
 import { LibMove } from "../libraries/LibMove.sol";

@@ -102,6 +102,19 @@
         "PortableComponent",
         "CarryingCapacityComponent"
       ]
+    },
+    {
+      "name": "ConsumeSystem",
+      "writeAccess": [
+        "CoreComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent",
+        "SubstanceComponent",
+        "MatterComponent"
+      ]
     }
   ]
 }
