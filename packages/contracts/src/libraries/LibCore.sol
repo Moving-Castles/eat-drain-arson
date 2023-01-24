@@ -53,18 +53,6 @@ library LibCore {
   }
 
   /**
-   * Get the base entity controlled by a core
-   *
-   * @param _components World components
-   * @param _coreEntity Core entity
-   * @return unsigned ID of the base entity
-   */
-  function getControlledEntity(IUint256Component _components, uint256 _coreEntity) internal view returns (uint256) {
-    CarriedByComponent carriedByComponent = CarriedByComponent(getAddressById(_components, CarriedByComponentID));
-    return carriedByComponent.getValue(_coreEntity);
-  }
-
-  /**
    * Check energy
    *
    * @param _components World components

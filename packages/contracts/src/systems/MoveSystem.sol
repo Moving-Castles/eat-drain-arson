@@ -10,6 +10,7 @@ import { STEP_COST } from "../utils/config.sol";
 import { LibMove } from "../libraries/LibMove.sol";
 import { LibCore } from "../libraries/LibCore.sol";
 import { LibCooldown } from "../libraries/LibCooldown.sol";
+import { LibInventory } from "../libraries/LibInventory.sol";
 
 uint256 constant ID = uint256(keccak256("system.Move"));
 
@@ -24,7 +25,7 @@ contract MoveSystem is System {
     require(LibCooldown.isReady(components, coreEntity), "MoveSystem: entity is in cooldown");
     require(LibCore.checkEnergy(components, coreEntity, STEP_COST), "MoveSystem: not enough energy");
 
-    uint256 baseEntity = LibCore.getControlledEntity(components, coreEntity);
+    uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
     LibMove.step(components, baseEntity, Direction(_direction));
 
     LibCore.decreaseEnergy(components, coreEntity, STEP_COST);

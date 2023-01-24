@@ -54,6 +54,54 @@
         "SubstanceComponent",
         "MatterComponent"
       ]
+    },
+    {
+      "name": "PickUpSystem",
+      "writeAccess": [
+        "CoreComponent",
+        "PositionComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent"
+      ]
+    },
+    {
+      "name": "DropSystem",
+      "writeAccess": [
+        "CoreComponent",
+        "PositionComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent"
+      ]
+    },
+    {
+      "name": "TakeSystem",
+      "writeAccess": [
+        "CoreComponent",
+        "PositionComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent"
+      ]
+    },
+    {
+      "name": "GiveSystem",
+      "writeAccess": [
+        "CoreComponent",
+        "PositionComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent"
+      ]
     }
   ]
 }

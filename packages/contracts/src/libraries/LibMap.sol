@@ -14,8 +14,6 @@ import { LibSubstanceBlock } from "../libraries/LibSubstanceBlock.sol";
 
 import { Coord } from "../components/PositionComponent.sol";
 
-import { SPAWN_MATTER_PER_TILE } from "../utils/config.sol";
-
 library LibMap {
   /**
    * Calculate chebyshev distance

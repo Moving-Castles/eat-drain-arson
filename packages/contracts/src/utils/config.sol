@@ -8,7 +8,8 @@ uint32 constant INITIAL_ENERGY = 100;
 uint32 constant DEFAULT_CARRYING_CAPACITY = 10;
 uint32 constant STEP_COST = 10;
 uint32 constant EXTRACT_COST = 10;
-uint32 constant SPAWN_MATTER_PER_TILE = 100;
+uint32 constant TRANSFER_COST = 10;
+uint32 constant MATTER_PER_TILE = 100;
 // --- ENERGY
 uint32 constant RESOURCE_TO_ENERGY_CONVERSION_RATE = 5;
 // --- FIRE

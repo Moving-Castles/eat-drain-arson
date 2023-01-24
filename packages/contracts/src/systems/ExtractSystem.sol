@@ -6,7 +6,7 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
 import { Coord } from "../components/PositionComponent.sol";
 
-import { EXTRACT_COST, SPAWN_MATTER_PER_TILE } from "../utils/config.sol";
+import { EXTRACT_COST, MATTER_PER_TILE } from "../utils/config.sol";
 
 import { LibMove } from "../libraries/LibMove.sol";
 import { LibCore } from "../libraries/LibCore.sol";
@@ -14,7 +14,7 @@ import { LibCooldown } from "../libraries/LibCooldown.sol";
 import { LibMap } from "../libraries/LibMap.sol";
 import { LibResource } from "../libraries/LibResource.sol";
 import { LibSubstanceBlock } from "../libraries/LibSubstanceBlock.sol";
-import { LibBaseEntity } from "../libraries/LibBaseEntity.sol";
+import { LibInventory } from "../libraries/LibInventory.sol";
 
 uint256 constant ID = uint256(keccak256("system.Extract"));
 
@@ -29,8 +29,8 @@ contract ExtractSystem is System {
     require(LibCooldown.isReady(components, coreEntity), "ExtractSystem: entity is in cooldown");
     require(LibCore.checkEnergy(components, coreEntity, EXTRACT_COST), "ExtractSystem: not enough energy");
 
-    uint256 baseEntity = LibCore.getControlledEntity(components, coreEntity);
-    Coord memory baseEntityPosition = LibBaseEntity.getPosition(components, baseEntity);
+    uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
+    Coord memory baseEntityPosition = LibMove.getPosition(components, baseEntity);
     require(LibMap.isAdjacent(baseEntityPosition, _extractionCoordinates), "ExtractSystem: tile not adjacent");
 
     /*
@@ -40,7 +40,7 @@ contract ExtractSystem is System {
      * – create substanceblock with  EXTRACT_COST matter
      *
      * If there is not (meaning the coordinates have not been extracted):
-     * – create resource with SPAWN_MATTER_PER_TILE - EXTRACT_COST matter
+     * – create resource with MATTER_PER_TILE - EXTRACT_COST matter
      * – create substanceblock with  EXTRACT_COST matter
      */
 
@@ -51,12 +51,7 @@ contract ExtractSystem is System {
       LibResource.decreaseMatter(components, resourceEntity, EXTRACT_COST);
       LibSubstanceBlock.spawn(components, world.getUniqueEntityId(), _extractionCoordinates, EXTRACT_COST);
     } else {
-      LibResource.spawn(
-        components,
-        world.getUniqueEntityId(),
-        _extractionCoordinates,
-        SPAWN_MATTER_PER_TILE - EXTRACT_COST
-      );
+      LibResource.spawn(components, world.getUniqueEntityId(), _extractionCoordinates, MATTER_PER_TILE - EXTRACT_COST);
       LibSubstanceBlock.spawn(components, world.getUniqueEntityId(), _extractionCoordinates, EXTRACT_COST);
     }
 

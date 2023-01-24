@@ -15,6 +15,41 @@ import { PositionComponent, ID as PositionComponentID, Coord } from "../componen
 
 library LibMove {
   /**
+   * Get position of entity
+   *
+   * @param _components World components
+   * @param _entity Entity
+   * @return coord position of entity
+   */
+  function getPosition(IUint256Component _components, uint256 _entity) internal view returns (Coord memory) {
+    PositionComponent positionComponent = PositionComponent(getAddressById(_components, PositionComponentID));
+    return positionComponent.getValue(_entity);
+  }
+
+  /**
+   * Set position of entity
+   *
+   * @param _components World components
+   * @param _entity Entity
+   * @param _coordinates position
+   */
+  function setPosition(IUint256Component _components, uint256 _entity, Coord memory _coordinates) internal {
+    PositionComponent positionComponent = PositionComponent(getAddressById(_components, PositionComponentID));
+    positionComponent.set(_entity, _coordinates);
+  }
+
+  /**
+   * Remove position of entity
+   *
+   * @param _components World components
+   * @param _entity Entity
+   */
+  function removePosition(IUint256Component _components, uint256 _entity) internal {
+    PositionComponent positionComponent = PositionComponent(getAddressById(_components, PositionComponentID));
+    positionComponent.remove(_entity);
+  }
+
+  /**
    * Set a random position within bounds
    *
    * @param _components World components

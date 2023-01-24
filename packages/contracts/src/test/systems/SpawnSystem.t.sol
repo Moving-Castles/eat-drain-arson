@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity >=0.8.0;
+pragma solidity >=0.8.17;
 
 import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
@@ -35,8 +35,6 @@ contract SpawnSystemTest is MudTest {
     // --- Get base entity
     assertTrue(carriedByComponent.has(addressToEntity(alice)));
     uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
-    console.log("___ BASE ENTITY:");
-    console.log(baseEntity);
 
     // --- Position
     Coord memory newPosition = positionComponent.getValue(baseEntity);
