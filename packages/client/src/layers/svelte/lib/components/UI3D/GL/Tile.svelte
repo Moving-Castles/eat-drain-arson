@@ -6,12 +6,14 @@
   import { textures } from "../index";
   import { DEG2RAD } from "three/src/math/MathUtils";
   import { Vector3, DoubleSide, MeshBasicMaterial, PlaneGeometry, Color } from "three";
+  import TileActions from "./TileActions.svelte";
   import { Text } from "@threlte/extras";
   import { DEV } from "../../../../utils/ui";
 
   export let tile: GridTile;
 
   let map;
+  let showActions = false;
   let tileMesh;
   let tileTextureKeys = [];
 
@@ -34,9 +36,8 @@
     }
   };
 
-  const revealStats = (e) => {
-    console.log(e.detail.object.material.color);
-    console.log(e.detail.object.userData.tile.perlinFactor.toString(16));
+  const toggleActions = () => {
+    showActions = !showActions;
   };
 
   $: {
@@ -48,23 +49,21 @@
   console.log("tile", map);
 </script>
 
-<T.Group interactive position.x={-5} position.z={-5} on:click={revealStats}>
-  {#if import.meta.env.DEV}
-    <!-- <Text position={new Vector3(0, 10, 0)} text="{tile.coordinates.x}:{tile.coordinates.y}" color="#000" /> -->
+<Mesh
+  {rotation}
+  userData={{ tile }}
+  position={{ x, y, z }}
+  interactive
+  on:click={toggleActions}
+  receiveShadow
+  material={new MeshBasicMaterial({
+    wireframe: true,
+    side: DoubleSide,
+    color: new Color(tile.perlinFactor * 255, tile.perlinFactor * 255, tile.perlinFactor * 255),
+  })}
+  geometry={new PlaneGeometry(1, 1)}
+>
+  {#if showActions}
+    <TileActions on:close={toggleActions} {tile} />
   {/if}
-  <Mesh
-    {rotation}
-    userData={{ tile }}
-    position={{ x, y, z }}
-    interactive
-    on:click={revealStats}
-    on:pointerenter={revealStats}
-    receiveShadow
-    material={new MeshBasicMaterial({
-      wireframe: true,
-      side: DoubleSide,
-      color: new Color(tile.perlinFactor * 255, tile.perlinFactor * 255, tile.perlinFactor * 255),
-    })}
-    geometry={new PlaneGeometry(1, 1)}
-  />
-</T.Group>
+</Mesh>

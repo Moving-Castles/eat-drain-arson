@@ -1,6 +1,8 @@
+import type { Derived } from "svelte/store";
 import { derived, writable, get } from "svelte/store";
 import { tweened } from "svelte/motion";
 import { network, blockNumber } from "../network";
+import { isEqual } from "lodash";
 import type { EntityType, Player } from "../entities";
 import { EntityType, entities } from "../entities";
 
@@ -59,10 +61,11 @@ export function activityToVerb(activity: Activities) {
 // --- STORES -----------------------------------------------------------------
 
 export const playerAddress = derived(network, ($network) => $network.network?.connectedAddress.get() || "0x0");
-export const player = derived(
-  [entities, playerAddress],
-  ([$entities, $playerAddress]) => $entities[$playerAddress] as Player
-);
+
+export const player = derived([entities, playerAddress], ([$entities, $playerAddress]) => {
+  const p = $entities[$playerAddress];
+  return p as Player;
+});
 
 export const players = derived([entities, blockNumber], ([$entities, $blockNumber]) => {
   let ps = Object.entries($entities).filter(
@@ -104,8 +107,36 @@ export const heartbeats = derived([player, blockNumber], ([$player, $blockNumber
 );
 export const dead = derived(player, ($player) => $player.energy < 1);
 // Interpolation
-export const playerPositionX = tweened(get(player)?.position?.x || 0, { duration: 0 });
-export const playerPositionY = tweened(get(player)?.position?.y || 0, { duration: 0 });
+export const playerPositionY = tweened(get(player)?.position?.y || 0, { duration: 10000 });
+export const playerPositionX = tweened(get(player)?.position?.x || 0, { duration: 10000 });
+
+// function makeInterpolated (entityStore: Derived, componentPath: 'string', duration: number) {
+//   const v = get(entityStore)
+//   console.log(v)
+//   // console.log(componentPath)
+//   const components = componentPath.split('.')
+//   let initialValue = null
+
+//   switch (components.length) {
+//     case (1):
+//       initialValue = v[components[0]]
+//       break
+//     case (2):
+//       initialValue = v[components[0]][components[1]]
+//       break
+//     case (3):
+//       initialValue = v[components[0]][components[1]][components[2]]
+//       break
+//     case (0):
+//     default:
+//       initialValue = v
+//       break
+//   }
+
+//   return tweened(initialValue, { duration })
+// }
+
+// export const playerPositionX = makeInterpolated(player, 'position.x', 1000)
 
 // --- FUNCTIONS -----------------------------------------------------------------
 

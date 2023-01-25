@@ -40,12 +40,7 @@
   // Store previous player state
   let previousPlayerState: any = null;
 
-  // playerPositionX.set($player.position.x);
-  // playerPositionY.set($player.position.y);
-
   player.subscribe((newPlayerState) => {
-    console.log("player");
-    console.log(newPlayerState);
     if (!!previousPlayerState && !isEqual(newPlayerState.position, previousPlayerState?.position)) {
       // Blocks to cooldown is (current block + 1) - cooldown block
       const duration = ($blockNumber + 1 - parseInt(newPlayerState.coolDownBlock)) * MS;
