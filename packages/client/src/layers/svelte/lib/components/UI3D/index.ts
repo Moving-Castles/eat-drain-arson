@@ -1,3 +1,4 @@
+import type { Coord } from "@latticexyz/utils";
 import type { Texture } from "three";
 import { writable } from "svelte/store";
 

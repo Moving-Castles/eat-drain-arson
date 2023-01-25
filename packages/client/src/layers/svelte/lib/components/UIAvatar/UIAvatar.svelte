@@ -1,6 +1,6 @@
 <script lang="ts">
   import UIDied from "../../UIDied.svelte";
-  import UI3DAvatar from "./UI3DAvatar.svelte";
+  import UI3DAvatar from "../UI3D/UI3DAvatar.svelte";
   import { playSound } from "../../../../howler";
   import UIMetric from "../UIMetric.svelte";
   import { Activities, activityToVerb, player, playerActivity, dead } from "../../../modules/player";

@@ -8,6 +8,7 @@ import UIFires from "../../lib/components/UIFires/UIFires.svelte";
 import UIPlanner from "../../lib/components/UIOperationsEditor/UIPlanner.svelte";
 import UIExecutor from "../../lib/components/UIOperationsEditor/UIExecutor.svelte";
 import UIGridMap from "../../lib/components/UIGridMap/UIGridMap.svelte";
+import UI3DMap from "../../lib/components/UI3D/UI3DMap.svelte";
 import UIDebugLog from "../../lib/components/UIDebug/UIDebugLog.svelte";
 import UIDebugMap from "../../lib/components/UIDebug/UIDebugMap.svelte";
 
@@ -140,6 +141,23 @@ export const initialState = () => ({
       persistent: true,
       fluid: true,
       layer: 2,
+      delay: 0,
+    },
+    hidden: false,
+    grid: {
+      col: [1, 3],
+      row: [1, 10],
+    },
+  }),
+  "3d-map": initialise({
+    id: "3d-map",
+    title: "Ortho Map",
+    component: UI3DMap,
+    active: true,
+    options: {
+      persistent: false,
+      fluid: true,
+      layer: 3,
       delay: 0,
     },
     hidden: false,

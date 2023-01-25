@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Compass from "./Compass.svelte";
   import { T } from "@threlte/core";
   import { GLTF, useGltfAnimations } from "@threlte/extras";
   import { MeshBasicMaterial } from "three";

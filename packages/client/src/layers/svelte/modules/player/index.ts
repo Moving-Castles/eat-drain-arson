@@ -104,8 +104,8 @@ export const heartbeats = derived([player, blockNumber], ([$player, $blockNumber
 );
 export const dead = derived(player, ($player) => $player.energy < 1);
 // Interpolation
-export const tweenedX = tweened(get(player)?.position?.x || 0, { duration: 0 });
-export const tweenedY = tweened(get(player)?.position?.y || 0, { duration: 0 });
+export const playerPositionX = tweened(get(player)?.position?.x || 0, { duration: 0 });
+export const playerPositionY = tweened(get(player)?.position?.y || 0, { duration: 0 });
 
 // --- FUNCTIONS -----------------------------------------------------------------
 

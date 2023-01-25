@@ -1,12 +1,17 @@
 <script lang="ts">
+  import { player } from "../../../modules/player";
   import { Canvas } from "@threlte/core";
-  import Map from "./Map.svelte";
+  import Map from "./GL/Map.svelte";
   import Stats from "./GUI/Stats.svelte";
+
+  console.log("map");
 </script>
 
 <div class="ui-3d-map">
   <Canvas>
-    <Map />
+    {#if $player}
+      <Map />
+    {/if}
 
     <!-- {#if import.meta.env.DEV} -->
     <Stats />

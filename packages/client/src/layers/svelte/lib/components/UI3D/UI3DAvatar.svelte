@@ -1,9 +1,9 @@
 <script lang="ts">
-  import Stats from "../3D/GUI/Stats.svelte";
+  import Stats from "./GUI/Stats.svelte";
   import { Canvas, T, PerspectiveCamera, OrbitControls } from "@threlte/core";
   import { Vector3 } from "three";
 
-  import Character from "../3D/Character.svelte";
+  import Character from "./GL/Character.svelte";
 </script>
 
 <Canvas>

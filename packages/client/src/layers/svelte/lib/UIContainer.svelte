@@ -1,6 +1,4 @@
 <script lang="ts">
-  import UI3DMap from "./components/3D/UI3DMap.svelte";
-  // import UI3DMap from "./components/UIGridMap/UIGridMap.svelte";
   import { uiState } from "../modules/ui";
   import { ready } from "../modules/network";
   import { player } from "../modules/player";
@@ -9,12 +7,6 @@
   import UISpawn from "./components/UISpawn.svelte";
   import UILoading from "./components/UILoading.svelte";
 </script>
-
-<!-- <div class="ui-container no-padding">
-  <div class="ui-container-center">
-    <UI3DMap />
-  </div>
-</div> -->
 
 <!-- The UI layer -->
 <div class="ui-container">

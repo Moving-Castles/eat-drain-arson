@@ -1,11 +1,12 @@
 <script lang="ts">
   import { T } from "@threlte/core";
-  import { blockNumber } from "../../../modules/network";
+  import { blockNumber } from "../../../../modules/network";
   // import { tweened } from "svelte/motion";
-  import { player, tweenedX, tweenedY } from "../../../modules/player";
+  import { player, playerPositionX, playerPositionY } from "../../../../modules/player";
   import { DEG2RAD } from "three/src/math/MathUtils";
-  import SingleAnimation from "./SingleAnimation.svelte";
   import { isEqual } from "lodash";
+
+  import Model from "./Model.svelte";
 
   const NORTH = DEG2RAD * -180;
   const MS = 1000; // millis
@@ -39,28 +40,30 @@
   // Store previous player state
   let previousPlayerState: any = null;
 
-  tweenedX.set($player.position.x);
-  tweenedY.set($player.position.y);
+  // playerPositionX.set($player.position.x);
+  // playerPositionY.set($player.position.y);
 
   player.subscribe((newPlayerState) => {
+    console.log("player");
+    console.log(newPlayerState);
     if (!!previousPlayerState && !isEqual(newPlayerState.position, previousPlayerState?.position)) {
       // Blocks to cooldown is (current block + 1) - cooldown block
       const duration = ($blockNumber + 1 - parseInt(newPlayerState.coolDownBlock)) * MS;
       console.log("DURATION: ", duration);
       // Now assign a tweened to that property that you can use in the templates
-      tweenedX.set(newPlayerState.position.x, { duration: 10000 });
-      tweenedY.set(newPlayerState.position.y, { duration: 10000 });
+      playerPositionX.set(newPlayerState.position.x, { duration: 10000 });
+      playerPositionY.set(newPlayerState.position.y, { duration: 10000 });
     }
 
     previousPlayerState = { ...newPlayerState };
   });
 
-  // $: console.log($tweenedX, $tweenedY);
+  // $: console.log($playerPositionX, $playerPositionY);
 </script>
 
-<T.Group position.x={$tweenedX} position.z={$tweenedY} scale={0.3} rotation.y={NORTH}>
+<T.Group position.x={$playerPositionX} position.z={$playerPositionY} scale={0.3} rotation.y={NORTH}>
   {#if $player.energy > 0}
-    <SingleAnimation animationKey="idle" />
+    <Model animationKey="idle" />
   {:else}
     <T.Group rotation.x={DEG2RAD * 90} position.y={2} position.z={-1}>
       <SingleAnimation animationKey="idle" />
