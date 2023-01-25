@@ -40,8 +40,8 @@
 <style>
   .ui-tooltip {
     border: var(--outer-border);
-    backdrop-filter: var(--backdrop);
-    -webkit-backdrop-filter: var(--backdrop);
+    /* backdrop-filter: var(--backdrop);
+    -webkit-backdrop-filter: var(--backdrop); */
     padding: var(--padding-button);
     position: absolute;
     max-width: 60ch;

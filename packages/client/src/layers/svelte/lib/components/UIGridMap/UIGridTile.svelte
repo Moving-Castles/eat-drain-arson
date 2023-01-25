@@ -2,11 +2,11 @@
   import { get } from "svelte/store";
   import type { GridTile } from "./index";
   import type { Entity } from "../../../modules/entities";
-  import { TileOverlays } from "./index";
+  import { conditions, isPlayerTile } from "./index";
   import { TerrainCategory, terrainCategoryToString, directionToString } from "../../../utils/space";
   import { player } from "../../../modules/player";
   import { entities, EntityType } from "../../../modules/entities";
-  import { seedToName, seedToMaskTileOverlay } from "../../../utils/name";
+  import { seedToName } from "../../../utils/name";
   import { tooltip } from "../UIToolTip/index";
   import { fireString, fireStatusClass } from "../UIFires/index";
 
@@ -39,44 +39,9 @@
     }
   }
 
-  function isPlayerTile(tile: GridTile) {
-    return (
-      tile.transformation.x == 0 &&
-      tile.transformation.y == 0 &&
-      ($player.entityType == EntityType.Player || $player.entityType == EntityType.Corpse)
-    );
+  $: {
+    overlays = [...conditions.map((c) => c(tile)).filter((o) => !!o)];
   }
-
-  const conditions = [
-    // Mined
-    (tile: GridTile) => (tile.resource == 0 ? TileOverlays.Empty : null),
-    (tile: GridTile) => (tile.resource < 33 && tile.resource > 0 ? TileOverlays.Depleted : null),
-    (tile: GridTile) => (tile.resource < 66 && tile.resource >= 33 ? TileOverlays.Extracted : null),
-    (tile: GridTile) => (tile.resource < 100 && tile.resource >= 66 ? TileOverlays.Dug : null),
-    // Other player
-    (tile: GridTile) =>
-      tile.other !== undefined ? `${TileOverlays.Other} ${seedToMaskTileOverlay(tile.other?.seed || 0)}` : null,
-    // Player
-    (tile: GridTile) => {
-      if (isPlayerTile(tile)) {
-        return `${TileOverlays.Player} ${seedToMaskTileOverlay($player.seed || 0)} ${
-          $player.entityType == EntityType.Corpse ? TileOverlays.CorpseMask : ""
-        }`;
-      }
-    },
-    // Player corpse
-    (tile: GridTile) => {
-      if (tile.transformation.x == 0 && tile.transformation.y == 0 && $player.entityType == EntityType.Corpse) {
-        return TileOverlays.Corpse;
-      }
-    },
-    // Corpse
-    (tile: GridTile) => (tile.corpse !== undefined ? TileOverlays.Corpse : null),
-    // Fire
-    (tile: GridTile) => (tile.fire !== undefined ? fireStatusClass(tile.fire) : null),
-  ];
-
-  $: overlays = [...conditions.map((c) => c(tile)).filter((o) => !!o)];
 </script>
 
 <div

@@ -110,6 +110,8 @@ export function addToLog(update: ComponentUpdate, category: EventCategory) {
     // --- Reacts to changes to the position component
     // ---
     if (category === EventCategory.Move && isSelf) {
+      console.log("update");
+      console.log(update);
       write(movement(update, isSelf), LogEntryType.Success);
     }
 

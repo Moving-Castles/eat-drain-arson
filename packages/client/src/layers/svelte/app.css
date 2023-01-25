@@ -105,6 +105,14 @@ span.ripple {
   }
 }
 
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.pointer-events-auto {
+  pointer-events: auto;
+}
+
 .link {
   cursor: pointer;
   opacity: var(--muted-opacity);
@@ -124,7 +132,7 @@ span.ripple {
   height: 100%;
   background-size: cover;
   background-position: center;
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
 .overlay:before {
@@ -224,8 +232,8 @@ span.ripple {
   position: absolute;
   width: 100%;
   background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  /* backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px); */
   height: 100%;
   top: 0;
   left: 0;

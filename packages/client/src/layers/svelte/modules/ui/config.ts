@@ -58,7 +58,7 @@ export const initialState = () => ({
     hidden: true,
     options: {
       bare: true,
-      persistent: true,
+      persistent: false,
       layer: 1,
       fluid: true,
       noscroll: true,
@@ -68,7 +68,7 @@ export const initialState = () => ({
   // OPS PLANNER
   compulsions: initialise({
     id: "compulsions",
-    title: "Compulsions",
+    title: "Compulsion planner",
     component: UIPlanner,
     active: false,
     options: {
@@ -185,12 +185,12 @@ export const initialState = () => ({
   //
   executor: initialise({
     id: "executor",
-    title: "Compulsions",
+    title: "Compulsion executor",
     component: UIExecutor,
     active: false,
     options: {
       muted: false,
-      persistent: true,
+      persistent: false,
       fluid: true,
       delay: makeDelay(),
     },
@@ -201,7 +201,7 @@ export const initialState = () => ({
     hidden: true,
   }),
   //
-  miniMap: initialise({
+  minimap: initialise({
     id: "minimap",
     title: "Map",
     component: UIGridMap,

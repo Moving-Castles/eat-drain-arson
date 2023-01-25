@@ -52,8 +52,35 @@ export function directionToString(direction: Directions) {
   return "";
 }
 
+export function directionStringToTransformation(direction: string) {
+  console.log(direction);
+  switch (direction) {
+    case "north":
+      return { x: 0, y: -1 };
+    case "north-east":
+      return { x: 1, y: -1 };
+    case "east":
+      return { x: 1, y: 0 };
+    case "south-east":
+      return { x: 1, y: 1 };
+    case "south":
+      return { x: 0, y: 1 };
+    case "south-west":
+      return { x: -1, y: 1 };
+    case "west":
+      return { x: -1, y: 0 };
+    case "north-west":
+      return { x: -1, y: -1 };
+    default:
+      console.log(direction);
+      break;
+  }
+}
+
 export function getDirection(from: Coord, to: Coord) {
   if (!from || !to) return "";
+  // console.log(from, to)
+  // debugger
   return directionToString(transformationToDirection(positionsToTransformation(from, to)));
 }
 

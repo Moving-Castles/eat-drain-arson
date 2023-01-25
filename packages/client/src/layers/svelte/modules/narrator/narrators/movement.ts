@@ -11,6 +11,8 @@ export function movement(update: ComponentUpdate, isSelf: boolean) {
   const from = update.value[1];
   const to = update.value[0];
 
+  console.log("inside movement, ", update);
+
   if (isSelf) {
     return sample(secondPersonActions) + getDirection(from, to);
   } else {
