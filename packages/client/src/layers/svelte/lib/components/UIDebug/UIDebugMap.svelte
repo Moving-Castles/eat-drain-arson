@@ -2,10 +2,11 @@
   import type { Coord } from "@latticexyz/utils";
   import { onMount } from "svelte";
   import { entities } from "../../../modules/entities";
-  import { playerAddress, player } from "../../../modules/player";
+  import { playerAddress, player, multiCore, playerCore } from "../../../modules/player";
   import { addressToColor } from "../../../utils/ui";
 
   import TileInteract from "./UITileInteract.svelte";
+  import DebugChat from "./UIDebugChat.svelte";
 
   $: console.log($entities);
 
@@ -93,6 +94,10 @@
     {/each}
   </div>
 </div>
+
+{#if $multiCore}
+  <DebugChat channelId={$playerCore.carriedBy} />
+{/if}
 
 <style>
   .ui-debug-map {

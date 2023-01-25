@@ -1,9 +1,10 @@
 import { derived, writable, get } from "svelte/store";
 import { network, blockNumber } from "../network";
-import type { Entity, Player } from "../entities";
+import type { Core, BaseEntity } from "../entities";
 import { entities } from "../entities";
 
 import { Directions } from "../../utils/space";
+import { FaucetStore_LatestDripEntry } from "@latticexyz/services/protobuf/ts/faucet/faucet";
 
 // --- TYPES -----------------------------------------------------------------
 
@@ -58,42 +59,51 @@ export function activityToVerb(activity: Activities) {
 // --- STORES -----------------------------------------------------------------
 
 export const playerAddress = derived(network, ($network) => $network.network?.connectedAddress.get() || "0x0");
-export const player = derived(
-  [entities, playerAddress],
-  ([$entities, $playerAddress]) => $entities[$playerAddress] as Player
-);
-export const playerActivity = writable(Activities.Idle);
-export const playerDirection = writable(Directions.None);
-export const playerEnergy = derived([player, blockNumber], ([$player, $blockNumber]) =>
-  $player ? calculateEnergy($player, $blockNumber) : 0
-);
-export const heartbeats = derived([player, blockNumber], ([$player, $blockNumber]) =>
-  $player && $blockNumber ? calculateHeartbeats($player, $blockNumber) : 0
-);
-export const dead = derived(player, ($player) => $player.energy < 1);
-
-// --- FUNCTIONS -----------------------------------------------------------------
 
 /**
- * Calculate the player's energy
- * @param $player
- * @param $blockNumber
- * @returns
+ * The `core` is the agent of the player.
+ *
+ * A `core` controls any `baseEntity` it is carried by.
+ *
  */
-export function calculateEnergy($player: Player, $blockNumber: number) {
-  if (parseInt(String($player.death)) <= $blockNumber) {
-    return 0;
-  }
-  // actualEnergy = deathBlock - currentBlock
-  return parseInt(String($player.death)) - $blockNumber;
-}
+export const playerCore = derived(
+  [entities, playerAddress],
+  ([$entities, $playerAddress]) => $entities[$playerAddress] as Core
+);
 
-export function calculateHeartbeats(player: Player, blockNumber: number) {
-  const energy = calculateEnergy(player, blockNumber);
-  const lifespan = parseInt(String(player.death)) - parseInt(String(player.birth));
-  if (energy < 1) {
-    return lifespan;
-  } else {
-    return lifespan + (blockNumber - parseInt(String(player.death)));
-  }
-}
+/**
+ * The `baseEntity` carrying the player's `core`
+ *
+ * A `baseEntity` is a "physical body" with position
+ * and inventory. It can be controlled by any `core` it carries.
+ *
+ */
+export const playerBaseEntity = derived(
+  [entities, playerCore],
+  ([$entities, $playerCore]) => $entities[$playerCore.carriedBy] as BaseEntity
+);
+
+/**
+ * Is the player's core sharing a baseEntity with other cores?
+ */
+export const multiCore = derived([entities, playerCore], ([$entities, $playerCore]) =>
+  Object.values($entities).filter((e) => e.carriedBy == $playerCore.carriedBy).length > 1 ? true : false
+);
+
+// - L - E - G - A - C - Y -
+
+export const player = derived([entities, playerAddress], ([$entities, $playerAddress]) => $entities[$playerAddress]);
+
+export const playerActivity = writable(Activities.Idle);
+export const playerDirection = writable(Directions.None);
+
+export const dead = derived(player, ($player) => $player.energy < 1);
+
+// export const playerEnergy = derived([player, blockNumber], ([$player, $blockNumber]) =>
+//   $player ? calculateEnergy($player, $blockNumber) : 0
+// // );
+// export const heartbeats = derived([player, blockNumber], ([$player, $blockNumber]) =>
+//   $player && $blockNumber ? calculateHeartbeats($player, $blockNumber) : 0
+// );
+
+export const heartbeats = 0;

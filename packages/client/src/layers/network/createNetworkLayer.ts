@@ -87,19 +87,24 @@ export async function createNetworkLayer(config: GameConfig) {
     return systems["system.Extract"].executeTyped(extractionCoordinates);
   }
 
-  function consume(resourceInput: number) {
-    return false;
-    // return systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
+  function pickUp(portableEntity: string) {
+    return systems["system.PickUp"].executeTyped(portableEntity);
   }
 
-  function burn(resourceInput: number) {
-    return false;
-    // return systems["system.Fire"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
+  function drop(portableEntity: string) {
+    return systems["system.Drop"].executeTyped(portableEntity);
   }
 
-  function play(energyInput: number) {
-    return false;
-    // return systems["system.Play"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
+  function take(portableEntity: string) {
+    return systems["system.Take"].executeTyped(portableEntity);
+  }
+
+  function give(portableEntity: string, targetBaseEntity: string) {
+    return systems["system.Give"].executeTyped(portableEntity, targetBaseEntity);
+  }
+
+  function consume(substanceBlockEntity: string) {
+    return systems["system.Consume"].executeTyped(substanceBlockEntity);
   }
 
   // --- CONTEXT --------------------------------------------------------------------
@@ -112,7 +117,7 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: { spawn, move, extract, consume, burn, play },
+    api: { spawn, move, extract, pickUp, drop, take, give, consume },
     dev: setupDevSystems(world, encoders, systems),
   };
 
