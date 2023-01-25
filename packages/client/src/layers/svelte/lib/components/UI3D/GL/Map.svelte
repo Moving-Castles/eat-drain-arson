@@ -14,7 +14,7 @@
 
   let grid: GridTile[] = [];
 
-  grid = initGrid(50);
+  grid = initGrid(10);
 
   blockNumber.subscribe(async () => {
     grid = await updateGrid(grid);
@@ -28,7 +28,7 @@
 <!-- <Player /> -->
 
 <!-- BASE LAYER -->
-<T.Group>
+<T.Group position.x={-5} position.z={-5}>
   <!-- Floor -->
   {#each grid as tile (`${tile.coordinates.x}-${tile.coordinates.y}`)}
     <Tile {tile} />
