@@ -43,9 +43,9 @@ export const updateTweenedEntity = (address: string, entity: Entity) => {
     const d = entityDurations[k];
 
     if (d !== false && !!v) {
-      console.log(typeof v);
-      console.log(v);
-      console.log(v?.subscribe);
+      // console.log(typeof v);
+      // console.log(v);
+      // console.log(v?.subscribe);
     }
   });
 };
