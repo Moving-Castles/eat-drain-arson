@@ -4,6 +4,7 @@
   // GAME
   import { blockNumber } from "../../../../modules/network";
   import { entities, getCores } from "../../../../modules/entities";
+  // import { entities } from "../../../../modules/gamestate";
   import { initGrid, updateGrid } from "../../UIGridMap";
   // GL
   import { T } from "@threlte/core";

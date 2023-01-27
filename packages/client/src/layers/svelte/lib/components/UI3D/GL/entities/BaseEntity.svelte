@@ -20,6 +20,12 @@
     console.log(object);
   };
 
+  let { position } = entity;
+
+  const p = tweened(position, { duration: 10000 });
+
+  $: p.set(entity.position);
+
   onMount(() => {
     opacity.set(1);
   });
@@ -30,7 +36,7 @@
   on:click={onClick}
   geometry={new BoxGeometry(0.5, 0.5, 0.5)}
   material={new MeshBasicMaterial({ color, transparent: true, opacity: $opacity })}
-  position={new Vector3(entity.position.x, 0, entity.position.y)}
+  position={{ x: $p.x, y: 0, z: $p.y }}
   rotation={new Vector3(0, DEG2RAD * 45, DEG2RAD)}
 >
   <slot />
