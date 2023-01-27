@@ -34,4 +34,15 @@ library LibConfig {
     GameConfigComponent gameConfigComponent = GameConfigComponent(getAddressById(_components, GameConfigComponentID));
     return gameConfigComponent.getValue(GodID);
   }
+
+  /**
+   * Is initialized
+   *
+   * @param _components World components
+   * @return bool is initialized?
+   */
+  function isInitialized(IUint256Component _components) internal view returns (bool) {
+    GameConfigComponent gameConfigComponent = GameConfigComponent(getAddressById(_components, GameConfigComponentID));
+    return gameConfigComponent.has(GodID);
+  }
 }

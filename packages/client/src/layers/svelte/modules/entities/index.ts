@@ -1,14 +1,23 @@
 import type { Coord } from "@latticexyz/utils";
 import { writable, get, derived } from "svelte/store";
+import type { GameConfig } from "../../../network/config";
 import { network } from "../network";
-// import { player } from "../player";
-import { uniq } from "lodash";
-import { seedToName } from "../../utils/name";
-import type { BooleanKeyframeTrack } from "three";
 
 // --- TYPES -----------------------------------------------------------------
 
+export type GameConfig = {
+  worldHeight: number;
+  worldWidth: number;
+  initialEnergy: number;
+  matterPerTile: number;
+  defaultCarryingCapacity: number;
+  moveCost: number;
+  extractCost: number;
+  transferCost: number;
+};
+
 export type Entity = {
+  gameConfig?: GameConfig;
   creationBlock?: number;
   readyBlock?: number;
   matter?: number;
@@ -22,6 +31,7 @@ export type Entity = {
   abilityMove?: boolean;
   abilityConsume?: boolean;
   abilityExtract?: boolean;
+  untraversable?: boolean;
 };
 
 export type Core = {

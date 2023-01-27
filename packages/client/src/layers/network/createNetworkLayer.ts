@@ -19,6 +19,8 @@ import {
   defineAbilityMoveComponent,
   defineAbilityConsumeComponent,
   defineAbilityExtractComponent,
+  defineGameConfigComponent,
+  defineUntraversableComponent,
 } from "./components";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { getNetworkConfig } from "./config";
@@ -38,6 +40,7 @@ export async function createNetworkLayer(config: GameConfig) {
   // --- COMPONENTS -----------------------------------------------------------------
   const components = {
     LoadingState: defineLoadingStateComponent(world),
+    GameConfig: defineGameConfigComponent(world),
     Position: definePositionComponent(world),
     Energy: defineEnergyComponent(world),
     Matter: defineMatterComponent(world),
@@ -51,6 +54,7 @@ export async function createNetworkLayer(config: GameConfig) {
     AbilityMove: defineAbilityMoveComponent(world),
     AbilityConsume: defineAbilityConsumeComponent(world),
     AbilityExtract: defineAbilityExtractComponent(world),
+    Untraversable: defineUntraversableComponent(world),
   };
 
   // --- SETUP ----------------------------------------------------------------------
@@ -64,18 +68,18 @@ export async function createNetworkLayer(config: GameConfig) {
   const address = network.connectedAddress.get();
   console.log("player address:", address);
 
-  async function requestDrip() {
-    const playerIsBroke = (await network.signer.get()?.getBalance())?.lte(utils.parseEther("0.05"));
-    if (playerIsBroke) {
-      console.info("[Dev Faucet] Dripping funds to player");
-      // Double drip
-      address && (await faucet?.dripDev({ address })) && (await faucet?.dripDev({ address }));
-    }
-  }
+  // async function requestDrip() {
+  //   const playerIsBroke = (await network.signer.get()?.getBalance())?.lte(utils.parseEther("0.05"));
+  //   if (playerIsBroke) {
+  //     console.info("[Dev Faucet] Dripping funds to player");
+  //     // Double drip
+  //     address && (await faucet?.dripDev({ address })) && (await faucet?.dripDev({ address }));
+  //   }
+  // }
 
-  requestDrip();
-  // Request a drip every 20 seconds
-  setInterval(requestDrip, 20000);
+  // requestDrip();
+  // // Request a drip every 20 seconds
+  // setInterval(requestDrip, 20000);
 
   // --- ACTION SYSTEM --------------------------------------------------------------
   const actions = createActionSystem(world, txReduced$);

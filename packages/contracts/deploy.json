@@ -13,7 +13,8 @@
     "AbilityMoveComponent",
     "AbilityConsumeComponent",
     "AbilityExtractComponent",
-    "GameConfigComponent"
+    "GameConfigComponent",
+    "UntraversableComponent"
   ],
   "systems": [
     {
@@ -24,6 +25,7 @@
     },
     {
       "name": "InitSystem",
+      "initialize": "new bytes(0)",
       "writeAccess": [
         "*"
       ]
@@ -42,7 +44,8 @@
         "CarriedByComponent",
         "AbilityMoveComponent",
         "AbilityConsumeComponent",
-        "AbilityExtractComponent"
+        "AbilityExtractComponent",
+        "UntraversableComponent"
       ]
     },
     {
@@ -54,7 +57,8 @@
         "EnergyComponent",
         "ReadyBlockComponent",
         "CarriedByComponent",
-        "AbilityMoveComponent"
+        "AbilityMoveComponent",
+        "UntraversableComponent"
       ]
     },
     {

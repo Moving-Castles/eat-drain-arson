@@ -12,3 +12,5 @@ export { defineCarryingCapacityComponent } from "./CarryingCapacityComponent";
 export { defineAbilityMoveComponent } from "./AbilityMoveComponent";
 export { defineAbilityConsumeComponent } from "./AbilityConsumeComponent";
 export { defineAbilityExtractComponent } from "./AbilityExtractComponent";
+export { defineUntraversableComponent } from "./UntraversableComponent";
+export { defineGameConfigComponent } from "./GameConfigComponent";

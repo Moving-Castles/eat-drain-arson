@@ -25,8 +25,6 @@ import { CoreComponent, ID as CoreComponentID } from "../components/CoreComponen
 import { CarriedByComponent, ID as CarriedByComponentID } from "../components/CarriedByComponent.sol";
 import { MatterComponent, ID as MatterComponentID } from "../components/MatterComponent.sol";
 
-import { InitSystem, ID as InitSystemID } from "../systems/InitSystem.sol";
-
 contract MudTest is DSTest {
   Cheats internal immutable vm = Cheats(HEVM_ADDRESS);
   Utilities internal immutable utils = new Utilities();
@@ -81,8 +79,6 @@ contract MudTest is DSTest {
     carriedByComponent = CarriedByComponent(getAddressById(components, CarriedByComponentID));
     matterComponent = MatterComponent(getAddressById(components, MatterComponentID));
 
-    InitSystem initSystem = InitSystem(system(InitSystemID));
-    initSystem.executeTyped();
     gameConfig = LibConfig.getGameConfig(components);
   }
 
