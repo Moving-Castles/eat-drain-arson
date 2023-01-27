@@ -1,14 +1,12 @@
 <script lang="ts">
   import type { Coord } from "@latticexyz/utils";
   import { onMount } from "svelte";
-  import { entities } from "../../../modules/entities";
-  import { playerAddress, player, multiCore, playerCore } from "../../../modules/player";
+  import { baseEntities, cores, items } from "../../../modules/entities";
+  import { playerAddress, playerCore, multiCore } from "../../../modules/player";
   import { addressToColor } from "../../../utils/ui";
 
   import TileInteract from "./UITileInteract.svelte";
   import DebugChat from "./UIDebugChat.svelte";
-
-  $: console.log($entities);
 
   let selectedTileCoords: Coord;
   let tileInteractActive = false;
@@ -69,28 +67,37 @@
         <div>{tile.coordinates.x}:{tile.coordinates.y}</div>
       </div>
     {/each}
+
     <!-- BASE ENTITIES -->
-    {#each Object.entries($entities) as [entityId, entity]}
-      {#if entity.carryingCapacity}
-        <div
-          class="base-entity"
-          style={"background:" +
-            addressToColor(entityId) +
-            "; left:" +
-            (entity.position.x * 50 + 5) +
-            "px; top:" +
-            (entity.position.y * 50 + 5) +
-            "px;"}
-        >
-          {#each Object.entries($entities) as [coreEntityId, coreEntity]}
-            {#if coreEntity.core && coreEntity.carriedBy == entityId}
-              <div class="core" style={"background:" + addressToColor(coreEntityId) + ";"}>
-                {#if coreEntityId === $playerAddress}*{/if}
-              </div>
-            {/if}
-          {/each}
-        </div>
-      {/if}
+    {#each Object.entries($baseEntities) as [entityId, entity]}
+      <div
+        class="base-entity"
+        style={"background:" +
+          addressToColor(entityId) +
+          "; left:" +
+          (entity.position.x * 50 + 5) +
+          "px; top:" +
+          (entity.position.y * 50 + 5) +
+          "px;"}
+      >
+        <!-- CORES -->
+        {#each Object.entries($cores) as [coreEntityId, coreEntity]}
+          {#if coreEntity.carriedBy == entityId}
+            <div class="core" style={"background:" + addressToColor(coreEntityId) + ";"}>
+              {#if coreEntityId === $playerAddress}*{/if}
+            </div>
+          {/if}
+        {/each}
+
+        <!-- ITEMS -->
+        {#each Object.entries($items) as [coreEntityId, coreEntity]}
+          {#if coreEntity.carriedBy == entityId}
+            <div class="item" style={"background:" + addressToColor(coreEntityId) + ";"}>
+              {#if coreEntityId === $playerAddress}*{/if}
+            </div>
+          {/if}
+        {/each}
+      </div>
     {/each}
   </div>
 </div>
@@ -143,8 +150,17 @@
   }
 
   .core {
-    width: 20px;
-    height: 20px;
+    width: 10px;
+    height: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+  }
+
+  .item {
+    width: 5px;
+    height: 5px;
     display: flex;
     justify-content: center;
     align-items: center;

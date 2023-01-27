@@ -8,8 +8,10 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
-import { Direction } from "../utils/types.sol";
-import { STEP_COST, WORLD_HEIGHT, WORLD_WIDTH } from "../utils/config.sol";
+import { Direction } from "../utils/constants.sol";
+
+import { LibConfig } from "../libraries/LibConfig.sol";
+import { GameConfig } from "../components/GameConfigComponent.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { AbilityMoveComponent, ID as AbilityMoveComponentID } from "../components/AbilityMoveComponent.sol";
@@ -81,20 +83,22 @@ library LibMove {
     PositionComponent positionComponent = PositionComponent(getAddressById(_components, PositionComponentID));
     Coord memory newPosition = positionComponent.getValue(_entity);
 
+    GameConfig memory gameConfig = LibConfig.getGameConfig(_components);
+
     if (_direction == Direction.North) {
       if (newPosition.y > 0) newPosition.y -= 1;
     } else if (_direction == Direction.NorthEast) {
       if (newPosition.y > 0) newPosition.y -= 1;
-      if (newPosition.x < WORLD_WIDTH) newPosition.x += 1;
+      if (newPosition.x < gameConfig.worldWidth) newPosition.x += 1;
     } else if (_direction == Direction.East) {
-      if (newPosition.x < WORLD_WIDTH) newPosition.x += 1;
+      if (newPosition.x < gameConfig.worldWidth) newPosition.x += 1;
     } else if (_direction == Direction.SouthEast) {
-      if (newPosition.y < WORLD_HEIGHT) newPosition.y += 1;
-      if (newPosition.x < WORLD_WIDTH) newPosition.x += 1;
+      if (newPosition.y < gameConfig.worldHeight) newPosition.y += 1;
+      if (newPosition.x < gameConfig.worldWidth) newPosition.x += 1;
     } else if (_direction == Direction.South) {
-      if (newPosition.y < WORLD_HEIGHT) newPosition.y += 1;
+      if (newPosition.y < gameConfig.worldHeight) newPosition.y += 1;
     } else if (_direction == Direction.SouthWest) {
-      if (newPosition.y < WORLD_HEIGHT) newPosition.y += 1;
+      if (newPosition.y < gameConfig.worldHeight) newPosition.y += 1;
       if (newPosition.x > 0) newPosition.x -= 1;
     } else if (_direction == Direction.West) {
       if (newPosition.x > 0) newPosition.x -= 1;

@@ -15,14 +15,14 @@ import { SubstanceComponent, ID as SubstanceComponentID } from "../components/Su
 
 library LibSubstanceBlock {
   /**
-   * Spawn a substanceBlock entity
+   * Create a substanceBlock entity
    *
    * @param _components World components
    * @param _substanceBlockEntity entity
    * @param _coordinates coord
    * @param _amount Matter
    */
-  function spawn(
+  function create(
     IUint256Component _components,
     uint256 _substanceBlockEntity,
     Coord memory _coordinates,

@@ -8,7 +8,8 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
-import { INITIAL_ENERGY } from "../utils/config.sol";
+import { LibConfig } from "../libraries/LibConfig.sol";
+import { GameConfig } from "../components/GameConfigComponent.sol";
 
 import { CoreComponent, ID as CoreComponentID } from "../components/CoreComponent.sol";
 import { CreationBlockComponent, ID as CreationBlockComponentID } from "../components/CreationBlockComponent.sol";
@@ -33,10 +34,12 @@ library LibCore {
       getAddressById(_components, CreationBlockComponentID)
     );
 
+    GameConfig memory gameConfig = LibConfig.getGameConfig(_components);
+
     coreComponent.set(_coreEntity);
     creationBlockComponent.set(_coreEntity, block.number);
     readyBlockComponent.set(_coreEntity, block.number);
-    energyComponent.set(_coreEntity, INITIAL_ENERGY);
+    energyComponent.set(_coreEntity, gameConfig.initialEnergy);
     portableComponent.set(_coreEntity);
   }
 

@@ -4,10 +4,6 @@ import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
-import { Coord } from "../components/PositionComponent.sol";
-
-import { EXTRACT_COST, MATTER_PER_TILE } from "../utils/config.sol";
-
 import { LibMove } from "../libraries/LibMove.sol";
 import { LibCore } from "../libraries/LibCore.sol";
 import { LibCooldown } from "../libraries/LibCooldown.sol";
@@ -16,6 +12,10 @@ import { LibResource } from "../libraries/LibResource.sol";
 import { LibSubstanceBlock } from "../libraries/LibSubstanceBlock.sol";
 import { LibInventory } from "../libraries/LibInventory.sol";
 import { LibAbility } from "../libraries/LibAbility.sol";
+import { LibConfig } from "../libraries/LibConfig.sol";
+
+import { GameConfig } from "../components/GameConfigComponent.sol";
+import { Coord } from "../components/PositionComponent.sol";
 
 import { ID as AbilityExtractComponentID } from "../components/AbilityExtractComponent.sol";
 
@@ -28,9 +28,11 @@ contract ExtractSystem is System {
     Coord memory _extractionCoordinates = abi.decode(arguments, (Coord));
     uint256 coreEntity = addressToEntity(msg.sender);
 
+    GameConfig memory gameConfig = LibConfig.getGameConfig(components);
+
     require(LibCore.isSpawned(components, coreEntity), "ExtractSystem: entity does not exist");
     require(LibCooldown.isReady(components, coreEntity), "ExtractSystem: entity is in cooldown");
-    require(LibCore.checkEnergy(components, coreEntity, EXTRACT_COST), "ExtractSystem: not enough energy");
+    require(LibCore.checkEnergy(components, coreEntity, gameConfig.extractCost), "ExtractSystem: not enough energy");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
 
@@ -56,16 +58,24 @@ contract ExtractSystem is System {
     uint256 resourceEntity = LibResource.getAtCoordinate(components, _extractionCoordinates);
 
     if (resourceEntity != 0) {
-      require(LibResource.checkMatter(components, resourceEntity, EXTRACT_COST), "ExtractSystem: not enough matter");
-      LibResource.decreaseMatter(components, resourceEntity, EXTRACT_COST);
-      LibSubstanceBlock.spawn(components, world.getUniqueEntityId(), _extractionCoordinates, EXTRACT_COST);
+      require(
+        LibResource.checkMatter(components, resourceEntity, gameConfig.extractCost),
+        "ExtractSystem: not enough matter"
+      );
+      LibResource.decreaseMatter(components, resourceEntity, gameConfig.extractCost);
+      LibSubstanceBlock.create(components, world.getUniqueEntityId(), _extractionCoordinates, gameConfig.extractCost);
     } else {
-      LibResource.spawn(components, world.getUniqueEntityId(), _extractionCoordinates, MATTER_PER_TILE - EXTRACT_COST);
-      LibSubstanceBlock.spawn(components, world.getUniqueEntityId(), _extractionCoordinates, EXTRACT_COST);
+      LibResource.create(
+        components,
+        world.getUniqueEntityId(),
+        _extractionCoordinates,
+        gameConfig.matterPerTile - gameConfig.extractCost
+      );
+      LibSubstanceBlock.create(components, world.getUniqueEntityId(), _extractionCoordinates, gameConfig.extractCost);
     }
 
-    LibCooldown.setReadyBlock(components, coreEntity, EXTRACT_COST);
-    LibCore.decreaseEnergy(components, coreEntity, EXTRACT_COST);
+    LibCooldown.setReadyBlock(components, coreEntity, gameConfig.extractCost);
+    LibCore.decreaseEnergy(components, coreEntity, gameConfig.extractCost);
   }
 
   function executeTyped(Coord memory _extractionCoordinates) public returns (bytes memory) {

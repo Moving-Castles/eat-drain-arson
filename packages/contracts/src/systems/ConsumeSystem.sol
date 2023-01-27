@@ -4,10 +4,6 @@ import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
-import { TRANSFER_COST } from "../utils/config.sol";
-
-import { console } from "forge-std/console.sol";
-
 import { LibCore } from "../libraries/LibCore.sol";
 import { LibCooldown } from "../libraries/LibCooldown.sol";
 import { LibInventory } from "../libraries/LibInventory.sol";

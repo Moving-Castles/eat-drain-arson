@@ -4,14 +4,14 @@ import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
-import { TRANSFER_COST } from "../utils/config.sol";
-
 import { LibMove } from "../libraries/LibMove.sol";
 import { LibCore } from "../libraries/LibCore.sol";
 import { LibCooldown } from "../libraries/LibCooldown.sol";
 import { LibMap } from "../libraries/LibMap.sol";
 import { LibInventory } from "../libraries/LibInventory.sol";
+import { LibConfig } from "../libraries/LibConfig.sol";
 
+import { GameConfig } from "../components/GameConfigComponent.sol";
 import { Coord } from "../components/PositionComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Give"));
@@ -23,9 +23,11 @@ contract GiveSystem is System {
     (uint256 _portableEntity, uint256 _targetBaseEntity) = abi.decode(arguments, (uint256, uint256));
     uint256 coreEntity = addressToEntity(msg.sender);
 
+    GameConfig memory gameConfig = LibConfig.getGameConfig(components);
+
     require(LibCore.isSpawned(components, coreEntity), "GiveSystem: entity does not exist");
     require(LibCooldown.isReady(components, coreEntity), "GiveSystem: entity is in cooldown");
-    require(LibCore.checkEnergy(components, coreEntity, TRANSFER_COST), "GiveSystem: not enough energy");
+    require(LibCore.checkEnergy(components, coreEntity, gameConfig.transferCost), "GiveSystem: not enough energy");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
     require(LibInventory.isCarriedBy(components, _portableEntity, baseEntity), "GiveSystem: not carried by caller");
@@ -36,7 +38,7 @@ contract GiveSystem is System {
 
     LibInventory.addToInventory(components, _targetBaseEntity, _portableEntity);
 
-    LibCore.decreaseEnergy(components, coreEntity, TRANSFER_COST);
+    LibCore.decreaseEnergy(components, coreEntity, gameConfig.transferCost);
   }
 
   function executeTyped(uint256 _portableEntity, uint256 _targetBaseEntity) public returns (bytes memory) {

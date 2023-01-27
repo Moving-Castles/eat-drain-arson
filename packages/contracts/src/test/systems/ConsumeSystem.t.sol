@@ -4,16 +4,16 @@ pragma solidity >=0.8.17;
 import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
 import { addressToEntity } from "solecs/utils.sol";
-import { TRANSFER_COST, INITIAL_ENERGY } from "../../utils/config.sol";
+
+import { ComponentDevSystem, ID as ComponentDevSystemID } from "../../systems/ComponentDevSystem.sol";
 import { ConsumeSystem, ID as ConsumeSystemID } from "../../systems/ConsumeSystem.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
+
 import { Coord } from "../../components/PositionComponent.sol";
-import { Direction } from "../../utils/types.sol";
+import { Direction } from "../../utils/constants.sol";
 
 import { LibResource } from "../../libraries/LibResource.sol";
 import { LibSubstanceBlock } from "../../libraries/LibSubstanceBlock.sol";
-
-import { ComponentDevSystem, ID as ComponentDevSystemID } from "../../systems/ComponentDevSystem.sol";
 
 contract ConsumeSystemTest is MudTest {
   function testConsume() public {
@@ -52,7 +52,7 @@ contract ConsumeSystemTest is MudTest {
     vm.stopPrank();
 
     // Core energy should be INITIAL_ENERGY + 10
-    assertEq(energyComponent.getValue(addressToEntity(alice)), INITIAL_ENERGY + 10);
+    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy + 10);
 
     // portableEntity should be removed
     assertTrue(!portableComponent.has(portableEntity));

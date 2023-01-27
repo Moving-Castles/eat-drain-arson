@@ -1,10 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.0;
-
-struct Coord {
-  int32 x;
-  int32 y;
-}
+pragma solidity >=0.8.17;
 
 //  | 8 | 1 | 2 |
 //  | 7 | X | 3 |
@@ -20,3 +15,5 @@ enum Direction {
   West,
   NorthWest
 }
+
+uint256 constant GodID = 0x60D;

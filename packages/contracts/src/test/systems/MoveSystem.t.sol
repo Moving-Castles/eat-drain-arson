@@ -4,11 +4,12 @@ pragma solidity >=0.8.17;
 import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
 import { addressToEntity } from "solecs/utils.sol";
-import { STEP_COST, WORLD_HEIGHT, WORLD_WIDTH, INITIAL_ENERGY } from "../../utils/config.sol";
+
 import { MoveSystem, ID as MoveSystemID } from "../../systems/MoveSystem.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
+
 import { Coord } from "../../components/PositionComponent.sol";
-import { Direction } from "../../utils/types.sol";
+import { Direction } from "../../utils/constants.sol";
 
 contract MoveSystemTest is MudTest {
   function testStep() public {
@@ -45,12 +46,12 @@ contract MoveSystemTest is MudTest {
 
     // --- ReadyBlock
     uint256 rB = readyBlockComponent.getValue(addressToEntity(alice));
-    assertEq(rB, STEP_COST + 2);
+    assertEq(rB, gameConfig.moveCost + 2);
     console.log("___READY BLOCK:");
     console.log(rB);
 
     // --- Energy
-    assertEq(energyComponent.getValue(addressToEntity(alice)), INITIAL_ENERGY - STEP_COST);
+    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.moveCost);
   }
 
   function testRevertCooldown() public {

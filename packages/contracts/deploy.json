@@ -12,7 +12,8 @@
     "SubstanceComponent",
     "AbilityMoveComponent",
     "AbilityConsumeComponent",
-    "AbilityExtractComponent"
+    "AbilityExtractComponent",
+    "GameConfigComponent"
   ],
   "systems": [
     {
@@ -22,8 +23,15 @@
       ]
     },
     {
+      "name": "InitSystem",
+      "writeAccess": [
+        "*"
+      ]
+    },
+    {
       "name": "SpawnSystem",
       "writeAccess": [
+        "GameConfigComponent",
         "CoreComponent",
         "PositionComponent",
         "EnergyComponent",
@@ -40,6 +48,7 @@
     {
       "name": "MoveSystem",
       "writeAccess": [
+        "GameConfigComponent",
         "CoreComponent",
         "PositionComponent",
         "EnergyComponent",
@@ -51,6 +60,7 @@
     {
       "name": "ExtractSystem",
       "writeAccess": [
+        "GameConfigComponent",
         "CoreComponent",
         "PositionComponent",
         "EnergyComponent",
@@ -66,6 +76,7 @@
     {
       "name": "PickUpSystem",
       "writeAccess": [
+        "GameConfigComponent",
         "CoreComponent",
         "PositionComponent",
         "EnergyComponent",
@@ -78,6 +89,7 @@
     {
       "name": "DropSystem",
       "writeAccess": [
+        "GameConfigComponent",
         "CoreComponent",
         "PositionComponent",
         "EnergyComponent",
@@ -90,6 +102,7 @@
     {
       "name": "TakeSystem",
       "writeAccess": [
+        "GameConfigComponent",
         "CoreComponent",
         "PositionComponent",
         "EnergyComponent",
@@ -102,6 +115,7 @@
     {
       "name": "GiveSystem",
       "writeAccess": [
+        "GameConfigComponent",
         "CoreComponent",
         "PositionComponent",
         "EnergyComponent",
@@ -114,6 +128,7 @@
     {
       "name": "ConsumeSystem",
       "writeAccess": [
+        "GameConfigComponent",
         "CoreComponent",
         "EnergyComponent",
         "ReadyBlockComponent",

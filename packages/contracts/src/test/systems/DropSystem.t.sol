@@ -4,16 +4,16 @@ pragma solidity >=0.8.17;
 import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
 import { addressToEntity } from "solecs/utils.sol";
-import { TRANSFER_COST, INITIAL_ENERGY } from "../../utils/config.sol";
+
+import { ComponentDevSystem, ID as ComponentDevSystemID } from "../../systems/ComponentDevSystem.sol";
 import { DropSystem, ID as DropSystemID } from "../../systems/DropSystem.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
+
 import { Coord } from "../../components/PositionComponent.sol";
-import { Direction } from "../../utils/types.sol";
+import { Direction } from "../../utils/constants.sol";
 
 import { LibResource } from "../../libraries/LibResource.sol";
 import { LibSubstanceBlock } from "../../libraries/LibSubstanceBlock.sol";
-
-import { ComponentDevSystem, ID as ComponentDevSystemID } from "../../systems/ComponentDevSystem.sol";
 
 contract DropSystemTest is MudTest {
   function testDrop() public {
@@ -53,8 +53,8 @@ contract DropSystemTest is MudTest {
     // portableEntity should not have carriedBy
     assertTrue(!carriedByComponent.has(portableEntity));
 
-    // Core energy should be INITAL_ENERGY - TRANSFER_COST
-    assertEq(energyComponent.getValue(addressToEntity(alice)), INITIAL_ENERGY - TRANSFER_COST);
+    // Core energy should be INITIAL_ENERGY - TRANSFER_COST
+    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.transferCost);
 
     vm.stopPrank();
   }

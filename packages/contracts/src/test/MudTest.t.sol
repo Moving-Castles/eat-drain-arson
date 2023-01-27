@@ -12,6 +12,9 @@ import { componentsComponentId, systemsComponentId } from "solecs/constants.sol"
 import { getAddressById } from "solecs/utils.sol";
 import { console } from "forge-std/console.sol";
 
+import { LibConfig } from "../libraries/LibConfig.sol";
+import { GameConfig } from "../components/GameConfigComponent.sol";
+
 import { PositionComponent, ID as PositionComponentID } from "../components/PositionComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { CreationBlockComponent, ID as CreationBlockComponentID } from "../components/CreationBlockComponent.sol";
@@ -21,6 +24,8 @@ import { CarryingCapacityComponent, ID as CarryingCapacityComponentID } from "..
 import { CoreComponent, ID as CoreComponentID } from "../components/CoreComponent.sol";
 import { CarriedByComponent, ID as CarriedByComponentID } from "../components/CarriedByComponent.sol";
 import { MatterComponent, ID as MatterComponentID } from "../components/MatterComponent.sol";
+
+import { InitSystem, ID as InitSystemID } from "../systems/InitSystem.sol";
 
 contract MudTest is DSTest {
   Cheats internal immutable vm = Cheats(HEVM_ADDRESS);
@@ -35,6 +40,8 @@ contract MudTest is DSTest {
   IUint256Component components;
   IUint256Component systems;
   Deploy internal deploy = new Deploy();
+
+  GameConfig gameConfig;
 
   PositionComponent positionComponent;
   EnergyComponent energyComponent;
@@ -73,6 +80,10 @@ contract MudTest is DSTest {
     coreComponent = CoreComponent(getAddressById(components, CoreComponentID));
     carriedByComponent = CarriedByComponent(getAddressById(components, CarriedByComponentID));
     matterComponent = MatterComponent(getAddressById(components, MatterComponentID));
+
+    InitSystem initSystem = InitSystem(system(InitSystemID));
+    initSystem.executeTyped();
+    gameConfig = LibConfig.getGameConfig(components);
   }
 
   modifier prank(address prankster) {

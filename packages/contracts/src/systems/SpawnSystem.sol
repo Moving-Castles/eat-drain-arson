@@ -4,16 +4,17 @@ import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
-import { ID as AbilityMoveComponentID } from "../components/AbilityMoveComponent.sol";
-import { ID as AbilityConsumeComponentID } from "../components/AbilityConsumeComponent.sol";
-import { ID as AbilityExtractComponentID } from "../components/AbilityExtractComponent.sol";
-
 import { LibInventory } from "../libraries/LibInventory.sol";
 import { LibCore } from "../libraries/LibCore.sol";
 import { LibMove } from "../libraries/LibMove.sol";
 import { LibAbility } from "../libraries/LibAbility.sol";
+import { LibConfig } from "../libraries/LibConfig.sol";
 
-import { DEFAULT_CARRYING_CAPACITY } from "../utils/config.sol";
+import { GameConfig } from "../components/GameConfigComponent.sol";
+
+import { ID as AbilityMoveComponentID } from "../components/AbilityMoveComponent.sol";
+import { ID as AbilityConsumeComponentID } from "../components/AbilityConsumeComponent.sol";
+import { ID as AbilityExtractComponentID } from "../components/AbilityExtractComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Spawn"));
 
@@ -25,11 +26,13 @@ contract SpawnSystem is System {
 
     require(!LibCore.isSpawned(components, coreEntity), "SpawnSystem: ID already exists");
 
+    GameConfig memory gameConfig = LibConfig.getGameConfig(components);
+
     LibCore.spawn(components, coreEntity);
 
     // Place the core in the inventory of a new base entity
     uint256 baseEntity = world.getUniqueEntityId();
-    LibInventory.setCarryingCapacity(components, baseEntity, DEFAULT_CARRYING_CAPACITY);
+    LibInventory.setCarryingCapacity(components, baseEntity, gameConfig.defaultCarryingCapacity);
     LibInventory.addToInventory(components, baseEntity, coreEntity);
     LibMove.setRandomPosition(components, baseEntity);
 
