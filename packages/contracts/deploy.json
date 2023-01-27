@@ -9,7 +9,10 @@
     "PortableComponent",
     "CarryingCapacityComponent",
     "CarriedByComponent",
-    "SubstanceComponent"
+    "SubstanceComponent",
+    "AbilityMoveComponent",
+    "AbilityConsumeComponent",
+    "AbilityExtractComponent"
   ],
   "systems": [
     {
@@ -28,7 +31,10 @@
         "ReadyBlockComponent",
         "PortableComponent",
         "CarryingCapacityComponent",
-        "CarriedByComponent"
+        "CarriedByComponent",
+        "AbilityMoveComponent",
+        "AbilityConsumeComponent",
+        "AbilityExtractComponent"
       ]
     },
     {
@@ -38,7 +44,8 @@
         "PositionComponent",
         "EnergyComponent",
         "ReadyBlockComponent",
-        "CarriedByComponent"
+        "CarriedByComponent",
+        "AbilityMoveComponent"
       ]
     },
     {
@@ -52,7 +59,8 @@
         "PortableComponent",
         "CarryingCapacityComponent",
         "SubstanceComponent",
-        "MatterComponent"
+        "MatterComponent",
+        "AbilityExtractComponent"
       ]
     },
     {
@@ -113,7 +121,8 @@
         "PortableComponent",
         "CarryingCapacityComponent",
         "SubstanceComponent",
-        "MatterComponent"
+        "MatterComponent",
+        "AbilityConsumeComponent"
       ]
     }
   ]

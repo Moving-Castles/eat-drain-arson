@@ -8,3 +8,6 @@ export { createLoadingStateSystem } from "./createLoadingStateSystem";
 export { createCoreSystem } from "./createCoreSystem";
 export { createPortableSystem } from "./createPortableSystem";
 export { createCarryingCapacitySystem } from "./createCarryingCapacitySystem";
+export { createAbilityMoveSystem } from "./createAbilityMoveSystem";
+export { createAbilityConsumeSystem } from "./createAbilityConsumeSystem";
+export { createAbilityExtractSystem } from "./createAbilityExtractSystem";

@@ -99,6 +99,38 @@
     <div class="matter">Matter: {entity.matter}</div>
   {/if}
 
+  <!-- ITEM -->
+  {#if type === EntityType.Item}
+    <div class="type">ITEM</div>
+    {#if entity.position}
+      <div class="position">
+        <div class="coord">x:{entity.position?.x}</div>
+        <div class="coord">y:{entity.position?.y}</div>
+      </div>
+    {/if}
+    <div class="control">Portable: {entity.portable}</div>
+    <div class="matter">AbilityMove: {entity.abilityMove}</div>
+    <div class="matter">AbilityConsume: {entity.abilityConsume}</div>
+    <div class="matter">AbilityExtract: {entity.abilityExtract}</div>
+    {#if entity.carriedBy}
+      <div class="control">
+        Carried by:
+        <span style={"background:" + addressToColor(entity.carriedBy) + ";"}>
+          {shortenAddress(entity.carriedBy)}
+        </span>
+      </div>
+    {/if}
+    <button on:click={pickUp}>Pick up</button>
+    <button on:click={drop}>Drop</button>
+    <button on:click={take}>Take</button>
+    <button on:click={give}>Give</button>
+    <select bind:value={targetEntityId} name="target" id="target">
+      {#each Object.keys($baseEntities) as key}
+        <option value={key}>{shortenAddress(key)}</option>
+      {/each}
+    </select>
+  {/if}
+
   <!-- SUBSTANCE BLOCK -->
   {#if type === EntityType.SubstanceBlock}
     <div class="type">SUBSTANCE</div>

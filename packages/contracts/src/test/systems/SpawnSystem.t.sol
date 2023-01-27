@@ -8,38 +8,36 @@ import { WORLD_HEIGHT, WORLD_WIDTH, INITIAL_ENERGY, DEFAULT_CARRYING_CAPACITY } 
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { Coord } from "../../components/PositionComponent.sol";
 
+import { ID as AbilityMoveComponentID } from "../../components/AbilityMoveComponent.sol";
+import { ID as AbilityConsumeComponentID } from "../../components/AbilityConsumeComponent.sol";
+import { ID as AbilityExtractComponentID } from "../../components/AbilityExtractComponent.sol";
+
+import { LibInventory } from "../../libraries/LibInventory.sol";
+import { LibAbility } from "../../libraries/LibAbility.sol";
+
 contract SpawnSystemTest is MudTest {
   function testSpawn() public {
     setUp();
 
-    // --- Spawn core
     vm.startPrank(alice);
     SpawnSystem(system(SpawnSystemID)).executeTyped();
     vm.stopPrank();
 
-    // --- Energy
-    assertEq(energyComponent.getValue(addressToEntity(alice)), INITIAL_ENERGY);
-
-    // --- ReadyBlock
-    assertEq(readyBlockComponent.getValue(addressToEntity(alice)), 1);
-
-    // --- CreationBlock
-    assertEq(creationBlockComponent.getValue(addressToEntity(alice)), 1);
-
-    // --- Core
+    // Check that the core was spawned correctly
     assertTrue(coreComponent.getValue(addressToEntity(alice)));
-
-    // --- Portable
     assertTrue(portableComponent.getValue(addressToEntity(alice)));
-
-    // --- Get base entity
+    assertEq(energyComponent.getValue(addressToEntity(alice)), INITIAL_ENERGY);
+    assertEq(creationBlockComponent.getValue(addressToEntity(alice)), 1);
+    assertEq(readyBlockComponent.getValue(addressToEntity(alice)), 1);
     assertTrue(carriedByComponent.has(addressToEntity(alice)));
+
+    // Get base entity
     uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
 
-    // --- Position
+    // Position
     Coord memory newPosition = positionComponent.getValue(baseEntity);
 
-    // --- Carrying capacity
+    // Carrying capacity
     assertEq(carryingCapacityComponent.getValue(baseEntity), DEFAULT_CARRYING_CAPACITY);
   }
 
@@ -53,5 +51,44 @@ contract SpawnSystemTest is MudTest {
     vm.expectRevert(bytes("SpawnSystem: ID already exists"));
     spawnSystem.executeTyped();
     vm.stopPrank();
+  }
+
+  function testSpawnInventory() public {
+    setUp();
+
+    vm.startPrank(alice);
+    SpawnSystem(system(SpawnSystemID)).executeTyped();
+    vm.stopPrank();
+
+    // Get base entity
+    uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
+
+    // Should have 4 items in inventory:
+    // - Core
+    // - AbilityMoveItem
+    // - AbilityConsumeItem
+    // - AbilityExtractItem
+    uint256[] memory inventory = LibInventory.getInventory(components, baseEntity);
+    assertEq(inventory.length, 4);
+  }
+
+  function testSpawnAbilities() public {
+    setUp();
+
+    vm.startPrank(alice);
+    SpawnSystem(system(SpawnSystemID)).executeTyped();
+    vm.stopPrank();
+
+    // Get base entity
+    uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
+
+    // Should be able to move
+    assertTrue(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityMoveComponentID));
+
+    // Should be able to consume
+    assertTrue(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityConsumeComponentID));
+
+    // Should be able to extract
+    assertTrue(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityExtractComponentID));
   }
 }

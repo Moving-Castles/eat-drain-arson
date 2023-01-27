@@ -16,10 +16,13 @@ import {
   defineCarryingCapacityComponent,
   defineCarriedByComponent,
   defineCoreComponent,
+  defineAbilityMoveComponent,
+  defineAbilityConsumeComponent,
+  defineAbilityExtractComponent,
 } from "./components";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { getNetworkConfig } from "./config";
-import { BigNumber, utils } from "ethers";
+import { utils } from "ethers";
 import type { Coord } from "@latticexyz/utils";
 
 /**
@@ -45,6 +48,9 @@ export async function createNetworkLayer(config: GameConfig) {
     CarryingCapacity: defineCarryingCapacityComponent(world),
     CarriedBy: defineCarriedByComponent(world),
     Core: defineCoreComponent(world),
+    AbilityMove: defineAbilityMoveComponent(world),
+    AbilityConsume: defineAbilityConsumeComponent(world),
+    AbilityExtract: defineAbilityExtractComponent(world),
   };
 
   // --- SETUP ----------------------------------------------------------------------

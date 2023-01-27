@@ -15,6 +15,9 @@
     createCarriedBySystem,
     createPortableSystem,
     createCarryingCapacitySystem,
+    createAbilityMoveSystem,
+    createAbilityConsumeSystem,
+    createAbilityExtractSystem,
   } from "./systems";
   import { network as networkStore, blockNumber, startBlock } from "./modules/network";
 
@@ -32,6 +35,9 @@
     createCarryingCapacitySystem(layers.network);
     createCarriedBySystem(layers.network);
     createCoreSystem(layers.network);
+    createAbilityMoveSystem(layers.network);
+    createAbilityConsumeSystem(layers.network);
+    createAbilityExtractSystem(layers.network);
 
     networkStore.set(layers.network);
 

@@ -4,6 +4,7 @@ import { network } from "../network";
 // import { player } from "../player";
 import { uniq } from "lodash";
 import { seedToName } from "../../utils/name";
+import type { BooleanKeyframeTrack } from "three";
 
 // --- TYPES -----------------------------------------------------------------
 
@@ -18,6 +19,9 @@ export type Entity = {
   core?: boolean;
   carriedBy?: string;
   inventory?: string[];
+  abilityMove?: boolean;
+  abilityConsume?: boolean;
+  abilityExtract?: boolean;
 };
 
 export type Core = {
@@ -48,6 +52,15 @@ export type SubstanceBlock = {
   carriedBy?: string;
 };
 
+export type Item = {
+  portable: true;
+  position?: Coord;
+  carriedBy?: string;
+  abilityMove?: boolean;
+  abilityConsume?: boolean;
+  abilityExtract?: boolean;
+};
+
 // - - - -
 
 export type Entities = {
@@ -68,6 +81,10 @@ export type Resources = {
 
 export type SubstanceBlocks = {
   [index: string]: SubstanceBlock;
+};
+
+export type Items = {
+  [index: string]: Item;
 };
 
 // --- STORES -----------------------------------------------------------------
@@ -101,6 +118,14 @@ export const freePortables = derived(entities, ($entities) => {
   return Object.fromEntries(
     Object.entries($entities).filter(([key, entity]) => entity.portable && entity.position)
   ) as Entities;
+});
+
+export const items = derived(entities, ($entities) => {
+  return Object.fromEntries(
+    Object.entries($entities).filter(
+      ([key, entity]) => entity.portable && (entity.abilityConsume || entity.abilityExtract || entity.abilityMove)
+    )
+  ) as SubstanceBlocks;
 });
 
 // --- FUNCTIONS -----------------------------------------------------------------

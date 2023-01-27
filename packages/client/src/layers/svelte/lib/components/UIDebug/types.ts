@@ -3,4 +3,5 @@ export enum EntityType {
   BaseEntity,
   Resource,
   SubstanceBlock,
+  Item,
 }

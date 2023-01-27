@@ -12,6 +12,9 @@ import { LibCore } from "../libraries/LibCore.sol";
 import { LibCooldown } from "../libraries/LibCooldown.sol";
 import { LibInventory } from "../libraries/LibInventory.sol";
 import { LibSubstanceBlock } from "../libraries/LibSubstanceBlock.sol";
+import { LibAbility } from "../libraries/LibAbility.sol";
+
+import { ID as AbilityConsumeComponentID } from "../components/AbilityConsumeComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Consume"));
 
@@ -26,6 +29,12 @@ contract ConsumeSystem is System {
     require(LibCooldown.isReady(components, coreEntity), "ConsumeSystem: entity is in cooldown");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
+
+    require(
+      LibAbility.checkInventoryForAbility(components, baseEntity, AbilityConsumeComponentID),
+      "ConsumeSystem: no item with AbilityConsume"
+    );
+
     require(LibInventory.isCarriedBy(components, _substanceBlockEntity, baseEntity), "ConsumeSystem: not carried");
 
     uint32 energy = LibSubstanceBlock.convertToEnergy(components, _substanceBlockEntity);

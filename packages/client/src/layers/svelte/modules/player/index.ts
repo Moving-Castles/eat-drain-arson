@@ -1,10 +1,8 @@
-import { derived, writable, get } from "svelte/store";
-import { network, blockNumber } from "../network";
+import { derived, writable } from "svelte/store";
+import { network } from "../network";
 import type { Core, BaseEntity } from "../entities";
-import { entities } from "../entities";
-
+import { entities, cores } from "../entities";
 import { Directions } from "../../utils/space";
-import { FaucetStore_LatestDripEntry } from "@latticexyz/services/protobuf/ts/faucet/faucet";
 
 // --- TYPES -----------------------------------------------------------------
 
@@ -86,8 +84,8 @@ export const playerBaseEntity = derived(
 /**
  * Is the player's core sharing a baseEntity with other cores?
  */
-export const multiCore = derived([entities, playerCore], ([$entities, $playerCore]) =>
-  Object.values($entities).filter((e) => e.carriedBy == $playerCore.carriedBy).length > 1 ? true : false
+export const multiCore = derived([cores, playerCore], ([$cores, $playerCore]) =>
+  Object.values($cores).filter((e) => e.carriedBy == $playerCore.carriedBy).length > 1 ? true : false
 );
 
 // - L - E - G - A - C - Y -

@@ -15,6 +15,9 @@ import { LibMap } from "../libraries/LibMap.sol";
 import { LibResource } from "../libraries/LibResource.sol";
 import { LibSubstanceBlock } from "../libraries/LibSubstanceBlock.sol";
 import { LibInventory } from "../libraries/LibInventory.sol";
+import { LibAbility } from "../libraries/LibAbility.sol";
+
+import { ID as AbilityExtractComponentID } from "../components/AbilityExtractComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Extract"));
 
@@ -30,6 +33,12 @@ contract ExtractSystem is System {
     require(LibCore.checkEnergy(components, coreEntity, EXTRACT_COST), "ExtractSystem: not enough energy");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
+
+    require(
+      LibAbility.checkInventoryForAbility(components, baseEntity, AbilityExtractComponentID),
+      "ExtractSystem: no item with AbilityExtract"
+    );
+
     Coord memory baseEntityPosition = LibMove.getPosition(components, baseEntity);
     require(LibMap.isAdjacent(baseEntityPosition, _extractionCoordinates), "ExtractSystem: tile not adjacent");
 
