@@ -9,8 +9,6 @@ import { LibMove } from "../libraries/LibMove.sol";
 import { Coord } from "../components/PositionComponent.sol";
 import { GameConfig } from "../components/GameConfigComponent.sol";
 
-import { GodID } from "../utils/constants.sol";
-
 uint256 constant ID = uint256(keccak256("system.Init"));
 
 contract InitSystem is System {
@@ -31,6 +29,7 @@ contract InitSystem is System {
     });
     LibConfig.setGameConfig(components, gameConfig);
 
+    // Create initial entities
     uint256 untraversableEntity = world.getUniqueEntityId();
     LibMove.makeUntraversable(components, untraversableEntity);
     LibMove.setPosition(components, untraversableEntity, Coord(4, 4));
