@@ -4,7 +4,7 @@ import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 
 import { LibConfig } from "../libraries/LibConfig.sol";
-import { LibMove } from "../libraries/LibMove.sol";
+import { LibMap } from "../libraries/LibMap.sol";
 
 import { Coord } from "../components/PositionComponent.sol";
 import { GameConfig } from "../components/GameConfigComponent.sol";
@@ -30,9 +30,14 @@ contract InitSystem is System {
     LibConfig.setGameConfig(components, gameConfig);
 
     // Create initial entities
-    uint256 untraversableEntity = world.getUniqueEntityId();
-    LibMove.makeUntraversable(components, untraversableEntity);
-    LibMove.setPosition(components, untraversableEntity, Coord(4, 4));
+    LibMap.createUntraversable(components, world.getUniqueEntityId(), Coord(4, 0));
+    LibMap.createUntraversable(components, world.getUniqueEntityId(), Coord(4, 1));
+    LibMap.createUntraversable(components, world.getUniqueEntityId(), Coord(4, 2));
+    LibMap.createUntraversable(components, world.getUniqueEntityId(), Coord(4, 3));
+    LibMap.createUntraversable(components, world.getUniqueEntityId(), Coord(4, 4));
+    LibMap.createUntraversable(components, world.getUniqueEntityId(), Coord(4, 5));
+    LibMap.createUntraversable(components, world.getUniqueEntityId(), Coord(4, 8));
+    LibMap.createUntraversable(components, world.getUniqueEntityId(), Coord(4, 9));
   }
 
   function executeTyped() public returns (bytes memory) {
