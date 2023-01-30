@@ -1,36 +1,44 @@
 <script lang="ts">
-  import type { Entity } from "../../../modules/entities";
-  import { entities, baseEntities } from "../../../modules/entities";
-  import { playerAddress } from "../../../modules/player";
+  import { playerAddress, playerCore } from "../../../modules/player";
   import { shortenAddress, addressToColor } from "../../../utils/ui";
-  import { EntityType } from "./types";
-  import { network } from "../../../modules/network";
-  import { io } from "socket.io-client";
-
   export let channelId: string;
 
+  type Message = {
+    id: string;
+    channel: string;
+    text: string;
+  };
+
   let textInput = "";
-  let messages: string[] = [];
+  let messages: Message[] = [];
 
-  const socket = io.connect("wss://eda-relay.cygnet-service.com");
+  // Create WebSocket connection.
+  const socket = new WebSocket("wss://eda-relay.cygnet-service.com");
 
-  socket.on("connect", () => {
-    console.log("Connected to server");
+  // Connection opened
+  socket.addEventListener("open", (event) => {
+    console.log("Connected");
   });
 
-  socket.on("message", (data) => {
-    console.log("Received message: " + data);
-    messages.push(data);
+  // Listen for messages
+  socket.addEventListener("message", (event) => {
+    console.log("Message from server ", event.data);
+    event.data.text().then((txt: string) => {
+      let msgObj = JSON.parse(txt);
+      if (msgObj.channel === $playerCore.carriedBy) {
+        messages = [...messages, { id: msgObj.id, channel: msgObj.channel, text: msgObj.text }];
+      }
+    });
   });
 
   function sendMessage() {
-    socket.emit("message", textInput);
+    socket.send(JSON.stringify({ id: $playerAddress, channel: $playerCore.carriedBy, text: textInput }));
     textInput = "";
   }
 </script>
 
 <div class="debug-chat">
-  chat: {channelId}
+  chat: <span style={"background:" + addressToColor(channelId) + ";"}>{shortenAddress(channelId)}</span>
   <hr />
   <div>
     <input type="text" bind:value={textInput} />
@@ -39,7 +47,9 @@
   <hr />
   <div>
     {#each messages as msg}
-      <div>{msg}</div>
+      <div>
+        <span style={"background:" + addressToColor(msg.id) + ";"}>{shortenAddress(msg.id)}</span>: {msg.text}
+      </div>
     {/each}
   </div>
 </div>
