@@ -3,11 +3,11 @@ export function shortenAddress(s: string) {
 }
 
 export function addressToColor(address: string): string {
-  let hash = address;
+  if (!address || address.length < 6) return "#FF0000";
   // Take the last 6 characters of the hash
-  hash = hash.slice(-6);
+  address = address.slice(-6);
   // Prefix with '#' to create a valid hex color code
-  return "#" + hash;
+  return "#" + address;
 }
 
 export function getRandomInt(min: number, max: number) {

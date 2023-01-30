@@ -8,8 +8,6 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
-import { INITIAL_ENERGY } from "../utils/config.sol";
-
 library LibUtils {
   // @todo: random gen
 

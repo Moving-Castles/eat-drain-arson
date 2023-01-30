@@ -28,7 +28,7 @@ library LibCooldown {
    *
    * @param _components World components
    * @param _entity Entity
-   * @return
+   * @return bool is the cooldown period over?
    */
   function isReady(IUint256Component _components, uint256 _entity) internal view returns (bool) {
     ReadyBlockComponent readyBlockComponent = ReadyBlockComponent(getAddressById(_components, ReadyBlockComponentID));

@@ -1,15 +1,16 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity >=0.8.0;
+pragma solidity >=0.8.17;
 
 import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
 import { addressToEntity } from "solecs/utils.sol";
-import { EXTRACT_COST, SPAWN_MATTER_PER_TILE } from "../../utils/config.sol";
+
 import { ExtractSystem, ID as ExtractSystemID } from "../../systems/ExtractSystem.sol";
 import { MoveSystem, ID as MoveSystemID } from "../../systems/MoveSystem.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
+
 import { Coord } from "../../components/PositionComponent.sol";
-import { Direction } from "../../utils/types.sol";
+import { Direction } from "../../utils/constants.sol";
 
 import { LibResource } from "../../libraries/LibResource.sol";
 import { LibSubstanceBlock } from "../../libraries/LibSubstanceBlock.sol";
@@ -37,12 +38,12 @@ contract ExtractSystemTest is MudTest {
     // Resource entity should be created
     uint256 resourceEntity = LibResource.getAtCoordinate(components, initialPosition);
     assertGt(resourceEntity, 0);
-    assertEq(matterComponent.getValue(resourceEntity), SPAWN_MATTER_PER_TILE - EXTRACT_COST);
+    assertEq(matterComponent.getValue(resourceEntity), gameConfig.matterPerTile - gameConfig.extractCost);
 
     // SubstanceBlock should be created
     uint256[] memory substanceBlockEntities = LibSubstanceBlock.getAtCoordinate(components, initialPosition);
     assertEq(substanceBlockEntities.length, 1);
-    assertEq(matterComponent.getValue(substanceBlockEntities[0]), EXTRACT_COST);
+    assertEq(matterComponent.getValue(substanceBlockEntities[0]), gameConfig.extractCost);
 
     vm.stopPrank();
   }

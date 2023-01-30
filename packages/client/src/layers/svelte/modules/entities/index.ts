@@ -1,95 +1,167 @@
 import type { Coord } from "@latticexyz/utils";
 import { writable, get, derived } from "svelte/store";
-import { network, blockNumber } from "../network";
-import { player, calculateEnergy } from "../player";
-import { uniq } from "lodash";
-import { seedToName } from "../../utils/name";
+import type { GameConfig } from "../../../network/config";
+import { network } from "../network";
 
 // --- TYPES -----------------------------------------------------------------
 
-export enum EntityType {
-  Player,
-  Terrain,
-  Fire,
-  Corpse,
-  Ghost,
-}
+export type GameConfig = {
+  worldHeight: number;
+  worldWidth: number;
+  initialEnergy: number;
+  matterPerTile: number;
+  defaultCarryingCapacity: number;
+  moveCost: number;
+  extractCost: number;
+  transferCost: number;
+};
 
 export type Entity = {
+  gameConfig?: GameConfig;
+  creationBlock?: number;
+  readyBlock?: number;
+  matter?: number;
+  energy?: number;
+  position?: Coord;
+  portable?: boolean;
+  carryingCapacity?: number;
+  core?: boolean;
+  carriedBy?: string;
+  inventory?: string[];
+  abilityMove?: boolean;
+  abilityConsume?: boolean;
+  abilityExtract?: boolean;
+  untraversable?: boolean;
+};
+
+export type Core = {
+  core: true;
+  portable: true;
   creationBlock: number;
   readyBlock: number;
-  matter: number;
   energy: number;
-  position: Coord;
-  portable: boolean;
-  carryingCapacity: number;
-  core: boolean;
   carriedBy: string;
 };
+
+export type BaseEntity = {
+  position: Coord;
+  carryingCapacity: number;
+  inventory: string[];
+};
+
+export type Resource = {
+  matter: number;
+  position: Coord;
+};
+
+export type SubstanceBlock = {
+  matter: number;
+  substance: number;
+  portable: true;
+  position?: Coord;
+  carriedBy?: string;
+};
+
+export type Item = {
+  portable: true;
+  position?: Coord;
+  carriedBy?: string;
+  abilityMove?: boolean;
+  abilityConsume?: boolean;
+  abilityExtract?: boolean;
+};
+
+export type Untraversable = {
+  untraversable: true;
+  position: Coord;
+};
+
+export type FreePortable = {
+  portable: true;
+  position: Coord;
+  substance?: number;
+  matter?: number;
+  abilityMove?: boolean;
+  abilityConsume?: boolean;
+  abilityExtract?: boolean;
+};
+
+// - - - -
 
 export type Entities = {
   [index: string]: Entity;
 };
 
-// export type Players = {
-//   [index: string]: Player;
-// };
+export type Cores = {
+  [index: string]: Core;
+};
 
-// export type Terrains = {
-//   [index: string]: Terrain;
-// };
+export type BaseEntities = {
+  [index: string]: BaseEntity;
+};
 
-// export type Fires = {
-//   [index: string]: Fire;
-// };
+export type Resources = {
+  [index: string]: Resource;
+};
 
-// export type Corpses = {
-//   [index: string]: Corpse;
-// };
+export type SubstanceBlocks = {
+  [index: string]: SubstanceBlock;
+};
 
-// export type Ghosts = {
-//   [index: string]: Ghost;
-// };
+export type Items = {
+  [index: string]: Item;
+};
+
+export type Untraversables = {
+  [index: string]: Untraversable;
+};
+
+export type FreePortables = {
+  [index: string]: FreePortable;
+};
 
 // --- STORES -----------------------------------------------------------------
 
 export const entities = writable({} as Entities);
 
-// export const players = derived([entities, blockNumber], ([$entities, $blockNumber]) => {
-//   let ps = Object.entries($entities).filter(
-//     ([k, e]) => e.entityType == EntityType.Player || e.entityType == EntityType.Corpse
-//   );
+export const cores = derived(entities, ($entities) => {
+  return Object.fromEntries(Object.entries($entities).filter(([key, entity]) => entity.core)) as Cores;
+});
 
-//   // Now double check for each one if they are dead
-//   ps = ps.map(([k, e]) => {
-//     const energy = calculateEnergy(e, $blockNumber);
-//     if (energy < 1) {
-//       e.entityType = EntityType.Corpse;
-//     } else if (e.entityType == EntityType.Corpse && energy > 0) {
-//       // Looks like you respawned, Padawan...
-//       e.entityType = EntityType.Player;
-//     }
-//     return [k, e];
-//   });
+export const baseEntities = derived(entities, ($entities) => {
+  return Object.fromEntries(
+    Object.entries($entities).filter(([key, entity]) => entity.carryingCapacity)
+  ) as BaseEntities;
+  // @todo add inventory array to entities
+});
 
-//   return Object.fromEntries(ps);
-// });
+export const resources = derived(entities, ($entities) => {
+  return Object.fromEntries(
+    Object.entries($entities).filter(([key, entity]) => entity.matter && !entity.portable)
+  ) as Resources;
+});
 
-export const players = derived(entities, ($entities) => $entities as Entities);
+export const substanceBlocks = derived(entities, ($entities) => {
+  return Object.fromEntries(
+    Object.entries($entities).filter(([key, entity]) => entity.matter && entity.portable)
+  ) as SubstanceBlocks;
+});
 
-export const fires = derived(entities, ($entities) => $entities as Entities);
+export const freePortables = derived(entities, ($entities) => {
+  return Object.fromEntries(
+    Object.entries($entities).filter(([key, entity]) => entity.portable && entity.position)
+  ) as FreePortables;
+});
 
-// export const terrains = derived(
-//   entities,
-//   ($entities) =>
-//     Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Terrain)) as Entities
-// );
+export const items = derived(entities, ($entities) => {
+  return Object.fromEntries(Object.entries($entities).filter(([key, entity]) => entity.portable)) as SubstanceBlocks;
+});
 
-// export const corpses = derived(
-//   entities,
-//   ($entities) =>
-//     Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Corpse)) as Entities
-// );
+export const untraversables = derived(entities, ($entities) => {
+  return Object.fromEntries(
+    Object.entries($entities).filter(([key, entity]) => entity.untraversable)
+  ) as Untraversables;
+});
 
 // --- FUNCTIONS -----------------------------------------------------------------
 
@@ -102,15 +174,33 @@ export const indexToID = (index: number) => {
  * @param Array of player names
  * @returns formatted string of names
  */
-export function playerList(players: string[]): string {
-  const playerNames = players.map((p) => (get(entities)[p] ? seedToName(get(entities)[p].seed) : "not-found"));
+// export function playerList(players: string[]): string {
+//   const playerNames = players.map((p) => (get(entities)[p] ? seedToName(get(entities)[p].seed) : "not-found"));
 
-  for (let i = 0; i < playerNames.length; i++) {
-    if (playerNames[i] === seedToName(get(player).seed || 0)) {
-      playerNames[i] += " (you)";
-    }
-  }
+//   for (let i = 0; i < playerNames.length; i++) {
+//     if (playerNames[i] === seedToName(get(player).seed || 0)) {
+//       playerNames[i] += " (you)";
+//     }
+//   }
 
-  // HACK: should make sure that the creator array on contract level is unique instead...
-  return uniq(playerNames).join(", ");
+//   // HACK: should make sure that the creator array on contract level is unique instead...
+//   return uniq(playerNames).join(", ");
+// }
+
+// - L - E - G - A - C - Y -
+
+export enum EntityType {
+  Player,
+  Terrain,
+  Fire,
+  Corpse,
+  Ghost,
 }
+
+export const fires = derived(entities, ($entities) => {
+  return Object.fromEntries(Object.entries($entities).filter(([key, entity]) => entity.core)) as Cores;
+});
+
+export const players = derived(entities, ($entities) => {
+  return Object.fromEntries(Object.entries($entities).filter(([key, entity]) => entity.core)) as Cores;
+});

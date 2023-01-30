@@ -1,13 +1,13 @@
 // Components
-import UITextLog from "../../lib/components/UITextLog.svelte";
-import UIAvatar from "../../lib/components/UIAvatar/UIAvatar.svelte";
-import UIView from "../../lib/components/UIView.svelte";
-import UILeaderBoard from "../../lib/components/UILeaderBoards/UILeaderBoard.svelte";
-import UISurvivalLeaderBoard from "../../lib/components/UILeaderBoards/UISurvivalLeaderBoard.svelte";
-import UIFires from "../../lib/components/UIFires/UIFires.svelte";
-import UIPlanner from "../../lib/components/UIOperationsEditor/UIPlanner.svelte";
-import UIExecutor from "../../lib/components/UIOperationsEditor/UIExecutor.svelte";
-import UIGridMap from "../../lib/components/UIGridMap/UIGridMap.svelte";
+// import UITextLog from "../../lib/components/UITextLog.svelte";
+// import UIAvatar from "../../lib/components/UIAvatar/UIAvatar.svelte";
+// import UIView from "../../lib/components/UIView.svelte";
+// import UILeaderBoard from "../../lib/components/UILeaderBoards/UILeaderBoard.svelte";
+// import UISurvivalLeaderBoard from "../../lib/components/UILeaderBoards/UISurvivalLeaderBoard.svelte";
+// import UIFires from "../../lib/components/UIFires/UIFires.svelte";
+// import UIPlanner from "../../lib/components/UIOperationsEditor/UIPlanner.svelte";
+// import UIExecutor from "../../lib/components/UIOperationsEditor/UIExecutor.svelte";
+// import UIGridMap from "../../lib/components/UIGridMap/UIGridMap.svelte";
 import UIDebugLog from "../../lib/components/UIDebug/UIDebugLog.svelte";
 import UIDebugMap from "../../lib/components/UIDebug/UIDebugMap.svelte";
 
