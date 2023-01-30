@@ -154,11 +154,7 @@ export const freePortables = derived(entities, ($entities) => {
 });
 
 export const items = derived(entities, ($entities) => {
-  return Object.fromEntries(
-    Object.entries($entities).filter(
-      ([key, entity]) => entity.portable && (entity.abilityConsume || entity.abilityExtract || entity.abilityMove)
-    )
-  ) as SubstanceBlocks;
+  return Object.fromEntries(Object.entries($entities).filter(([key, entity]) => entity.portable)) as SubstanceBlocks;
 });
 
 export const untraversables = derived(entities, ($entities) => {

@@ -25,8 +25,4 @@
   {#each Object.entries($substanceBlocks) as [entityId, entity], i (entityId)}
     <DebugEntityItem {entityId} {entity} type={EntityType.SubstanceBlock} />
   {/each}
-  <h1>UNTRAVERSABLES</h1>
-  {#each Object.entries($untraversables) as [entityId, entity], i (entityId)}
-    <DebugEntityItem {entityId} {entity} type={EntityType.Untraversable} />
-  {/each}
 </div>

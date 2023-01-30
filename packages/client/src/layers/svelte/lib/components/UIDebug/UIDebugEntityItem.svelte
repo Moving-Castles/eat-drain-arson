@@ -109,6 +109,10 @@
       </div>
     {/if}
     <div class="control">Portable: {entity.portable}</div>
+
+    {#if entity.untraversable}
+      <div class="matter">Untraversable: {entity.untraversable}</div>
+    {/if}
     {#if entity.abilityMove}
       <div class="matter">AbilityMove: {entity.abilityMove}</div>
     {/if}
@@ -132,7 +136,6 @@
     {/if}
     {#if entity.carriedBy === $playerCore.carriedBy}
       <button on:click={drop}>Drop</button>
-      <button on:click={take}>Take</button>
       <button on:click={give}>Give</button>
       <select bind:value={targetEntityId} name="target" id="target">
         {#each Object.keys($baseEntities) as key}
@@ -140,6 +143,7 @@
         {/each}
       </select>
     {/if}
+    <button on:click={take}>Take</button>
   {/if}
 
   <!-- SUBSTANCE BLOCK -->

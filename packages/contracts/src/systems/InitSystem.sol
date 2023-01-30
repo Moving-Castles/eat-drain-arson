@@ -30,14 +30,14 @@ contract InitSystem is System {
     LibConfig.setGameConfig(components, gameConfig);
 
     // Create initial entities
-    LibMap.createUntraversable(components, world.getUniqueEntityId(), Coord(4, 0));
-    LibMap.createUntraversable(components, world.getUniqueEntityId(), Coord(4, 1));
-    LibMap.createUntraversable(components, world.getUniqueEntityId(), Coord(4, 2));
-    LibMap.createUntraversable(components, world.getUniqueEntityId(), Coord(4, 3));
-    LibMap.createUntraversable(components, world.getUniqueEntityId(), Coord(4, 4));
-    LibMap.createUntraversable(components, world.getUniqueEntityId(), Coord(4, 5));
-    LibMap.createUntraversable(components, world.getUniqueEntityId(), Coord(4, 8));
-    LibMap.createUntraversable(components, world.getUniqueEntityId(), Coord(4, 9));
+    LibMap.createUntraversable(world, components, Coord(4, 0));
+    LibMap.createUntraversable(world, components, Coord(4, 1));
+    LibMap.createUntraversable(world, components, Coord(4, 2));
+    LibMap.createUntraversable(world, components, Coord(4, 3));
+    LibMap.createUntraversable(world, components, Coord(4, 4));
+    LibMap.createUntraversable(world, components, Coord(4, 5));
+    LibMap.createUntraversable(world, components, Coord(4, 8));
+    LibMap.createUntraversable(world, components, Coord(4, 9));
   }
 
   function executeTyped() public returns (bytes memory) {

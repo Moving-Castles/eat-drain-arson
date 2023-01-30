@@ -101,32 +101,15 @@
           (entity.position.y * 50 + 5) +
           "px;"}
       >
-        <!-- CORES -->
-        {#each Object.entries($cores) as [coreEntityId, coreEntity]}
-          {#if coreEntity.carriedBy == entityId}
-            <div class="core" style={"background:" + addressToColor(coreEntityId) + ";"}>
-              {#if coreEntityId === $playerAddress}*{/if}
-            </div>
-          {/if}
-        {/each}
-
         <!-- ITEMS -->
         {#each Object.entries($items) as [coreEntityId, coreEntity]}
           {#if coreEntity.carriedBy == entityId}
-            <div class="item" style={"background:" + addressToColor(coreEntityId) + ";"}>
+            <div class="item" class:core={coreEntity.core} style={"background:" + addressToColor(coreEntityId) + ";"}>
               {#if coreEntityId === $playerAddress}*{/if}
             </div>
           {/if}
         {/each}
       </div>
-    {/each}
-
-    <!-- UNTRAVERSABLES -->
-    {#each Object.entries($untraversables) as [entityId, entity]}
-      <div
-        class="untraversable"
-        style={"left:" + entity.position.x * 50 + "px; top:" + entity.position.y * 50 + "px;"}
-      />
     {/each}
   </div>
 </div>
@@ -190,15 +173,6 @@
     cursor: not-allowed;
   }
 
-  .core {
-    width: 10px;
-    height: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: black;
-  }
-
   .item {
     width: 5px;
     height: 5px;
@@ -219,6 +193,12 @@
     z-index: 10000;
   }
 
-  .free-portable-container {
+  .core {
+    width: 10px;
+    height: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
   }
 </style>
