@@ -8,7 +8,7 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
-import { GodID } from "../utils/constants.sol";
+import { WorldID } from "../utils/constants.sol";
 
 import { GameConfigComponent, ID as GameConfigComponentID, GameConfig } from "../components/GameConfigComponent.sol";
 
@@ -21,7 +21,7 @@ library LibConfig {
    */
   function setGameConfig(IUint256Component _components, GameConfig memory _gameConfig) internal {
     GameConfigComponent gameConfigComponent = GameConfigComponent(getAddressById(_components, GameConfigComponentID));
-    gameConfigComponent.set(GodID, _gameConfig);
+    gameConfigComponent.set(WorldID, _gameConfig);
   }
 
   /**
@@ -32,7 +32,7 @@ library LibConfig {
    */
   function getGameConfig(IUint256Component _components) internal view returns (GameConfig memory) {
     GameConfigComponent gameConfigComponent = GameConfigComponent(getAddressById(_components, GameConfigComponentID));
-    return gameConfigComponent.getValue(GodID);
+    return gameConfigComponent.getValue(WorldID);
   }
 
   /**
@@ -43,6 +43,6 @@ library LibConfig {
    */
   function isInitialized(IUint256Component _components) internal view returns (bool) {
     GameConfigComponent gameConfigComponent = GameConfigComponent(getAddressById(_components, GameConfigComponentID));
-    return gameConfigComponent.has(GodID);
+    return gameConfigComponent.has(WorldID);
   }
 }

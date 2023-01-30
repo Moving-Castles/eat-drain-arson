@@ -16,4 +16,4 @@ enum Direction {
   NorthWest
 }
 
-uint256 constant GodID = 0x60D;
+uint256 constant WorldID = 0x6A1A;
