@@ -68,21 +68,21 @@
 
   <!-- <div class="ui-avatar-video">
     {#if $player.entityType == EntityType.Corpse}
-      <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted />
+      <video src={"/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted />
     {:else if $playerActivity === Activities.Moving}
-      <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Walk.mp4"} autoplay muted loop />
+      <video src={"/animations/" + seedToMask($player.seed) + "/Walk.mp4"} autoplay muted loop />
     {:else if $playerActivity === Activities.Eating}
-      <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Eat.mp4"} autoplay muted loop />
+      <video src={"/animations/" + seedToMask($player.seed) + "/Eat.mp4"} autoplay muted loop />
     {:else if $playerActivity === Activities.Gathering}
-      <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Gather.mp4"} autoplay muted loop />
+      <video src={"/animations/" + seedToMask($player.seed) + "/Gather.mp4"} autoplay muted loop />
     {:else if $playerActivity === Activities.Burning}
-      <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Fire.mp4"} autoplay muted loop />
+      <video src={"/animations/" + seedToMask($player.seed) + "/Fire.mp4"} autoplay muted loop />
     {:else if $playerActivity === Activities.Playing}
-      <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Play.mp4"} autoplay muted loop />
+      <video src={"/animations/" + seedToMask($player.seed) + "/Play.mp4"} autoplay muted loop />
     {:else if $playerActivity === Activities.Dead}
-      <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted />
+      <video src={"/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted />
     {:else}
-      <video src={"/src/public/animations/" + seedToMask($player.seed) + "/Idle.mp4"} autoplay muted loop />
+      <video src={"/animations/" + seedToMask($player.seed) + "/Idle.mp4"} autoplay muted loop />
     {/if}
   </div> -->
 

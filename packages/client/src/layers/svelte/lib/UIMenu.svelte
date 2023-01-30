@@ -78,9 +78,10 @@
     transition: all 0.2s ease-out;
     height: var(--taskbar-height);
     width: 70px;
+    background-color: var(--background);
     /* background-color: rgba(var(--background-rgb), var(--muted-opacity)); */
-    backdrop-filter: var(--backdrop);
-    -webkit-backdrop-filter: var(--backdrop);
+    /* backdrop-filter: var(--backdrop);
+    -webkit-backdrop-filter: var(--backdrop); */
     user-select: none;
   }
   .ui-menu-container.open {

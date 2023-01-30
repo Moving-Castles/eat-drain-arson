@@ -36,12 +36,13 @@
     padding: var(--padding-button);
     font-size: var(--font-size);
     color: var(--foreground);
+    background-color: var(--background);
     height: var(--titlebar-height);
     font-weight: bold;
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    -webkit-backdrop-filter: var(--backdrop);
+    /* -webkit-backdrop-filter: var(--backdrop); */
     z-index: 99;
   }
 

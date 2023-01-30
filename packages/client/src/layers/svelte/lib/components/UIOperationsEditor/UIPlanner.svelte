@@ -18,6 +18,7 @@
   } from "../../../modules/sequencer/index";
 
   const categories = [...new Set(operations.map((op) => op.category))];
+  console.log(operations);
 
   let localSequence: SequenceElement[] = Array(SEQUENCER_LENGTH);
   localSequence.fill(emptySequenceElement);
@@ -97,7 +98,7 @@
     {#each categories as category}
       <div class="category">
         <span class="operation blank">
-          {category}
+          {OperationTypeString[category]}
         </span>
         {#each operations.filter((o) => o.category === category) as operation}
           <!-- svelte-ignore a11y-click-events-have-key-events -->

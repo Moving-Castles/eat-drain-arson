@@ -62,6 +62,7 @@
       </div>
     </div>
   {/if}
+
   <div class="state">{StateString[$sequencerState]}</div>
 
   <!-- GRID -->
