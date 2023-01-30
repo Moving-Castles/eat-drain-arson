@@ -72,6 +72,7 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
     position: relative;
+    background-color: var(--background);
   }
 
   .ui-component:not(.span) {
@@ -86,9 +87,9 @@
   }
 
   .ui-component.backed {
-    background-color: rgba(0, 0, 0, var(--muted-opacity));
-    backdrop-filter: var(--backdrop);
-    -webkit-backdrop-filter: var(--backdrop);
+    background-color: var(--background);
+    /* backdrop-filter: var(--backdrop);
+    -webkit-backdrop-filter: var(--backdrop); */
   }
 
   .ui-component.box {

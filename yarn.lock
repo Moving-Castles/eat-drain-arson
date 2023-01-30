@@ -15337,6 +15337,13 @@ svelte-hmr@^0.15.1:
   resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.15.1.tgz#d11d878a0bbb12ec1cba030f580cd2049f4ec86b"
   integrity sha512-BiKB4RZ8YSwRKCNVdNxK/GfY+r4Kjgp9jCLEy0DuqAKfmQtpL38cQK3afdpjw4sqSs4PLi3jIPJIFp259NkZtA==
 
+svelte-previous@^2.1.3:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/svelte-previous/-/svelte-previous-2.1.3.tgz#018923c9602e2d41ae0e7a1a844fb0581ad5bb21"
+  integrity sha512-6+AsoLftHkQC0OjJbyimiLRRAc7eBnUYurrBn4HPRJ87CyviDBp/4lvduf16P9hW7r/oETcCdEZUhHFfh4+VPg==
+  dependencies:
+    svelte "^3.55.0"
+
 svelte-sequential-preprocessor@^0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/svelte-sequential-preprocessor/-/svelte-sequential-preprocessor-0.0.7.tgz#c4dcbe6935a36f5770f7c6f36e00e785333b8aed"

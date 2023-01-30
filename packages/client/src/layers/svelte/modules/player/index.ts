@@ -1,7 +1,9 @@
-import { derived, writable } from "svelte/store";
-import { network } from "../network";
-import type { Core, BaseEntity } from "../entities";
-import { entities, cores } from "../entities";
+import { derived, writable, get } from "svelte/store";
+import { tweened } from "svelte/motion";
+import { network, blockNumber } from "../network";
+import type { EntityType, Player, Core, BaseEntity } from "../entities";
+import { EntityType, entities, cores } from "../entities";
+
 import { Directions } from "../../utils/space";
 
 // --- TYPES -----------------------------------------------------------------
@@ -68,6 +70,49 @@ export const playerCore = derived(
   [entities, playerAddress],
   ([$entities, $playerAddress]) => $entities[$playerAddress] as Core
 );
+
+export const players = derived([entities, blockNumber], ([$entities, $blockNumber]) => {
+  let ps = Object.entries($entities).filter(
+    ([k, e]) => e.entityType == EntityType.Player || e.entityType == EntityType.Corpse
+  );
+
+  // Now double check for each one if they are dead
+  ps = ps.map(([k, e]) => {
+    const energy = calculateEnergy(e, $blockNumber);
+    if (energy < 1) {
+      e.entityType = EntityType.Corpse;
+    } else if (e.entityType == EntityType.Corpse && energy > 0) {
+      // Looks like you respawned, Padawan...
+      e.entityType = EntityType.Player;
+    }
+    return [k, e];
+  });
+
+  return Object.fromEntries(ps);
+});
+
+/**
+ * Other players
+ */
+export const others = derived([players, playerAddress], ([$players, $playerAddress]) =>
+  Object.entries($players).filter(([k, e]) => k !== $playerAddress)
+);
+
+/**
+ * Player properties
+ */
+export const playerActivity = writable(Activities.Idle);
+export const playerDirection = writable(Directions.None);
+export const playerEnergy = derived([player, blockNumber], ([$player, $blockNumber]) =>
+  $player ? calculateEnergy($player, $blockNumber) : 0
+);
+export const heartbeats = derived([player, blockNumber], ([$player, $blockNumber]) =>
+  $player && $blockNumber ? calculateHeartbeats($player, $blockNumber) : 0
+);
+export const dead = derived(player, ($player) => $player.energy < 1);
+// Interpolation
+export const tweenedX = tweened(get(player)?.position?.x || 0, { duration: 0 });
+export const tweenedY = tweened(get(player)?.position?.y || 0, { duration: 0 });
 
 /**
  * The `baseEntity` carrying the player's `core`

@@ -2,7 +2,7 @@
   import { flip } from "svelte/animate";
   import { derived } from "svelte/store";
   import { cubicInOut as easing } from "svelte/easing";
-  import { players } from "../../../modules/entities";
+  import { players } from "../../../modules/player";
   import { category } from "../../../modules/ui";
   import { seedToName } from "../../../utils/name";
   import { EntityType } from "../../../modules/entities";
@@ -79,8 +79,9 @@
     left: 0;
     top: 0;
     padding-bottom: 6px;
-    backdrop-filter: var(--backdrop);
-    -webkit-backdrop-filter: var(--backdrop);
+    background-color: var(--background);
+    /* backdrop-filter: var(--backdrop);
+    -webkit-backdrop-filter: var(--backdrop); */
     display: flex;
     justify-content: space-between;
   }

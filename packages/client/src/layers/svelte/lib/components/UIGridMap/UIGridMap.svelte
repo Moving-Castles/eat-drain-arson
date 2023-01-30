@@ -34,14 +34,14 @@
 
   blockNumber.subscribe(async () => {
     if ($player) {
-      grid = await updateGrid($player.position, grid);
+      grid = await updateGrid(grid);
     }
   });
 
   onMount(async () => {
     grid = initGrid(unit);
     if ($player) {
-      grid = await updateGrid($player.position, grid);
+      grid = await updateGrid(grid);
     }
   });
 

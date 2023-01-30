@@ -4,31 +4,31 @@ const BASE_VOLUME = 0.3;
 
 export const environment: SoundAssets = {
   drone: {
-    src: "/src/public/sounds/environment/drone.mp3",
+    src: "./sounds/environment/drone.mp3",
     volume: BASE_VOLUME,
   },
   fire: {
-    src: "/src/public/sounds/environment/fire.mp3",
+    src: "./sounds/environment/fire.mp3",
     volume: BASE_VOLUME,
   },
   quiet: {
-    src: "/src/public/sounds/environment/quiet.mp3",
+    src: "./sounds/environment/quiet.mp3",
     volume: BASE_VOLUME,
   },
   stormy: {
-    src: "/src/public/sounds/environment/stormy.mp3",
+    src: "./sounds/environment/stormy.mp3",
     volume: BASE_VOLUME,
   },
   workSiteFire: {
-    src: "/src/public/sounds/environment/work-site-fire.mp3",
+    src: "./sounds/environment/work-site-fire.mp3",
     volume: BASE_VOLUME,
   },
   workSitePlain: {
-    src: "/src/public/sounds/environment/work-site-plain.mp3",
+    src: "./sounds/environment/work-site-plain.mp3",
     volume: BASE_VOLUME,
   },
   workSiteRain: {
-    src: "/src/public/sounds/environment/work-site-rain.mp3",
+    src: "./sounds/environment/work-site-rain.mp3",
     volume: BASE_VOLUME,
   },
 };

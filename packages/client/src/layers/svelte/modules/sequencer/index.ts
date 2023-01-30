@@ -1,10 +1,12 @@
-import { writable, get } from "svelte/store";
+import { writable, derived, get } from "svelte/store";
 import { tweened } from "svelte/motion";
 import type { Operation } from "../../operations/types";
 import { OperationType } from "../../operations/types";
 import type { ContractReceipt, ContractTransaction } from "ethers";
 import { blockNumber } from "../network";
+import { directToLog } from "../../modules/narrator";
 import { player, playerActivity, Activities } from "../player";
+import { range } from "../../utils/maths";
 
 // --- TYPES -----------------------------------------------------------------
 
@@ -37,7 +39,7 @@ export const StateString = {
   [State.Ready]: "Ready",
   [State.StartingUp]: "Starting up",
   [State.ShuttingDown]: "Shutting down",
-  [State.Running]: "running",
+  [State.Running]: "Running",
   [State.Error]: "Error",
 };
 
@@ -47,7 +49,9 @@ export const sequence = writable([] as SequenceElement[]);
 export const sequencerState = writable(State.Empty);
 export const activeOperationIndex = writable(0);
 export const progress = tweened(0);
+export const binaryProgress = tweened(0);
 export const operationDuration = writable(0);
+export const activeOperation = derived([sequence, activeOperationIndex], ([$s, $i]) => $s[$i]);
 
 // --- CONSTANTS -----------------------------------------------------------------
 
@@ -213,6 +217,7 @@ blockNumber.subscribe(async (newBlock) => {
     progress.set(get(operationDuration), { duration: 0 });
     // ... to 0 over operationDuration seconds
     progress.set(0, { duration: get(operationDuration) * 1000 });
+
     // Store cooldown block for future reference
     oldCoolDownBlock = get(player).coolDownBlock || 0;
   }
@@ -254,6 +259,8 @@ blockNumber.subscribe(async (newBlock) => {
           activeTransactions.push(tx);
 
           const receipt: ContractReceipt = await tx.wait();
+
+          console.log("receipt", receipt);
 
           // Remove transaction from activeTransactions
           activeTransactions = activeTransactions.filter((tx) => tx.hash !== receipt.transactionHash);

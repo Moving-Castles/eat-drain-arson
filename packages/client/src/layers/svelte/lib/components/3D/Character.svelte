@@ -1,40 +1,24 @@
 <script lang="ts">
+  import Compass from "./Compass.svelte";
+  import { T } from "@threlte/core";
   import { GLTF, useGltfAnimations } from "@threlte/extras";
-  import { PointLight, Mesh, MeshBasicMaterial, SphereGeometry } from "three";
+  import { MeshBasicMaterial } from "three";
 
-  let currentActionKey = !Math.round(Math.random()) ? "Idle1" : "Idle2";
+  let currentActionKey = "idle";
 
   let available = true;
 
   const { gltf, actions } = useGltfAnimations(({ actions }) => {
     // Uncomment to see all the different possible action keys
-    // console.log(actions);
+    console.log(actions);
     // set the initial animation
     actions[currentActionKey]?.play();
-  });
-
-  const light = new PointLight(0xffff99, 1.2, 10);
-  const sphereMesh = new Mesh(
-    new SphereGeometry(0.5),
-    new MeshBasicMaterial({ color: 0xffff99, transparent: true, opacity: 0 })
-  );
-  sphereMesh.attach(light);
-  sphereMesh.position.y += 1.8;
-  sphereMesh.position.z += 0.6;
-  sphereMesh.position.x += 0.5;
-
-  $: {
     if ($gltf?.scene) {
-      $gltf.scene.traverse((node) => {
-        // node.receiveShadow = true;
-        node.castShadow = true;
-
-        if (node.name === "LeftHand") {
-          node.attach(sphereMesh);
-        }
-      });
+      // $gltf.scene.traverse((node) => {
+      //   console.log(node);
+      // });
     }
-  }
+  });
 
   function transitionTo(nextActionKey: string, duration = 1) {
     available = false;
@@ -65,7 +49,6 @@
       case "w":
         walk();
       default:
-        // console.log(e.key);
         break;
     }
   }
@@ -100,4 +83,5 @@
 
 <svelte:window on:keypress={handleKeyPress} />
 
-<GLTF bind:gltf={$gltf} url="/src/public/models/Animations_v2.glb" useDraco />
+<!-- <GLTF bind:gltf={$gltf} url="/models/I_15_Animated.glb" useDraco /> -->
+<GLTF bind:gltf={$gltf} url="/models/NewBodies_110123_03.glb" useDraco />

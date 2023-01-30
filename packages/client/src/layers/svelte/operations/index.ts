@@ -1,8 +1,8 @@
 import type { Operation } from "./types";
 import {
-  crawl,
-  stumble,
-  gallop,
+  // crawl,
+  // stumble,
+  // gallop,
   east,
   west,
   north,
@@ -11,7 +11,7 @@ import {
   southWest,
   northEast,
   northWest,
-  goTowardsFire,
+  // goTowardsFire,
 } from "./move";
 import { collect, dig, drain } from "./gather";
 import { nibble, eat, feast } from "./consume";
@@ -22,9 +22,9 @@ import { hungry, sludgeRich, drained, byFire } from "./gates";
 
 export const operations: Operation[] = [
   // --- MOVE
-  crawl,
-  stumble,
-  gallop,
+  // crawl,
+  // stumble,
+  // gallop,
   east,
   west,
   north,
@@ -33,7 +33,7 @@ export const operations: Operation[] = [
   southWest,
   northEast,
   northWest,
-  goTowardsFire,
+  // goTowardsFire,
   // --- GATHER
   collect,
   dig,
