@@ -71,6 +71,21 @@ export type Item = {
   abilityExtract?: boolean;
 };
 
+export type Untraversable = {
+  untraversable: true;
+  position: Coord;
+};
+
+export type FreePortable = {
+  portable: true;
+  position: Coord;
+  substance?: number;
+  matter?: number;
+  abilityMove?: boolean;
+  abilityConsume?: boolean;
+  abilityExtract?: boolean;
+};
+
 // - - - -
 
 export type Entities = {
@@ -95,6 +110,14 @@ export type SubstanceBlocks = {
 
 export type Items = {
   [index: string]: Item;
+};
+
+export type Untraversables = {
+  [index: string]: Untraversable;
+};
+
+export type FreePortables = {
+  [index: string]: FreePortable;
 };
 
 // --- STORES -----------------------------------------------------------------
@@ -127,7 +150,7 @@ export const substanceBlocks = derived(entities, ($entities) => {
 export const freePortables = derived(entities, ($entities) => {
   return Object.fromEntries(
     Object.entries($entities).filter(([key, entity]) => entity.portable && entity.position)
-  ) as Entities;
+  ) as FreePortables;
 });
 
 export const items = derived(entities, ($entities) => {
@@ -136,6 +159,12 @@ export const items = derived(entities, ($entities) => {
       ([key, entity]) => entity.portable && (entity.abilityConsume || entity.abilityExtract || entity.abilityMove)
     )
   ) as SubstanceBlocks;
+});
+
+export const untraversables = derived(entities, ($entities) => {
+  return Object.fromEntries(
+    Object.entries($entities).filter(([key, entity]) => entity.untraversable)
+  ) as Untraversables;
 });
 
 // --- FUNCTIONS -----------------------------------------------------------------

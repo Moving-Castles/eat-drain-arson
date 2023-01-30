@@ -4,4 +4,5 @@ export enum EntityType {
   Resource,
   SubstanceBlock,
   Item,
+  Untraversable,
 }

@@ -1,9 +1,10 @@
 <script lang="ts">
   import type { Coord } from "@latticexyz/utils";
   import { onMount } from "svelte";
-  import { baseEntities, cores, items } from "../../../modules/entities";
+  import { baseEntities, cores, items, untraversables, freePortables } from "../../../modules/entities";
   import { playerAddress, playerCore, multiCore } from "../../../modules/player";
   import { addressToColor } from "../../../utils/ui";
+  import { network } from "../../../modules/network";
 
   import TileInteract from "./UITileInteract.svelte";
   import DebugChat from "./UIDebugChat.svelte";
@@ -41,6 +42,10 @@
     grid = initGrid(10);
     console.log(grid);
   });
+
+  function pickUp(entityId: string) {
+    $network.api.pickUp(entityId);
+  }
 </script>
 
 <div class="ui-debug-map">
@@ -65,6 +70,22 @@
         }}
       >
         <div>{tile.coordinates.x}:{tile.coordinates.y}</div>
+
+        <!-- FREE PORTABLES -->
+        <div class="free-portable-container">
+          {#each Object.entries($freePortables) as [entityId, entity]}
+            {#if entity.position.x == tile.coordinates.x && entity.position.y == tile.coordinates.y}
+              <div
+                class="free-portable"
+                style={"background:" + addressToColor(entityId) + ";"}
+                on:click={(e) => {
+                  e.preventDefault();
+                  pickUp(entityId);
+                }}
+              />
+            {/if}
+          {/each}
+        </div>
       </div>
     {/each}
 
@@ -98,6 +119,14 @@
           {/if}
         {/each}
       </div>
+    {/each}
+
+    <!-- UNTRAVERSABLES -->
+    {#each Object.entries($untraversables) as [entityId, entity]}
+      <div
+        class="untraversable"
+        style={"left:" + entity.position.x * 50 + "px; top:" + entity.position.y * 50 + "px;"}
+      />
     {/each}
   </div>
 </div>
@@ -149,6 +178,18 @@
     align-items: center;
   }
 
+  .untraversable {
+    width: 50px;
+    height: 50px;
+    background: red;
+    opacity: 0.5;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: not-allowed;
+  }
+
   .core {
     width: 10px;
     height: 10px;
@@ -165,5 +206,19 @@
     justify-content: center;
     align-items: center;
     color: black;
+  }
+
+  .free-portable {
+    width: 10px;
+    height: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    cursor: pointer;
+    z-index: 10000;
+  }
+
+  .free-portable-container {
   }
 </style>

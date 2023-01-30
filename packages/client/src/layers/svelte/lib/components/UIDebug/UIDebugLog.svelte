@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cores, baseEntities, resources, substanceBlocks, items } from "../../../modules/entities";
+  import { cores, baseEntities, resources, substanceBlocks, items, untraversables } from "../../../modules/entities";
   import DebugEntityItem from "./UIDebugEntityItem.svelte";
   import { EntityType } from "./types";
 </script>
@@ -24,5 +24,9 @@
   <h1>SUBSTANCE BLOCKS</h1>
   {#each Object.entries($substanceBlocks) as [entityId, entity], i (entityId)}
     <DebugEntityItem {entityId} {entity} type={EntityType.SubstanceBlock} />
+  {/each}
+  <h1>UNTRAVERSABLES</h1>
+  {#each Object.entries($untraversables) as [entityId, entity], i (entityId)}
+    <DebugEntityItem {entityId} {entity} type={EntityType.Untraversable} />
   {/each}
 </div>

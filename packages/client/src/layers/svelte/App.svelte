@@ -18,6 +18,8 @@
     createAbilityMoveSystem,
     createAbilityConsumeSystem,
     createAbilityExtractSystem,
+    createUntraversableSystem,
+    createGameConfigSystem,
   } from "./systems";
   import { network as networkStore, blockNumber, startBlock } from "./modules/network";
 
@@ -38,6 +40,8 @@
     createAbilityMoveSystem(layers.network);
     createAbilityConsumeSystem(layers.network);
     createAbilityExtractSystem(layers.network);
+    createUntraversableSystem(layers.network);
+    createGameConfigSystem(layers.network);
 
     networkStore.set(layers.network);
 
@@ -51,7 +55,7 @@
     // startHarmonySoundSystem();
 
     layers.network.network.blockNumber$.subscribe((x) => {
-      console.log(x);
+      // console.log(x);
       blockNumber.set(x);
       if ($startBlock == 0) {
         startBlock.set(x);
