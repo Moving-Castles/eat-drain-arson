@@ -40,11 +40,8 @@
     "nice-grpc-web": "^2.0.2",
     "protobufjs": "^7.1.2",
     "proxy-deep": "^3.1.1",
-    "pusher-js": "^8.0.1",
     "react": "^18.2.0",
     "rxjs": "^7.8.0",
-    "socket.io": "^4.5.4",
-    "socket.io-client": "^4.5.4",
     "threads": "^1.7.0",
     "uuid": "^9.0.0"
   },
