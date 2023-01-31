@@ -18,8 +18,6 @@
     x,
     y: z, // y becomes z in 3D space
   } = tile.coordinates;
-  x -= 1;
-  z -= 1;
   const rotation = new Vector3(DEG2RAD * 90, 0, 0);
 
   const toggleActions = () => {

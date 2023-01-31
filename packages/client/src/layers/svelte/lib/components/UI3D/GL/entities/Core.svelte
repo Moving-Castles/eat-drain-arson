@@ -32,13 +32,9 @@
   on:click={onClick}
   geometry={new SphereGeometry(1, 10, 10)}
   material={new MeshBasicMaterial({ color })}
-  {scale}
+  scale={$playerAddress === id ? scale : 1}
   {position}
   {rotation}
 >
-  {#if $playerAddress === id}
-    <Text text="*" />
-  {/if}
-
   <slot />
 </Mesh>

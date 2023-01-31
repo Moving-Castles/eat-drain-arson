@@ -4,7 +4,7 @@
   // GAME
   import { blockNumber } from "../../../../modules/network";
   import { playerAddress } from "../../../../modules/player";
-  import { entities, getCores } from "../../../../modules/entities";
+  import { entities } from "../../../../modules/entities";
   // import { entities } from "../../../../modules/gamestate";
   import { initGrid, updateGrid } from "../../UIGridMap";
   // GL
@@ -31,7 +31,7 @@
 <!-- <Player /> -->
 
 <!-- BASE LAYER -->
-<T.Group rotation.y={DEG2RAD * 45}>
+<T.Group>
   <!-- Floor -->
   {#each grid as tile (`${tile.coordinates.x}-${tile.coordinates.y}`)}
     <Tile {tile} />
@@ -40,11 +40,7 @@
   <!-- Entities -->
   {#each Object.entries($entities) as [id, entity] (id)}
     <!-- Your position in the world -->
-    <Entity {id} {entity}>
-      {#each getCores(id) as [coreId, coreEntity] (coreId)}
-        <Core id={coreId} entity={coreEntity} />
-      {/each}
-    </Entity>
+    <Entity {id} {entity} />
   {/each}
 </T.Group>
 

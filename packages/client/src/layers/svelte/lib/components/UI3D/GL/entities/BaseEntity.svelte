@@ -32,7 +32,7 @@
 
   console.log(position.x, position.y);
 
-  const p = spring(position, { stiffness: 0.9, damping: 0.25 });
+  const p = tweened(position, { duration: 1000 });
 
   $: p.set(entity.position);
 
