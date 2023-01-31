@@ -8,7 +8,16 @@
 
   export let tile: GridTile;
 
-  const map = useTexture("/images/tilesets/Tileset_13_Masked.png");
+  // SVELTE
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
+
+  const map = useTexture("/images/tilesets/Tileset_13_Masked.png", {
+    onLoad: () => {
+      dispatch("load");
+    },
+  });
   const opacity = spring(1, { stiffness: 0.2, damping: 0.9 });
 
   map.repeat = new Vector2(0.1, 0.1);
@@ -36,21 +45,20 @@
 
   const previewActions = () => {
     opacity.set(0.8);
-    $rx = DEG2RAD * 270;
+    // $rx = DEG2RAD * 270;
 
-    $tileY = 1;
-    // rotation.set({ x: 0, y: DEG2RAD * 90, z: 0 });
+    // $tileY = 1;
+    // rotation.set({ x: 0, y  DEG2RAD * 90, z: 0 });
   };
 
   const onPointerEnter = () => opacity.set(0.8);
   const onPointerLeave = () => opacity.set(1);
 
   const hideActions = () => {
-    $rx = DEG2RAD * 90;
-    $ry = 0;
-    $rz = 0;
-
-    $tileY = 0;
+    // $rx = DEG2RAD * 90;
+    // $ry = 0;
+    // $rz = 0;
+    // $tileY = 0;
   };
 </script>
 

@@ -2,8 +2,15 @@
   import { InstancedMesh, Instance, useTexture } from "@threlte/core";
   import { DEG2RAD } from "three/src/math/MathUtils";
   import { Vector2, Vector3, DoubleSide, MeshBasicMaterial, PlaneGeometry, Color } from "three";
+  import { createEventDispatcher } from "svelte";
 
-  const map = useTexture("/images/tilesets/Tileset_13_Verboten-Masked.png");
+  const dispatch = createEventDispatcher();
+
+  const map = useTexture("/images/tilesets/Tileset_13_Verboten-Masked.png", {
+    onLoad: () => {
+      dispatch("load");
+    },
+  });
   map.wrapS = 1;
   map.wrapT = 1;
 

@@ -1,14 +1,23 @@
 <script lang="ts">
   import { playerAddress } from "../../../modules/player";
   import { Canvas } from "@threlte/core";
+  import { fade } from "svelte/transition";
   import Map from "./GL/Map.svelte";
   import Stats from "./GUI/Stats.svelte";
+
+  let loading = true;
+  const onLoad = () => (loading = false);
 </script>
 
 <div class="ui-3d-map">
+  {#if loading}
+    <div transition:fade class="loading">Loading...</div>
+  {/if}
+
+  <!--  -->
   <Canvas>
     {#if $playerAddress}
-      <Map />
+      <Map on:load={onLoad} />
     {/if}
 
     {#if import.meta.env.DEV}
@@ -18,6 +27,14 @@
 </div>
 
 <style>
+  .loading {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(255, 0, 0, 0.5);
+  }
   .ui-3d-map {
     height: 100%;
   }

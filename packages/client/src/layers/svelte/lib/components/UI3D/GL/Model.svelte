@@ -1,5 +1,6 @@
 <script lang="ts">
   import { GLTF, useGltfAnimations } from "@threlte/extras";
+  import { DEG2RAD } from "three/src/math/MathUtils";
 
   export let url = "/models/CharacterSkeletonMesh_01.glb";
   export let animationKey = "Idle"; // this will be decided via prop
@@ -14,4 +15,4 @@
   $: if ($gltf) console.log($gltf);
 </script>
 
-<GLTF position={{ x: 0.5, z: 0.5 }} scale={1} bind:gltf={$gltf} {url} useDraco />
+<GLTF rotation={{ y: DEG2RAD * 90 }} position={{ x: 0.5, z: 0.5 }} scale={1} bind:gltf={$gltf} {url} useDraco />

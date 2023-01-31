@@ -17,6 +17,12 @@
   // THREE
   import { DEG2RAD } from "three/src/math/MathUtils";
   import { MeshBasicMaterial } from "three";
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
+
+  let tl = false;
+  let bl = false;
 
   const UNIT = 10;
 
@@ -24,20 +30,27 @@
 
   grid = initGrid(UNIT);
 
+  const tileLoaded = () => (tl = true);
+  const bgLoaded = () => (bl = true);
+
   blockNumber.subscribe(async () => {
     grid = await updateGrid(grid);
   });
+
+  $: if (tl && bl) {
+    dispatch("load");
+  }
 </script>
 
 <!-- BASE LAYER -->
 <T.Group>
   <!-- Floor -->
   {#each grid as tile (`${tile.coordinates.x}-${tile.coordinates.y}`)}
-    <Tile {tile} />
+    <Tile {tile} on:load={tileLoaded} />
   {/each}
 
   <T.Group position.x={4.5} position.z={4.5}>
-    <Background />
+    <Background on:load={bgLoaded} />
   </T.Group>
 
   <!-- Entities -->
