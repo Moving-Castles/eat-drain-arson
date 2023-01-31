@@ -78,13 +78,12 @@ export function perlinToTerrainCategory(p: number) {
 
 export function initGrid(unit: number) {
   let grid = [] as GridTile[];
-  for (let y = 0; y <= unit; y++) {
-    for (let x = 0; x <= unit; x++) {
+  for (let y = 0; y < unit; y++) {
+    for (let x = 0; x < unit; x++) {
       const newGridTile: GridTile = {
         direction: ".",
-        coordinates: { x, y },
+        coordinates: { x: x, y: y },
         perlinFactor: 0,
-        terrain: TerrainCategory.Dust,
         resource: 100,
       };
       grid = [...grid, newGridTile];
@@ -94,7 +93,7 @@ export function initGrid(unit: number) {
   return grid;
 }
 
-export async function updateGrid(grid: GridTile[], mock = false) {
+export async function updateGrid(grid: GridTile[]) {
   perlin = await createPerlin();
 
   for (let i = 0; i < grid.length; i++) {

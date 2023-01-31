@@ -21,8 +21,8 @@
 
   function initGrid(unit: number) {
     let grid = [] as GridTile[];
-    for (let y = 0; y <= unit - 1; y++) {
-      for (let x = 0; x <= unit - 1; x++) {
+    for (let y = 0; y < unit; y++) {
+      for (let x = 0; x < unit; x++) {
         const newGridTile: GridTile = {
           direction: ".",
           coordinates: { x: x, y: y },

@@ -135,10 +135,10 @@ export const playerPositionX = tweened(get(player)?.position?.x || 0, { duration
  * and inventory. It can be controlled by any `core` it carries.
  *
  */
-export const playerBaseEntity = derived(
-  [entities, playerCore],
-  ([$entities, $playerCore]) => $entities[$playerCore.carriedBy] as BaseEntity
-);
+export const playerBaseEntity = derived([entities, playerCore], ([$entities, $playerCore]) => {
+  if (!$entities || !$playerCore) return false;
+  return $entities[$playerCore.carriedBy] as BaseEntity;
+});
 
 /**
  * Is the player's core sharing a baseEntity with other cores?

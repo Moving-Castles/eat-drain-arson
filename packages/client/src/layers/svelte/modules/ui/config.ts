@@ -2,6 +2,7 @@
 import UIDebugLog from "../../lib/components/UIDebug/UIDebugLog.svelte";
 import UIDebugMap from "../../lib/components/UIDebug/UIDebugMap.svelte";
 import UI3DMap from "../../lib/components/UI3D/UI3DMap.svelte";
+import UI3DAvatar from "../../lib/components/UI3D/UI3DAvatar.svelte";
 
 // --- TYPES -----------------------------------------------------------------
 
@@ -80,6 +81,23 @@ export const initialState = () => ({
       persistent: false,
       fluid: true,
       layer: 3,
+      delay: 0,
+    },
+    hidden: false,
+    grid: {
+      col: [1, 3],
+      row: [1, 10],
+    },
+  }),
+  you: initialise({
+    id: "you",
+    title: "You",
+    component: UI3DAvatar,
+    active: false,
+    options: {
+      persistent: false,
+      fluid: true,
+      layer: 4,
       delay: 0,
     },
     hidden: false,

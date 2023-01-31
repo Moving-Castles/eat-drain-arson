@@ -1,6 +1,6 @@
 <script>
   import { playSound } from "../../howler";
-  import { player } from "../modules/player";
+  import { playerAddress } from "../modules/player";
   import { menuVisible, uiState } from "../modules/ui";
   import { fade } from "svelte/transition";
   import { speed, fragSpeed } from "../modules/ui";
@@ -42,7 +42,7 @@
 
 <svelte:window on:keydown={handleShortcuts} />
 
-{#if $player}
+{#if $playerAddress}
   <div class="ui-menu-container" class:open={$menuVisible}>
     <button class="ui-button" on:click={toggle}>Senses</button>
 

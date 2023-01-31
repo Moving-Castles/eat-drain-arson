@@ -22,6 +22,8 @@
 
   let { position } = entity;
 
+  console.log(position.x, position.y);
+
   const p = spring(position, { stiffness: 0.9, damping: 0.25 });
 
   $: p.set(entity.position);
@@ -36,8 +38,7 @@
   on:click={onClick}
   geometry={new BoxGeometry(0.5, 0.5, 0.5)}
   material={new MeshBasicMaterial({ color, transparent: true, opacity: $opacity })}
-  position={{ x: $p.x, y: 0, z: $p.y }}
-  rotation={new Vector3(0, DEG2RAD * 45, DEG2RAD)}
+  position={{ x: $p.x, y: 1, z: $p.y }}
 >
   <slot />
 </Mesh>

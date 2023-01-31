@@ -1,7 +1,5 @@
 <script lang="ts">
-  import { T } from "@threlte/core";
   import { GLTF, useGltfAnimations } from "@threlte/extras";
-  import { MeshBasicMaterial } from "three";
 
   let currentActionKey = "idle";
 
@@ -13,9 +11,6 @@
     // set the initial animation
     actions[currentActionKey]?.play();
     if ($gltf?.scene) {
-      // $gltf.scene.traverse((node) => {
-      //   console.log(node);
-      // });
     }
   });
 

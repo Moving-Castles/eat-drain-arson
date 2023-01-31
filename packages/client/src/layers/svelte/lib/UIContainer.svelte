@@ -1,16 +1,19 @@
 <script lang="ts">
   import { uiState } from "../modules/ui";
   import { ready } from "../modules/network";
-  import { player } from "../modules/player";
+  import { playerBaseEntity } from "../modules/player";
   import UITaskBar from "./UITaskBar.svelte";
   import UIComponent from "./UIComponent.svelte";
   import UISpawn from "./components/UISpawn.svelte";
   import UILoading from "./components/UILoading.svelte";
+
+  $: console.log("ready ", $ready);
+  $: console.log("bae ", $playerBaseEntity);
 </script>
 
 <!-- The UI layer -->
 <div class="ui-container">
-  {#if !$player}
+  {#if !$playerBaseEntity}
     <span />
   {:else}
     <UITaskBar />
@@ -20,7 +23,7 @@
       <UIComponent id="ui-loading" options={{ fluid: true, bare: true, span: true }} area="mm">
         <UILoading />
       </UIComponent>
-    {:else if !$player}
+    {:else if !$playerBaseEntity}
       <UIComponent id="ui-spawn" options={{ fluid: true, bare: true, span: true }} area="mm">
         <UISpawn />
       </UIComponent>

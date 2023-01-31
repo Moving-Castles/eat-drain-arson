@@ -1,13 +1,9 @@
 <script lang="ts">
   import { blockNumber } from "../modules/network";
-  import { player } from "../modules/player";
 
   const BLOCKS_IN_DAY = 600;
 
   let clockTime: number;
-
-  $: console.log($player.energy);
-  $: clockTime = Math.floor(($blockNumber - $player.birth) / BLOCKS_IN_DAY);
 </script>
 
 <div class="ui-clock">

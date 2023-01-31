@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { player, heartbeats } from "../../modules/player";
+  import { playerBaseEntity } from "../../modules/player";
   import { playSound } from "../../../howler";
   import { network } from "../../modules/network";
   import { uiState } from "../../modules/ui";
@@ -21,7 +21,7 @@
     <div>Spawning...</div>
   {:else}
     <button on:click={spawn}>
-      {#if $player}
+      {#if $playerBaseEntity}
         Respawn
       {:else}
         Spawn

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { player } from "../../../modules/player";
+  import { playerAddress } from "../../../modules/player";
   import { Canvas } from "@threlte/core";
   import Map from "./GL/Map.svelte";
   import Stats from "./GUI/Stats.svelte";
@@ -7,7 +7,7 @@
 
 <div class="ui-3d-map">
   <Canvas>
-    {#if $player}
+    {#if $playerAddress}
       <Map />
     {/if}
 
