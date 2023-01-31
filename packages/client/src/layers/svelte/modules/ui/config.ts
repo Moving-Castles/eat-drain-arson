@@ -74,7 +74,7 @@ export const initialState = () => ({
   }),
   "3d-map": initialise({
     id: "3d-map",
-    title: "Ortho Map",
+    title: "Tarpit",
     component: UI3DMap,
     active: true,
     options: {

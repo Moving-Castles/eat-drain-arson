@@ -15,6 +15,7 @@
   import { onMount } from "svelte";
   import { createEventDispatcher } from "svelte";
   import { tweened, spring } from "svelte/motion";
+  import { cubicInOut } from "svelte/easing";
 
   // THREE
   import Core from "./Core.svelte";
@@ -31,7 +32,7 @@
 
   let { position } = entity;
 
-  const p = tweened(position, { duration: 1000 });
+  const p = tweened(position, { duration: 1000, easing: cubicInOut });
 
   $: p.set(entity.position);
 
@@ -46,11 +47,14 @@
 
   <!-- PLAYER (YOU) -->
   {#if id === $playerCore?.carriedBy}
-    <Model url="/models/CharacterSkeletonMeshAnims_02.glb">
-      {#each getCores(id) as [coreId, coreEntity] (coreId)}
-        <Core id={coreId} entity={coreEntity} />
-      {/each}
+    <Model scale={0.6} url="/models/CharacterSkeletonMeshAnims_02.glb">
+      <Group slot="cores">
+        {#each getCores(id) as [coreId, coreEntity], i (coreId)}
+          <Core {i} id={coreId} entity={coreEntity} />
+        {/each}
+      </Group>
     </Model>
+
     <Camera />
   {/if}
 
@@ -58,9 +62,8 @@
   <!-- WALL -->
   {#if isWall(id)}
     <Model url="/models/WallSkeletonMesh_01.glb">
-      {#each getInventory(id) as [jd, entity] (jd)}
-        {console.log("inventory", entity)}
-        <!-- <InventoryItem /> -->
+      {#each getCores(id) as [coreId, coreEntity], i (coreId)}
+        <Core {i} id={coreId} entity={coreEntity} />
       {/each}
     </Model>
   {/if}

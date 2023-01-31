@@ -33,7 +33,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background: rgba(255, 0, 0, 0.5);
+    background: rgba(255, 0, 0, 0);
   }
   .ui-3d-map {
     height: 100%;

@@ -5,35 +5,21 @@
   import type { Entity } from "../../../../../modules/entities";
 
   // GL
-  import { Mesh, useFrame } from "@threlte/core";
-  import { Text } from "@threlte/extras";
-  import { MeshBasicMaterial, BoxGeometry, SphereGeometry, Vector3 } from "three";
+  import { Vector3 } from "three";
   import { DEG2RAD } from "three/src/math/MathUtils";
+  import CoreHead from "./CoreHead.svelte";
 
   export let id: string;
   export let entity: Entity;
+  export let i: number;
 
   const color = addressToColor(id);
 
   const onClick = (e) => {};
 
   const rotation = new Vector3(0, DEG2RAD, DEG2RAD);
-  const position = new Vector3(0.1, 1, 0);
-  let scale = 0.2;
-
-  useFrame((d) => {
-    // position.x += Math.sin(d.clock.elapsedTime * 10) / 100;
-    scale += Math.cos(d.clock.elapsedTime * 10) / 500;
-  });
+  const position = new Vector3(0.5, i + 0.5, 0.5);
+  let scale = 1;
 </script>
 
-<Mesh
-  on:click={onClick}
-  geometry={new SphereGeometry(1, 10, 10)}
-  material={new MeshBasicMaterial({ color })}
-  scale={$playerAddress === id ? scale : 0.1}
-  {position}
-  {rotation}
->
-  <slot />
-</Mesh>
+<CoreHead {position} scale={$playerAddress === id ? scale : 1} {id} />
