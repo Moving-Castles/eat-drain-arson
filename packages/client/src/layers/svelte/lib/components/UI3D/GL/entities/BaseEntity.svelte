@@ -5,7 +5,7 @@
   // GAME
   import { addressToColor } from "../../../../../utils/ui";
   import { playerCore } from "../../../../../modules/player";
-  import { isWall, getInventory, getCores } from "../../../../../modules/entities";
+  import { isWall, isPlayer, getInventory, getCores } from "../../../../../modules/entities";
 
   // GL
   import { Mesh, Group } from "@threlte/core";
@@ -59,8 +59,7 @@
   {#if isWall(id)}
     <Model url="/models/WallSkeletonMesh_01.glb">
       {#each getInventory(id) as [jd, entity] (jd)}
-        {console.log("inventory")}
-        {console.log(id)}
+        {console.log("inventory", entity)}
         <!-- <InventoryItem /> -->
       {/each}
     </Model>

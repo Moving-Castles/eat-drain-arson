@@ -22,29 +22,46 @@
     y: z, // y becomes z in 3D space
   } = tile.coordinates;
 
-  const rotation = new Vector3(DEG2RAD * 90, 0, 0);
+  const rx = spring(DEG2RAD * 90, { stiffness: 0.2, damping: 0.8 });
+  const ry = spring(0, { stiffness: 0.2, damping: 0.8 });
+  const rz = spring(0, { stiffness: 0.2, damping: 0.8 });
+  const tileY = spring(y, { stiffness: 0.05, damping: 0.2 });
 
   const toggleActions = () => {
     showActions = !showActions;
+
+    if (showActions) previewActions();
+    if (!showActions) hideActions();
   };
 
   const previewActions = () => {
     opacity.set(0.8);
+    $rx = DEG2RAD * 270;
+
+    $tileY = 1;
+    // rotation.set({ x: 0, y: DEG2RAD * 90, z: 0 });
   };
 
+  const onPointerEnter = () => opacity.set(0.8);
+  const onPointerLeave = () => opacity.set(1);
+
   const hideActions = () => {
-    opacity.set(1);
+    $rx = DEG2RAD * 90;
+    $ry = 0;
+    $rz = 0;
+
+    $tileY = 0;
   };
 </script>
 
 <Mesh
-  {rotation}
+  rotation={{ x: $rx, y: $ry, z: $rz }}
   userData={{ tile }}
-  position={{ x, y, z }}
+  position={{ x, z }}
   interactive
   on:click={toggleActions}
-  on:pointerenter={previewActions}
-  on:pointerleave={hideActions}
+  on:pointerenter={onPointerEnter}
+  on:pointerleave={onPointerLeave}
   receiveShadow
   material={new MeshBasicMaterial({
     map,
@@ -54,8 +71,8 @@
     opacity: $opacity,
   })}
   geometry={new PlaneGeometry(1, 1)}
->
-  {#if showActions}
-    <TileActions on:close={toggleActions} {tile} />
-  {/if}
-</Mesh>
+/>
+
+{#if showActions}
+  <TileActions position={{ x, y, z }} on:close={toggleActions} {tile} />
+{/if}

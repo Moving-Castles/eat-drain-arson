@@ -173,10 +173,11 @@ export const getCores = (address: string) =>
   Object.entries(get(entities)).filter(([id, ent]) => ent.core && ent.carriedBy === address);
 
 export const getInventory = (address: string) =>
-  Object.entries(get(entities)).filter(([id, ent]) => ent.core && ent.carriedBy === address);
+  Object.entries(get(entities)).filter(([id, ent]) => ent.carriedBy === address);
 
 /** Determine what it is  */
-export const isWall = (address: string) => getInventory(address).filter(([id, item]) => item?.untraversable);
+export const isWall = (address: string) => getInventory(address).filter(([id, item]) => item?.untraversable).length > 0;
+export const isPlayer = (address: string) => getInventory(address).filter(([id, item]) => item);
 
 /**
  * Format player list

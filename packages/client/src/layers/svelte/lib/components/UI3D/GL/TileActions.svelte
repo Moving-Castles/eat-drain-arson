@@ -6,12 +6,16 @@
   import { player } from "../../../../modules/player";
 
   // GL
+  import { Group, useThrelte } from "@threlte/core";
   import { HTML } from "@threlte/extras";
   import { DEG2RAD } from "three/src/math/MathUtils";
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
   export let tile: GridTile;
+  export let position;
+
+  const { camera } = useThrelte();
 
   function move() {
     if (chebyshev($entities[$player.carriedBy].position, tile.coordinates) === 1) {
@@ -36,20 +40,22 @@
   console.log("tile interactions ");
 </script>
 
-<HTML transform scale={0.2} rotation={{ x: DEG2RAD * 180, z: DEG2RAD * 45 }}>
-  <div class="tile-interact">
-    {#if import.meta.env.DEV}
-      <div class="text">x:{tile.coordinates.x},y:{tile.coordinates.y}</div>
-    {/if}
-    {#if chebyshev($entities[$player.carriedBy].position, tile.coordinates) === 1}
-      <div><button on:click={move}>MOVE</button></div>
-      <div><button on:click={extract}>EXTRACT</button></div>
-    {:else}
-      <div class="text">Nothing to do here</div>
-    {/if}
-    <div><button on:click={close}>CLOSE</button></div>
-  </div>
-</HTML>
+<Group {position} lookAt={$camera.position}>
+  <HTML transform scale={0.2}>
+    <div class="tile-interact">
+      {#if import.meta.env.DEV}
+        <div class="text">x:{tile.coordinates.x},y:{tile.coordinates.y}</div>
+      {/if}
+      {#if chebyshev($entities[$player.carriedBy].position, tile.coordinates) === 1}
+        <div><button on:click={move}>MOVE</button></div>
+        <div><button on:click={extract}>EXTRACT</button></div>
+      {:else}
+        <div class="text">Nothing to do here</div>
+      {/if}
+      <div><button on:click={close}>CLOSE</button></div>
+    </div>
+  </HTML>
+</Group>
 
 <style>
   .tile-interact {
