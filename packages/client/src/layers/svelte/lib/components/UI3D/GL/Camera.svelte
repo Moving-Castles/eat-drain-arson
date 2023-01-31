@@ -1,17 +1,18 @@
 <script>
   import { T, TransformableObject } from "@threlte/core";
-  import { playerBaseEntity } from "../../../../modules/player";
+
+  // Camera focuses on the base entity that is carrying the core
   let cam;
 </script>
 
 <T.OrthographicCamera
-  zoom={80}
+  zoom={200}
   near={1}
   far={2000}
   let:ref={cam}
   position.x={10}
   position.z={10}
-  position.y={8}
+  position.y={10}
   makeDefault
 >
   <TransformableObject

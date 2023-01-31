@@ -1,17 +1,25 @@
 <script lang="ts">
+  // TYPES
+  import type { Entity } from "../../../../../modules/entities";
+
   // GAME
   import { addressToColor } from "../../../../../utils/ui";
+  import { playerCore } from "../../../../../modules/player";
 
   // GL
   import { Mesh } from "@threlte/core";
   import { MeshBasicMaterial, BoxGeometry, SphereGeometry, Vector3 } from "three";
   import { DEG2RAD } from "three/src/math/MathUtils";
+
   // SVELTE
   import { onMount } from "svelte";
   import { tweened, spring } from "svelte/motion";
 
-  export let id;
-  export let entity;
+  // THREE
+  import Camera from "../Camera.svelte";
+
+  export let id: string;
+  export let entity: Entity;
 
   const opacity = tweened(0, { duration: 200 });
   const color = addressToColor(id);
@@ -38,7 +46,11 @@
   on:click={onClick}
   geometry={new BoxGeometry(0.5, 0.5, 0.5)}
   material={new MeshBasicMaterial({ color, transparent: true, opacity: $opacity })}
-  position={{ x: $p.x, y: 1, z: $p.y }}
+  position={{ x: $p.x, y: 0.5, z: $p.y }}
 >
   <slot />
+
+  {#if id === $playerCore?.carriedBy}
+    <Camera />
+  {/if}
 </Mesh>

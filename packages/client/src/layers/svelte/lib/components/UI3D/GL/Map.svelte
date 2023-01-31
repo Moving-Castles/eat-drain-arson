@@ -10,7 +10,7 @@
   // GL
   import { T } from "@threlte/core";
   import Camera from "./Camera.svelte";
-  import BaseEntity from "./entities/BaseEntity.svelte";
+  import Entity from "./entities/Entity.svelte";
   import Core from "./entities/Core.svelte";
   import Tile from "./Tile.svelte";
   // THREE
@@ -37,19 +37,14 @@
     <Tile {tile} />
   {/each}
 
-  <!-- Camera -->
-  <Camera />
-
   <!-- Entities -->
   {#each Object.entries($entities) as [id, entity] (id)}
-    {#if entity.carryingCapacity}
-      <!-- Your position in the world -->
-      <BaseEntity {id} {entity}>
-        {#each getCores(id) as [coreId, coreEntity] (coreId)}
-          <Core id={coreId} entity={coreEntity} />
-        {/each}
-      </BaseEntity>
-    {/if}
+    <!-- Your position in the world -->
+    <Entity {id} {entity}>
+      {#each getCores(id) as [coreId, coreEntity] (coreId)}
+        <Core id={coreId} entity={coreEntity} />
+      {/each}
+    </Entity>
   {/each}
 </T.Group>
 

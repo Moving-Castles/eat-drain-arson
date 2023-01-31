@@ -146,3 +146,5 @@ export const playerBaseEntity = derived([entities, playerCore], ([$entities, $pl
 export const multiCore = derived([cores, playerCore], ([$cores, $playerCore]) =>
   Object.values($cores).filter((e) => e.carriedBy == $playerCore.carriedBy).length > 1 ? true : false
 );
+
+// export const focusEntityAddress = derived([playerCore, entities], ([$playerCore, $entities]) => $entities[$playerCore.carriedBy])
