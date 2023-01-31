@@ -11,9 +11,9 @@
       <Map />
     {/if}
 
-    <!-- {#if import.meta.env.DEV} -->
-    <Stats />
-    <!-- {/if} -->
+    {#if import.meta.env.DEV}
+      <Stats />
+    {/if}
   </Canvas>
 </div>
 

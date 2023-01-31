@@ -36,9 +36,11 @@
   console.log("tile interactions ");
 </script>
 
-<HTML transform rotation={{ x: DEG2RAD * 180 }}>
+<HTML transform scale={0.2} rotation={{ x: DEG2RAD * 180, z: DEG2RAD * 45 }}>
   <div class="tile-interact">
-    <div class="text">x:{tile.coordinates.x},y:{tile.coordinates.y}</div>
+    {#if import.meta.env.DEV}
+      <div class="text">x:{tile.coordinates.x},y:{tile.coordinates.y}</div>
+    {/if}
     {#if chebyshev($entities[$player.carriedBy].position, tile.coordinates) === 1}
       <div><button on:click={move}>MOVE</button></div>
       <div><button on:click={extract}>EXTRACT</button></div>

@@ -7,50 +7,52 @@
   import { playerCore } from "../../../../../modules/player";
 
   // GL
-  import { Mesh } from "@threlte/core";
+  import { Mesh, T } from "@threlte/core";
   import { MeshBasicMaterial, BoxGeometry, SphereGeometry, Vector3 } from "three";
   import { DEG2RAD } from "three/src/math/MathUtils";
 
   // SVELTE
   import { onMount } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import { tweened, spring } from "svelte/motion";
 
   // THREE
   import Camera from "../Camera.svelte";
+  import Model from "../Model.svelte";
 
   export let id: string;
   export let entity: Entity;
 
+  const dispatch = createEventDispatcher();
   const opacity = tweened(0, { duration: 200 });
   const color = addressToColor(id);
 
   const onClick = ({ detail: { object } }) => {
-    console.log(object);
+    dispatch("click", object);
   };
 
   let { position } = entity;
-
-  console.log(position.x, position.y);
 
   const p = tweened(position, { duration: 1000 });
 
   $: p.set(entity.position);
 
   onMount(() => {
-    opacity.set(1);
+    opacity.set(0);
   });
 </script>
 
 <Mesh
   interactive
   on:click={onClick}
-  geometry={new BoxGeometry(0.5, 0.5, 0.5)}
+  geometry={new BoxGeometry(1, 1, 1)}
   material={new MeshBasicMaterial({ color, transparent: true, opacity: $opacity })}
   position={{ x: $p.x, y: 0.5, z: $p.y }}
 >
   <slot />
 
   {#if id === $playerCore?.carriedBy}
+    <Model />
     <Camera />
   {/if}
 </Mesh>

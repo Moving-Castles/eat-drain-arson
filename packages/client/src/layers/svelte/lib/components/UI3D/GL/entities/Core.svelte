@@ -32,7 +32,7 @@
   on:click={onClick}
   geometry={new SphereGeometry(1, 10, 10)}
   material={new MeshBasicMaterial({ color })}
-  scale={$playerAddress === id ? scale : 1}
+  scale={$playerAddress === id ? scale : 0.1}
   {position}
   {rotation}
 >

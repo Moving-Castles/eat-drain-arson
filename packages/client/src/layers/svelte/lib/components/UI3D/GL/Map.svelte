@@ -13,8 +13,10 @@
   import Entity from "./entities/Entity.svelte";
   import Core from "./entities/Core.svelte";
   import Tile from "./Tile.svelte";
+  import Background from "./Background.svelte";
   // THREE
   import { DEG2RAD } from "three/src/math/MathUtils";
+  import { MeshBasicMaterial } from "three";
 
   const UNIT = 10;
 
@@ -27,9 +29,6 @@
   });
 </script>
 
-<!-- PLAYERS LAYER -->
-<!-- <Player /> -->
-
 <!-- BASE LAYER -->
 <T.Group>
   <!-- Floor -->
@@ -37,12 +36,13 @@
     <Tile {tile} />
   {/each}
 
+  <T.Group position.x={4.5} position.z={4.5}>
+    <Background />
+  </T.Group>
+
   <!-- Entities -->
   {#each Object.entries($entities) as [id, entity] (id)}
     <!-- Your position in the world -->
     <Entity {id} {entity} />
   {/each}
 </T.Group>
-
-<!-- LIGHTING AND FX -->
-<!-- <T.AmbientLight intensity={1} /> -->

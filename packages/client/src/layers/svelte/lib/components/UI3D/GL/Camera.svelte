@@ -2,14 +2,27 @@
   import { T, TransformableObject } from "@threlte/core";
   import { useParent } from "@threlte/core";
   import { PerspectiveCamera } from "three";
+  import { spring } from "svelte/motion";
 
   const parent = useParent();
 
   console.log($parent);
+  let zoom = spring(1, { stiffness: 0.2, damping: 0.9 });
+
+  const onKeyPress = ({ key }) => {
+    if (key === "=") {
+      $zoom *= 3;
+    }
+    if (key === "-") {
+      $zoom /= 3;
+    }
+  };
 
   // Camera focuses on the base entity that is carrying the core
   let cam;
 </script>
+
+<svelte:window on:keypress={onKeyPress} />
 
 <!-- <T.OrthographicCamera
   position.x={0}
@@ -26,10 +39,10 @@
 
 <T.PerspectiveCamera
   fov={1}
-  position.x={0}
+  position.x={150}
   position.z={150}
   position.y={150}
-  zoom={1}
+  zoom={$zoom}
   near={1}
   far={2000}
   let:ref={cam}
