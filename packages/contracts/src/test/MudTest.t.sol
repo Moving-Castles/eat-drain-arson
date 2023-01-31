@@ -12,6 +12,9 @@ import { componentsComponentId, systemsComponentId } from "solecs/constants.sol"
 import { getAddressById } from "solecs/utils.sol";
 import { console } from "forge-std/console.sol";
 
+import { LibConfig } from "../libraries/LibConfig.sol";
+import { GameConfig } from "../components/GameConfigComponent.sol";
+
 import { PositionComponent, ID as PositionComponentID } from "../components/PositionComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { CreationBlockComponent, ID as CreationBlockComponentID } from "../components/CreationBlockComponent.sol";
@@ -35,6 +38,8 @@ contract MudTest is DSTest {
   IUint256Component components;
   IUint256Component systems;
   Deploy internal deploy = new Deploy();
+
+  GameConfig gameConfig;
 
   PositionComponent positionComponent;
   EnergyComponent energyComponent;
@@ -73,6 +78,8 @@ contract MudTest is DSTest {
     coreComponent = CoreComponent(getAddressById(components, CoreComponentID));
     carriedByComponent = CarriedByComponent(getAddressById(components, CarriedByComponentID));
     matterComponent = MatterComponent(getAddressById(components, MatterComponentID));
+
+    gameConfig = LibConfig.getGameConfig(components);
   }
 
   modifier prank(address prankster) {

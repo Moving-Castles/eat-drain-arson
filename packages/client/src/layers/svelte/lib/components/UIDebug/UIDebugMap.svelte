@@ -1,13 +1,13 @@
 <script lang="ts">
   import type { Coord } from "@latticexyz/utils";
   import { onMount } from "svelte";
-  import { entities } from "../../../modules/entities";
-  import { playerAddress, player } from "../../../modules/player";
+  import { baseEntities, cores, items, untraversables, freePortables } from "../../../modules/entities";
+  import { playerAddress, playerCore, multiCore } from "../../../modules/player";
   import { addressToColor } from "../../../utils/ui";
+  import { network } from "../../../modules/network";
 
   import TileInteract from "./UITileInteract.svelte";
-
-  $: console.log($entities);
+  import DebugChat from "./UIDebugChat.svelte";
 
   let selectedTileCoords: Coord;
   let tileInteractActive = false;
@@ -42,6 +42,10 @@
     grid = initGrid(10);
     console.log(grid);
   });
+
+  function pickUp(entityId: string) {
+    $network.api.pickUp(entityId);
+  }
 </script>
 
 <div class="ui-debug-map">
@@ -66,33 +70,53 @@
         }}
       >
         <div>{tile.coordinates.x}:{tile.coordinates.y}</div>
-      </div>
-    {/each}
-    <!-- BASE ENTITIES -->
-    {#each Object.entries($entities) as [entityId, entity]}
-      {#if entity.carryingCapacity}
-        <div
-          class="base-entity"
-          style={"background:" +
-            addressToColor(entityId) +
-            "; left:" +
-            (entity.position.x * 50 + 5) +
-            "px; top:" +
-            (entity.position.y * 50 + 5) +
-            "px;"}
-        >
-          {#each Object.entries($entities) as [coreEntityId, coreEntity]}
-            {#if coreEntity.core && coreEntity.carriedBy == entityId}
-              <div class="core" style={"background:" + addressToColor(coreEntityId) + ";"}>
-                {#if coreEntityId === $playerAddress}*{/if}
-              </div>
+
+        <!-- FREE PORTABLES -->
+        <div class="free-portable-container">
+          {#each Object.entries($freePortables) as [entityId, entity]}
+            {#if entity.position.x == tile.coordinates.x && entity.position.y == tile.coordinates.y}
+              <div
+                class="free-portable"
+                style={"background:" + addressToColor(entityId) + ";"}
+                on:click={(e) => {
+                  e.preventDefault();
+                  pickUp(entityId);
+                }}
+              />
             {/if}
           {/each}
         </div>
-      {/if}
+      </div>
+    {/each}
+
+    <!-- BASE ENTITIES -->
+    {#each Object.entries($baseEntities) as [entityId, entity]}
+      <div
+        class="base-entity"
+        style={"background:" +
+          addressToColor(entityId) +
+          "; left:" +
+          (entity.position.x * 50 + 5) +
+          "px; top:" +
+          (entity.position.y * 50 + 5) +
+          "px;"}
+      >
+        <!-- ITEMS -->
+        {#each Object.entries($items) as [coreEntityId, coreEntity]}
+          {#if coreEntity.carriedBy == entityId}
+            <div class="item" class:core={coreEntity.core} style={"background:" + addressToColor(coreEntityId) + ";"}>
+              {#if coreEntityId === $playerAddress}*{/if}
+            </div>
+          {/if}
+        {/each}
+      </div>
     {/each}
   </div>
 </div>
+
+{#if $multiCore}
+  <DebugChat channelId={$playerCore.carriedBy} />
+{/if}
 
 <style>
   .ui-debug-map {
@@ -137,9 +161,41 @@
     align-items: center;
   }
 
+  .untraversable {
+    width: 50px;
+    height: 50px;
+    background: red;
+    opacity: 0.5;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: not-allowed;
+  }
+
+  .item {
+    width: 5px;
+    height: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+  }
+
+  .free-portable {
+    width: 10px;
+    height: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    cursor: pointer;
+    z-index: 10000;
+  }
+
   .core {
-    width: 20px;
-    height: 20px;
+    width: 10px;
+    height: 10px;
     display: flex;
     justify-content: center;
     align-items: center;

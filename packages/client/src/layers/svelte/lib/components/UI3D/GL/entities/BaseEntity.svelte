@@ -8,7 +8,7 @@
   import { DEG2RAD } from "three/src/math/MathUtils";
   // SVELTE
   import { onMount } from "svelte";
-  import { tweened } from "svelte/motion";
+  import { tweened, spring } from "svelte/motion";
 
   export let id;
   export let entity;
@@ -22,7 +22,7 @@
 
   let { position } = entity;
 
-  const p = tweened(position, { duration: 10000 });
+  const p = spring(position, { stiffness: 0.9, damping: 0.25 });
 
   $: p.set(entity.position);
 

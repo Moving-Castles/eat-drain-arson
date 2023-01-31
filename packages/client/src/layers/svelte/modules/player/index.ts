@@ -2,9 +2,8 @@ import type { Derived } from "svelte/store";
 import { derived, writable, get } from "svelte/store";
 import { tweened } from "svelte/motion";
 import { network, blockNumber } from "../network";
-import { isEqual } from "lodash";
-import type { EntityType, Player } from "../entities";
-import { EntityType, entities } from "../entities";
+import type { EntityType, Player, Core, BaseEntity } from "../entities";
+import { EntityType, entities, cores } from "../entities";
 
 import { Directions } from "../../utils/space";
 
@@ -62,10 +61,16 @@ export function activityToVerb(activity: Activities) {
 
 export const playerAddress = derived(network, ($network) => $network.network?.connectedAddress.get() || "0x0");
 
-export const player = derived([entities, playerAddress], ([$entities, $playerAddress]) => {
-  const p = $entities[$playerAddress];
-  return p as Player;
-});
+/**
+ * The `core` is the agent of the player.
+ *
+ * A `core` controls any `baseEntity` it is carried by.
+ *
+ */
+export const playerCore = derived(
+  [entities, playerAddress],
+  ([$entities, $playerAddress]) => $entities[$playerAddress] as Core
+);
 
 export const players = derived([entities, blockNumber], ([$entities, $blockNumber]) => {
   let ps = Object.entries($entities).filter(
@@ -138,28 +143,39 @@ export const playerPositionX = tweened(get(player)?.position?.x || 0, { duration
 
 // export const playerPositionX = makeInterpolated(player, 'position.x', 1000)
 
-// --- FUNCTIONS -----------------------------------------------------------------
+/**
+ * The `baseEntity` carrying the player's `core`
+ *
+ * A `baseEntity` is a "physical body" with position
+ * and inventory. It can be controlled by any `core` it carries.
+ *
+ */
+export const playerBaseEntity = derived(
+  [entities, playerCore],
+  ([$entities, $playerCore]) => $entities[$playerCore.carriedBy] as BaseEntity
+);
 
 /**
- * Calculate the player's energy
- * @param $player
- * @param $blockNumber
- * @returns
+ * Is the player's core sharing a baseEntity with other cores?
  */
-export function calculateEnergy($player: Player, $blockNumber: number) {
-  if (parseInt(String($player.death)) <= $blockNumber) {
-    return 0;
-  }
-  // actualEnergy = deathBlock - currentBlock
-  return parseInt(String($player.death)) - $blockNumber;
-}
+export const multiCore = derived([cores, playerCore], ([$cores, $playerCore]) =>
+  Object.values($cores).filter((e) => e.carriedBy == $playerCore.carriedBy).length > 1 ? true : false
+);
 
-export function calculateHeartbeats(player: Player, blockNumber: number) {
-  const energy = calculateEnergy(player, blockNumber);
-  const lifespan = parseInt(String(player.death)) - parseInt(String(player.birth));
-  if (energy < 1) {
-    return lifespan;
-  } else {
-    return lifespan + (blockNumber - parseInt(String(player.death)));
-  }
-}
+// - L - E - G - A - C - Y -
+
+export const player = derived([entities, playerAddress], ([$entities, $playerAddress]) => $entities[$playerAddress]);
+
+export const playerActivity = writable(Activities.Idle);
+export const playerDirection = writable(Directions.None);
+
+export const dead = derived(player, ($player) => $player.energy < 1);
+
+// export const playerEnergy = derived([player, blockNumber], ([$player, $blockNumber]) =>
+//   $player ? calculateEnergy($player, $blockNumber) : 0
+// // );
+// export const heartbeats = derived([player, blockNumber], ([$player, $blockNumber]) =>
+//   $player && $blockNumber ? calculateHeartbeats($player, $blockNumber) : 0
+// );
+
+export const heartbeats = 0;

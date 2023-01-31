@@ -13,14 +13,14 @@ import { MatterComponent, ID as MatterComponentID } from "../components/MatterCo
 
 library LibResource {
   /**
-   * Spawn a resource entity
+   * Create a resource entity
    *
    * @param _components World components
    * @param _resourceEntity entity
    * @param _coordinates coord
    * @param _amount Matter
    */
-  function spawn(
+  function create(
     IUint256Component _components,
     uint256 _resourceEntity,
     Coord memory _coordinates,

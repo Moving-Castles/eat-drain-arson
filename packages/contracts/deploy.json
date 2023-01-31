@@ -9,7 +9,12 @@
     "PortableComponent",
     "CarryingCapacityComponent",
     "CarriedByComponent",
-    "SubstanceComponent"
+    "SubstanceComponent",
+    "AbilityMoveComponent",
+    "AbilityConsumeComponent",
+    "AbilityExtractComponent",
+    "GameConfigComponent",
+    "UntraversableComponent"
   ],
   "systems": [
     {
@@ -19,8 +24,16 @@
       ]
     },
     {
+      "name": "InitSystem",
+      "initialize": "new bytes(0)",
+      "writeAccess": [
+        "*"
+      ]
+    },
+    {
       "name": "SpawnSystem",
       "writeAccess": [
+        "GameConfigComponent",
         "CoreComponent",
         "PositionComponent",
         "EnergyComponent",
@@ -28,22 +41,30 @@
         "ReadyBlockComponent",
         "PortableComponent",
         "CarryingCapacityComponent",
-        "CarriedByComponent"
+        "CarriedByComponent",
+        "AbilityMoveComponent",
+        "AbilityConsumeComponent",
+        "AbilityExtractComponent",
+        "UntraversableComponent"
       ]
     },
     {
       "name": "MoveSystem",
       "writeAccess": [
+        "GameConfigComponent",
         "CoreComponent",
         "PositionComponent",
         "EnergyComponent",
         "ReadyBlockComponent",
-        "CarriedByComponent"
+        "CarriedByComponent",
+        "AbilityMoveComponent",
+        "UntraversableComponent"
       ]
     },
     {
       "name": "ExtractSystem",
       "writeAccess": [
+        "GameConfigComponent",
         "CoreComponent",
         "PositionComponent",
         "EnergyComponent",
@@ -52,7 +73,75 @@
         "PortableComponent",
         "CarryingCapacityComponent",
         "SubstanceComponent",
-        "MatterComponent"
+        "MatterComponent",
+        "AbilityExtractComponent"
+      ]
+    },
+    {
+      "name": "PickUpSystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "PositionComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent"
+      ]
+    },
+    {
+      "name": "DropSystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "PositionComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent"
+      ]
+    },
+    {
+      "name": "TakeSystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "PositionComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent"
+      ]
+    },
+    {
+      "name": "GiveSystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "PositionComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent"
+      ]
+    },
+    {
+      "name": "ConsumeSystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent",
+        "SubstanceComponent",
+        "MatterComponent",
+        "AbilityConsumeComponent"
       ]
     }
   ]

@@ -16,10 +16,15 @@ import {
   defineCarryingCapacityComponent,
   defineCarriedByComponent,
   defineCoreComponent,
+  defineAbilityMoveComponent,
+  defineAbilityConsumeComponent,
+  defineAbilityExtractComponent,
+  defineGameConfigComponent,
+  defineUntraversableComponent,
 } from "./components";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { getNetworkConfig } from "./config";
-import { BigNumber, utils } from "ethers";
+import { utils } from "ethers";
 import type { Coord } from "@latticexyz/utils";
 
 /**
@@ -35,6 +40,7 @@ export async function createNetworkLayer(config: GameConfig) {
   // --- COMPONENTS -----------------------------------------------------------------
   const components = {
     LoadingState: defineLoadingStateComponent(world),
+    GameConfig: defineGameConfigComponent(world),
     Position: definePositionComponent(world),
     Energy: defineEnergyComponent(world),
     Matter: defineMatterComponent(world),
@@ -45,6 +51,10 @@ export async function createNetworkLayer(config: GameConfig) {
     CarryingCapacity: defineCarryingCapacityComponent(world),
     CarriedBy: defineCarriedByComponent(world),
     Core: defineCoreComponent(world),
+    AbilityMove: defineAbilityMoveComponent(world),
+    AbilityConsume: defineAbilityConsumeComponent(world),
+    AbilityExtract: defineAbilityExtractComponent(world),
+    Untraversable: defineUntraversableComponent(world),
   };
 
   // --- SETUP ----------------------------------------------------------------------
@@ -80,26 +90,36 @@ export async function createNetworkLayer(config: GameConfig) {
   }
 
   function move(direction: number) {
-    return systems["system.Move"].executeTyped(direction);
+    try {
+      return systems["system.Move"].executeTyped(direction);
+    } catch (e) {
+      console.log("catch");
+      console.log(e);
+    }
   }
 
   function extract(extractionCoordinates: Coord) {
     return systems["system.Extract"].executeTyped(extractionCoordinates);
   }
 
-  function consume(resourceInput: number) {
-    return false;
-    // return systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
+  function pickUp(portableEntity: string) {
+    return systems["system.PickUp"].executeTyped(portableEntity);
   }
 
-  function burn(resourceInput: number) {
-    return false;
-    // return systems["system.Fire"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
+  function drop(portableEntity: string) {
+    return systems["system.Drop"].executeTyped(portableEntity);
   }
 
-  function play(energyInput: number) {
-    return false;
-    // return systems["system.Play"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
+  function take(portableEntity: string) {
+    return systems["system.Take"].executeTyped(portableEntity);
+  }
+
+  function give(portableEntity: string, targetBaseEntity: string) {
+    return systems["system.Give"].executeTyped(portableEntity, targetBaseEntity);
+  }
+
+  function consume(substanceBlockEntity: string) {
+    return systems["system.Consume"].executeTyped(substanceBlockEntity);
   }
 
   // --- CONTEXT --------------------------------------------------------------------
@@ -112,7 +132,7 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: { spawn, move, extract, consume, burn, play },
+    api: { spawn, move, extract, pickUp, drop, take, give, consume },
     dev: setupDevSystems(world, encoders, systems),
   };
 

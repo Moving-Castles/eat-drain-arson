@@ -15,14 +15,14 @@ import { SubstanceComponent, ID as SubstanceComponentID } from "../components/Su
 
 library LibSubstanceBlock {
   /**
-   * Spawn a substanceBlock entity
+   * Create a substanceBlock entity
    *
    * @param _components World components
    * @param _substanceBlockEntity entity
    * @param _coordinates coord
    * @param _amount Matter
    */
-  function spawn(
+  function create(
     IUint256Component _components,
     uint256 _substanceBlockEntity,
     Coord memory _coordinates,
@@ -38,6 +38,22 @@ library LibSubstanceBlock {
     portableComponent.set(_substanceBlockEntity);
     substanceComponent.set(_substanceBlockEntity, 100);
     // substanceComponent.set(Substance(100, 0));
+  }
+
+  /**
+   * Destroy a substanceBlock entity
+   *
+   * @param _components World components
+   * @param _substanceBlockEntity entity
+   */
+  function destroy(IUint256Component _components, uint256 _substanceBlockEntity) internal {
+    MatterComponent matterComponent = MatterComponent(getAddressById(_components, MatterComponentID));
+    PortableComponent portableComponent = PortableComponent(getAddressById(_components, PortableComponentID));
+    SubstanceComponent substanceComponent = SubstanceComponent(getAddressById(_components, SubstanceComponentID));
+
+    matterComponent.remove(_substanceBlockEntity);
+    portableComponent.remove(_substanceBlockEntity);
+    substanceComponent.remove(_substanceBlockEntity);
   }
 
   /**
@@ -61,5 +77,20 @@ library LibSubstanceBlock {
     fragments[2] = QueryFragment(QueryType.Has, portableComponent, abi.encode(0));
 
     return LibQuery.query(fragments);
+  }
+
+  /**
+   * Convert substance block to energy
+   *
+   * @param _components World components
+   * @param _substanceBlockEntity entity
+   * @return unsigned energy value
+   */
+  function convertToEnergy(
+    IUint256Component _components,
+    uint256 _substanceBlockEntity
+  ) internal view returns (uint32) {
+    MatterComponent matterComponent = MatterComponent(getAddressById(_components, MatterComponentID));
+    return matterComponent.getValue(_substanceBlockEntity);
   }
 }
