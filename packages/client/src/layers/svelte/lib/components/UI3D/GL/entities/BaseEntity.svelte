@@ -5,11 +5,11 @@
   // GAME
   import { addressToColor } from "../../../../../utils/ui";
   import { playerCore } from "../../../../../modules/player";
+  import { isWall, getInventory, getCores } from "../../../../../modules/entities";
 
   // GL
-  import { Mesh, T } from "@threlte/core";
-  import { MeshBasicMaterial, BoxGeometry, SphereGeometry, Vector3 } from "three";
-  import { DEG2RAD } from "three/src/math/MathUtils";
+  import { Mesh, Group } from "@threlte/core";
+  import { MeshBasicMaterial, BoxGeometry } from "three";
 
   // SVELTE
   import { onMount } from "svelte";
@@ -17,6 +17,8 @@
   import { tweened, spring } from "svelte/motion";
 
   // THREE
+  import Core from "./Core.svelte";
+  //
   import Camera from "../Camera.svelte";
   import Model from "../Model.svelte";
 
@@ -26,10 +28,6 @@
   const dispatch = createEventDispatcher();
   const opacity = tweened(0, { duration: 200 });
   const color = addressToColor(id);
-
-  const onClick = ({ detail: { object } }) => {
-    dispatch("click", object);
-  };
 
   let { position } = entity;
 
@@ -42,17 +40,29 @@
   });
 </script>
 
-<Mesh
-  interactive
-  on:click={onClick}
-  geometry={new BoxGeometry(1, 1, 1)}
-  material={new MeshBasicMaterial({ color, transparent: true, opacity: $opacity })}
-  position={{ x: $p.x, y: 0.5, z: $p.y }}
->
+<Group position={{ x: $p.x, y: 0.5, z: $p.y }}>
+  <!-- EXTEND -->
   <slot />
 
+  <!-- PLAYER (YOU) -->
   {#if id === $playerCore?.carriedBy}
-    <Model />
+    <Model url="/models/CharacterSkeletonMeshAnims_02.glb">
+      {#each getCores(id) as [coreId, coreEntity] (coreId)}
+        <Core id={coreId} entity={coreEntity} />
+      {/each}
+    </Model>
     <Camera />
   {/if}
-</Mesh>
+
+  <!-- SOMETHING ELSE -->
+  <!-- WALL -->
+  {#if isWall(id)}
+    <Model url="/models/WallSkeletonMesh_01.glb">
+      {#each getInventory(id) as [jd, entity] (jd)}
+        {console.log("inventory")}
+        {console.log(id)}
+        <!-- <InventoryItem /> -->
+      {/each}
+    </Model>
+  {/if}
+</Group>

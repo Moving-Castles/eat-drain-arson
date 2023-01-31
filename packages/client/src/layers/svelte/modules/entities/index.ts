@@ -172,6 +172,12 @@ export const indexToID = (index: number) => {
 export const getCores = (address: string) =>
   Object.entries(get(entities)).filter(([id, ent]) => ent.core && ent.carriedBy === address);
 
+export const getInventory = (address: string) =>
+  Object.entries(get(entities)).filter(([id, ent]) => ent.core && ent.carriedBy === address);
+
+/** Determine what it is  */
+export const isWall = (address: string) => getInventory(address).filter(([id, item]) => item?.untraversable);
+
 /**
  * Format player list
  * @param Array of player names

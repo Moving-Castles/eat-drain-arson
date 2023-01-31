@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { Entity } from "../../../../../modules/entities";
-  import { getCores } from "../../../../../modules/entities";
   //
   import BaseEntity from "./BaseEntity.svelte";
   import Core from "./Core.svelte";
@@ -19,17 +18,11 @@
   const onPointerLeave = ({ detail }) => {
     console.log(detail);
   };
-
-  console.log(id, entity);
 </script>
 
 <!-- Entry point and event bus component for all 3D entities -->
 
 <!-- BASE ENTITIES -->
 {#if entity.carryingCapacity}
-  <BaseEntity on:click={onClick} on:pointerenter={onPointerEnter} on:pointerleave={onPointerLeave} {id} {entity}>
-    {#each getCores(id) as [coreId, coreEntity] (coreId)}
-      <Core id={coreId} entity={coreEntity} />
-    {/each}
-  </BaseEntity>
+  <BaseEntity on:click={onClick} on:pointerenter={onPointerEnter} on:pointerleave={onPointerLeave} {id} {entity} />
 {/if}

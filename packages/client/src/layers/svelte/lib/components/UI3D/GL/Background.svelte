@@ -3,7 +3,7 @@
   import { DEG2RAD } from "three/src/math/MathUtils";
   import { Vector2, Vector3, DoubleSide, MeshBasicMaterial, PlaneGeometry, Color } from "three";
 
-  const map = useTexture("/images/tilesets/verboten.png");
+  const map = useTexture("/images/tilesets/Tileset_13_Verboten-Masked.png");
   map.wrapS = 1;
   map.wrapT = 1;
 
@@ -39,22 +39,3 @@
     <Instance {rotation} position={{ x: pos.x * 10, z: pos.z * 10, y: -0.01 }} />
   {/each}
 </InstancedMesh>
-
-<!-- <Mesh
-  {rotation}
-  userData={{ tile }}
-  position={{ x, y, z }}
-  interactive
-  on:click={toggleActions}
-  receiveShadow
-  material={new MeshBasicMaterial({
-    map,
-    wireframe: false,
-    side: DoubleSide,
-  })}
-  geometry={new PlaneGeometry(3, 10)}
->
-  {#if showActions}
-    <TileActions on:close={toggleActions} {tile} />
-  {/if}
-</Mesh> -->

@@ -28,7 +28,6 @@
 </script>
 
 <Mesh
-  interactive
   on:click={onClick}
   geometry={new SphereGeometry(1, 10, 10)}
   material={new MeshBasicMaterial({ color })}

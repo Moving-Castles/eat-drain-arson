@@ -11,11 +11,13 @@
 
   const onKeyPress = ({ key }) => {
     if (key === "=") {
-      $zoom *= 3;
+      $zoom *= 2;
     }
     if (key === "-") {
-      $zoom /= 3;
+      $zoom /= 2;
     }
+
+    console.log($zoom);
   };
 
   // Camera focuses on the base entity that is carrying the core
