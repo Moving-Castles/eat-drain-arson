@@ -169,6 +169,9 @@ export const indexToID = (index: number) => {
   return get(network).world?.entities[index];
 };
 
+export const getCores = (address: string) =>
+  Object.entries(get(entities)).filter(([id, ent]) => ent.core && ent.carriedBy === address);
+
 /**
  * Format player list
  * @param Array of player names

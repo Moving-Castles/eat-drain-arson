@@ -1,4 +1,3 @@
-import type { Derived } from "svelte/store";
 import { derived, writable, get } from "svelte/store";
 import { tweened } from "svelte/motion";
 import { network, blockNumber } from "../network";
@@ -61,6 +60,23 @@ export function activityToVerb(activity: Activities) {
 
 export const playerAddress = derived(network, ($network) => $network.network?.connectedAddress.get() || "0x0");
 
+// - L - E - G - A - C - Y -
+
+export const player = derived([entities, playerAddress], ([$entities, $playerAddress]) => $entities[$playerAddress]);
+
+export const playerEnergy = derived([player, blockNumber], ([$player, $blockNumber]) =>
+  $player ? calculateEnergy($player, $blockNumber) : 0
+);
+
+// export const playerActivity = writable(Activities.Idle);
+// export const playerDirection = writable(Directions.None);
+
+// export const dead = derived(player, ($player) => $player.energy < 1);
+
+// export const heartbeats = 0;
+
+// - N - E- W
+
 /**
  * The `core` is the agent of the player.
  *
@@ -104,9 +120,6 @@ export const others = derived([players, playerAddress], ([$players, $playerAddre
  */
 export const playerActivity = writable(Activities.Idle);
 export const playerDirection = writable(Directions.None);
-export const playerEnergy = derived([player, blockNumber], ([$player, $blockNumber]) =>
-  $player ? calculateEnergy($player, $blockNumber) : 0
-);
 export const heartbeats = derived([player, blockNumber], ([$player, $blockNumber]) =>
   $player && $blockNumber ? calculateHeartbeats($player, $blockNumber) : 0
 );
@@ -114,34 +127,6 @@ export const dead = derived(player, ($player) => $player.energy < 1);
 // Interpolation
 export const playerPositionY = tweened(get(player)?.position?.y || 0, { duration: 10000 });
 export const playerPositionX = tweened(get(player)?.position?.x || 0, { duration: 10000 });
-
-// function makeInterpolated (entityStore: Derived, componentPath: 'string', duration: number) {
-//   const v = get(entityStore)
-//   console.log(v)
-//   // console.log(componentPath)
-//   const components = componentPath.split('.')
-//   let initialValue = null
-
-//   switch (components.length) {
-//     case (1):
-//       initialValue = v[components[0]]
-//       break
-//     case (2):
-//       initialValue = v[components[0]][components[1]]
-//       break
-//     case (3):
-//       initialValue = v[components[0]][components[1]][components[2]]
-//       break
-//     case (0):
-//     default:
-//       initialValue = v
-//       break
-//   }
-
-//   return tweened(initialValue, { duration })
-// }
-
-// export const playerPositionX = makeInterpolated(player, 'position.x', 1000)
 
 /**
  * The `baseEntity` carrying the player's `core`
@@ -161,21 +146,3 @@ export const playerBaseEntity = derived(
 export const multiCore = derived([cores, playerCore], ([$cores, $playerCore]) =>
   Object.values($cores).filter((e) => e.carriedBy == $playerCore.carriedBy).length > 1 ? true : false
 );
-
-// - L - E - G - A - C - Y -
-
-export const player = derived([entities, playerAddress], ([$entities, $playerAddress]) => $entities[$playerAddress]);
-
-export const playerActivity = writable(Activities.Idle);
-export const playerDirection = writable(Directions.None);
-
-export const dead = derived(player, ($player) => $player.energy < 1);
-
-// export const playerEnergy = derived([player, blockNumber], ([$player, $blockNumber]) =>
-//   $player ? calculateEnergy($player, $blockNumber) : 0
-// // );
-// export const heartbeats = derived([player, blockNumber], ([$player, $blockNumber]) =>
-//   $player && $blockNumber ? calculateHeartbeats($player, $blockNumber) : 0
-// );
-
-export const heartbeats = 0;

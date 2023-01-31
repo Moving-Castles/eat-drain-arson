@@ -3,8 +3,6 @@
   import { Canvas } from "@threlte/core";
   import Map from "./GL/Map.svelte";
   import Stats from "./GUI/Stats.svelte";
-
-  console.log("map");
 </script>
 
 <div class="ui-3d-map">
