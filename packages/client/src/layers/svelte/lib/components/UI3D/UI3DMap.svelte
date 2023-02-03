@@ -10,11 +10,11 @@
 </script>
 
 <div class="ui-3d-map">
-  {#if loading}
+  <!-- {#if loading}
     <div transition:fade class="loading">
       <span> Starting... </span>
     </div>
-  {/if}
+  {/if} -->
 
   <!--  -->
   <Canvas>
@@ -22,9 +22,7 @@
       <Map on:load={onLoad} />
     {/if}
 
-    {#if import.meta.env.DEV}
-      <Stats />
-    {/if}
+    <Stats />
   </Canvas>
 </div>
 

@@ -29,8 +29,8 @@
   position.z={150}
   position.y={150}
   zoom={$zoom}
-  near={1}
-  far={2000}
+  near={100}
+  far={1000}
   let:ref={cam}
   makeDefault
 >
