@@ -8,6 +8,7 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
+import { LibAbility } from "../libraries/LibAbility.sol";
 import { LibMap } from "../libraries/LibMap.sol";
 import { LibConfig } from "../libraries/LibConfig.sol";
 import { GameConfig } from "../components/GameConfigComponent.sol";
@@ -90,18 +91,16 @@ library LibMove {
    * @return bool is untraversable?
    */
   function isUntraversable(IUint256Component _components, Coord memory _coordinates) internal view returns (bool) {
-    UntraversableComponent untraversableComponent = UntraversableComponent(
-      getAddressById(_components, UntraversableComponentID)
-    );
     PositionComponent positionComponent = PositionComponent(getAddressById(_components, PositionComponentID));
 
-    QueryFragment[] memory fragments = new QueryFragment[](2);
+    QueryFragment[] memory fragments = new QueryFragment[](1);
     fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(_coordinates));
-    fragments[1] = QueryFragment(QueryType.Has, untraversableComponent, abi.encode(0));
-
     uint256[] memory results = LibQuery.query(fragments);
 
-    if (results.length > 0) return true;
+    for (uint256 i; i < results.length; i++) {
+      if (LibAbility.checkInventoryForAbility(_components, results[i], UntraversableComponentID)) return true;
+    }
+
     return false;
   }
 

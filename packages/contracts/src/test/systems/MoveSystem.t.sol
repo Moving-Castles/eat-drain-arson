@@ -5,8 +5,12 @@ import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
 import { addressToEntity } from "solecs/utils.sol";
 
+import { ComponentDevSystem, ID as ComponentDevSystemID } from "../../systems/ComponentDevSystem.sol";
 import { MoveSystem, ID as MoveSystemID } from "../../systems/MoveSystem.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
+
+import { LibMove } from "../../libraries/LibMove.sol";
+import { LibInventory } from "../../libraries/LibInventory.sol";
 
 import { Coord } from "../../components/PositionComponent.sol";
 
@@ -46,6 +50,58 @@ contract MoveSystemTest is MudTest {
 
     // --- Energy
     assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.moveCost);
+  }
+
+  function testRevertUntraversable() public {
+    setUp();
+
+    SpawnSystem spawnSystem = SpawnSystem(system(SpawnSystemID));
+    MoveSystem moveSystem = MoveSystem(system(MoveSystemID));
+
+    // --- Spawn core
+    vm.startPrank(alice);
+    spawnSystem.executeTyped();
+
+    vm.roll(2);
+
+    uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
+
+    Coord memory initialPosition = positionComponent.getValue(baseEntity);
+
+    Coord memory targetPosition = Coord(
+      initialPosition.x < gameConfig.worldWidth - 2 ? initialPosition.x + 1 : initialPosition.x - 1,
+      initialPosition.y
+    );
+
+    // Create a base entity at our target position
+    uint256 untraversableBaseEntity = world.getUniqueEntityId();
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      CarryingCapacityComponentID,
+      untraversableBaseEntity,
+      abi.encode(10)
+    );
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      PositionComponentID,
+      untraversableBaseEntity,
+      abi.encode(targetPosition)
+    );
+
+    // Create an untraversable portable and place it in the inventory
+    uint256 portableEntity = world.getUniqueEntityId();
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(PortableComponentID, portableEntity, abi.encode(1));
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      UntraversableComponentID,
+      portableEntity,
+      abi.encode(1)
+    );
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      CarriedByComponentID,
+      portableEntity,
+      abi.encode(untraversableBaseEntity)
+    );
+
+    vm.expectRevert(bytes("LibMove: untraversable"));
+    moveSystem.executeTyped(targetPosition);
   }
 
   function testRevertCooldown() public {

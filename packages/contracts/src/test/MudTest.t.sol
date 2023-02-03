@@ -24,6 +24,7 @@ import { CarryingCapacityComponent, ID as CarryingCapacityComponentID } from "..
 import { CoreComponent, ID as CoreComponentID } from "../components/CoreComponent.sol";
 import { CarriedByComponent, ID as CarriedByComponentID } from "../components/CarriedByComponent.sol";
 import { MatterComponent, ID as MatterComponentID } from "../components/MatterComponent.sol";
+import { UntraversableComponent, ID as UntraversableComponentID } from "../components/UntraversableComponent.sol";
 
 contract MudTest is DSTest {
   Cheats internal immutable vm = Cheats(HEVM_ADDRESS);
@@ -50,6 +51,7 @@ contract MudTest is DSTest {
   CoreComponent coreComponent;
   CarriedByComponent carriedByComponent;
   MatterComponent matterComponent;
+  UntraversableComponent untraversableComponent;
 
   function component(uint256 id) public view returns (address) {
     return getAddressById(components, id);
@@ -78,6 +80,7 @@ contract MudTest is DSTest {
     coreComponent = CoreComponent(getAddressById(components, CoreComponentID));
     carriedByComponent = CarriedByComponent(getAddressById(components, CarriedByComponentID));
     matterComponent = MatterComponent(getAddressById(components, MatterComponentID));
+    untraversableComponent = UntraversableComponent(getAddressById(components, UntraversableComponentID));
 
     gameConfig = LibConfig.getGameConfig(components);
   }
