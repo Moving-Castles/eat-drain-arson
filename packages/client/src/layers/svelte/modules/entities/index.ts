@@ -14,6 +14,8 @@ export type GameConfig = {
   moveCost: number;
   extractCost: number;
   transferCost: number;
+  moveCooldown: number;
+  extractCooldown: number;
 };
 
 export type Entity = {

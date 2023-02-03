@@ -42,7 +42,7 @@ contract MoveSystem is System {
     LibMove.step(components, baseEntity, Direction(_direction));
 
     LibCore.decreaseEnergy(components, coreEntity, gameConfig.moveCost);
-    LibCooldown.setReadyBlock(components, coreEntity, gameConfig.moveCost);
+    LibCooldown.setReadyBlock(components, coreEntity, gameConfig.moveCooldown);
   }
 
   function executeTyped(uint32 _direction) public returns (bytes memory) {

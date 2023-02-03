@@ -91,6 +91,6 @@ library LibSubstanceBlock {
     uint256 _substanceBlockEntity
   ) internal view returns (uint32) {
     MatterComponent matterComponent = MatterComponent(getAddressById(_components, MatterComponentID));
-    return matterComponent.getValue(_substanceBlockEntity);
+    return matterComponent.getValue(_substanceBlockEntity) * 2;
   }
 }

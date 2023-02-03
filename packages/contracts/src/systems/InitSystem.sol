@@ -25,7 +25,9 @@ contract InitSystem is System {
       defaultCarryingCapacity: 10,
       moveCost: 10,
       extractCost: 10,
-      transferCost: 5
+      transferCost: 5,
+      moveCooldown: 1,
+      extractCooldown: 1
     });
     LibConfig.setGameConfig(components, gameConfig);
 

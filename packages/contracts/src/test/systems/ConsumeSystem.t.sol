@@ -51,8 +51,8 @@ contract ConsumeSystemTest is MudTest {
     consumeSystem.executeTyped(portableEntity);
     vm.stopPrank();
 
-    // Core energy should be INITIAL_ENERGY + 10
-    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy + 10);
+    // Core energy should be INITIAL_ENERGY + 20
+    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy + 20);
 
     // portableEntity should be removed
     assertTrue(!portableComponent.has(portableEntity));

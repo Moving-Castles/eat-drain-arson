@@ -5,10 +5,10 @@
   import { entities } from "../../../modules/entities";
   import { player } from "../../../modules/player";
 
+  export let selectedTileCoords: Coord;
+
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
-
-  export let selectedTileCoords: Coord;
 
   function move() {
     if (chebyshev($entities[$player.carriedBy].position, selectedTileCoords) === 1) {
@@ -46,7 +46,7 @@
     background: lightgrey;
     color: black;
     font-size: 32px;
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);

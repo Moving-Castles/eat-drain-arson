@@ -22,7 +22,7 @@
   {:else}
     <button on:click={spawn}>
       {#if $playerBaseEntity}
-        Respawn
+        Spawn
       {:else}
         Spawn
       {/if}

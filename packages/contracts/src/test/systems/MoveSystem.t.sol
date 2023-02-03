@@ -46,7 +46,7 @@ contract MoveSystemTest is MudTest {
 
     // --- ReadyBlock
     uint256 rB = readyBlockComponent.getValue(addressToEntity(alice));
-    assertEq(rB, gameConfig.moveCost + 2);
+    assertEq(rB, gameConfig.moveCooldown + 2);
     console.log("___READY BLOCK:");
     console.log(rB);
 

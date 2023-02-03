@@ -1,7 +1,7 @@
 <script lang="ts">
   import { uiState } from "../modules/ui";
   import { ready } from "../modules/network";
-  import { playerBaseEntity } from "../modules/player";
+  import { playerBaseEntity, playerCore } from "../modules/player";
   import UITaskBar from "./UITaskBar.svelte";
   import UIComponent from "./UIComponent.svelte";
   import UISpawn from "./components/UISpawn.svelte";
@@ -13,7 +13,7 @@
 
 <!-- The UI layer -->
 <div class="ui-container">
-  {#if !$playerBaseEntity}
+  {#if !$playerCore}
     <span />
   {:else}
     <UITaskBar />
@@ -23,7 +23,7 @@
       <UIComponent id="ui-loading" options={{ fluid: true, bare: true, span: true }} area="mm">
         <UILoading />
       </UIComponent>
-    {:else if !$playerBaseEntity}
+    {:else if !$playerCore}
       <UIComponent id="ui-spawn" options={{ fluid: true, bare: true, span: true }} area="mm">
         <UISpawn />
       </UIComponent>

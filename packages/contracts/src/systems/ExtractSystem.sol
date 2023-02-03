@@ -74,7 +74,7 @@ contract ExtractSystem is System {
       LibSubstanceBlock.create(components, world.getUniqueEntityId(), _extractionCoordinates, gameConfig.extractCost);
     }
 
-    LibCooldown.setReadyBlock(components, coreEntity, gameConfig.extractCost);
+    LibCooldown.setReadyBlock(components, coreEntity, gameConfig.extractCooldown);
     LibCore.decreaseEnergy(components, coreEntity, gameConfig.extractCost);
   }
 

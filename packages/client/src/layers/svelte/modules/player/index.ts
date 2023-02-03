@@ -136,7 +136,7 @@ export const playerPositionX = tweened(get(player)?.position?.x || 0, { duration
  *
  */
 export const playerBaseEntity = derived([entities, playerCore], ([$entities, $playerCore]) => {
-  if (!$entities || !$playerCore) return false;
+  if (!$entities || !$playerCore) return {} as BaseEntity;
   return $entities[$playerCore.carriedBy] as BaseEntity;
 });
 

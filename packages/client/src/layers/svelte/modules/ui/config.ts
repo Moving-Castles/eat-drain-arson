@@ -1,5 +1,7 @@
 // Components
 import UIDebugLog from "../../lib/components/UIDebug/UIDebugLog.svelte";
+import UIDebugStats from "../../lib/components/UIDebug/UIDebugStats.svelte";
+import UIDebugInspector from "../../lib/components/UIDebug/UIDebugInspector.svelte";
 import UIDebugMap from "../../lib/components/UIDebug/UIDebugMap.svelte";
 import UI3DMap from "../../lib/components/UI3D/UI3DMap.svelte";
 import UI3DAvatar from "../../lib/components/UI3D/UI3DAvatar.svelte";
@@ -38,13 +40,12 @@ export type UIComponentDefinition = {
 // --- CONSTANTS -----------------------------------------------------------------
 
 export const initialState = () => ({
-  "debug-log": initialise({
-    id: "debug-log",
-    title: "Debug Log",
-    component: UIDebugLog,
+  "debug-stats": initialise({
+    id: "debug-stats",
+    title: "Debug Stats",
+    component: UIDebugStats,
     active: true,
     options: {
-      persistent: true,
       fluid: true,
       layer: 2,
       delay: 0,
@@ -52,6 +53,38 @@ export const initialState = () => ({
     hidden: false,
     grid: {
       col: [3, 4],
+      row: [1, 6],
+    },
+  }),
+  "debug-inspector": initialise({
+    id: "debug-inspector",
+    title: "Debug Inspector",
+    component: UIDebugInspector,
+    active: false,
+    options: {
+      fluid: true,
+      layer: 2,
+      delay: 0,
+    },
+    hidden: false,
+    grid: {
+      col: [3, 4],
+      row: [6, 10],
+    },
+  }),
+  "debug-log": initialise({
+    id: "debug-log",
+    title: "Debug Log",
+    component: UIDebugLog,
+    active: false,
+    options: {
+      fluid: true,
+      layer: 2,
+      delay: 0,
+    },
+    hidden: false,
+    grid: {
+      col: [4, 5],
       row: [1, 10],
     },
   }),
@@ -63,23 +96,6 @@ export const initialState = () => ({
     options: {
       persistent: true,
       fluid: true,
-      layer: 2,
-      delay: 0,
-    },
-    hidden: false,
-    grid: {
-      col: [1, 3],
-      row: [1, 10],
-    },
-  }),
-  "3d-map": initialise({
-    id: "3d-map",
-    title: "Ortho Map",
-    component: UI3DMap,
-    active: true,
-    options: {
-      persistent: false,
-      fluid: true,
       layer: 3,
       delay: 0,
     },
@@ -89,23 +105,40 @@ export const initialState = () => ({
       row: [1, 10],
     },
   }),
-  you: initialise({
-    id: "you",
-    title: "You",
-    component: UI3DAvatar,
-    active: false,
-    options: {
-      persistent: false,
-      fluid: true,
-      layer: 4,
-      delay: 0,
-    },
-    hidden: false,
-    grid: {
-      col: [1, 3],
-      row: [1, 10],
-    },
-  }),
+  // "3d-map": initialise({
+  //   id: "3d-map",
+  //   title: "Ortho Map",
+  //   component: UI3DMap,
+  //   active: true,
+  //   options: {
+  //     persistent: false,
+  //     fluid: true,
+  //     layer: 3,
+  //     delay: 0,
+  //   },
+  //   hidden: false,
+  //   grid: {
+  //     col: [1, 3],
+  //     row: [1, 10],
+  //   },
+  // }),
+  // you: initialise({
+  //   id: "you",
+  //   title: "You",
+  //   component: UI3DAvatar,
+  //   active: false,
+  //   options: {
+  //     persistent: false,
+  //     fluid: true,
+  //     layer: 4,
+  //     delay: 0,
+  //   },
+  //   hidden: false,
+  //   grid: {
+  //     col: [1, 3],
+  //     row: [1, 10],
+  //   },
+  // }),
 });
 
 // --- FUNCTIONS -----------------------------------------------------------------

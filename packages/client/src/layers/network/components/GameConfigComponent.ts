@@ -13,6 +13,8 @@ export function defineGameConfigComponent(world: World) {
       moveCost: Type.Number,
       extractCost: Type.Number,
       transferCost: Type.Number,
+      moveCooldown: Type.Number,
+      extractCooldown: Type.Number,
     },
     {
       id: "GameConfig",

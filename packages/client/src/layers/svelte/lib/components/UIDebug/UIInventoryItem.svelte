@@ -1,0 +1,63 @@
+<script lang="ts">
+  import { addressToColor } from "../../../utils/ui";
+  import { network } from "../../../modules/network";
+
+  export let itemId: string;
+  export let item: any;
+
+  let text = "";
+  if (item.core) {
+    text = "*";
+  } else if (item.matter) {
+    text = "S";
+  } else if (item.abilityMove) {
+    text = "M";
+  } else if (item.abilityConsume) {
+    text = "C";
+  } else if (item.abilityExtract) {
+    text = "E";
+  }
+
+  function drop() {
+    $network.api.drop(itemId);
+  }
+
+  function consume() {
+    $network.api.consume(itemId);
+  }
+</script>
+
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div
+  style={"background:" + addressToColor(itemId) + ";"}
+  class="inventory-item"
+  on:click={() => {
+    if (item.matter) {
+      consume();
+    } else {
+      drop();
+    }
+  }}
+>
+  <div>{text}</div>
+</div>
+
+<style>
+  .inventory-item {
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    font-size: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    cursor: pointer;
+  }
+
+  .inventory-item:hover {
+    opacity: 0.9;
+  }
+</style>
