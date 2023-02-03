@@ -57,4 +57,34 @@ contract DropSystemTest is MudTest {
 
     vm.stopPrank();
   }
+
+  function testDropCore() public {
+    setUp();
+    SpawnSystem spawnSystem = SpawnSystem(system(SpawnSystemID));
+    DropSystem dropSystem = DropSystem(system(DropSystemID));
+
+    vm.startPrank(alice);
+    spawnSystem.executeTyped();
+
+    // Get base entity
+    assertTrue(carriedByComponent.has(addressToEntity(alice)));
+    uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
+    Coord memory initialPosition = positionComponent.getValue(baseEntity);
+
+    vm.roll(2);
+
+    // Drop your own core
+    dropSystem.executeTyped(addressToEntity(alice));
+
+    // Core is in the void
+    assertTrue(!positionComponent.has(addressToEntity(alice)));
+
+    // Core should not have carriedBy
+    assertTrue(!carriedByComponent.has(addressToEntity(alice)));
+
+    // Core energy should be INITIAL_ENERGY - TRANSFER_COST
+    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.transferCost);
+
+    vm.stopPrank();
+  }
 }

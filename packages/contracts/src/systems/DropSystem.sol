@@ -35,7 +35,11 @@ contract DropSystem is System {
     Coord memory baseEntityPosition = LibMove.getPosition(components, baseEntity);
 
     LibInventory.removeFromInventory(components, _portableEntity);
-    LibMove.setPosition(components, _portableEntity, baseEntityPosition);
+
+    // Dropping a core ejects it into the void...
+    if (_portableEntity != coreEntity) {
+      LibMove.setPosition(components, _portableEntity, baseEntityPosition);
+    }
 
     LibCore.decreaseEnergy(components, coreEntity, gameConfig.transferCost);
   }
