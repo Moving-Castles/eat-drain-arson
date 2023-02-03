@@ -49,9 +49,8 @@ library LibMap {
    * @param _coordinates position
    * @return bool
    */
-  function isWithinBounds(IUint256Component _components, Coord memory _coordinates) internal returns (bool) {
+  function isWithinBounds(IUint256Component _components, Coord memory _coordinates) internal view returns (bool) {
     GameConfig memory gameConfig = LibConfig.getGameConfig(_components);
-
     if (_coordinates.x < 0) return false;
     if (_coordinates.x > gameConfig.worldWidth - 1) return false;
     if (_coordinates.y < 0) return false;
@@ -79,5 +78,28 @@ library LibMap {
     LibMove.makeUntraversable(_components, untraversableEntity);
     LibInventory.makePortable(_components, untraversableEntity);
     LibInventory.addToInventory(_components, baseEntity, untraversableEntity);
+  }
+
+  /**
+   * Generates random coordinates, within the bounds of the world
+   *
+   * @param _components world components
+   * @return coord random coordinates
+   */
+  function randomCoordinates(IUint256Component _components) internal view returns (Coord memory) {
+    GameConfig memory gameConfig = LibConfig.getGameConfig(_components);
+
+    // We try max 10 times to get an untraversable position, then give up a return a default...
+    for (uint256 i = 0; i < 10; i++) {
+      int32 x = int32(int256(LibUtils.random(addressToEntity(msg.sender), block.timestamp)) % gameConfig.worldWidth);
+      int32 y = int32(int256(LibUtils.random(block.timestamp, block.number)) % gameConfig.worldHeight);
+
+      // Make sure the values are positive
+      if (x < 0) x *= -1;
+      if (y < 0) y *= -1;
+
+      if (!LibMove.isUntraversable(_components, Coord(x, y))) return Coord(x, y);
+    }
+    return Coord(2, 4);
   }
 }

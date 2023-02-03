@@ -16,8 +16,8 @@ library LibUtils {
    * @param   r2  second source of randomness
    * @return  r  random value
    */
-  function randomness(uint256 r1, uint256 r2) public view returns (uint256 r) {
-    return uint256(keccak256(abi.encodePacked(r1, r2, block.timestamp, blockhash(block.number - 1))));
+  function random(uint256 r1, uint256 r2) internal view returns (uint256 r) {
+    return uint256(keccak256(abi.encodePacked(r1, r2, block.difficulty, blockhash(block.number - 1))));
   }
 
   /**

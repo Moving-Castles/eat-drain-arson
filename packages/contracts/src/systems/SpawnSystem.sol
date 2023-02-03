@@ -7,6 +7,7 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { LibInventory } from "../libraries/LibInventory.sol";
 import { LibCore } from "../libraries/LibCore.sol";
 import { LibMove } from "../libraries/LibMove.sol";
+import { LibMap } from "../libraries/LibMove.sol";
 import { LibAbility } from "../libraries/LibAbility.sol";
 import { LibConfig } from "../libraries/LibConfig.sol";
 
@@ -34,7 +35,7 @@ contract SpawnSystem is System {
     uint256 baseEntity = world.getUniqueEntityId();
     LibInventory.setCarryingCapacity(components, baseEntity, gameConfig.defaultCarryingCapacity);
     LibInventory.addToInventory(components, baseEntity, coreEntity);
-    LibMove.setRandomPosition(components, baseEntity);
+    LibMove.setPosition(components, baseEntity, LibMap.randomCoordinates(components));
 
     // Place an item allowing Move in inventory
     uint256 AbilityMoveItem = world.getUniqueEntityId();

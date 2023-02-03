@@ -54,36 +54,6 @@ library LibMove {
   }
 
   /**
-   * Set a random position within bounds
-   *
-   * @param _components World components
-   * @param _entity Entity to set position for
-   */
-  function setRandomPosition(IUint256Component _components, uint256 _entity) internal {
-    PositionComponent positionComponent = PositionComponent(getAddressById(_components, PositionComponentID));
-
-    // Repeat until we get get a position that is not untraversable
-    while (true) {
-      int32 randomX = int32(
-        int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender)))) % 10
-      );
-      int32 randomY = int32(
-        int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender)))) % 10
-      );
-      // Make sure the values are positive
-      if (randomX < 0) randomX *= -1;
-      if (randomY < 0) randomY *= -1;
-      // randomX += 25;
-      // randomY += 25;
-
-      if (!isUntraversable(_components, Coord(randomX, randomY))) {
-        positionComponent.set(_entity, Coord(randomX, randomY));
-        return;
-      }
-    }
-  }
-
-  /**
    * Check if position is untraversable
    *
    * @param _components World components
