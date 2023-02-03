@@ -2,6 +2,7 @@
   import type { Entity } from "../../../../../modules/entities";
   //
   import BaseEntity from "./BaseEntity.svelte";
+  import BaseItem from "./BaseItem.svelte";
   import Core from "./Core.svelte";
 
   export let id: string;
@@ -25,4 +26,9 @@
 <!-- BASE ENTITIES -->
 {#if entity.carryingCapacity}
   <BaseEntity on:click={onClick} on:pointerenter={onPointerEnter} on:pointerleave={onPointerLeave} {id} {entity} />
+{/if}
+
+<!-- ITEM that has not been picked up -->
+{#if entity.portable && !entity.carriedBy}
+  <BaseItem {id} {entity} />
 {/if}

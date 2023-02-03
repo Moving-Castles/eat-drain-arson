@@ -2,6 +2,7 @@
   import { GLTF } from "@threlte/extras";
   import { useTexture, useFrame } from "@threlte/core";
   import { MeshBasicMaterial, Vector2, Vector3, DoubleSide } from "three";
+  import { seedToLegacyMask } from "../../../../../utils/name";
   import { DEG2RAD } from "three/src/math/MathUtils";
 
   export let id: string;
@@ -12,17 +13,10 @@
   let loaded = false;
   let ry = 0;
 
-  const seedToRandomMask = (id: string) => {
-    const x = Math.floor(Math.random() * 5);
-    const y = Math.floor(Math.random() * 5);
-
-    return { x, y };
-  };
-
   const map = useTexture("/images/tilesets/CoreTextures.png", {
     onLoad: () => {
       loaded = true;
-      const { x, y } = seedToRandomMask(id);
+      const { x, y } = seedToLegacyMask(id);
       map.repeat = new Vector2(0.2, 0.2);
       map.offset = new Vector2(x / 5, y / 5);
       map.unpackAlignment = 4;
@@ -42,6 +36,7 @@
         node.material = new MeshBasicMaterial({
           side: 2,
           map,
+          wireframe: true,
         });
       }
     });
@@ -54,11 +49,4 @@
   });
 </script>
 
-<GLTF
-  {position}
-  rotation={{ y: DEG2RAD * 90 - ry }}
-  {scale}
-  url="/models/Core-Mesh_01.glb"
-  useDraco
-  bind:gltf={model}
-/>
+<GLTF {position} {scale} url="/models/Core-Mesh_01.glb" useDraco bind:gltf={model} />

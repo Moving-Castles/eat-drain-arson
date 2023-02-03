@@ -54,6 +54,13 @@ function reverseString(str: string): string {
   else return reverseString(str.substr(1)) + str.charAt(0);
 }
 
+export const seedToLegacyMask = (id: string) => {
+  const x = Math.floor(Number(id.charCodeAt(3)) % 5);
+  const y = Math.floor(Number(id.charCodeAt(4)) % 5);
+
+  return { x, y };
+};
+
 export function seedToName(seed: number) {
   if (!seed) return "";
   const seedAsString = reverseString(Math.abs(seed).toString());

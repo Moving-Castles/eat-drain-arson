@@ -45,10 +45,6 @@
 
   const previewActions = () => {
     opacity.set(0.8);
-    // $rx = DEG2RAD * 270;
-
-    // $tileY = 1;
-    // rotation.set({ x: 0, y  DEG2RAD * 90, z: 0 });
   };
 
   const onPointerEnter = () => opacity.set(0.8);
@@ -58,7 +54,7 @@
     // $rx = DEG2RAD * 90;
     // $ry = 0;
     // $rz = 0;
-    // $tileY = 0;
+    $tileY = 0;
   };
 </script>
 
@@ -73,7 +69,7 @@
   receiveShadow
   material={new MeshBasicMaterial({
     map,
-    wireframe: false,
+    wireframe: true,
     side: DoubleSide,
     transparent: true,
     opacity: $opacity,

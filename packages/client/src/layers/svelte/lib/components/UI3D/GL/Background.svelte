@@ -37,7 +37,7 @@
 <InstancedMesh
   material={new MeshBasicMaterial({
     map,
-    wireframe: false,
+    wireframe: true,
     side: DoubleSide,
   })}
   geometry={new PlaneGeometry(10, 10)}

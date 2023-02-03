@@ -36,21 +36,22 @@
   function close() {
     dispatch("close", {});
   }
-
-  console.log("tile interactions ");
 </script>
 
 <Group {position} lookAt={$camera.position}>
-  <HTML transform scale={0.2}>
+  <HTML transform scale={0.1}>
     <div class="tile-interact">
       {#if import.meta.env.DEV}
         <div class="text">x:{tile.coordinates.x},y:{tile.coordinates.y}</div>
       {/if}
+      <div class="text">
+        r: {tile.resource}
+      </div>
       {#if chebyshev($entities[$player.carriedBy].position, tile.coordinates) === 1}
         <div><button on:click={move}>MOVE</button></div>
         <div><button on:click={extract}>EXTRACT</button></div>
       {:else}
-        <div class="text">Nothing to do here</div>
+        <div class="text">---</div>
       {/if}
       <div><button on:click={close}>CLOSE</button></div>
     </div>

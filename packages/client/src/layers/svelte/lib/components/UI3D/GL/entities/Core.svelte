@@ -13,12 +13,8 @@
   export let entity: Entity;
   export let i: number;
 
-  const color = addressToColor(id);
-
-  const onClick = (e) => {};
-
-  const rotation = new Vector3(0, DEG2RAD, DEG2RAD);
-  const position = new Vector3(0.5, i + 0.5, 0.5);
+  console.log("hello from corehead", id);
+  const position = new Vector3(0.5, 0.15 + 0.2 * i, 0.5);
   let scale = 1;
 </script>
 

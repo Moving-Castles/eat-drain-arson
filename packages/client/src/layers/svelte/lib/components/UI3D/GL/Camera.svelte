@@ -1,12 +1,9 @@
 <script>
   import { T, TransformableObject } from "@threlte/core";
-  import { useParent } from "@threlte/core";
-  import { PerspectiveCamera } from "three";
+  import { useParent, OrbitControls } from "@threlte/core";
   import { spring } from "svelte/motion";
 
   const parent = useParent();
-
-  console.log($parent);
   let zoom = spring(1, { stiffness: 0.2, damping: 0.9 });
 
   const onKeyPress = ({ key }) => {
@@ -16,28 +13,15 @@
     if (key === "-") {
       $zoom /= 2;
     }
-
-    console.log($zoom);
   };
+
+  let pan = true;
 
   // Camera focuses on the base entity that is carrying the core
   let cam;
 </script>
 
 <svelte:window on:keypress={onKeyPress} />
-
-<!-- <T.OrthographicCamera
-  position.x={0}
-  position.z={0}
-  position.y={10}
-  zoom={100}
-  near={1}
-  far={2000}
-  let:ref={cam}
-  makeDefault
->
-  <TransformableObject object={cam} lookAt={{ x: 0, y: 0, z: 0 }} />
-</T.OrthographicCamera> -->
 
 <T.PerspectiveCamera
   fov={1}
@@ -53,7 +37,11 @@
   {#if $parent}
     <TransformableObject
       object={cam}
-      lookAt={{ x: $parent.position.x, y: $parent.position.y, z: $parent.position.z }}
+      lookAt={{ x: $parent.position.x, y: $parent.position.y - 0.4, z: $parent.position.z }}
     />
+  {/if}
+
+  {#if pan}
+    <OrbitControls enableDamping />
   {/if}
 </T.PerspectiveCamera>

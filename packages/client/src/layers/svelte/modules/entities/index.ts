@@ -169,15 +169,27 @@ export const indexToID = (index: number) => {
   return get(network).world?.entities[index];
 };
 
-export const getCores = (address: string) =>
-  Object.entries(get(entities)).filter(([id, ent]) => ent.core && ent.carriedBy === address);
+export const getInventory = (address: string) => {
+  return Object.entries(get(entities)).filter(([id, ent]) => ent.carriedBy === address);
+};
 
-export const getInventory = (address: string) =>
-  Object.entries(get(entities)).filter(([id, ent]) => ent.carriedBy === address);
+export const getCores = (address: string) => {
+  const inventory = getInventory(address);
+  return inventory.filter(([id, ent]) => ent.core);
+};
+
+export const hasPlayer = (address: string) => {
+  const inv = getInventory(address);
+  console.log(inv);
+
+  return inv.map((item) => item);
+  // getInventory(address).filter([id, item]) => item?.
+};
 
 /** Determine what it is  */
-export const isWall = (address: string) => getInventory(address).filter(([id, item]) => item?.untraversable).length > 0;
-export const isPlayer = (address: string) => getInventory(address).filter(([id, item]) => item);
+export const isTraversable = (address: string) =>
+  getInventory(address).filter(([id, item]) => !item?.untraversable).length > 0;
+// export const isPlayer = (address: string) => getInventory(address).filter(([id, item]) => item).length > 0;
 
 /**
  * Format player list

@@ -11,7 +11,9 @@
 
 <div class="ui-3d-map">
   {#if loading}
-    <div transition:fade class="loading">Loading...</div>
+    <div transition:fade class="loading">
+      <span> Starting... </span>
+    </div>
   {/if}
 
   <!--  -->
@@ -33,7 +35,12 @@
     right: 0;
     bottom: 0;
     left: 0;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
     background: rgba(255, 0, 0, 0);
+    color: var(--foreground);
   }
   .ui-3d-map {
     height: 100%;

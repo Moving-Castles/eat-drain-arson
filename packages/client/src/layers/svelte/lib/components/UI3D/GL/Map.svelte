@@ -44,18 +44,18 @@
 
 <!-- BASE LAYER -->
 <T.Group>
+  <!-- Sides -->
+  <T.Group position.x={5} position.z={5}>
+    <Background on:load={bgLoaded} />
+  </T.Group>
+
   <!-- Floor -->
   {#each grid as tile (`${tile.coordinates.x}-${tile.coordinates.y}`)}
     <Tile {tile} on:load={tileLoaded} />
   {/each}
 
-  <T.Group position.x={4.5} position.z={4.5}>
-    <Background on:load={bgLoaded} />
-  </T.Group>
-
   <!-- Entities -->
   {#each Object.entries($entities) as [id, entity] (id)}
-    <!-- Your position in the world -->
     <Entity {id} {entity} />
   {/each}
 </T.Group>
