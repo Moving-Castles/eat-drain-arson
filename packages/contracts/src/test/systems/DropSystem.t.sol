@@ -10,7 +10,6 @@ import { DropSystem, ID as DropSystemID } from "../../systems/DropSystem.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 
 import { Coord } from "../../components/PositionComponent.sol";
-import { Direction } from "../../utils/constants.sol";
 
 import { LibResource } from "../../libraries/LibResource.sol";
 import { LibSubstanceBlock } from "../../libraries/LibSubstanceBlock.sol";

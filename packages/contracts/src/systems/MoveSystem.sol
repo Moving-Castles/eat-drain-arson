@@ -5,8 +5,6 @@ import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
-import { Direction } from "../utils/constants.sol";
-
 import { LibMove } from "../libraries/LibMove.sol";
 import { LibCore } from "../libraries/LibCore.sol";
 import { LibCooldown } from "../libraries/LibCooldown.sol";
@@ -17,13 +15,15 @@ import { LibConfig } from "../libraries/LibConfig.sol";
 import { GameConfig } from "../components/GameConfigComponent.sol";
 import { ID as AbilityMoveComponentID } from "../components/AbilityMoveComponent.sol";
 
+import { Coord } from "../components/PositionComponent.sol";
+
 uint256 constant ID = uint256(keccak256("system.Move"));
 
 contract MoveSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    uint32 _direction = abi.decode(arguments, (uint32));
+    Coord memory _targetPosition = abi.decode(arguments, (Coord));
     uint256 coreEntity = addressToEntity(msg.sender);
 
     GameConfig memory gameConfig = LibConfig.getGameConfig(components);
@@ -39,13 +39,13 @@ contract MoveSystem is System {
       "MoveSystem: no item with AbilityMove"
     );
 
-    LibMove.step(components, baseEntity, Direction(_direction));
+    LibMove.step(components, baseEntity, _targetPosition);
 
     LibCore.decreaseEnergy(components, coreEntity, gameConfig.moveCost);
     LibCooldown.setReadyBlock(components, coreEntity, gameConfig.moveCooldown);
   }
 
-  function executeTyped(uint32 _direction) public returns (bytes memory) {
-    return execute(abi.encode(_direction));
+  function executeTyped(Coord memory _targetPosition) public returns (bytes memory) {
+    return execute(abi.encode(_targetPosition));
   }
 }

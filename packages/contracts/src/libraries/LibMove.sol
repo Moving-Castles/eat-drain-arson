@@ -8,8 +8,7 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
-import { Direction } from "../utils/constants.sol";
-
+import { LibMap } from "../libraries/LibMap.sol";
 import { LibConfig } from "../libraries/LibConfig.sol";
 import { GameConfig } from "../components/GameConfigComponent.sol";
 
@@ -124,38 +123,16 @@ library LibMove {
    *
    * @param _components World components
    * @param _entity Entity to move
-   * @param _direction Direction to move
+   * @param _targetPosition Position to move to
    */
-  function step(IUint256Component _components, uint256 _entity, Direction _direction) internal {
+  function step(IUint256Component _components, uint256 _entity, Coord memory _targetPosition) internal {
     PositionComponent positionComponent = PositionComponent(getAddressById(_components, PositionComponentID));
-    Coord memory newPosition = positionComponent.getValue(_entity);
+    Coord memory currentPosition = positionComponent.getValue(_entity);
 
-    GameConfig memory gameConfig = LibConfig.getGameConfig(_components);
+    require(LibMap.isWithinBounds(_components, _targetPosition), "LibMove: out of bounds");
+    require(LibMap.isAdjacent(currentPosition, _targetPosition), "LibMove: not adjacent");
+    require(!isUntraversable(_components, _targetPosition), "LibMove: untraversable");
 
-    if (_direction == Direction.North) {
-      if (newPosition.y > 0) newPosition.y -= 1;
-    } else if (_direction == Direction.NorthEast) {
-      if (newPosition.y > 0) newPosition.y -= 1;
-      if (newPosition.x < gameConfig.worldWidth) newPosition.x += 1;
-    } else if (_direction == Direction.East) {
-      if (newPosition.x < gameConfig.worldWidth) newPosition.x += 1;
-    } else if (_direction == Direction.SouthEast) {
-      if (newPosition.y < gameConfig.worldHeight) newPosition.y += 1;
-      if (newPosition.x < gameConfig.worldWidth) newPosition.x += 1;
-    } else if (_direction == Direction.South) {
-      if (newPosition.y < gameConfig.worldHeight) newPosition.y += 1;
-    } else if (_direction == Direction.SouthWest) {
-      if (newPosition.y < gameConfig.worldHeight) newPosition.y += 1;
-      if (newPosition.x > 0) newPosition.x -= 1;
-    } else if (_direction == Direction.West) {
-      if (newPosition.x > 0) newPosition.x -= 1;
-    } else if (_direction == Direction.NorthWest) {
-      if (newPosition.y > 0) newPosition.y -= 1;
-      if (newPosition.x > 0) newPosition.x -= 1;
-    }
-
-    require(!isUntraversable(_components, newPosition), "LibMove: untraversable");
-
-    positionComponent.set(_entity, newPosition);
+    positionComponent.set(_entity, _targetPosition);
   }
 }

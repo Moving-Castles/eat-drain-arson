@@ -9,46 +9,40 @@ import { MoveSystem, ID as MoveSystemID } from "../../systems/MoveSystem.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 
 import { Coord } from "../../components/PositionComponent.sol";
-import { Direction } from "../../utils/constants.sol";
 
 contract MoveSystemTest is MudTest {
   function testStep() public {
     setUp();
 
-    // --- Spawn core
     vm.startPrank(alice);
     SpawnSystem(system(SpawnSystemID)).executeTyped();
     vm.stopPrank();
 
-    // --- Get base entity
+    // Get base entity
     assertTrue(carriedByComponent.has(addressToEntity(alice)));
     uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
-    console.log("___ BASE ENTITY:");
-    console.log(baseEntity);
 
-    // --- Initial position
     Coord memory initialPosition = positionComponent.getValue(baseEntity);
-    console.log("___ INITIAL POSITION:");
-    console.logInt(initialPosition.x);
-    console.logInt(initialPosition.y);
 
     vm.roll(2);
 
+    Coord memory targetPosition = Coord(
+      initialPosition.x < gameConfig.worldWidth - 2 ? initialPosition.x + 1 : initialPosition.x - 1,
+      initialPosition.y
+    );
+
     vm.startPrank(alice);
-    MoveSystem(system(MoveSystemID)).executeTyped(uint32(Direction.North));
+    MoveSystem(system(MoveSystemID)).executeTyped(targetPosition);
     vm.stopPrank();
 
     // --- New position
     Coord memory newPosition = positionComponent.getValue(baseEntity);
-    console.log("___ NEW POSITION:");
-    console.logInt(newPosition.x);
-    console.logInt(newPosition.y);
+    assertEq(newPosition.x, targetPosition.x);
+    assertEq(newPosition.y, targetPosition.y);
 
     // --- ReadyBlock
     uint256 rB = readyBlockComponent.getValue(addressToEntity(alice));
     assertEq(rB, gameConfig.moveCooldown + 2);
-    console.log("___READY BLOCK:");
-    console.log(rB);
 
     // --- Energy
     assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.moveCost);
@@ -66,10 +60,19 @@ contract MoveSystemTest is MudTest {
 
     vm.roll(2);
 
-    moveSystem.executeTyped(uint32(Direction.North));
+    uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
+
+    Coord memory initialPosition = positionComponent.getValue(baseEntity);
+
+    MoveSystem(system(MoveSystemID)).executeTyped(
+      Coord(
+        initialPosition.x < gameConfig.worldWidth - 2 ? initialPosition.x + 1 : initialPosition.x - 1,
+        initialPosition.y
+      )
+    );
 
     vm.expectRevert(bytes("MoveSystem: entity is in cooldown"));
-    moveSystem.executeTyped(uint32(Direction.South));
+    moveSystem.executeTyped(Coord(0, 0));
     vm.stopPrank();
   }
 
@@ -78,7 +81,7 @@ contract MoveSystemTest is MudTest {
     MoveSystem moveSystem = MoveSystem(system(MoveSystemID));
     vm.startPrank(alice);
     vm.expectRevert(bytes("MoveSystem: entity does not exist"));
-    moveSystem.executeTyped(uint32(Direction.South));
+    moveSystem.executeTyped(Coord(0, 0));
     vm.stopPrank();
   }
 }

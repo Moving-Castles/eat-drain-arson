@@ -43,6 +43,23 @@ library LibMap {
   }
 
   /**
+   * Check if within the bounds of the world
+   *
+   * @param _components world components
+   * @param _coordinates position
+   * @return bool
+   */
+  function isWithinBounds(IUint256Component _components, Coord memory _coordinates) internal returns (bool) {
+    GameConfig memory gameConfig = LibConfig.getGameConfig(_components);
+
+    if (_coordinates.x < 0) return false;
+    if (_coordinates.x > gameConfig.worldWidth - 1) return false;
+    if (_coordinates.y < 0) return false;
+    if (_coordinates.y > gameConfig.worldHeight - 1) return false;
+    return true;
+  }
+
+  /**
    * Check if two coordinates are adjacent
    *
    * @param _world world

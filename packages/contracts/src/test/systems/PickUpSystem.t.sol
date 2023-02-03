@@ -10,7 +10,6 @@ import { PickUpSystem, ID as PickUpSystemID } from "../../systems/PickUpSystem.s
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 
 import { Coord } from "../../components/PositionComponent.sol";
-import { Direction } from "../../utils/constants.sol";
 
 import { LibResource } from "../../libraries/LibResource.sol";
 import { LibSubstanceBlock } from "../../libraries/LibSubstanceBlock.sol";

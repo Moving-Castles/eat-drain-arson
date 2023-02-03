@@ -89,13 +89,8 @@ export async function createNetworkLayer(config: GameConfig) {
     systems["system.Spawn"].executeTyped();
   }
 
-  function move(direction: number) {
-    try {
-      return systems["system.Move"].executeTyped(direction);
-    } catch (e) {
-      console.log("catch");
-      console.log(e);
-    }
+  function move(targetPosition: Coord) {
+    return systems["system.Move"].executeTyped(targetPosition);
   }
 
   function extract(extractionCoordinates: Coord) {

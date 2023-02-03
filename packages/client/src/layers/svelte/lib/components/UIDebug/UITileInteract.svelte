@@ -12,9 +12,7 @@
 
   function move() {
     if (chebyshev($entities[$player.carriedBy].position, selectedTileCoords) === 1) {
-      $network.api.move(
-        transformationToDirection(positionsToTransformation($entities[$player.carriedBy].position, selectedTileCoords))
-      );
+      $network.api.move(selectedTileCoords);
     }
     close();
   }
