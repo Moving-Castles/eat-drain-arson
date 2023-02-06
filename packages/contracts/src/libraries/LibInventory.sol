@@ -30,6 +30,17 @@ library LibInventory {
   }
 
   /**
+   * Get a base entity's inventory
+   *
+   * @param _components world components
+   * @param _baseEntity holder of the inventory
+   * @return length length of inventory
+   */
+  function getInventorySize(IUint256Component _components, uint256 _baseEntity) internal view returns (uint256) {
+    return getInventory(_components, _baseEntity).length;
+  }
+
+  /**
    * Add an item to an inventory
    *
    * @param _components world components
@@ -43,10 +54,12 @@ library LibInventory {
       getAddressById(_components, CarryingCapacityComponentID)
     );
 
-    require(carryingCapacityComponent.has(_entity), "LibInventory: Entity has no carrying capacity");
-    require(portableComponent.has(_item), "LibInventory: Item is not portable");
-
-    // @todo check that there is room in the inventory
+    require(carryingCapacityComponent.has(_entity), "LibInventory: entity has no carrying capacity");
+    require(portableComponent.has(_item), "LibInventory: item is not portable");
+    require(
+      getInventorySize(_components, _entity) < carryingCapacityComponent.getValue(_entity),
+      "LibInventory: inventory is full"
+    );
 
     carriedByComponent.set(_item, _entity);
   }
