@@ -25,7 +25,10 @@ contract InitSystem is System {
       defaultCarryingCapacity: 10,
       moveCost: 10,
       extractCost: 10,
-      transferCost: 5,
+      pickUpCost: 5,
+      dropCost: 5,
+      giveCost: 5,
+      takeCost: 5,
       moveCooldown: 1,
       extractCooldown: 1
     });

@@ -48,8 +48,8 @@ contract PickUpSystemTest is MudTest {
     // portableEntity should have no position
     assertTrue(!positionComponent.has(portableEntity));
 
-    // Core energy should be INITAL_ENERGY - TRANSFER_COST
-    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.transferCost);
+    // Core energy should be INITAL_ENERGY - PICKUP_COST
+    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.pickUpCost);
 
     vm.stopPrank();
   }

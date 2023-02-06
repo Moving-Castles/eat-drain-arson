@@ -27,7 +27,7 @@ contract GiveSystem is System {
 
     require(LibCore.isSpawned(components, coreEntity), "GiveSystem: entity does not exist");
     require(LibCooldown.isReady(components, coreEntity), "GiveSystem: entity is in cooldown");
-    require(LibCore.checkEnergy(components, coreEntity, gameConfig.transferCost), "GiveSystem: not enough energy");
+    require(LibCore.checkEnergy(components, coreEntity, gameConfig.giveCost), "GiveSystem: not enough energy");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
     require(LibInventory.isCarriedBy(components, _portableEntity, baseEntity), "GiveSystem: not carried by caller");
@@ -38,7 +38,7 @@ contract GiveSystem is System {
 
     LibInventory.addToInventory(components, _targetBaseEntity, _portableEntity);
 
-    LibCore.decreaseEnergy(components, coreEntity, gameConfig.transferCost);
+    LibCore.decreaseEnergy(components, coreEntity, gameConfig.giveCost);
   }
 
   function executeTyped(uint256 _portableEntity, uint256 _targetBaseEntity) public returns (bytes memory) {

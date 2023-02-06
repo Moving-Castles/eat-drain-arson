@@ -65,7 +65,7 @@ contract TakeSystemTest is MudTest {
     // portableEntity should be carried by Alice
     assertEq(carriedByComponent.getValue(portableEntity), baseEntity);
 
-    // Core energy should be INITAL_ENERGY - TRANSFER_COST
-    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.transferCost);
+    // Core energy should be INITAL_ENERGY - TAKE_COST
+    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.takeCost);
   }
 }

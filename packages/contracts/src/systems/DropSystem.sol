@@ -27,7 +27,7 @@ contract DropSystem is System {
 
     require(LibCore.isSpawned(components, coreEntity), "DropSystem: entity does not exist");
     require(LibCooldown.isReady(components, coreEntity), "DropSystem: entity is in cooldown");
-    require(LibCore.checkEnergy(components, coreEntity, gameConfig.transferCost), "DropSystem: not enough energy");
+    require(LibCore.checkEnergy(components, coreEntity, gameConfig.dropCost), "DropSystem: not enough energy");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
     require(LibInventory.isCarriedBy(components, _portableEntity, baseEntity), "DropSystem: not carried by caller");
@@ -41,7 +41,7 @@ contract DropSystem is System {
       LibMove.setPosition(components, _portableEntity, baseEntityPosition);
     }
 
-    LibCore.decreaseEnergy(components, coreEntity, gameConfig.transferCost);
+    LibCore.decreaseEnergy(components, coreEntity, gameConfig.dropCost);
   }
 
   function executeTyped(uint256 _portableEntity) public returns (bytes memory) {

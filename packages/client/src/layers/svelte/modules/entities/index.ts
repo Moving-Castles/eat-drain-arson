@@ -13,7 +13,10 @@ export type GameConfig = {
   defaultCarryingCapacity: number;
   moveCost: number;
   extractCost: number;
-  transferCost: number;
+  pickUpCost: number;
+  dropCost: number;
+  giveCost: number;
+  takeCost: number;
   moveCooldown: number;
   extractCooldown: number;
 };

@@ -65,7 +65,7 @@ contract GiveSystemTest is MudTest {
     // portableEntity should be carried by Bob
     assertEq(carriedByComponent.getValue(portableEntity), bobBaseEntity);
 
-    // Core energy should be INITAL_ENERGY - TRANSFER_COST
-    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.transferCost);
+    // Core energy should be INITAL_ENERGY - GIVE_COST
+    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.giveCost);
   }
 }

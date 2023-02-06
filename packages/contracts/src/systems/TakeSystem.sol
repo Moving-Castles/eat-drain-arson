@@ -27,7 +27,7 @@ contract TakeSystem is System {
 
     require(LibCore.isSpawned(components, coreEntity), "TakeSystem: entity does not exist");
     require(LibCooldown.isReady(components, coreEntity), "TakeSystem: entity is in cooldown");
-    require(LibCore.checkEnergy(components, coreEntity, gameConfig.transferCost), "TakeSystem: not enough energy");
+    require(LibCore.checkEnergy(components, coreEntity, gameConfig.takeCost), "TakeSystem: not enough energy");
 
     // @todo: make sure the portable is in fact carried
     uint256 targetBaseEntity = LibInventory.getCarriedBy(components, _portableEntity);
@@ -40,7 +40,7 @@ contract TakeSystem is System {
 
     LibInventory.addToInventory(components, baseEntity, _portableEntity);
 
-    LibCore.decreaseEnergy(components, coreEntity, gameConfig.transferCost);
+    LibCore.decreaseEnergy(components, coreEntity, gameConfig.takeCost);
   }
 
   function executeTyped(uint256 _portableEntity) public returns (bytes memory) {

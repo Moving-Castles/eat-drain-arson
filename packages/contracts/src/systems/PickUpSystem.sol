@@ -27,7 +27,7 @@ contract PickUpSystem is System {
 
     require(LibCore.isSpawned(components, coreEntity), "PickUpSystem: entity does not exist");
     require(LibCooldown.isReady(components, coreEntity), "PickUpSystem: entity is in cooldown");
-    require(LibCore.checkEnergy(components, coreEntity, gameConfig.transferCost), "PickUpSystem: not enough energy");
+    require(LibCore.checkEnergy(components, coreEntity, gameConfig.pickUpCost), "PickUpSystem: not enough energy");
     require(LibInventory.isPortable(components, _portableEntity), "PickUpSystem: entity is not portable");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
@@ -39,7 +39,7 @@ contract PickUpSystem is System {
     LibMove.removePosition(components, _portableEntity);
     LibInventory.addToInventory(components, baseEntity, _portableEntity);
 
-    LibCore.decreaseEnergy(components, coreEntity, gameConfig.transferCost);
+    LibCore.decreaseEnergy(components, coreEntity, gameConfig.pickUpCost);
   }
 
   function executeTyped(uint256 _portableEntity) public returns (bytes memory) {

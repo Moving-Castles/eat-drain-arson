@@ -52,8 +52,8 @@ contract DropSystemTest is MudTest {
     // portableEntity should not have carriedBy
     assertTrue(!carriedByComponent.has(portableEntity));
 
-    // Core energy should be INITIAL_ENERGY - TRANSFER_COST
-    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.transferCost);
+    // Core energy should be INITIAL_ENERGY - DROP_COST
+    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.dropCost);
 
     vm.stopPrank();
   }
@@ -82,8 +82,8 @@ contract DropSystemTest is MudTest {
     // Core should not have carriedBy
     assertTrue(!carriedByComponent.has(addressToEntity(alice)));
 
-    // Core energy should be INITIAL_ENERGY - TRANSFER_COST
-    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.transferCost);
+    // Core energy should be INITIAL_ENERGY - DROP_COST
+    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.dropCost);
 
     vm.stopPrank();
   }
