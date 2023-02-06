@@ -27,6 +27,7 @@ import { getNetworkConfig } from "./config";
 import { utils } from "ethers";
 import type { Coord } from "@latticexyz/utils";
 import type { ContractReceipt, ContractTransaction } from "ethers";
+import { transactions, receipts } from "../svelte/modules/network";
 
 /**
  * The Network layer is the lowest layer in the client architecture.
@@ -86,39 +87,43 @@ export async function createNetworkLayer(config: GameConfig) {
   const actions = createActionSystem(world, txReduced$);
 
   // --- API ------------------------------------------------------------------------
+
+  async function addToTxLog(tx: ContractTransaction, description: string) {
+    transactions.update((value) => [...value, { hash: tx.hash, description: description }]);
+    const receipt: ContractReceipt = await tx.wait();
+    receipts.update((value) => [...value, receipt]);
+  }
+
   function spawn() {
     systems["system.Spawn"].executeTyped();
   }
 
   async function move(targetPosition: Coord) {
-    const tx: ContractTransaction = await systems["system.Move"].executeTyped(targetPosition);
-    console.log(tx);
-    const receipt: ContractReceipt = await tx.wait();
-    console.log(receipt);
+    addToTxLog(await systems["system.Move"].executeTyped(targetPosition), "move");
   }
 
-  function extract(extractionCoordinates: Coord) {
-    return systems["system.Extract"].executeTyped(extractionCoordinates);
+  async function extract(extractionCoordinates: Coord) {
+    addToTxLog(await systems["system.Extract"].executeTyped(extractionCoordinates), "extract");
   }
 
-  function pickUp(portableEntity: string) {
-    return systems["system.PickUp"].executeTyped(portableEntity);
+  async function pickUp(portableEntity: string) {
+    addToTxLog(await systems["system.PickUp"].executeTyped(portableEntity), "pickUp");
   }
 
-  function drop(portableEntity: string) {
-    return systems["system.Drop"].executeTyped(portableEntity);
+  async function drop(portableEntity: string) {
+    addToTxLog(await systems["system.Drop"].executeTyped(portableEntity), "drop");
   }
 
-  function take(portableEntity: string) {
-    return systems["system.Take"].executeTyped(portableEntity);
+  async function take(portableEntity: string) {
+    addToTxLog(await systems["system.Take"].executeTyped(portableEntity), "take");
   }
 
-  function give(portableEntity: string, targetBaseEntity: string) {
-    return systems["system.Give"].executeTyped(portableEntity, targetBaseEntity);
+  async function give(portableEntity: string, targetBaseEntity: string) {
+    addToTxLog(await systems["system.Give"].executeTyped(portableEntity, targetBaseEntity), "give");
   }
 
-  function consume(substanceBlockEntity: string) {
-    return systems["system.Consume"].executeTyped(substanceBlockEntity);
+  async function consume(substanceBlockEntity: string) {
+    addToTxLog(await systems["system.Consume"].executeTyped(substanceBlockEntity), "consume");
   }
 
   // --- CONTEXT --------------------------------------------------------------------

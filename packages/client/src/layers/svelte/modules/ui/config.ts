@@ -1,9 +1,9 @@
 // Components
 import UIDebugLog from "../../lib/components/UIDebug/UIDebugLog.svelte";
 import UIDebugStats from "../../lib/components/UIDebug/UIDebugStats.svelte";
-import UIDebugInspector from "../../lib/components/UIDebug/UIDebugInspector.svelte";
 import UIDebugMap from "../../lib/components/UIDebug/UIDebugMap.svelte";
 import UIGameConfig from "../../lib/components/UIDebug/UIGameConfig.svelte";
+import UITransactions from "../../lib/components/UIDebug/UITransactions.svelte";
 
 // --- TYPES -----------------------------------------------------------------
 
@@ -60,6 +60,22 @@ export const initialState = () => ({
     title: "Game Config",
     component: UIGameConfig,
     active: false,
+    options: {
+      fluid: true,
+      layer: 2,
+      delay: 0,
+    },
+    hidden: false,
+    grid: {
+      col: [3, 4],
+      row: [6, 10],
+    },
+  }),
+  transactions: initialise({
+    id: "transactions",
+    title: "Transactions",
+    component: UITransactions,
+    active: true,
     options: {
       fluid: true,
       layer: 2,
