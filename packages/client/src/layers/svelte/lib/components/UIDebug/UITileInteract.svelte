@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Coord } from "@latticexyz/utils";
-  import { chebyshev, positionsToTransformation, transformationToDirection } from "../../../utils/space";
+  import { chebyshev } from "../../../utils/space";
   import { network } from "../../../modules/network";
   import { entities } from "../../../modules/entities";
   import { player } from "../../../modules/player";
@@ -10,15 +10,19 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
+  const isSame = chebyshev($entities[$player.carriedBy].position, selectedTileCoords) === 0;
+
+  const isAdjacent = chebyshev($entities[$player.carriedBy].position, selectedTileCoords) === 1;
+
   function move() {
-    if (chebyshev($entities[$player.carriedBy].position, selectedTileCoords) === 1) {
+    if (isAdjacent) {
       $network.api.move(selectedTileCoords);
     }
     close();
   }
 
   function extract() {
-    if (chebyshev($entities[$player.carriedBy].position, selectedTileCoords) === 1) {
+    if (isSame || isAdjacent) {
       $network.api.extract(selectedTileCoords);
     }
     close();
@@ -31,8 +35,12 @@
 
 <div class="tile-interact">
   <div class="text">x:{selectedTileCoords.x},y:{selectedTileCoords.y}</div>
-  <div><button on:click={move}>MOVE</button></div>
-  <div><button on:click={extract}>EXTRACT</button></div>
+  {#if isAdjacent}
+    <div><button on:click={move}>MOVE</button></div>
+  {/if}
+  {#if isSame || isAdjacent}
+    <div><button on:click={extract}>EXTRACT</button></div>
+  {/if}
   <div><button on:click={close}>CLOSE</button></div>
 </div>
 
