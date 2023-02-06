@@ -29,6 +29,8 @@
         <div class="coord">y:{$playerBaseEntity.position.y}</div>
       </div>
       <hr />
+    {:else}
+      YOU ARE IN THE VOID
     {/if}
     {#if $playerCore.carriedBy}
       <Inventory baseEntityId={$playerCore.carriedBy} />

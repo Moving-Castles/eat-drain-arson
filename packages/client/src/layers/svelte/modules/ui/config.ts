@@ -3,8 +3,7 @@ import UIDebugLog from "../../lib/components/UIDebug/UIDebugLog.svelte";
 import UIDebugStats from "../../lib/components/UIDebug/UIDebugStats.svelte";
 import UIDebugInspector from "../../lib/components/UIDebug/UIDebugInspector.svelte";
 import UIDebugMap from "../../lib/components/UIDebug/UIDebugMap.svelte";
-import UI3DMap from "../../lib/components/UI3D/UI3DMap.svelte";
-import UI3DAvatar from "../../lib/components/UI3D/UI3DAvatar.svelte";
+import UIGameConfig from "../../lib/components/UIDebug/UIGameConfig.svelte";
 
 // --- TYPES -----------------------------------------------------------------
 
@@ -40,9 +39,9 @@ export type UIComponentDefinition = {
 // --- CONSTANTS -----------------------------------------------------------------
 
 export const initialState = () => ({
-  "debug-stats": initialise({
-    id: "debug-stats",
-    title: "Debug Stats",
+  stats: initialise({
+    id: "stats",
+    title: "Stats",
     component: UIDebugStats,
     active: true,
     options: {
@@ -56,10 +55,10 @@ export const initialState = () => ({
       row: [1, 6],
     },
   }),
-  "debug-inspector": initialise({
-    id: "debug-inspector",
-    title: "Debug Inspector",
-    component: UIDebugInspector,
+  "game-config": initialise({
+    id: "game-config",
+    title: "Game Config",
+    component: UIGameConfig,
     active: false,
     options: {
       fluid: true,
@@ -88,9 +87,9 @@ export const initialState = () => ({
       row: [1, 10],
     },
   }),
-  "debug-map": initialise({
-    id: "debug-map",
-    title: "Debug Map",
+  map: initialise({
+    id: "map",
+    title: "Map",
     component: UIDebugMap,
     active: true,
     options: {
@@ -105,40 +104,6 @@ export const initialState = () => ({
       row: [1, 10],
     },
   }),
-  // "3d-map": initialise({
-  //   id: "3d-map",
-  //   title: "Ortho Map",
-  //   component: UI3DMap,
-  //   active: true,
-  //   options: {
-  //     persistent: false,
-  //     fluid: true,
-  //     layer: 3,
-  //     delay: 0,
-  //   },
-  //   hidden: false,
-  //   grid: {
-  //     col: [1, 3],
-  //     row: [1, 10],
-  //   },
-  // }),
-  // you: initialise({
-  //   id: "you",
-  //   title: "You",
-  //   component: UI3DAvatar,
-  //   active: false,
-  //   options: {
-  //     persistent: false,
-  //     fluid: true,
-  //     layer: 4,
-  //     delay: 0,
-  //   },
-  //   hidden: false,
-  //   grid: {
-  //     col: [1, 3],
-  //     row: [1, 10],
-  //   },
-  // }),
 });
 
 // --- FUNCTIONS -----------------------------------------------------------------

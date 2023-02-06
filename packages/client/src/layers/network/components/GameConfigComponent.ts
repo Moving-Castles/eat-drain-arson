@@ -11,6 +11,7 @@ export function defineGameConfigComponent(world: World) {
       matterPerTile: Type.Number,
       defaultCarryingCapacity: Type.Number,
       moveCost: Type.Number,
+      extractCost: Type.Number,
       pickUpCost: Type.Number,
       dropCost: Type.Number,
       giveCost: Type.Number,

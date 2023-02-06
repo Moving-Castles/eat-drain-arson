@@ -4,6 +4,7 @@
 
   export let itemId: string;
   export let item: any;
+  export let targetBaseEntityId = "";
 
   let text = "";
   if (item.core) {
@@ -25,6 +26,10 @@
   function consume() {
     $network.api.consume(itemId);
   }
+
+  function give() {
+    $network.api.give(itemId, targetBaseEntityId);
+  }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -32,10 +37,14 @@
   style={"background:" + addressToColor(itemId) + ";"}
   class="inventory-item"
   on:click={() => {
-    if (item.matter) {
-      consume();
+    if (targetBaseEntityId) {
+      give();
     } else {
-      drop();
+      if (item.matter) {
+        consume();
+      } else {
+        drop();
+      }
     }
   }}
 >

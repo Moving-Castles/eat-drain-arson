@@ -51,7 +51,7 @@
   }
 
   onMount(async () => {
-    setTimeout(centerMapOnPlayer, 2000);
+    setTimeout(centerMapOnPlayer, 500);
   });
 </script>
 

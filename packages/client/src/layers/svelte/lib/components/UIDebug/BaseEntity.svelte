@@ -1,22 +1,52 @@
 <script lang="ts">
-  import { items } from "../../../modules/entities";
+  import { chebyshev } from "../../../utils/space";
+  import { items, baseEntities } from "../../../modules/entities";
   import { playerCore } from "../../../modules/player";
   import { addressToColor } from "../../../utils/ui";
 
   import Item from "./Item.svelte";
-
-  let untraversable = false;
-  $: untraversable = Object.values($items).some((i) => i.carriedBy === baseEntityId && i.untraversable);
+  import Transfer from "./UITransfer.svelte";
 
   export let baseEntityId: string;
   export let baseEntity: any;
+
+  let transferActive = false;
+
+  const isPlayer = baseEntityId === $playerCore.carriedBy;
+
+  let isSame = false;
+  let isAdjacent = false;
+  $: isSame = $playerCore.carriedBy
+    ? chebyshev($baseEntities[$playerCore.carriedBy].position, baseEntity.position) === 0
+    : false;
+  $: isAdjacent = $playerCore.carriedBy
+    ? chebyshev($baseEntities[$playerCore.carriedBy].position, baseEntity.position) === 1
+    : false;
+
+  let untraversable = false;
+  $: untraversable = Object.values($items).some((i) => i.carriedBy === baseEntityId && i.untraversable);
 </script>
 
+{#if transferActive}
+  <Transfer
+    {baseEntityId}
+    on:close={() => {
+      transferActive = false;
+    }}
+  />
+{/if}
+
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
   class="base-entity"
   class:untraversable
   style={"background:" + addressToColor(baseEntityId) + ";"}
-  class:player={baseEntityId === $playerCore.carriedBy}
+  class:player={isPlayer}
+  on:click={() => {
+    if (!isPlayer && (isSame || isAdjacent)) {
+      transferActive = true;
+    }
+  }}
 >
   <!-- ITEMS -->
   <div class="inventory">
@@ -37,10 +67,12 @@
     align-items: center;
     margin: 5px;
     line-height: 0;
+    cursor: pointer;
+    width: fit-content;
+    padding: 10px;
   }
 
   .inventory {
-    padding: 10px;
     display: inline-flex;
     justify-content: center;
     align-items: center;

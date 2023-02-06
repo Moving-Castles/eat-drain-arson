@@ -38,10 +38,24 @@
 </script>
 
 <div class="debug-chat">
-  chat: <span style={"background:" + addressToColor(channelId) + ";"}>{shortenAddress(channelId)}</span>
+  chat:
+  {#if channelId}
+    <span style={"background:" + addressToColor(channelId) + ";"}>{shortenAddress(channelId)}</span>
+  {:else}
+    <span class="void">Ţ̶̨̡̡̣̮͓̪̖̦̱͍͖̭͖̠̱̣͕͔̊̀̚͜͝͠ͅH̷̛͚̟̮̜͖͔̳̬̳̱͇̩̙͚͍̿͑͂̀̑̈͗́͊̏̇̈́͛̄̑̇͐̂̍͗̈́͑̽̉̾̚̚̚͘̕͘̕Ë̸̮̘̠͉͛́͆̈́̔̍̐͛͒͊̏͠͠ͅ ̷̧̧̡̝̩̱̰̠̖̳̤͉̪͓̭̤̙̞͈͉̝͍̫̘͇̫̙̦̘̬̻̝̣̰̺̼̘͕͖̜̯̖̿V̴̡̧̨̨̯͔̯̖̪̫̞̯̫̩͇̬͔̟̥͖̹̪̊̂̆̅̀̆͋̒͌̇̆̂͂̊͑̀̅͌͘̚͜͠͝ͅO̸̬̘̭̖̠̥̰͔͎̲̼͈̟͚̙͉̙̰͉͉̱̙̹͉̪̹̪͕̣̭͚̲̺̪̙̞̻͋̋̔͛̀̀̃̆̂̇̀͌́̽̽̇̾̀̐Į̷̢̨̧̨̛̛̻̲͖̞͔̱͔̺̻̹̯̹̱̻̰̥̹̤̘̣̞̹̺̞̬̜̭̜̤̦̟̟̟̳͙̙̭̗͚̥̼̽̓̋͂́̐̓́̿̀͌̔́̔̀̊̅͘̚͜͝͝D̵̨̨̨̡̛̛̮̟͚̺̺̟̥̹̱̺̜̬͓͙̗̩͓̟͕͎̜̗̦̪̟̟͔̞̘̰̏̾͋̂̆͂̽̎̇̐̈́̎̑͌͐̆̓͗̾̓͛͛̏̽̋̑͗̄͌͘̚͜͝͝͠</span>
+  {/if}
   <hr />
   <div>
-    <input type="text" bind:value={textInput} />
+    <input
+      type="text"
+      bind:value={textInput}
+      on:keydown={(e) => {
+        console.log(e.key);
+        if (e.key === "Enter") {
+          sendMessage();
+        }
+      }}
+    />
     <button on:click={sendMessage}>Send</button>
   </div>
   <hr />
@@ -57,15 +71,20 @@
 <style>
   .debug-chat {
     position: fixed;
-    bottom: 10px;
-    left: 10px;
+    bottom: 30px;
+    left: 30px;
     padding: 10px;
     background: lightgray;
     border-radius: 5px;
     color: black;
+    z-index: 1000000;
   }
 
   .type {
     text-decoration: underline;
+  }
+
+  .void {
+    font-size: 64px;
   }
 </style>

@@ -2,17 +2,16 @@
   import type { Coord } from "@latticexyz/utils";
   import { chebyshev } from "../../../utils/space";
   import { network } from "../../../modules/network";
-  import { entities } from "../../../modules/entities";
-  import { player } from "../../../modules/player";
+  import { entities, baseEntities } from "../../../modules/entities";
+  import { player, playerCore } from "../../../modules/player";
 
   export let selectedTileCoords: Coord;
 
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
-  const isSame = chebyshev($entities[$player.carriedBy].position, selectedTileCoords) === 0;
-
-  const isAdjacent = chebyshev($entities[$player.carriedBy].position, selectedTileCoords) === 1;
+  const isSame = chebyshev($baseEntities[$playerCore.carriedBy].position, selectedTileCoords) === 0;
+  const isAdjacent = chebyshev($baseEntities[$playerCore.carriedBy].position, selectedTileCoords) === 1;
 
   function move() {
     if (isAdjacent) {

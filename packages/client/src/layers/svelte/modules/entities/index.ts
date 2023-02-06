@@ -129,6 +129,10 @@ export type FreePortables = {
 
 export const entities = writable({} as Entities);
 
+export const gameConfig = derived(entities, ($entities) => {
+  return $entities["0x6a1a"].gameConfig;
+});
+
 export const cores = derived(entities, ($entities) => {
   return Object.fromEntries(Object.entries($entities).filter(([key, entity]) => entity.core)) as Cores;
 });
