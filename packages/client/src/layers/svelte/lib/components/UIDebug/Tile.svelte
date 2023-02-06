@@ -10,10 +10,15 @@
   export let tile: any;
 
   let matter = 100;
+  let resource = Object.values($resources).find(
+    (r) => r.position.x === tile.coordinates.x && r.position.y === tile.coordinates.y
+  );
 
-  $: matter =
-    Object.values($resources).find((r) => r.position.x === tile.coordinates.x && r.position.y === tile.coordinates.y)
-      ?.matter || 100;
+  $: resource = Object.values($resources).find(
+    (r) => r.position.x === tile.coordinates.x && r.position.y === tile.coordinates.y
+  );
+
+  $: matter = resource ? resource.matter : 100;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->

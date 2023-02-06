@@ -139,13 +139,17 @@ export const baseEntities = derived(entities, ($entities) => {
 
 export const resources = derived(entities, ($entities) => {
   return Object.fromEntries(
-    Object.entries($entities).filter(([key, entity]) => entity.matter && !entity.portable)
+    Object.entries($entities).filter(
+      ([key, entity]) => Object.prototype.hasOwnProperty.call(entity, "matter") && !entity.portable
+    )
   ) as Resources;
 });
 
 export const substanceBlocks = derived(entities, ($entities) => {
   return Object.fromEntries(
-    Object.entries($entities).filter(([key, entity]) => entity.matter && entity.portable)
+    Object.entries($entities).filter(
+      ([key, entity]) => Object.prototype.hasOwnProperty.call(entity, "matter") && entity.portable
+    )
   ) as SubstanceBlocks;
 });
 

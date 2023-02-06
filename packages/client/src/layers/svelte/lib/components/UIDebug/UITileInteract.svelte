@@ -46,7 +46,7 @@
 
 <style>
   .tile-interact {
-    z-index: 10000;
+    z-index: 1000000;
     padding: 40px;
     border: 3px solid black;
     background: lightgrey;
