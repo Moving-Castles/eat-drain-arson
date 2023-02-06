@@ -44,7 +44,7 @@
 
 {#if $playerAddress}
   <div class="ui-menu-container" class:open={$menuVisible}>
-    <button class="ui-button" on:click={toggle}>Senses</button>
+    <button class="ui-button" on:click={toggle}>Menu</button>
 
     {#if $menuVisible}
       <ul class="ui-menu">
@@ -77,7 +77,7 @@
     z-index: 9;
     transition: all 0.2s ease-out;
     height: var(--taskbar-height);
-    width: 70px;
+    width: 54px;
     background-color: var(--background);
     /* background-color: rgba(var(--background-rgb), var(--muted-opacity)); */
     /* backdrop-filter: var(--backdrop);

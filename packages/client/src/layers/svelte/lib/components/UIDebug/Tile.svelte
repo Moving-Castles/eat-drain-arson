@@ -25,7 +25,6 @@
 <div
   class="tile"
   on:click={(e) => {
-    console.log(e);
     if (e.target.classList.contains("tile")) {
       dispatch("interact", { selectedTileCoords: tile.coordinates });
     }
@@ -35,14 +34,14 @@
   <div class="matter">{matter}</div>
 
   <!-- BASE ENTITIES -->
-  {#each Object.entries($baseEntities) as [baseEntityId, baseEntity]}
+  {#each Object.entries($baseEntities) as [baseEntityId, baseEntity] (baseEntityId)}
     {#if baseEntity.position.x == tile.coordinates.x && baseEntity.position.y == tile.coordinates.y}
       <BaseEntity {baseEntityId} {baseEntity} />
     {/if}
   {/each}
 
   <!-- FREE PORTABLES -->
-  {#each Object.entries($freePortables) as [entityId, entity]}
+  {#each Object.entries($freePortables) as [entityId, entity] (entityId)}
     {#if entity.position.x == tile.coordinates.x && entity.position.y == tile.coordinates.y}
       <Item {entityId} {entity} free={true} />
     {/if}

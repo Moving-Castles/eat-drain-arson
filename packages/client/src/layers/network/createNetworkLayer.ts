@@ -26,6 +26,7 @@ import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { getNetworkConfig } from "./config";
 import { utils } from "ethers";
 import type { Coord } from "@latticexyz/utils";
+import type { ContractReceipt, ContractTransaction } from "ethers";
 
 /**
  * The Network layer is the lowest layer in the client architecture.
@@ -89,8 +90,11 @@ export async function createNetworkLayer(config: GameConfig) {
     systems["system.Spawn"].executeTyped();
   }
 
-  function move(targetPosition: Coord) {
-    return systems["system.Move"].executeTyped(targetPosition);
+  async function move(targetPosition: Coord) {
+    const tx: ContractTransaction = await systems["system.Move"].executeTyped(targetPosition);
+    console.log(tx);
+    const receipt: ContractReceipt = await tx.wait();
+    console.log(receipt);
   }
 
   function extract(extractionCoordinates: Coord) {

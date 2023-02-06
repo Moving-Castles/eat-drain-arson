@@ -8,7 +8,6 @@
   import UILoading from "./components/UILoading.svelte";
 
   $: console.log("ready ", $ready);
-  $: console.log("bae ", $playerBaseEntity);
 </script>
 
 <!-- The UI layer -->

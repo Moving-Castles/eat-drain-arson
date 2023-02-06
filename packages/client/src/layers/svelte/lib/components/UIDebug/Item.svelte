@@ -6,8 +6,6 @@
   export let entity: any;
   export let free = false;
 
-  console.log(entityId);
-
   let text = "";
   if (entity.core) {
     text = "*";
@@ -47,7 +45,7 @@
   .item {
     width: 20px;
     height: 20px;
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     color: black;
