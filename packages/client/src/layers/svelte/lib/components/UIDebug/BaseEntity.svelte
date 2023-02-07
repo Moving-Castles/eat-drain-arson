@@ -12,10 +12,11 @@
 
   let transferActive = false;
 
-  const isPlayer = baseEntityId === $playerCore.carriedBy;
-
+  let isPlayer = false;
   let isSame = false;
   let isAdjacent = false;
+
+  $: isPlayer = baseEntityId === $playerCore.carriedBy;
   $: isSame = $playerCore.carriedBy
     ? chebyshev($baseEntities[$playerCore.carriedBy].position, baseEntity.position) === 0
     : false;
