@@ -71,7 +71,7 @@ library LibMap {
     // Create baseEntity
     uint256 baseEntity = _world.getUniqueEntityId();
     LibMove.setPosition(_components, baseEntity, _coordinates);
-    LibInventory.setCarryingCapacity(_components, baseEntity, gameConfig.defaultCarryingCapacity);
+    LibInventory.setCarryingCapacity(_components, baseEntity, gameConfig.defaultCarryingCapacity * 2);
 
     // Create untraversable item
     uint256 untraversableEntity = _world.getUniqueEntityId();
