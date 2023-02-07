@@ -25,6 +25,9 @@ import { CoreComponent, ID as CoreComponentID } from "../components/CoreComponen
 import { CarriedByComponent, ID as CarriedByComponentID } from "../components/CarriedByComponent.sol";
 import { MatterComponent, ID as MatterComponentID } from "../components/MatterComponent.sol";
 import { UntraversableComponent, ID as UntraversableComponentID } from "../components/UntraversableComponent.sol";
+import { AbilityMoveComponent, ID as AbilityMoveComponentID } from "../components/AbilityMoveComponent.sol";
+import { AbilityExtractComponent, ID as AbilityExtractComponentID } from "../components/AbilityExtractComponent.sol";
+import { AbilityConsumeComponent, ID as AbilityConsumeComponentID } from "../components/AbilityConsumeComponent.sol";
 
 contract MudTest is DSTest {
   Cheats internal immutable vm = Cheats(HEVM_ADDRESS);

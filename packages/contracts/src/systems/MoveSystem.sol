@@ -34,14 +34,15 @@ contract MoveSystem is System {
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
 
-    require(
-      LibAbility.checkInventoryForAbility(components, baseEntity, AbilityMoveComponentID),
-      "MoveSystem: no item with AbilityMove"
-    );
+    uint32 abilityCount = LibAbility.checkInventoryForAbilityNumber(components, baseEntity, AbilityMoveComponentID);
+    require(abilityCount > 0, "MoveSystem: no item with AbilityMove");
 
     LibMove.step(components, baseEntity, _targetPosition);
 
-    LibCore.decreaseEnergy(components, coreEntity, gameConfig.moveCost);
+    // Apply discount if entity has more than one "movement organ"
+    uint32 calculatedMoveCost = gameConfig.moveCost - (2 * (abilityCount - 1));
+
+    LibCore.decreaseEnergy(components, coreEntity, calculatedMoveCost);
     LibCooldown.setReadyBlock(components, coreEntity, gameConfig.moveCooldown);
   }
 

@@ -140,4 +140,47 @@ contract MoveSystemTest is MudTest {
     moveSystem.executeTyped(Coord(0, 0));
     vm.stopPrank();
   }
+
+  function testMultiAbilityCost() public {
+    setUp();
+
+    vm.startPrank(alice);
+    SpawnSystem(system(SpawnSystemID)).executeTyped();
+    vm.stopPrank();
+
+    // Get base entity
+    assertTrue(carriedByComponent.has(addressToEntity(alice)));
+    uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
+
+    Coord memory initialPosition = positionComponent.getValue(baseEntity);
+
+    vm.roll(2);
+
+    Coord memory targetPosition = Coord(
+      initialPosition.x < gameConfig.worldWidth - 2 ? initialPosition.x + 1 : initialPosition.x - 1,
+      initialPosition.y
+    );
+
+    // Give baseEntity two more movement organs for a total of three
+    uint256 m1 = world.getUniqueEntityId();
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(PortableComponentID, m1, abi.encode(1));
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(AbilityMoveComponentID, m1, abi.encode(1));
+
+    uint256 m2 = world.getUniqueEntityId();
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(PortableComponentID, m2, abi.encode(1));
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(AbilityMoveComponentID, m2, abi.encode(1));
+
+    // Place in inventory
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(CarriedByComponentID, m1, abi.encode(baseEntity));
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(CarriedByComponentID, m2, abi.encode(baseEntity));
+
+    vm.startPrank(alice);
+    MoveSystem(system(MoveSystemID)).executeTyped(targetPosition);
+    vm.stopPrank();
+
+    // Energy should be:
+    // gameConfig.initialEnergy - (gameConfig.moveCost - (2 * (3 - 1)))
+    // 3 => number of movement organs
+    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - (gameConfig.moveCost - 4));
+  }
 }

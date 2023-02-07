@@ -84,13 +84,17 @@ library LibSubstanceBlock {
    *
    * @param _components World components
    * @param _substanceBlockEntity entity
+   * @param _abilityCount number of items giving the comsume ability
    * @return unsigned energy value
    */
   function convertToEnergy(
     IUint256Component _components,
-    uint256 _substanceBlockEntity
+    uint256 _substanceBlockEntity,
+    uint32 _abilityCount
   ) internal view returns (uint32) {
     MatterComponent matterComponent = MatterComponent(getAddressById(_components, MatterComponentID));
-    return matterComponent.getValue(_substanceBlockEntity) * 2;
+    uint32 energy = matterComponent.getValue(_substanceBlockEntity);
+    // Give more energy if entity has more than one "consume organ"
+    return energy * (2 * _abilityCount);
   }
 }

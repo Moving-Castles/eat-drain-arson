@@ -48,7 +48,9 @@
     }
   }}
 >
-  <div>{text}</div>
+  <div>
+    {#if item.matter}{item.matter}{:else}{text}{/if}
+  </div>
 </div>
 
 <style>

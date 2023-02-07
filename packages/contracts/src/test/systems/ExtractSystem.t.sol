@@ -5,6 +5,7 @@ import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
 import { addressToEntity } from "solecs/utils.sol";
 
+import { ComponentDevSystem, ID as ComponentDevSystemID } from "../../systems/ComponentDevSystem.sol";
 import { ExtractSystem, ID as ExtractSystemID } from "../../systems/ExtractSystem.sol";
 import { MoveSystem, ID as MoveSystemID } from "../../systems/MoveSystem.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
@@ -104,6 +105,54 @@ contract ExtractSystemTest is MudTest {
 
     vm.expectRevert(bytes("ExtractSystem: tile not adjacent"));
     extractSystem.executeTyped(Coord(initialPosition.x + 3, initialPosition.y + 3));
+    vm.stopPrank();
+  }
+
+  function testMultiAbilityExtract() public {
+    setUp();
+
+    SpawnSystem spawnSystem = SpawnSystem(system(SpawnSystemID));
+    ExtractSystem extractSystem = ExtractSystem(system(ExtractSystemID));
+
+    vm.startPrank(alice);
+
+    spawnSystem.executeTyped();
+
+    // Get base entity
+    assertTrue(carriedByComponent.has(addressToEntity(alice)));
+    uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
+    Coord memory initialPosition = positionComponent.getValue(baseEntity);
+
+    vm.roll(2);
+
+    // Give baseEntity two more "extract organs" for a total of three
+    uint256 e1 = world.getUniqueEntityId();
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(PortableComponentID, e1, abi.encode(1));
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(AbilityExtractComponentID, e1, abi.encode(1));
+
+    uint256 e2 = world.getUniqueEntityId();
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(PortableComponentID, e2, abi.encode(1));
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(AbilityExtractComponentID, e2, abi.encode(1));
+
+    // Place in inventory
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(CarriedByComponentID, e1, abi.encode(baseEntity));
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(CarriedByComponentID, e2, abi.encode(baseEntity));
+
+    extractSystem.executeTyped(Coord(initialPosition.x, initialPosition.y));
+
+    // Should be 10 + (10 * (3 - 1))
+    uint32 matterToExtract = 30;
+
+    // Resource entity should be created
+    uint256 resourceEntity = LibResource.getAtCoordinate(components, initialPosition);
+    assertGt(resourceEntity, 0);
+    assertEq(matterComponent.getValue(resourceEntity), gameConfig.matterPerTile - matterToExtract);
+
+    // SubstanceBlock should be created
+    uint256[] memory substanceBlockEntities = LibSubstanceBlock.getAtCoordinate(components, initialPosition);
+    assertEq(substanceBlockEntities.length, 1);
+    assertEq(matterComponent.getValue(substanceBlockEntities[0]), matterToExtract);
+
     vm.stopPrank();
   }
 }

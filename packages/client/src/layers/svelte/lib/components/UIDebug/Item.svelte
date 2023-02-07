@@ -38,7 +38,9 @@
   }}
   style={"background:" + addressToColor(entityId) + ";"}
 >
-  <div>{text}</div>
+  <div>
+    {#if entity.matter}{entity.matter}{:else}{text}{/if}
+  </div>
 </div>
 
 <style>
@@ -62,6 +64,6 @@
     cursor: pointer;
     z-index: 10000;
     cursor: grab;
-    font-size: 16px;
+    font-size: 12px;
   }
 </style>

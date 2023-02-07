@@ -55,6 +55,18 @@ library LibResource {
   }
 
   /**
+   * Get matter
+   *
+   * @param _components World components
+   * @param _entity Core entity
+   * @return matter matter in resource
+   */
+  function getMatter(IUint256Component _components, uint256 _entity) internal view returns (uint32) {
+    MatterComponent matterComponent = MatterComponent(getAddressById(_components, MatterComponentID));
+    return matterComponent.getValue(_entity);
+  }
+
+  /**
    * Check matter
    *
    * @param _components World components
@@ -75,13 +87,11 @@ library LibResource {
    * @param _components World components
    * @param _entity Core entity
    * @param _amount Amount to decrease by
-   * @return bool False if the resource does not have enough matter
    */
-  function decreaseMatter(IUint256Component _components, uint256 _entity, uint32 _amount) internal returns (bool) {
+  function decreaseMatter(IUint256Component _components, uint256 _entity, uint32 _amount) internal {
     MatterComponent matterComponent = MatterComponent(getAddressById(_components, MatterComponentID));
     uint32 currentMatter = matterComponent.getValue(_entity);
-    if (currentMatter < _amount) return false;
-    matterComponent.set(_entity, currentMatter - _amount);
-    return true;
+    uint32 newMatter = currentMatter - _amount;
+    matterComponent.set(_entity, newMatter);
   }
 }
