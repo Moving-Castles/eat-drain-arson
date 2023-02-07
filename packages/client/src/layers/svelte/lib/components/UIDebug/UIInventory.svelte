@@ -1,19 +1,18 @@
 <script lang="ts">
-  import { entities } from "../../../modules/entities";
+  import { entities, baseEntities } from "../../../modules/entities";
   import InventoryItem from "./UIInventoryItem.svelte";
 
   export let baseEntityId: string;
   export let targetBaseEntityId = "";
 </script>
 
-<div class="ui-debug-log">
-  <div class="inventory">
-    {#each Object.entries($entities) as [itemId, item]}
-      {#if item.carriedBy === baseEntityId}
-        <InventoryItem {itemId} {item} {targetBaseEntityId} />
-      {/if}
-    {/each}
-  </div>
+<div class="cc">Carrying capacity: {$baseEntities[baseEntityId].carryingCapacity}</div>
+<div class="inventory">
+  {#each Object.entries($entities) as [itemId, item] (itemId)}
+    {#if item.carriedBy === baseEntityId}
+      <InventoryItem {itemId} {item} {targetBaseEntityId} />
+    {/if}
+  {/each}
 </div>
 
 <style>
@@ -27,6 +26,10 @@
     width: 50px;
     overflow: hidden;
     margin-right: 5px;
+    margin-bottom: 5px;
+  }
+
+  .cc {
     margin-bottom: 5px;
   }
 </style>

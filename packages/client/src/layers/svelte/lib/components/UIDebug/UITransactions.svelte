@@ -4,7 +4,7 @@
 </script>
 
 <div class="ui-transactions">
-  {#each $activeTransactions as tx}
+  {#each $activeTransactions as tx (tx.hash)}
     <div><span class="description">{tx.description}</span> {shortenAddress(tx.hash)}</div>
   {/each}
 </div>

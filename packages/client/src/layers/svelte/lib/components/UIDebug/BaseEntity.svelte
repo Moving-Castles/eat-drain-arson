@@ -50,7 +50,7 @@
 >
   <!-- ITEMS -->
   <div class="inventory">
-    {#each Object.entries($items) as [entityId, entity]}
+    {#each Object.entries($items) as [entityId, entity] (entityId)}
       {#if entity.carriedBy == baseEntityId}
         <Item {entityId} {entity} />
       {/if}
@@ -82,10 +82,9 @@
   }
 
   .untraversable {
-    width: 280px;
-    height: 280px;
+    width: 100%;
+    height: 100%;
     border-radius: 0;
-    cursor: not-allowed;
   }
 
   .player {
