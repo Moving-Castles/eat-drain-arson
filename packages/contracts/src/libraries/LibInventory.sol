@@ -86,8 +86,20 @@ library LibInventory {
     CarryingCapacityComponent carryingCapacityComponent = CarryingCapacityComponent(
       getAddressById(_components, CarryingCapacityComponentID)
     );
-
     carryingCapacityComponent.set(_entity, _size);
+  }
+
+  /**
+   * Remove carrying capacity
+   *
+   * @param _components world components
+   * @param _entity holder of the inventory
+   */
+  function removeCarryingCapacity(IUint256Component _components, uint256 _entity) internal {
+    CarryingCapacityComponent carryingCapacityComponent = CarryingCapacityComponent(
+      getAddressById(_components, CarryingCapacityComponentID)
+    );
+    carryingCapacityComponent.remove(_entity);
   }
 
   /**

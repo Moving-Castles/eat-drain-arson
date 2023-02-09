@@ -37,11 +37,19 @@ contract DropSystem is System {
     LibInventory.removeFromInventory(components, _portableEntity);
 
     // Dropping a core ejects it into the void...
-    if (_portableEntity != coreEntity) {
+    if (_portableEntity == coreEntity) {
+      LibMove.removePosition(components, _portableEntity);
+    } else {
       LibMove.setPosition(components, _portableEntity, baseEntityPosition);
     }
 
     LibCore.decreaseEnergy(components, coreEntity, gameConfig.dropCost);
+
+    // If the inventory is empty, remove the baseEntity
+    if (LibInventory.getInventorySize(components, baseEntity) == 0) {
+      LibMove.removePosition(components, baseEntity);
+      LibInventory.removeCarryingCapacity(components, baseEntity);
+    }
   }
 
   function executeTyped(uint256 _portableEntity) public returns (bytes memory) {

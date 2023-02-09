@@ -120,5 +120,5 @@ export function manhattan(a: Coord, b: Coord) {
  * @returns Chebyshev distance from A to B (https://en.wikipedia.org/wiki/Chebyshev_distance)
  */
 export function chebyshev(a: Coord, b: Coord) {
-  return Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
+  return a && b ? Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y)) : 9999;
 }
