@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { startEnvironmentSoundSystem, startMelodySoundSystem, startHarmonySoundSystem } from "../howler";
   import { onMount } from "svelte";
   import { bootGame } from "./boot";
   import UIContainer from "./lib/UIContainer.svelte";
@@ -50,9 +49,9 @@
       // transactions.update((ts) => [tx, ...ts]);
     });
 
-    // startEnvironmentSoundSystem();
-    // startMelodySoundSystem();
-    // startHarmonySoundSystem();
+    layers.network.systemCallStreams["system.Move"].subscribe((systemCall) => {
+      console.log("systemCall", systemCall);
+    });
 
     layers.network.network.blockNumber$.subscribe((x) => {
       // console.log(x);

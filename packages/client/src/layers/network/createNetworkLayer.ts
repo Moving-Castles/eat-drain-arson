@@ -60,10 +60,10 @@ export async function createNetworkLayer(config: GameConfig) {
   };
 
   // --- SETUP ----------------------------------------------------------------------
-  const { txQueue, systems, txReduced$, network, startSync, encoders } = await setupMUDNetwork<
+  const { txQueue, systems, txReduced$, network, startSync, encoders, systemCallStreams } = await setupMUDNetwork<
     typeof components,
     SystemTypes
-  >(getNetworkConfig(config), world, components, SystemAbis);
+  >(getNetworkConfig(config), world, components, SystemAbis, { fetchSystemCalls: true });
 
   // Faucet setup
   const faucet = config.faucetServiceUrl ? createFaucetService(config.faucetServiceUrl) : undefined;
@@ -95,35 +95,67 @@ export async function createNetworkLayer(config: GameConfig) {
   }
 
   function spawn() {
-    systems["system.Spawn"].executeTyped();
+    try {
+      systems["system.Spawn"].executeTyped();
+    } catch (e) {
+      window.alert(e);
+    }
   }
 
   async function move(targetPosition: Coord) {
-    addToTxLog(await systems["system.Move"].executeTyped(targetPosition), "move");
+    try {
+      addToTxLog(await systems["system.Move"].executeTyped(targetPosition), "move");
+    } catch (e) {
+      window.alert(e);
+    }
   }
 
   async function extract(extractionCoordinates: Coord) {
-    addToTxLog(await systems["system.Extract"].executeTyped(extractionCoordinates), "extract");
+    try {
+      addToTxLog(await systems["system.Extract"].executeTyped(extractionCoordinates), "extract");
+    } catch (e) {
+      window.alert(e);
+    }
   }
 
   async function pickUp(portableEntity: string) {
-    addToTxLog(await systems["system.PickUp"].executeTyped(portableEntity), "pickUp");
+    try {
+      addToTxLog(await systems["system.PickUp"].executeTyped(portableEntity), "pickUp");
+    } catch (e) {
+      window.alert(e);
+    }
   }
 
   async function drop(portableEntity: string) {
-    addToTxLog(await systems["system.Drop"].executeTyped(portableEntity), "drop");
+    try {
+      addToTxLog(await systems["system.Drop"].executeTyped(portableEntity), "drop");
+    } catch (e) {
+      window.alert(e);
+    }
   }
 
   async function take(portableEntity: string) {
-    addToTxLog(await systems["system.Take"].executeTyped(portableEntity), "take");
+    try {
+      addToTxLog(await systems["system.Take"].executeTyped(portableEntity), "take");
+    } catch (e) {
+      window.alert(e);
+    }
   }
 
   async function give(portableEntity: string, targetBaseEntity: string) {
-    addToTxLog(await systems["system.Give"].executeTyped(portableEntity, targetBaseEntity), "give");
+    try {
+      addToTxLog(await systems["system.Give"].executeTyped(portableEntity, targetBaseEntity), "give");
+    } catch (e) {
+      window.alert(e);
+    }
   }
 
   async function consume(substanceBlockEntity: string) {
-    addToTxLog(await systems["system.Consume"].executeTyped(substanceBlockEntity), "consume");
+    try {
+      addToTxLog(await systems["system.Consume"].executeTyped(substanceBlockEntity), "consume");
+    } catch (e) {
+      window.alert(e);
+    }
   }
 
   // --- CONTEXT --------------------------------------------------------------------
@@ -136,6 +168,7 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
+    systemCallStreams,
     api: { spawn, move, extract, pickUp, drop, take, give, consume },
     dev: setupDevSystems(world, encoders, systems),
   };

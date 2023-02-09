@@ -6,7 +6,9 @@
   export let targetBaseEntityId = "";
 </script>
 
-<div class="cc">Carrying capacity: {$baseEntities[baseEntityId].carryingCapacity}</div>
+<div class="cc">
+  Carrying capacity: {$baseEntities[baseEntityId] ? $baseEntities[baseEntityId].carryingCapacity : 0}
+</div>
 <div class="inventory">
   {#each Object.entries($entities) as [itemId, item] (itemId)}
     {#if item.carriedBy === baseEntityId}

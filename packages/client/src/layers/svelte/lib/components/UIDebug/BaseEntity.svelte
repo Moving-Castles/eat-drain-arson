@@ -17,12 +17,14 @@
   let isAdjacent = false;
 
   $: isPlayer = baseEntityId === $playerCore.carriedBy;
-  $: isSame = $playerCore.carriedBy
-    ? chebyshev($baseEntities[$playerCore.carriedBy].position, baseEntity.position) === 0
-    : false;
-  $: isAdjacent = $playerCore.carriedBy
-    ? chebyshev($baseEntities[$playerCore.carriedBy].position, baseEntity.position) === 1
-    : false;
+  $: isSame =
+    $playerCore.carriedBy && $baseEntities[$playerCore.carriedBy]
+      ? chebyshev($baseEntities[$playerCore.carriedBy].position, baseEntity.position) === 0
+      : false;
+  $: isAdjacent =
+    $playerCore.carriedBy && $baseEntities[$playerCore.carriedBy]
+      ? chebyshev($baseEntities[$playerCore.carriedBy].position, baseEntity.position) === 1
+      : false;
 
   let untraversable = false;
   $: untraversable = Object.values($items).some((i) => i.carriedBy === baseEntityId && i.untraversable);

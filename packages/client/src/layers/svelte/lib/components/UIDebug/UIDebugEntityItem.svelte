@@ -20,10 +20,6 @@
     $network.api.drop(entityId);
   }
 
-  function take() {
-    $network.api.take(entityId);
-  }
-
   function give() {
     $network.api.give(entityId, targetEntityId);
   }
@@ -57,7 +53,6 @@
     <hr />
     <button on:click={pickUp}>Pick up</button>
     <button on:click={drop}>Drop</button>
-    <button on:click={take}>Take</button>
     <button on:click={give}>Give</button>
     <select bind:value={targetEntityId} name="target" id="target">
       {#each Object.keys($baseEntities) as key}
@@ -143,7 +138,6 @@
         {/each}
       </select>
     {/if}
-    <button on:click={take}>Take</button>
   {/if}
 
   <!-- SUBSTANCE BLOCK -->
@@ -171,7 +165,6 @@
     {#if entity.carriedBy === $playerCore.carriedBy}
       <button on:click={consume}>Consume</button>
       <button on:click={drop}>Drop</button>
-      <button on:click={take}>Take</button>
       <button on:click={give}>Give</button>
       <select bind:value={targetEntityId} name="target" id="target">
         {#each Object.keys($baseEntities) as key}
