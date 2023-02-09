@@ -44,24 +44,25 @@ contract ExtractSystem is System {
 
     /*
      * If there is a Resource entity:
-     * – check that there is at least EXTRACT_COST matter
-     * – decrease the matter balance of the resource block by EXTRACT_COST
-     * – create substanceblock with  EXTRACT_COST matter
+     * – subtract the amount of matter in the resource
+     * – create a new substance block with the same amount of matter
      *
      * If there is not (meaning the coordinates have not been extracted):
-     * – create resource with MATTER_PER_TILE - EXTRACT_COST matter
-     * – create substanceblock with  EXTRACT_COST matter
+     * – create resource with the default amount of matter per tile - the requested amount
+     * – create a new substance block with the same amount of matter
      */
 
     uint256 resourceEntity = LibResource.getAtCoordinate(components, _extractionCoordinates);
 
-    // Extract 10 more for each extra "extract organ"
+    // Extract 10 more for each extra "extract organ", capped at default amount per tile
     uint32 matterToExtract = gameConfig.extractCost + (10 * (abilityCount - 1));
+    matterToExtract = matterToExtract > gameConfig.matterPerTile ? gameConfig.matterPerTile : matterToExtract;
 
     if (resourceEntity != 0) {
       uint32 matterInResource = LibResource.getMatter(components, resourceEntity);
       require(matterInResource > 0, "ExtractSystem: tile is empty");
-
+      // Limit extraction to amount available in resource
+      matterToExtract = matterToExtract > matterInResource ? matterInResource : matterToExtract;
       LibResource.decreaseMatter(components, resourceEntity, matterToExtract);
       LibSubstanceBlock.create(components, world.getUniqueEntityId(), _extractionCoordinates, matterToExtract);
     } else {
