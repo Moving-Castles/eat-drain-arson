@@ -4,14 +4,16 @@ import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
+import { LibConfig } from "../libraries/LibConfig.sol";
 import { LibInventory } from "../libraries/LibInventory.sol";
 import { LibCore } from "../libraries/LibCore.sol";
 import { LibMove } from "../libraries/LibMove.sol";
 import { LibMap } from "../libraries/LibMove.sol";
 import { LibAbility } from "../libraries/LibAbility.sol";
-import { LibConfig } from "../libraries/LibConfig.sol";
+import { LibResource } from "../libraries/LibResource.sol";
 
 import { GameConfig } from "../components/GameConfigComponent.sol";
+import { Coord } from "../components/PositionComponent.sol";
 
 import { ID as AbilityMoveComponentID } from "../components/AbilityMoveComponent.sol";
 import { ID as AbilityConsumeComponentID } from "../components/AbilityConsumeComponent.sol";
@@ -35,7 +37,12 @@ contract SpawnSystem is System {
     uint256 baseEntity = world.getUniqueEntityId();
     LibInventory.setCarryingCapacity(components, baseEntity, gameConfig.defaultCarryingCapacity);
     LibInventory.addToInventory(components, baseEntity, coreEntity);
-    LibMove.setPosition(components, baseEntity, LibMap.randomCoordinates(components));
+
+    // Find valid spawn position
+    Coord memory spawnPosition = LibMap.getSpawnPosition(components);
+    LibMove.setPosition(components, baseEntity, spawnPosition);
+    // Remove matter in tile ("converting" it to energy in the core)
+    LibResource.create(components, world.getUniqueEntityId(), spawnPosition, 0);
 
     // Place an item allowing Move in inventory
     uint256 AbilityMoveItem = world.getUniqueEntityId();

@@ -33,15 +33,20 @@ contract ExtractSystemTest is MudTest {
 
     vm.roll(2);
 
-    extractSystem.executeTyped(Coord(initialPosition.x, initialPosition.y));
+    // Spawn tile is empty, so we extract from an adjacent tile
+    Coord memory targetPosition = Coord(
+      initialPosition.x < gameConfig.worldWidth - 2 ? initialPosition.x + 1 : initialPosition.x - 1,
+      initialPosition.y
+    );
+    extractSystem.executeTyped(targetPosition);
 
     // Resource entity should be created
-    uint256 resourceEntity = LibResource.getAtCoordinate(components, initialPosition);
+    uint256 resourceEntity = LibResource.getAtCoordinate(components, targetPosition);
     assertGt(resourceEntity, 0);
     assertEq(matterComponent.getValue(resourceEntity), gameConfig.matterPerTile - gameConfig.extractCost);
 
     // SubstanceBlock should be created
-    uint256[] memory substanceBlockEntities = LibSubstanceBlock.getAtCoordinate(components, initialPosition);
+    uint256[] memory substanceBlockEntities = LibSubstanceBlock.getAtCoordinate(components, targetPosition);
     assertEq(substanceBlockEntities.length, 1);
     assertEq(matterComponent.getValue(substanceBlockEntities[0]), gameConfig.extractCost);
 
@@ -138,18 +143,23 @@ contract ExtractSystemTest is MudTest {
     ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(CarriedByComponentID, e1, abi.encode(baseEntity));
     ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(CarriedByComponentID, e2, abi.encode(baseEntity));
 
-    extractSystem.executeTyped(Coord(initialPosition.x, initialPosition.y));
+    // Spawn tile is empty, so we extract from an adjacent tile
+    Coord memory targetPosition = Coord(
+      initialPosition.x < gameConfig.worldWidth - 2 ? initialPosition.x + 1 : initialPosition.x - 1,
+      initialPosition.y
+    );
+    extractSystem.executeTyped(targetPosition);
 
     // Should be 10 + (10 * (3 - 1))
     uint32 matterToExtract = 30;
 
     // Resource entity should be created
-    uint256 resourceEntity = LibResource.getAtCoordinate(components, initialPosition);
+    uint256 resourceEntity = LibResource.getAtCoordinate(components, targetPosition);
     assertGt(resourceEntity, 0);
     assertEq(matterComponent.getValue(resourceEntity), gameConfig.matterPerTile - matterToExtract);
 
     // SubstanceBlock should be created
-    uint256[] memory substanceBlockEntities = LibSubstanceBlock.getAtCoordinate(components, initialPosition);
+    uint256[] memory substanceBlockEntities = LibSubstanceBlock.getAtCoordinate(components, targetPosition);
     assertEq(substanceBlockEntities.length, 1);
     assertEq(matterComponent.getValue(substanceBlockEntities[0]), matterToExtract);
 

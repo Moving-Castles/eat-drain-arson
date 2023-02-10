@@ -2,6 +2,7 @@
   import type { Coord } from "@latticexyz/utils";
   import { onMount } from "svelte";
   import { playerCore, multiCore } from "../../../modules/player";
+  import { gameConfig } from "../../../modules/entities";
 
   import TileInteract from "./UITileInteract.svelte";
   import DebugChat from "./UIDebugChat.svelte";
@@ -36,7 +37,7 @@
   let grid: GridTile[] = [];
 
   onMount(async () => {
-    grid = initGrid(10);
+    grid = initGrid($gameConfig.worldWidth);
   });
 
   function centerMapOnPlayer() {
@@ -71,7 +72,14 @@
 <div class="ui-debug-map">
   <div class="center-map-button"><button on:click={centerMapOnPlayer}>CENTER</button></div>
 
-  <div class="map-container">
+  <div
+    class="map-container"
+    style={"width: " +
+      ($gameConfig.worldWidth * 300 + 3) +
+      "px; height: " +
+      ($gameConfig.worldHeight * 300 + 3) +
+      "px;"}
+  >
     <!-- GRID -->
     {#each grid as tile}
       <Tile

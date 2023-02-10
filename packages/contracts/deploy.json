@@ -45,7 +45,8 @@
         "AbilityMoveComponent",
         "AbilityConsumeComponent",
         "AbilityExtractComponent",
-        "UntraversableComponent"
+        "UntraversableComponent",
+        "MatterComponent"
       ]
     },
     {

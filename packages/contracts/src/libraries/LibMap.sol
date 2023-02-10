@@ -12,6 +12,7 @@ import { LibConfig } from "../libraries/LibConfig.sol";
 import { LibUtils } from "../libraries/LibUtils.sol";
 import { LibMove } from "../libraries/LibMove.sol";
 import { LibInventory } from "../libraries/LibInventory.sol";
+import { LibResource } from "../libraries/LibResource.sol";
 
 import { GameConfig } from "../components/GameConfigComponent.sol";
 import { Coord } from "../components/PositionComponent.sol";
@@ -89,17 +90,35 @@ library LibMap {
   function randomCoordinates(IUint256Component _components) internal view returns (Coord memory) {
     GameConfig memory gameConfig = LibConfig.getGameConfig(_components);
 
-    // We try max 10 times to get an untraversable position, then give up a return a default...
-    for (uint256 i = 0; i < 10; i++) {
-      int32 x = int32(int256(LibUtils.random(addressToEntity(msg.sender), block.timestamp)) % gameConfig.worldWidth);
-      int32 y = int32(int256(LibUtils.random(block.timestamp, block.number)) % gameConfig.worldHeight);
+    int32 x = int32(int256(LibUtils.random(addressToEntity(msg.sender), block.timestamp)) % gameConfig.worldWidth);
+    int32 y = int32(int256(LibUtils.random(block.timestamp, block.number)) % gameConfig.worldHeight);
 
-      // Make sure the values are positive
-      if (x < 0) x *= -1;
-      if (y < 0) y *= -1;
+    // Make sure the values are positive
+    if (x < 0) x *= -1;
+    if (y < 0) y *= -1;
 
-      if (!LibMove.isUntraversable(_components, Coord(x, y))) return Coord(x, y);
+    return Coord(x, y);
+  }
+
+  /**
+   * Find a valid spawn location
+   *
+   * @param _components world components
+   * @return coord spawn position
+   */
+  function getSpawnPosition(IUint256Component _components) internal view returns (Coord memory) {
+    // We try max 20 times...
+    for (uint32 i = 0; i < 20; i++) {
+      Coord memory spawnPosition = randomCoordinates(_components);
+      // Has to be traversable and not have a resource entity on it
+      if (
+        LibMove.isUntraversable(_components, spawnPosition) == false &&
+        LibResource.getAtCoordinate(_components, spawnPosition) == 0
+      ) {
+        return spawnPosition;
+      }
     }
+    // @hack: should check conclusively if there is an open spawn position above, and deny spawn if not
     return Coord(2, 4);
   }
 }

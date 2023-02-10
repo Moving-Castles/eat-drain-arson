@@ -18,8 +18,8 @@ contract InitSystem is System {
     require(!LibConfig.isInitialized(components), "InitSystem: already initialized");
 
     GameConfig memory gameConfig = GameConfig({
-      worldHeight: 10,
-      worldWidth: 10,
+      worldHeight: 50,
+      worldWidth: 50,
       initialEnergy: 100,
       matterPerTile: 100,
       defaultCarryingCapacity: 10,
