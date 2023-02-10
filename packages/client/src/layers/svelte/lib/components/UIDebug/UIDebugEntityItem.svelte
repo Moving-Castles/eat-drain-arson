@@ -20,8 +20,8 @@
     $network.api.drop(entityId);
   }
 
-  function give() {
-    $network.api.give(entityId, targetEntityId);
+  function transfer() {
+    $network.api.transfer(entityId, targetEntityId);
   }
 
   function consume() {
@@ -53,7 +53,7 @@
     <hr />
     <button on:click={pickUp}>Pick up</button>
     <button on:click={drop}>Drop</button>
-    <button on:click={give}>Give</button>
+    <button on:click={transfer}>transfer</button>
     <select bind:value={targetEntityId} name="target" id="target">
       {#each Object.keys($baseEntities) as key}
         <option value={key}>{shortenAddress(key)}</option>
@@ -131,7 +131,7 @@
     {/if}
     {#if entity.carriedBy === $playerCore.carriedBy}
       <button on:click={drop}>Drop</button>
-      <button on:click={give}>Give</button>
+      <button on:click={transfer}>transfer</button>
       <select bind:value={targetEntityId} name="target" id="target">
         {#each Object.keys($baseEntities) as key}
           <option value={key}>{shortenAddress(key)}</option>
@@ -165,7 +165,7 @@
     {#if entity.carriedBy === $playerCore.carriedBy}
       <button on:click={consume}>Consume</button>
       <button on:click={drop}>Drop</button>
-      <button on:click={give}>Give</button>
+      <button on:click={transfer}>transfer</button>
       <select bind:value={targetEntityId} name="target" id="target">
         {#each Object.keys($baseEntities) as key}
           <option value={key}>{shortenAddress(key)}</option>

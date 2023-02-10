@@ -104,20 +104,7 @@
       ]
     },
     {
-      "name": "TakeSystem",
-      "writeAccess": [
-        "GameConfigComponent",
-        "CoreComponent",
-        "PositionComponent",
-        "EnergyComponent",
-        "ReadyBlockComponent",
-        "CarriedByComponent",
-        "PortableComponent",
-        "CarryingCapacityComponent"
-      ]
-    },
-    {
-      "name": "GiveSystem",
+      "name": "TransferSystem",
       "writeAccess": [
         "GameConfigComponent",
         "CoreComponent",

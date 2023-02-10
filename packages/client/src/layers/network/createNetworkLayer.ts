@@ -134,17 +134,9 @@ export async function createNetworkLayer(config: GameConfig) {
     }
   }
 
-  async function take(portableEntity: string) {
+  async function transfer(portableEntity: string, targetBaseEntity: string) {
     try {
-      addToTxLog(await systems["system.Take"].executeTyped(portableEntity), "take");
-    } catch (e) {
-      window.alert(e);
-    }
-  }
-
-  async function give(portableEntity: string, targetBaseEntity: string) {
-    try {
-      addToTxLog(await systems["system.Give"].executeTyped(portableEntity, targetBaseEntity), "give");
+      addToTxLog(await systems["system.Transfer"].executeTyped(portableEntity, targetBaseEntity), "transfer");
     } catch (e) {
       window.alert(e);
     }
@@ -169,7 +161,7 @@ export async function createNetworkLayer(config: GameConfig) {
     network,
     actions,
     systemCallStreams,
-    api: { spawn, move, extract, pickUp, drop, take, give, consume },
+    api: { spawn, move, extract, pickUp, drop, transfer, consume },
     dev: setupDevSystems(world, encoders, systems),
   };
 

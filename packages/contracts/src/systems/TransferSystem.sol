@@ -14,9 +14,9 @@ import { LibConfig } from "../libraries/LibConfig.sol";
 import { GameConfig } from "../components/GameConfigComponent.sol";
 import { Coord } from "../components/PositionComponent.sol";
 
-uint256 constant ID = uint256(keccak256("system.Give"));
+uint256 constant ID = uint256(keccak256("system.Transfer"));
 
-contract GiveSystem is System {
+contract TransferSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
@@ -25,20 +25,20 @@ contract GiveSystem is System {
 
     GameConfig memory gameConfig = LibConfig.getGameConfig(components);
 
-    require(LibCore.isSpawned(components, coreEntity), "GiveSystem: entity does not exist");
-    require(LibCooldown.isReady(components, coreEntity), "GiveSystem: entity is in cooldown");
-    require(LibCore.checkEnergy(components, coreEntity, gameConfig.giveCost), "GiveSystem: not enough energy");
+    require(LibCore.isSpawned(components, coreEntity), "TransferSystem: entity does not exist");
+    require(LibCooldown.isReady(components, coreEntity), "TransferSystem: entity is in cooldown");
+    require(LibCore.checkEnergy(components, coreEntity, gameConfig.transferCost), "TransferSystem: not enough energy");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
-    require(LibInventory.isCarriedBy(components, _portableEntity, baseEntity), "GiveSystem: not carried by caller");
+    require(LibInventory.isCarriedBy(components, _portableEntity, baseEntity), "TransferSystem: not carried by caller");
 
     Coord memory baseEntityPosition = LibMove.getPosition(components, baseEntity);
     Coord memory targetBaseEntityPosition = LibMove.getPosition(components, _targetBaseEntity);
-    require(LibMap.isAdjacent(baseEntityPosition, targetBaseEntityPosition), "GiveSystem: not adjacent");
+    require(LibMap.isAdjacent(baseEntityPosition, targetBaseEntityPosition), "TransferSystem: not adjacent");
 
     LibInventory.addToInventory(components, _targetBaseEntity, _portableEntity);
 
-    LibCore.decreaseEnergy(components, coreEntity, gameConfig.giveCost);
+    LibCore.decreaseEnergy(components, coreEntity, gameConfig.transferCost);
 
     // If the inventory is empty, remove the baseEntity
     if (LibInventory.getInventorySize(components, baseEntity) == 0) {

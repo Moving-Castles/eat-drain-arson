@@ -6,7 +6,7 @@ import { console } from "forge-std/console.sol";
 import { addressToEntity } from "solecs/utils.sol";
 
 import { ComponentDevSystem, ID as ComponentDevSystemID } from "../../systems/ComponentDevSystem.sol";
-import { TakeSystem, ID as TakeSystemID } from "../../systems/TakeSystem.sol";
+import { TransferSystem, ID as TransferSystemID } from "../../systems/TransferSystem.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 
 import { Coord } from "../../components/PositionComponent.sol";
@@ -14,11 +14,11 @@ import { Coord } from "../../components/PositionComponent.sol";
 import { LibResource } from "../../libraries/LibResource.sol";
 import { LibSubstanceBlock } from "../../libraries/LibSubstanceBlock.sol";
 
-contract TakeSystemTest is MudTest {
-  function testTake() public {
+contract TransferSystemTest is MudTest {
+  function testTransfer() public {
     setUp();
     SpawnSystem spawnSystem = SpawnSystem(system(SpawnSystemID));
-    TakeSystem takeSystem = TakeSystem(system(TakeSystemID));
+    TransferSystem transferSystem = TransferSystem(system(TransferSystemID));
 
     vm.startPrank(alice);
     spawnSystem.executeTyped();
@@ -35,6 +35,13 @@ contract TakeSystemTest is MudTest {
     uint256 portableEntity = world.getUniqueEntityId();
     ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(PortableComponentID, portableEntity, abi.encode(1));
 
+    // Place in inventory
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      CarriedByComponentID,
+      portableEntity,
+      abi.encode(baseEntity)
+    );
+
     // Spawn Bob
     vm.startPrank(bob);
     spawnSystem.executeTyped();
@@ -43,29 +50,22 @@ contract TakeSystemTest is MudTest {
     // Get bob's base entity
     uint256 bobBaseEntity = carriedByComponent.getValue(addressToEntity(bob));
 
-    // Place portable in Bob's inventory
-    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
-      CarriedByComponentID,
-      portableEntity,
-      abi.encode(bobBaseEntity)
-    );
-
-    // Move bob
+    // Move bob to same position as Alice
     ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
       PositionComponentID,
       bobBaseEntity,
       abi.encode(initialPosition)
     );
 
-    // Take the portableEntity
+    // Transfer portableEntity to bob
     vm.startPrank(alice);
-    takeSystem.executeTyped(portableEntity);
+    transferSystem.executeTyped(portableEntity, bobBaseEntity);
     vm.stopPrank();
 
-    // portableEntity should be carried by Alice
-    assertEq(carriedByComponent.getValue(portableEntity), baseEntity);
+    // portableEntity should be carried by Bob
+    assertEq(carriedByComponent.getValue(portableEntity), bobBaseEntity);
 
-    // Core energy should be INITAL_ENERGY - TAKE_COST
-    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.takeCost);
+    // Core energy should be INITAL_ENERGY - TRANSFER_COST
+    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.transferCost);
   }
 }

@@ -15,8 +15,7 @@ export type GameConfig = {
   extractCost: number;
   pickUpCost: number;
   dropCost: number;
-  giveCost: number;
-  takeCost: number;
+  transferCost: number;
   moveCooldown: number;
   extractCooldown: number;
 };

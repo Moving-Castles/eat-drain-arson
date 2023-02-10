@@ -27,8 +27,8 @@
     $network.api.consume(itemId);
   }
 
-  function give() {
-    $network.api.give(itemId, targetBaseEntityId);
+  function transfer() {
+    $network.api.transfer(itemId, targetBaseEntityId);
   }
 </script>
 
@@ -38,7 +38,7 @@
   class="inventory-item"
   on:click={() => {
     if (targetBaseEntityId) {
-      give();
+      transfer();
     } else {
       if (item.matter) {
         consume();
