@@ -15,6 +15,7 @@ export function defineGameConfigComponent(world: World) {
       pickUpCost: Type.Number,
       dropCost: Type.Number,
       transferCost: Type.Number,
+      playCost: Type.Number,
       moveCooldown: Type.Number,
       extractCooldown: Type.Number,
     },

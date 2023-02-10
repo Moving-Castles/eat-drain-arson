@@ -6,9 +6,9 @@ import { createActionSystem, setupMUDNetwork } from "@latticexyz/std-client";
 import { createFaucetService } from "@latticexyz/network";
 import {
   defineLoadingStateComponent,
+  defineGameConfigComponent,
   defineCreationBlockComponent,
   defineEnergyComponent,
-  defineExpirationBlockComponent,
   defineMatterComponent,
   definePortableComponent,
   definePositionComponent,
@@ -19,8 +19,9 @@ import {
   defineAbilityMoveComponent,
   defineAbilityConsumeComponent,
   defineAbilityExtractComponent,
-  defineGameConfigComponent,
+  defineAbilityPlayComponent,
   defineUntraversableComponent,
+  defineCommitComponent,
 } from "./components";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { getNetworkConfig } from "./config";
@@ -47,7 +48,6 @@ export async function createNetworkLayer(config: GameConfig) {
     Energy: defineEnergyComponent(world),
     Matter: defineMatterComponent(world),
     CreationBlock: defineCreationBlockComponent(world),
-    ExpirationBlock: defineExpirationBlockComponent(world),
     ReadyBlock: defineReadyBlockComponent(world),
     Portable: definePortableComponent(world),
     CarryingCapacity: defineCarryingCapacityComponent(world),
@@ -56,7 +56,9 @@ export async function createNetworkLayer(config: GameConfig) {
     AbilityMove: defineAbilityMoveComponent(world),
     AbilityConsume: defineAbilityConsumeComponent(world),
     AbilityExtract: defineAbilityExtractComponent(world),
+    AbilityPlay: defineAbilityPlayComponent(world),
     Untraversable: defineUntraversableComponent(world),
+    Commit: defineCommitComponent(world),
   };
 
   // --- SETUP ----------------------------------------------------------------------
@@ -150,6 +152,14 @@ export async function createNetworkLayer(config: GameConfig) {
     }
   }
 
+  async function play() {
+    try {
+      addToTxLog(await systems["system.Play"].executeTyped(), "play");
+    } catch (e) {
+      window.alert(e);
+    }
+  }
+
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
@@ -161,7 +171,7 @@ export async function createNetworkLayer(config: GameConfig) {
     network,
     actions,
     systemCallStreams,
-    api: { spawn, move, extract, pickUp, drop, transfer, consume },
+    api: { spawn, move, extract, pickUp, drop, transfer, consume, play },
     dev: setupDevSystems(world, encoders, systems),
   };
 

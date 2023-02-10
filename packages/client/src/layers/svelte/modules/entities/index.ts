@@ -5,6 +5,10 @@ import { network } from "../network";
 
 // --- TYPES -----------------------------------------------------------------
 
+export enum Activity {
+  Play,
+}
+
 export type GameConfig = {
   worldHeight: number;
   worldWidth: number;
@@ -16,6 +20,7 @@ export type GameConfig = {
   pickUpCost: number;
   dropCost: number;
   transferCost: number;
+  playCost: number;
   moveCooldown: number;
   extractCooldown: number;
 };
@@ -30,16 +35,19 @@ export type Entity = {
   portable?: boolean;
   carryingCapacity?: number;
   core?: boolean;
+  commit?: Activity;
   carriedBy?: string;
   inventory?: string[];
   abilityMove?: boolean;
   abilityConsume?: boolean;
   abilityExtract?: boolean;
   untraversable?: boolean;
+  abilityPlay?: boolean;
 };
 
 export type Core = {
   core: true;
+  commit?: Activity;
   portable: true;
   creationBlock: number;
   readyBlock: number;
@@ -73,6 +81,7 @@ export type Item = {
   abilityMove?: boolean;
   abilityConsume?: boolean;
   abilityExtract?: boolean;
+  abilityPlay?: boolean;
 };
 
 export type Untraversable = {

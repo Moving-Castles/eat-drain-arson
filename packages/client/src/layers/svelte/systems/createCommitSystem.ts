@@ -2,19 +2,18 @@ import { defineComponentSystem } from "@latticexyz/recs";
 import type { NetworkLayer } from "../../network";
 import { entities, indexToID } from "../modules/entities";
 
-export function createEnergySystem(network: NetworkLayer) {
+export function createCommitSystem(network: NetworkLayer) {
   const {
     world,
-    components: { Energy },
+    components: { Commit },
   } = network;
 
-  defineComponentSystem(world, Energy, (update) => {
-    console.log("==> Energy system: ", update);
-    const oldEnergy = update.value[1]?.value;
-    const energy = update.value[0]?.value;
+  defineComponentSystem(world, Commit, (update) => {
+    console.log("==> Commit system: ", update);
+    const commit = update.value[0]?.value;
     entities.update((value) => {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};
-      value[indexToID(update.entity)].energy = energy;
+      value[indexToID(update.entity)].commit = commit;
       return value;
     });
   });

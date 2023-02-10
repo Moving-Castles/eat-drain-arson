@@ -8,7 +8,7 @@ export function defineAbilityExtractComponent(world: World) {
       value: Type.Boolean,
     },
     {
-      id: "Portable",
+      id: "AbilityExtract",
       metadata: { contractId: "component.AbilityExtract" },
     }
   );

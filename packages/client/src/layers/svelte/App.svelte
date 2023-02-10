@@ -17,8 +17,10 @@
     createAbilityMoveSystem,
     createAbilityConsumeSystem,
     createAbilityExtractSystem,
+    createAbilityPlaySystem,
     createUntraversableSystem,
     createGameConfigSystem,
+    createCommitSystem,
   } from "./systems";
   import { network as networkStore, blockNumber, startBlock } from "./modules/network";
 
@@ -41,12 +43,13 @@
     createAbilityExtractSystem(layers.network);
     createUntraversableSystem(layers.network);
     createGameConfigSystem(layers.network);
+    createAbilityPlaySystem(layers.network);
+    createCommitSystem(layers.network);
 
     networkStore.set(layers.network);
 
     layers.network.txReduced$.subscribe((tx) => {
       console.log("TX:", tx);
-      // transactions.update((ts) => [tx, ...ts]);
     });
 
     layers.network.systemCallStreams["system.Move"].subscribe((systemCall) => {
@@ -54,7 +57,6 @@
     });
 
     layers.network.network.blockNumber$.subscribe((x) => {
-      // console.log(x);
       blockNumber.set(x);
       if ($startBlock == 0) {
         startBlock.set(x);

@@ -27,6 +27,7 @@ contract DropSystem is System {
 
     require(LibCore.isSpawned(components, coreEntity), "DropSystem: entity does not exist");
     require(LibCooldown.isReady(components, coreEntity), "DropSystem: entity is in cooldown");
+    require(!LibCore.isCommitted(components, coreEntity), "DropSystem: entity is committed");
     require(LibCore.checkEnergy(components, coreEntity, gameConfig.dropCost), "DropSystem: not enough energy");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);

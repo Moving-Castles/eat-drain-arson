@@ -17,6 +17,9 @@ import { ReadyBlockComponent, ID as ReadyBlockComponentID } from "../components/
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { PortableComponent, ID as PortableComponentID } from "../components/PortableComponent.sol";
 import { CarriedByComponent, ID as CarriedByComponentID } from "../components/CarriedByComponent.sol";
+import { CommitComponent, ID as CommitComponentID } from "../components/CommitComponent.sol";
+
+import { Activity } from "../utils/constants.sol";
 
 library LibCore {
   /**
@@ -101,5 +104,40 @@ library LibCore {
     EnergyComponent energyComponent = EnergyComponent(getAddressById(_components, EnergyComponentID));
     uint32 currentEnergy = energyComponent.getValue(_coreEntity);
     energyComponent.set(_coreEntity, currentEnergy + _amount);
+  }
+
+  /**
+   * Commit to activity
+   *
+   * @param _components World components
+   * @param _coreEntity Core entity
+   * @param _activity Activity
+   */
+  function commit(IUint256Component _components, uint256 _coreEntity, Activity _activity) internal {
+    CommitComponent commitComponent = CommitComponent(getAddressById(_components, CommitComponentID));
+    commitComponent.set(_coreEntity, uint32(_activity));
+  }
+
+  /**
+   * Uncommit from activity
+   *
+   * @param _components World components
+   * @param _coreEntity Core entity
+   */
+  function uncommit(IUint256Component _components, uint256 _coreEntity) internal {
+    CommitComponent commitComponent = CommitComponent(getAddressById(_components, CommitComponentID));
+    commitComponent.remove(_coreEntity);
+  }
+
+  /**
+   * Check if committed
+   *
+   * @param _components World components
+   * @param _coreEntity Core entity
+   * @return bool is the core committed to something?
+   */
+  function isCommitted(IUint256Component _components, uint256 _coreEntity) internal view returns (bool) {
+    CommitComponent commitComponent = CommitComponent(getAddressById(_components, CommitComponentID));
+    return commitComponent.has(_coreEntity);
   }
 }

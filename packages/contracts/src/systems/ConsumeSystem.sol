@@ -23,6 +23,7 @@ contract ConsumeSystem is System {
 
     require(LibCore.isSpawned(components, coreEntity), "ConsumeSystem: entity does not exist");
     require(LibCooldown.isReady(components, coreEntity), "ConsumeSystem: entity is in cooldown");
+    require(!LibCore.isCommitted(components, coreEntity), "ConsumeSystem: entity is committed");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
 

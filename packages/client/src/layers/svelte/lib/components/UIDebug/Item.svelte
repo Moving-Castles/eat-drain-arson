@@ -17,6 +17,8 @@
     text = "C";
   } else if (entity.abilityExtract) {
     text = "E";
+  } else if (entity.abilityPlay) {
+    text = "P";
   } else if (entity.untraversable) {
     text = "X";
   }

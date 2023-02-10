@@ -1,10 +1,13 @@
 <script lang="ts">
-  import { entities } from "../../../modules/entities";
+  import { Activity } from "../../../modules/entities";
   import { playerCore, playerBaseEntity, playerAddress } from "../../../modules/player";
   import { shortenAddress, addressToColor } from "../../../utils/ui";
+  import { network } from "../../../modules/network";
   import Inventory from "./UIInventory.svelte";
 
-  $: console.log($entities);
+  function play() {
+    $network.api.play();
+  }
 </script>
 
 <div class="ui-debug-log">
@@ -27,6 +30,16 @@
       <div class="position">
         <div class="coord">x:{$playerBaseEntity.position.x}</div>
         <div class="coord">y:{$playerBaseEntity.position.y}</div>
+      </div>
+      <div>
+        {#if $playerCore.commit === Activity.Play}
+          <div>...P.l.A.y.I.n.G...</div>
+          <div><button on:click={play}>STOP</button></div>
+        {:else}
+          <div>
+            <button on:click={play}>PLAY</button>
+          </div>
+        {/if}
       </div>
       <hr />
     {:else}

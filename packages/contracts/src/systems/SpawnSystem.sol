@@ -18,6 +18,7 @@ import { Coord } from "../components/PositionComponent.sol";
 import { ID as AbilityMoveComponentID } from "../components/AbilityMoveComponent.sol";
 import { ID as AbilityConsumeComponentID } from "../components/AbilityConsumeComponent.sol";
 import { ID as AbilityExtractComponentID } from "../components/AbilityExtractComponent.sol";
+import { ID as AbilityPlayComponentID } from "../components/AbilityPlayComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Spawn"));
 
@@ -61,6 +62,12 @@ contract SpawnSystem is System {
     LibAbility.giveAbility(components, AbilityExtractItem, AbilityExtractComponentID);
     LibInventory.makePortable(components, AbilityExtractItem);
     LibInventory.addToInventory(components, baseEntity, AbilityExtractItem);
+
+    // Place an item allowing Extract in inventory
+    uint256 AbilityPlayItem = world.getUniqueEntityId();
+    LibAbility.giveAbility(components, AbilityPlayItem, AbilityPlayComponentID);
+    LibInventory.makePortable(components, AbilityPlayItem);
+    LibInventory.addToInventory(components, baseEntity, AbilityPlayItem);
   }
 
   function executeTyped() public returns (bytes memory) {

@@ -30,6 +30,7 @@ contract MoveSystem is System {
 
     require(LibCore.isSpawned(components, coreEntity), "MoveSystem: entity does not exist");
     require(LibCooldown.isReady(components, coreEntity), "MoveSystem: entity is in cooldown");
+    require(!LibCore.isCommitted(components, coreEntity), "MoveSystem: entity is committed");
     require(LibCore.checkEnergy(components, coreEntity, gameConfig.moveCost), "MoveSystem: not enough energy");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);

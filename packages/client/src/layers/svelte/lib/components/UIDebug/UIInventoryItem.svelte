@@ -17,6 +17,10 @@
     text = "C";
   } else if (item.abilityExtract) {
     text = "E";
+  } else if (item.abilityPlay) {
+    text = "P";
+  } else if (item.untraversable) {
+    text = "X";
   }
 
   function drop() {

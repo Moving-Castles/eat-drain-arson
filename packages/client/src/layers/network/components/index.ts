@@ -1,5 +1,5 @@
 export { defineLoadingStateComponent } from "./LoadingStateComponent";
-export { defineExpirationBlockComponent } from "./ExpirationBlockComponent";
+export { defineGameConfigComponent } from "./GameConfigComponent";
 export { defineCreationBlockComponent } from "./CreationBlockComponent";
 export { defineReadyBlockComponent } from "./ReadyBlockComponent";
 export { definePositionComponent } from "./PositionComponent";
@@ -12,5 +12,6 @@ export { defineCarryingCapacityComponent } from "./CarryingCapacityComponent";
 export { defineAbilityMoveComponent } from "./AbilityMoveComponent";
 export { defineAbilityConsumeComponent } from "./AbilityConsumeComponent";
 export { defineAbilityExtractComponent } from "./AbilityExtractComponent";
+export { defineAbilityPlayComponent } from "./AbilityPlayComponent";
 export { defineUntraversableComponent } from "./UntraversableComponent";
-export { defineGameConfigComponent } from "./GameConfigComponent";
+export { defineCommitComponent } from "./CommitComponent";

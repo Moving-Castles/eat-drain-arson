@@ -18,8 +18,8 @@ contract InitSystem is System {
     require(!LibConfig.isInitialized(components), "InitSystem: already initialized");
 
     GameConfig memory gameConfig = GameConfig({
-      worldHeight: 50,
-      worldWidth: 50,
+      worldHeight: 10,
+      worldWidth: 10,
       initialEnergy: 100,
       matterPerTile: 100,
       defaultCarryingCapacity: 10,
@@ -28,6 +28,7 @@ contract InitSystem is System {
       pickUpCost: 5,
       dropCost: 5,
       transferCost: 5,
+      playCost: 50,
       moveCooldown: 1,
       extractCooldown: 1
     });

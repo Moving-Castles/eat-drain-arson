@@ -27,6 +27,7 @@ contract PickUpSystem is System {
 
     require(LibCore.isSpawned(components, coreEntity), "PickUpSystem: entity does not exist");
     require(LibCooldown.isReady(components, coreEntity), "PickUpSystem: entity is in cooldown");
+    require(!LibCore.isCommitted(components, coreEntity), "PickUpSystem: entity is committed");
     require(LibCore.checkEnergy(components, coreEntity, gameConfig.pickUpCost), "PickUpSystem: not enough energy");
     require(LibInventory.isPortable(components, _portableEntity), "PickUpSystem: entity is not portable");
 

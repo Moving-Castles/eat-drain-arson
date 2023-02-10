@@ -27,6 +27,7 @@ contract TransferSystem is System {
 
     require(LibCore.isSpawned(components, coreEntity), "TransferSystem: entity does not exist");
     require(LibCooldown.isReady(components, coreEntity), "TransferSystem: entity is in cooldown");
+    require(!LibCore.isCommitted(components, coreEntity), "TransferSystem: entity is committed");
     require(LibCore.checkEnergy(components, coreEntity, gameConfig.transferCost), "TransferSystem: not enough energy");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);

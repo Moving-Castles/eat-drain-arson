@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Coord } from "@latticexyz/utils";
   import { onMount } from "svelte";
-  import { playerCore, multiCore } from "../../../modules/player";
+  import { playerCore, playerBaseEntity, multiCore } from "../../../modules/player";
   import { gameConfig } from "../../../modules/entities";
 
   import TileInteract from "./UITileInteract.svelte";
@@ -69,7 +69,7 @@
   <DebugChat channelId={$playerCore.carriedBy} />
 {/if}
 
-<div class="ui-debug-map">
+<div class="ui-debug-map" class:void={!($playerBaseEntity && $playerBaseEntity.position)}>
   <div class="center-map-button"><button on:click={centerMapOnPlayer}>CENTER</button></div>
 
   <div
@@ -106,6 +106,11 @@
     width: 100%;
     overflow: auto;
     padding: 0;
+  }
+
+  .void {
+    filter: grayscale(1);
+    opacity: 0.2;
   }
 
   .map-container {

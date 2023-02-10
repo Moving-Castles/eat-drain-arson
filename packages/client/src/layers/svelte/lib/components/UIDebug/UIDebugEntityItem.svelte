@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Entity } from "../../../modules/entities";
+  import type { Entity, Activity } from "../../../modules/entities";
   import { entities, baseEntities } from "../../../modules/entities";
   import { playerAddress, playerCore } from "../../../modules/player";
   import { shortenAddress, addressToColor } from "../../../utils/ui";
@@ -33,6 +33,7 @@
   <div class="id">
     <span style={"background:" + addressToColor(entityId) + ";"}>
       {shortenAddress(entityId)}
+      {entityId === $playerAddress ? " (* YOU)" : ""}
     </span>
   </div>
 
@@ -44,10 +45,12 @@
       Carried by:
       <span style={"background:" + addressToColor(entity.carriedBy) + ";"}>
         {shortenAddress(entity.carriedBy)}
-        {entityId === $playerAddress ? " (* YOU)" : ""}
       </span>
     </div>
     <div class="control">Portable: {entity.portable}</div>
+    {#if entity.commit}
+      <div class="control">Commit: {entity.commit}</div>
+    {/if}
     <div class="control">Creation block: {parseInt(String(entity.creationBlock), 16)}</div>
     <div class="control">Ready block: {parseInt(String(entity.readyBlock), 16)}</div>
     <hr />
@@ -116,6 +119,9 @@
     {/if}
     {#if entity.abilityExtract}
       <div class="matter">AbilityExtract: {entity.abilityExtract}</div>
+    {/if}
+    {#if entity.abilityPlay}
+      <div class="matter">AbilityPlay: {entity.abilityPlay}</div>
     {/if}
     {#if entity.carriedBy}
       <div class="control">

@@ -1,6 +1,8 @@
 {
   "components": [
+    "GameConfigComponent",
     "CoreComponent",
+    "CommitComponent",
     "PositionComponent",
     "EnergyComponent",
     "CreationBlockComponent",
@@ -13,7 +15,7 @@
     "AbilityMoveComponent",
     "AbilityConsumeComponent",
     "AbilityExtractComponent",
-    "GameConfigComponent",
+    "AbilityPlayComponent",
     "UntraversableComponent"
   ],
   "systems": [
@@ -45,8 +47,10 @@
         "AbilityMoveComponent",
         "AbilityConsumeComponent",
         "AbilityExtractComponent",
+        "AbilityPlayComponent",
         "UntraversableComponent",
-        "MatterComponent"
+        "MatterComponent",
+        "CommitComponent"
       ]
     },
     {
@@ -130,6 +134,18 @@
         "SubstanceComponent",
         "MatterComponent",
         "AbilityConsumeComponent"
+      ]
+    },
+    {
+      "name": "PlaySystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "AbilityPlayComponent",
+        "CommitComponent"
       ]
     }
   ]

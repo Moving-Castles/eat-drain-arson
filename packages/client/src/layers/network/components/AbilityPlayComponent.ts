@@ -1,15 +1,15 @@
 import type { World } from "@latticexyz/recs";
 import { defineComponent, Type } from "@latticexyz/recs";
 
-export function defineAbilityConsumeComponent(world: World) {
+export function defineAbilityPlayComponent(world: World) {
   return defineComponent(
     world,
     {
       value: Type.Boolean,
     },
     {
-      id: "AbilityConsume",
-      metadata: { contractId: "component.AbilityConsume" },
+      id: "AbilityPlay",
+      metadata: { contractId: "component.AbilityPlay" },
     }
   );
 }
