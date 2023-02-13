@@ -57,6 +57,19 @@ library LibSubstanceBlock {
   }
 
   /**
+   * Is entity a substance block
+   *
+   * @param _components World components
+   * @param _entity entity
+   * @return bool is entity a substanceblock?
+   */
+  function isSubstanceBlock(IUint256Component _components, uint256 _entity) internal view returns (bool) {
+    MatterComponent matterComponent = MatterComponent(getAddressById(_components, MatterComponentID));
+    PortableComponent portableComponent = PortableComponent(getAddressById(_components, PortableComponentID));
+    return matterComponent.has(_entity) && portableComponent.has(_entity);
+  }
+
+  /**
    * Get substance block at coordinate
    *
    * @param _components World components

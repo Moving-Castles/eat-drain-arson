@@ -19,6 +19,18 @@ import { UntraversableComponent, ID as UntraversableComponentID } from "../compo
 
 library LibMove {
   /**
+   * Check if entity has position
+   *
+   * @param _components World components
+   * @param _entity Entity
+   * @return bool does entity have position?
+   */
+  function hasPosition(IUint256Component _components, uint256 _entity) internal view returns (bool) {
+    PositionComponent positionComponent = PositionComponent(getAddressById(_components, PositionComponentID));
+    return positionComponent.has(_entity);
+  }
+
+  /**
    * Get position of entity
    *
    * @param _components World components

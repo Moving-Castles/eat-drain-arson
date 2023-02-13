@@ -12,6 +12,7 @@ import { ID as AbilityMoveComponentID } from "../../components/AbilityMoveCompon
 import { ID as AbilityConsumeComponentID } from "../../components/AbilityConsumeComponent.sol";
 import { ID as AbilityExtractComponentID } from "../../components/AbilityExtractComponent.sol";
 import { ID as AbilityPlayComponentID } from "../../components/AbilityPlayComponent.sol";
+import { ID as AbilityBurnComponentID } from "../../components/AbilityBurnComponent.sol";
 
 import { LibInventory } from "../../libraries/LibInventory.sol";
 import { LibAbility } from "../../libraries/LibAbility.sol";
@@ -74,14 +75,15 @@ contract SpawnSystemTest is MudTest {
     // Get base entity
     uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
 
-    // Should have 5 items in inventory:
+    // Should have 6 items in inventory:
     // - Core
     // - AbilityMoveItem
     // - AbilityConsumeItem
     // - AbilityExtractItem
     // - AbilityPlayItem
+    // - AbilityBurnItem
     uint256[] memory inventory = LibInventory.getInventory(components, baseEntity);
-    assertEq(inventory.length, 5);
+    assertEq(inventory.length, 6);
   }
 
   function testSpawnAbilities() public {
@@ -105,5 +107,8 @@ contract SpawnSystemTest is MudTest {
 
     // Should be able to play
     assertTrue(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityPlayComponentID));
+
+    // Should be able to burn
+    assertTrue(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityBurnComponentID));
   }
 }

@@ -139,6 +139,7 @@ library LibInventory {
     uint256 _baseEntity
   ) internal view returns (bool) {
     CarriedByComponent carriedByComponent = CarriedByComponent(getAddressById(_components, CarriedByComponentID));
+    if (!carriedByComponent.has(_portableEntity)) return false;
     return carriedByComponent.getValue(_portableEntity) == _baseEntity;
   }
 

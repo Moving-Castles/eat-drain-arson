@@ -8,3 +8,4 @@ libs = ["../../node_modules", "../../../mud"]
 include_paths = ["../../node_modules"]
 src = "src"
 out = "out"
+gas_reports = ["*"]

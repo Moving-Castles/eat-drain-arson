@@ -21,8 +21,10 @@ export type GameConfig = {
   dropCost: number;
   transferCost: number;
   playCost: number;
+  burnCost: number;
   moveCooldown: number;
   extractCooldown: number;
+  burntime: number;
 };
 
 export type Entity = {
@@ -43,6 +45,8 @@ export type Entity = {
   abilityExtract?: boolean;
   untraversable?: boolean;
   abilityPlay?: boolean;
+  abilityBurn?: boolean;
+  burnBlock?: number;
 };
 
 export type Core = {
@@ -72,16 +76,20 @@ export type SubstanceBlock = {
   portable: true;
   position?: Coord;
   carriedBy?: string;
+  burnBlock?: number;
 };
 
 export type Item = {
   portable: true;
+  matter?: number;
   position?: Coord;
   carriedBy?: string;
   abilityMove?: boolean;
   abilityConsume?: boolean;
   abilityExtract?: boolean;
   abilityPlay?: boolean;
+  abilityBurn?: boolean;
+  untraversable?: boolean;
 };
 
 export type Untraversable = {
@@ -97,6 +105,8 @@ export type FreePortable = {
   abilityMove?: boolean;
   abilityConsume?: boolean;
   abilityExtract?: boolean;
+  abilityPlay?: boolean;
+  abilityBurn?: boolean;
 };
 
 // - - - -

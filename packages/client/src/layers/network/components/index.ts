@@ -13,5 +13,7 @@ export { defineAbilityMoveComponent } from "./AbilityMoveComponent";
 export { defineAbilityConsumeComponent } from "./AbilityConsumeComponent";
 export { defineAbilityExtractComponent } from "./AbilityExtractComponent";
 export { defineAbilityPlayComponent } from "./AbilityPlayComponent";
+export { defineAbilityBurnComponent } from "./AbilityBurnComponent";
 export { defineUntraversableComponent } from "./UntraversableComponent";
 export { defineCommitComponent } from "./CommitComponent";
+export { defineBurnBlockComponent } from "./BurnBlockComponent";

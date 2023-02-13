@@ -16,7 +16,9 @@
     "AbilityConsumeComponent",
     "AbilityExtractComponent",
     "AbilityPlayComponent",
-    "UntraversableComponent"
+    "AbilityBurnComponent",
+    "UntraversableComponent",
+    "BurnBlockComponent"
   ],
   "systems": [
     {
@@ -50,7 +52,8 @@
         "AbilityPlayComponent",
         "UntraversableComponent",
         "MatterComponent",
-        "CommitComponent"
+        "CommitComponent",
+        "AbilityBurnComponent"
       ]
     },
     {
@@ -146,6 +149,19 @@
         "CarriedByComponent",
         "AbilityPlayComponent",
         "CommitComponent"
+      ]
+    },
+    {
+      "name": "BurnSystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "AbilityBurnComponent",
+        "CommitComponent",
+        "BurnBlockComponent"
       ]
     }
   ]

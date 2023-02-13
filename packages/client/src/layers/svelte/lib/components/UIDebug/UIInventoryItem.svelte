@@ -19,6 +19,8 @@
     text = "E";
   } else if (item.abilityPlay) {
     text = "P";
+  } else if (item.abilityBurn) {
+    text = "B";
   } else if (item.untraversable) {
     text = "X";
   }
@@ -28,7 +30,8 @@
   }
 
   function consume() {
-    $network.api.consume(itemId);
+    $network.api.burn(itemId);
+    // $network.api.consume(itemId);
   }
 
   function transfer() {

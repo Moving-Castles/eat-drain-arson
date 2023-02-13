@@ -18,9 +18,11 @@
     createAbilityConsumeSystem,
     createAbilityExtractSystem,
     createAbilityPlaySystem,
+    createAbilityBurnSystem,
     createUntraversableSystem,
     createGameConfigSystem,
     createCommitSystem,
+    createBurnBlockSystem,
   } from "./systems";
   import { network as networkStore, blockNumber, startBlock } from "./modules/network";
 
@@ -44,7 +46,9 @@
     createUntraversableSystem(layers.network);
     createGameConfigSystem(layers.network);
     createAbilityPlaySystem(layers.network);
+    createAbilityBurnSystem(layers.network);
     createCommitSystem(layers.network);
+    createBurnBlockSystem(layers.network);
 
     networkStore.set(layers.network);
 

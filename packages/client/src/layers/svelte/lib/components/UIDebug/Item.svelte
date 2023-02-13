@@ -1,9 +1,10 @@
 <script lang="ts">
   import { addressToColor } from "../../../utils/ui";
+  import type { Entity } from "../../../modules/entities";
   import { network } from "../../../modules/network";
 
   export let entityId: string;
-  export let entity: any;
+  export let entity: Entity;
   export let free = false;
 
   let text = "";
@@ -19,12 +20,16 @@
     text = "E";
   } else if (entity.abilityPlay) {
     text = "P";
+  } else if (entity.abilityBurn) {
+    text = "B";
   } else if (entity.untraversable) {
     text = "X";
   }
 
   function pickUp(entityId: string) {
-    if (free) {
+    if (entity.matter) {
+      $network.api.burn(entityId);
+    } else if (free) {
       $network.api.pickUp(entityId);
     }
   }

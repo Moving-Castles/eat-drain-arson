@@ -20,8 +20,10 @@ import {
   defineAbilityConsumeComponent,
   defineAbilityExtractComponent,
   defineAbilityPlayComponent,
+  defineAbilityBurnComponent,
   defineUntraversableComponent,
   defineCommitComponent,
+  defineBurnBlockComponent,
 } from "./components";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { getNetworkConfig } from "./config";
@@ -49,6 +51,7 @@ export async function createNetworkLayer(config: GameConfig) {
     Matter: defineMatterComponent(world),
     CreationBlock: defineCreationBlockComponent(world),
     ReadyBlock: defineReadyBlockComponent(world),
+    BurnBlock: defineBurnBlockComponent(world),
     Portable: definePortableComponent(world),
     CarryingCapacity: defineCarryingCapacityComponent(world),
     CarriedBy: defineCarriedByComponent(world),
@@ -57,6 +60,7 @@ export async function createNetworkLayer(config: GameConfig) {
     AbilityConsume: defineAbilityConsumeComponent(world),
     AbilityExtract: defineAbilityExtractComponent(world),
     AbilityPlay: defineAbilityPlayComponent(world),
+    AbilityBurn: defineAbilityBurnComponent(world),
     Untraversable: defineUntraversableComponent(world),
     Commit: defineCommitComponent(world),
   };
@@ -160,6 +164,14 @@ export async function createNetworkLayer(config: GameConfig) {
     }
   }
 
+  async function burn(substanceBlockEntity: string) {
+    try {
+      addToTxLog(await systems["system.Burn"].executeTyped(substanceBlockEntity), "burn");
+    } catch (e) {
+      window.alert(e);
+    }
+  }
+
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
@@ -171,7 +183,7 @@ export async function createNetworkLayer(config: GameConfig) {
     network,
     actions,
     systemCallStreams,
-    api: { spawn, move, extract, pickUp, drop, transfer, consume, play },
+    api: { spawn, move, extract, pickUp, drop, transfer, consume, play, burn },
     dev: setupDevSystems(world, encoders, systems),
   };
 

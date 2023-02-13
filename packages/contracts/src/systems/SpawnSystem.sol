@@ -19,6 +19,7 @@ import { ID as AbilityMoveComponentID } from "../components/AbilityMoveComponent
 import { ID as AbilityConsumeComponentID } from "../components/AbilityConsumeComponent.sol";
 import { ID as AbilityExtractComponentID } from "../components/AbilityExtractComponent.sol";
 import { ID as AbilityPlayComponentID } from "../components/AbilityPlayComponent.sol";
+import { ID as AbilityBurnComponentID } from "../components/AbilityBurnComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Spawn"));
 
@@ -63,11 +64,17 @@ contract SpawnSystem is System {
     LibInventory.makePortable(components, AbilityExtractItem);
     LibInventory.addToInventory(components, baseEntity, AbilityExtractItem);
 
-    // Place an item allowing Extract in inventory
+    // Place an item allowing Play in inventory
     uint256 AbilityPlayItem = world.getUniqueEntityId();
     LibAbility.giveAbility(components, AbilityPlayItem, AbilityPlayComponentID);
     LibInventory.makePortable(components, AbilityPlayItem);
     LibInventory.addToInventory(components, baseEntity, AbilityPlayItem);
+
+    // Place an item allowing Burn in inventory
+    uint256 AbilityBurnItem = world.getUniqueEntityId();
+    LibAbility.giveAbility(components, AbilityBurnItem, AbilityBurnComponentID);
+    LibInventory.makePortable(components, AbilityBurnItem);
+    LibInventory.addToInventory(components, baseEntity, AbilityBurnItem);
   }
 
   function executeTyped() public returns (bytes memory) {

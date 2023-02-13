@@ -15,17 +15,19 @@ struct GameConfig {
   uint32 pickUpCost;
   uint32 dropCost;
   uint32 playCost;
+  uint32 burnCost;
   uint32 transferCost;
   uint32 moveCooldown;
   uint32 extractCooldown;
+  uint32 burnTime;
 }
 
 contract GameConfigComponent is BareComponent {
   constructor(address world) BareComponent(world, ID) {}
 
   function getSchema() public pure override returns (string[] memory keys, LibTypes.SchemaValue[] memory values) {
-    keys = new string[](13);
-    values = new LibTypes.SchemaValue[](13);
+    keys = new string[](15);
+    values = new LibTypes.SchemaValue[](15);
 
     keys[0] = "worldHeight";
     values[0] = LibTypes.SchemaValue.INT32;
@@ -60,11 +62,17 @@ contract GameConfigComponent is BareComponent {
     keys[10] = "playCost";
     values[10] = LibTypes.SchemaValue.UINT32;
 
-    keys[11] = "moveCooldown";
+    keys[11] = "burnCost";
     values[11] = LibTypes.SchemaValue.UINT32;
 
-    keys[12] = "extractCooldown";
+    keys[12] = "moveCooldown";
     values[12] = LibTypes.SchemaValue.UINT32;
+
+    keys[13] = "extractCooldown";
+    values[13] = LibTypes.SchemaValue.UINT32;
+
+    keys[14] = "burnTime";
+    values[14] = LibTypes.SchemaValue.UINT32;
   }
 
   function set(uint256 entity, GameConfig memory gameConfig) public {
