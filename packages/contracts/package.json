@@ -29,7 +29,7 @@
     "@solidstate/contracts": "^0.0.52",
     "@typechain/ethers-v5": "^10.2.0",
     "@types/glob": "^8.0.1",
-    "@types/node": "^18.11.18",
+    "@types/node": "^18.13.0",
     "abdk-libraries-solidity": "^3.1.0",
     "base64-sol": "https://github.com/Brechtpd/base64.git#4d85607b18d981acff392d2e99ba654305552a97",
     "copyfiles": "^2.4.1",

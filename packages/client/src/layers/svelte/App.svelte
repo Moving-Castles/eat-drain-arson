@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { bootGame } from "./boot";
-  import UIContainer from "./lib/UIContainer.svelte";
-  import UIMenu from "./lib/UIMenu.svelte";
+  import UIContainer from "./components/UI/UIContainer.svelte";
+  import UIMenu from "./components/UI/UIMenu.svelte";
   import {
     createLoadingStateSystem,
     createPositionSystem,
@@ -52,9 +52,9 @@
 
     networkStore.set(layers.network);
 
-    layers.network.txReduced$.subscribe((tx) => {
-      console.log("TX:", tx);
-    });
+    // layers.network.txReduced$.subscribe((tx) => {
+    //   console.log("TX:", tx);
+    // });
 
     layers.network.systemCallStreams["system.Move"].subscribe((systemCall) => {
       console.log("systemCall", systemCall);
