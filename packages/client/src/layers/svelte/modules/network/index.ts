@@ -13,7 +13,6 @@ export const network = writable({} as NetworkLayer);
 export const blockNumber = writable(0);
 export const ready = writable(false);
 export const loadingMessage = writable("Loading");
-export const startBlock = writable(0);
 export const transactions = writable([] as tx[]);
 export const receipts = writable([] as ContractReceipt[]);
 // Get transaction that do not have a matching receipt
