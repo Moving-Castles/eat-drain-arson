@@ -111,7 +111,7 @@ export const initialState = () => ({
     options: {
       persistent: true,
       fluid: true,
-      layer: 3,
+      layer: 0,
       delay: 0,
     },
     hidden: false,
@@ -123,8 +123,6 @@ export const initialState = () => ({
 });
 
 // --- FUNCTIONS -----------------------------------------------------------------
-
-const makeDelay = () => Math.floor(Math.random() * 200);
 
 // Start
 export const initialise = (def: UIComponentDefinition) => {

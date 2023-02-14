@@ -55,7 +55,7 @@
   <div class="inventory">
     {#each Object.entries($items) as [entityId, entity] (entityId)}
       {#if entity.carriedBy == baseEntityId}
-        <Item {entityId} {entity} />
+        <Item itemId={entityId} item={entity} />
       {/if}
     {/each}
   </div>

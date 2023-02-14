@@ -147,4 +147,20 @@ export const multiCore = derived([cores, playerCore], ([$cores, $playerCore]) =>
   Object.values($cores).filter((e) => e.carriedBy == $playerCore.carriedBy).length > 1 ? true : false
 );
 
+const ABILITY_LIST = ["abilityMove", "abilityExtract", "abilityConsume", "abilityPlay", "abilityBurn"];
+
+export const playerAbilities = derived([entities, playerCore], ([$entities, $playerCore]) => {
+  const abilities: string[] = [];
+
+  const inventory = Object.values($entities).filter((e) => e.carriedBy === $playerCore.carriedBy);
+
+  ABILITY_LIST.forEach((a) => {
+    if (inventory.find((item) => item[a])) {
+      abilities.push(a);
+    }
+  });
+
+  return abilities;
+});
+
 // export const focusEntityAddress = derived([playerCore, entities], ([$playerCore, $entities]) => $entities[$playerCore.carriedBy])

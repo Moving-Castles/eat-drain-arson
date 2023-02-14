@@ -1,28 +1,46 @@
 <script lang="ts">
+  import { onMount, onDestroy } from "svelte";
+  import tippy from "tippy.js";
+  import "tippy.js/dist/tippy.css"; // optional for styling
   import { addressToColor } from "../../utils/ui";
   import { network } from "../../modules/network";
+  import { playerAddress, playerAbilities, playerCore } from "../../modules/player";
+  import type { Entity } from "../../modules/entities";
+  import { Activity } from "../../modules/entities";
 
   export let itemId: string;
-  export let item: any;
-  export let targetBaseEntityId = "";
+  export let item: Entity;
 
-  let text = "";
+  let markerEl: HTMLElement;
+  let dialogEl: HTMLElement;
+  let toolTip: any;
+
+  let info = {
+    symbol: "",
+    description: "",
+  };
+
+  const setInfo = (symbol: string, description: string) => {
+    info.symbol = symbol;
+    info.description = description;
+  };
+
   if (item.core) {
-    text = "*";
+    setInfo("*", itemId === $playerAddress ? "Core (you)" : "Core: " + item.energy + " energy");
   } else if (item.matter) {
-    text = "S";
+    setInfo("S", "Substance block");
   } else if (item.abilityMove) {
-    text = "M";
+    setInfo("M", "Ability: Move");
   } else if (item.abilityConsume) {
-    text = "C";
+    setInfo("C", "Ability: Consume");
   } else if (item.abilityExtract) {
-    text = "E";
+    setInfo("E", "Ability: Extract");
   } else if (item.abilityPlay) {
-    text = "P";
+    setInfo("P", "Ability: Play");
   } else if (item.abilityBurn) {
-    text = "B";
+    setInfo("B", "Ability: Burn");
   } else if (item.untraversable) {
-    text = "X";
+    setInfo("X", "Untraversable");
   }
 
   function drop() {
@@ -30,34 +48,50 @@
   }
 
   function consume() {
-    $network.api.burn(itemId);
-    // $network.api.consume(itemId);
+    $network.api.consume(itemId);
   }
 
-  function transfer() {
-    $network.api.transfer(itemId, targetBaseEntityId);
+  function burn() {
+    $network.api.burn(itemId);
   }
+
+  function play() {
+    $network.api.play();
+  }
+
+  onMount(async () => {
+    toolTip = tippy(markerEl, {
+      content: dialogEl,
+      interactive: true,
+    });
+  });
+
+  onDestroy(() => {
+    if (toolTip) {
+      toolTip.destroy();
+    }
+  });
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div
-  style={"background:" + addressToColor(itemId) + ";"}
-  class="inventory-item"
-  on:click={() => {
-    if (targetBaseEntityId) {
-      transfer();
-    } else {
-      if (item.matter) {
-        consume();
-      } else {
-        drop();
-      }
-    }
-  }}
->
-  <div>
-    {#if item.matter}{item.matter}{:else}{text}{/if}
-  </div>
+<div class="inventory-item" bind:this={markerEl} style={"background:" + addressToColor(itemId) + ";"}>
+  {item.matter ?? info.symbol}
+</div>
+
+<div class="dialog" bind:this={dialogEl}>
+  <div class="description">{info.description}</div>
+  {#if item.abilityPlay}
+    <button on:click={play}>{$playerCore.commit === Activity.Play ? "STOP" : "play"}</button>
+  {/if}
+  {#if item.matter}
+    {#if $playerAbilities.includes("abilityBurn")}
+      <button on:click={burn}>burn</button>
+    {/if}
+    {#if $playerAbilities.includes("abilityConsume")}
+      <button on:click={consume}>consume</button>
+    {/if}
+  {/if}
+  <button on:click={drop}>drop</button>
 </div>
 
 <style>
@@ -77,5 +111,15 @@
 
   .inventory-item:hover {
     opacity: 0.9;
+  }
+
+  .dialog {
+    padding: 10px;
+    text-align: center;
+  }
+
+  .description {
+    font-weight: bold;
+    margin-bottom: 10px;
   }
 </style>

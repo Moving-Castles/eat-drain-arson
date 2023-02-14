@@ -31,14 +31,10 @@
         <div class="coord">x:{$playerBaseEntity.position.x}</div>
         <div class="coord">y:{$playerBaseEntity.position.y}</div>
       </div>
-      <div>
+      <div class="play">
         {#if $playerCore.commit === Activity.Play}
           <div>...P.l.A.y.I.n.G...</div>
           <div><button on:click={play}>STOP</button></div>
-        {:else}
-          <div>
-            <button on:click={play}>PLAY</button>
-          </div>
         {/if}
       </div>
       <hr />
@@ -50,3 +46,11 @@
     {/if}
   {/if}
 </div>
+
+<style>
+  .play {
+    font-size: 24px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+</style>

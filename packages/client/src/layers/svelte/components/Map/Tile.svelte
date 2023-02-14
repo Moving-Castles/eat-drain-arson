@@ -31,7 +31,7 @@
   }}
 >
   <div class="coords">{tile.coordinates.x}:{tile.coordinates.y}</div>
-  <div class="matter">{matter}</div>
+  <div class="matter" class:empty={matter === 0}>{matter}</div>
 
   <!-- BASE ENTITIES -->
   {#each Object.entries($baseEntities) as [baseEntityId, baseEntity] (baseEntityId)}
@@ -43,7 +43,7 @@
   <!-- FREE PORTABLES -->
   {#each Object.entries($freePortables) as [entityId, entity] (entityId)}
     {#if entity.position?.x == tile.coordinates.x && entity.position?.y == tile.coordinates.y}
-      <Item {entityId} {entity} free={true} />
+      <Item itemId={entityId} item={entity} free={true} />
     {/if}
   {/each}
 </div>
@@ -75,5 +75,10 @@
     position: absolute;
     top: 10px;
     left: 10px;
+    font-size: 10px;
+  }
+
+  .empty {
+    color: red;
   }
 </style>

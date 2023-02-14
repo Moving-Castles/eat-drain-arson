@@ -3,7 +3,7 @@
   import { chebyshev } from "../../utils/space";
   import { network } from "../../modules/network";
   import { entities, baseEntities } from "../../modules/entities";
-  import { player, playerCore } from "../../modules/player";
+  import { playerCore, playerAbilities } from "../../modules/player";
 
   export let selectedTileCoords: Coord;
 
@@ -34,10 +34,10 @@
 
 <div class="tile-interact">
   <div class="text">x:{selectedTileCoords.x},y:{selectedTileCoords.y}</div>
-  {#if isAdjacent}
+  {#if $playerAbilities.includes("abilityMove") && isAdjacent}
     <div><button on:click={move}>MOVE</button></div>
   {/if}
-  {#if isSame || isAdjacent}
+  {#if $playerAbilities.includes("abilityExtract") && (isSame || isAdjacent)}
     <div><button on:click={extract}>EXTRACT</button></div>
   {/if}
   <div><button on:click={close}>CLOSE</button></div>
