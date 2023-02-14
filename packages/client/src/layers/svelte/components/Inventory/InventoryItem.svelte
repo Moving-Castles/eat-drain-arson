@@ -3,13 +3,14 @@
   import tippy from "tippy.js";
   import "tippy.js/dist/tippy.css"; // optional for styling
   import { addressToColor } from "../../utils/ui";
-  import { network } from "../../modules/network";
+  import { network, blockNumber } from "../../modules/network";
   import { playerAddress, playerAbilities, playerCore } from "../../modules/player";
   import type { Entity } from "../../modules/entities";
   import { Activity } from "../../modules/entities";
 
   export let itemId: string;
   export let item: Entity;
+  export let targetBaseEntityId: string;
 
   let markerEl: HTMLElement;
   let dialogEl: HTMLElement;
@@ -60,10 +61,12 @@
   }
 
   onMount(async () => {
-    toolTip = tippy(markerEl, {
-      content: dialogEl,
-      interactive: true,
-    });
+    if (!targetBaseEntityId) {
+      toolTip = tippy(markerEl, {
+        content: dialogEl,
+        interactive: true,
+      });
+    }
   });
 
   onDestroy(() => {
@@ -74,28 +77,66 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="inventory-item" bind:this={markerEl} style={"background:" + addressToColor(itemId) + ";"}>
-  {item.matter ?? info.symbol}
+<div
+  class="item"
+  class:burning={item.burnBlock > $blockNumber}
+  class:burnt={item.burnBlock <= $blockNumber}
+  bind:this={markerEl}
+  style={"background:" + addressToColor(itemId) + ";"}
+  on:click={() => {
+    if (targetBaseEntityId) {
+      $network.api.transfer(itemId, targetBaseEntityId);
+    }
+  }}
+>
+  {#if item.matter}
+    {#if item.burnBlock}
+      {#if item.burnBlock > $blockNumber}
+        {item.burnBlock - $blockNumber}
+      {:else}
+        ╳
+      {/if}
+    {:else}
+      {item.matter}
+    {/if}
+  {:else}
+    {info.symbol}
+  {/if}
 </div>
 
-<div class="dialog" bind:this={dialogEl}>
-  <div class="description">{info.description}</div>
-  {#if item.abilityPlay}
-    <button on:click={play}>{$playerCore.commit === Activity.Play ? "STOP" : "play"}</button>
-  {/if}
-  {#if item.matter}
-    {#if $playerAbilities.includes("abilityBurn")}
-      <button on:click={burn}>burn</button>
+{#if !targetBaseEntityId}
+  <div class="dialog" bind:this={dialogEl}>
+    <div class="description">{info.description}</div>
+
+    {#if item.burnBlock}
+      {#if item.burnBlock > $blockNumber}
+        <div class="description">BURNING🔥🔥🔥</div>
+      {:else}
+        <div class="description">ASHES</div>
+      {/if}
     {/if}
-    {#if $playerAbilities.includes("abilityConsume")}
-      <button on:click={consume}>consume</button>
+
+    {#if item.abilityPlay}
+      <button on:click={play}>{$playerCore.commit === Activity.Play ? "STOP" : "play"}</button>
     {/if}
-  {/if}
-  <button on:click={drop}>drop</button>
-</div>
+
+    {#if item.matter}
+      {#if !item.burnBlock}
+        {#if $playerAbilities.includes("abilityBurn")}
+          <button on:click={burn}>burn</button>
+        {/if}
+        {#if $playerAbilities.includes("abilityConsume")}
+          <button on:click={consume}>consume</button>
+        {/if}
+      {/if}
+    {/if}
+
+    <button on:click={drop}>drop</button>
+  </div>
+{/if}
 
 <style>
-  .inventory-item {
+  .item {
     height: 50px;
     width: 50px;
     overflow: hidden;
@@ -109,7 +150,7 @@
     cursor: pointer;
   }
 
-  .inventory-item:hover {
+  .item:hover {
     opacity: 0.9;
   }
 
@@ -121,5 +162,26 @@
   .description {
     font-weight: bold;
     margin-bottom: 10px;
+  }
+
+  /* Define the keyframes */
+  @keyframes color-change {
+    0% {
+      background: red;
+    }
+    50% {
+      background: orangered;
+    }
+    100% {
+      background: red;
+    }
+  }
+
+  .item.burning {
+    animation: color-change 2s ease-in-out infinite;
+  }
+
+  .item.burnt {
+    background: rgb(34, 34, 34) !important;
   }
 </style>

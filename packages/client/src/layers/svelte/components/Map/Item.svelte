@@ -4,7 +4,7 @@
   import "tippy.js/dist/tippy.css"; // optional for styling
   import { addressToColor } from "../../utils/ui";
   import type { Entity } from "../../modules/entities";
-  import { network } from "../../modules/network";
+  import { network, blockNumber } from "../../modules/network";
   import { playerAddress, playerAbilities } from "../../modules/player";
 
   export let itemId: string;
@@ -70,20 +70,44 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="item" bind:this={markerEl} class:free style={"background:" + addressToColor(itemId) + ";"}>
-  {item.matter ?? info.symbol}
+<div
+  class="item"
+  class:burning={item.burnBlock > $blockNumber}
+  class:burnt={item.burnBlock <= $blockNumber}
+  bind:this={markerEl}
+  class:free
+  style={item.burnBlock ? "" : "background:" + addressToColor(itemId) + ";"}
+>
+  {#if item.matter}
+    {#if item.burnBlock}
+      {#if item.burnBlock > $blockNumber}
+        {item.burnBlock - $blockNumber}
+      {:else}
+        ╳
+      {/if}
+    {:else}
+      {item.matter}
+    {/if}
+  {:else}
+    {info.symbol}
+  {/if}
 </div>
 
 {#if free}
   <div class="dialog" bind:this={dialogEl}>
     <div class="description">{info.description}</div>
 
-    {#if item.matter}
-      {#if $playerAbilities.includes("abilityBurn")}
-        <button on:click={burn}>burn</button>
-      {/if}
+    {#if item.burnBlock}
+      <div class="description">BURNING🔥🔥🔥</div>
     {/if}
-    <button on:click={pickUp}>pickup</button>
+
+    {#if item.matter && !item.burnBlock && $playerAbilities.includes("abilityBurn")}
+      <button on:click={burn}>burn</button>
+    {/if}
+
+    {#if !item.burnBlock}
+      <button on:click={pickUp}>pickup</button>
+    {/if}
   </div>
 {/if}
 
@@ -119,5 +143,27 @@
   .description {
     font-weight: bold;
     margin-bottom: 10px;
+  }
+
+  /* Define the keyframes */
+  @keyframes color-change {
+    0% {
+      background: red;
+    }
+    50% {
+      background: orangered;
+    }
+    100% {
+      background: red;
+    }
+  }
+
+  .item.burning {
+    animation: color-change 2s ease-in-out infinite;
+  }
+
+  .item.burnt {
+    background: rgb(34, 34, 34) !important;
+    pointer-events: none;
   }
 </style>

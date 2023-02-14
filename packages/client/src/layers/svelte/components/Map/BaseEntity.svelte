@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Activity, cores } from "../../modules/entities";
   import { chebyshev } from "../../utils/space";
   import { items, baseEntities } from "../../modules/entities";
   import { playerCore } from "../../modules/player";
@@ -15,6 +16,12 @@
   let isPlayer = false;
   let isSame = false;
   let isAdjacent = false;
+
+  let playing = false;
+
+  $: playing = Object.values($cores)
+    .filter((c) => c.carriedBy === baseEntityId)
+    .some((c) => c.commit === Activity.Play);
 
   $: isPlayer = baseEntityId === $playerCore.carriedBy;
   $: isSame =
@@ -43,6 +50,7 @@
 <div
   class="base-entity"
   class:untraversable
+  class:playing
   style={"background:" + addressToColor(baseEntityId) + ";"}
   class:player={isPlayer}
   on:click={() => {
@@ -93,5 +101,21 @@
   .player {
     border: 4px dashed white;
     box-sizing: border-box;
+  }
+
+  /* Define the keyframes */
+  @keyframes color-change {
+    0% {
+      background-color: white;
+    }
+
+    100% {
+      background-color: black;
+    }
+  }
+
+  /* Apply the animation */
+  .playing {
+    animation: color-change 0.1s infinite;
   }
 </style>
