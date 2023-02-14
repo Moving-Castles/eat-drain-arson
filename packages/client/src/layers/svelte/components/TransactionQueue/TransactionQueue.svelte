@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { activeTransactions } from "../../modules/network";
+  import { activeTransactions2 } from "../../modules/network";
   import { shortenAddress } from "../../utils/ui";
 </script>
 
 <div class="ui-transactions">
-  {#each $activeTransactions as tx (tx.hash)}
+  {#each $activeTransactions2 as tx (tx.hash)}
     <div><span class="description">{tx.description}</span> {shortenAddress(tx.hash)}</div>
   {/each}
 </div>

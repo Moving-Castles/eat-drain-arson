@@ -35,6 +35,7 @@ export function tooltip(node: HTMLElement, options: UIToolTipOptions = { class: 
       y: event.pageY + options.offset.y,
     });
   }
+
   function mouseLeave() {
     tooltipComponent.$destroy();
     node.setAttribute("title", title);
