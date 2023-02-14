@@ -4,8 +4,8 @@ import { sample } from "lodash";
 import { writable, get } from "svelte/store";
 import { userSettings } from "../svelte/components/UI";
 
-export const music = writable(new Howl({ src: "" }));
-export const fx = writable(new Howl({ src: "" }));
+export const music = writable(new Howl({ src: [""] }));
+export const fx = writable(new Howl({ src: [""] }));
 
 export function playSound(id: string, category: string, loop = false, fade = false) {
   const settings = get(userSettings);
