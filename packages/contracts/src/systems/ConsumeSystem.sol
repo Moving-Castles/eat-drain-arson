@@ -31,6 +31,9 @@ contract ConsumeSystem is System {
     uint32 abilityCount = LibAbility.checkInventoryForAbility(components, baseEntity, AbilityConsumeComponentID);
     require(abilityCount > 0, "ConsumeSystem: no item with AbilityConsume");
 
+    require(LibSubstanceBlock.isSubstanceBlock(components, _substanceBlockEntity), "ConsumeSystem: not substanceBlock");
+    require(!LibSubstanceBlock.isBurnt(components, _substanceBlockEntity), "ConsumeSystem: burnt");
+
     uint32 energy = LibSubstanceBlock.convertToEnergy(components, _substanceBlockEntity, abilityCount);
     LibCore.increaseEnergy(components, coreEntity, energy);
 

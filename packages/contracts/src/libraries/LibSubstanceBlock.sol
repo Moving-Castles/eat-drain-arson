@@ -8,10 +8,15 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
+import { LibConfig } from "./LibConfig.sol";
+
+import { GameConfig } from "../components/GameConfigComponent.sol";
+
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { MatterComponent, ID as MatterComponentID } from "../components/MatterComponent.sol";
 import { PortableComponent, ID as PortableComponentID } from "../components/PortableComponent.sol";
 import { SubstanceComponent, ID as SubstanceComponentID } from "../components/SubstanceComponent.sol";
+import { BurnBlockComponent, ID as BurnBlockComponentID } from "../components/BurnBlockComponent.sol";
 
 library LibSubstanceBlock {
   /**
@@ -37,7 +42,6 @@ library LibSubstanceBlock {
     matterComponent.set(_substanceBlockEntity, _amount);
     portableComponent.set(_substanceBlockEntity);
     substanceComponent.set(_substanceBlockEntity, 100);
-    // substanceComponent.set(Substance(100, 0));
   }
 
   /**
@@ -57,7 +61,7 @@ library LibSubstanceBlock {
   }
 
   /**
-   * Is entity a substance block
+   * Is entity a substance block?
    *
    * @param _components World components
    * @param _entity entity
@@ -109,5 +113,30 @@ library LibSubstanceBlock {
     uint32 energy = matterComponent.getValue(_substanceBlockEntity);
     // Give more energy if entity has more than one "consume organ"
     return energy * (2 * _abilityCount);
+  }
+
+  /**
+   * Burn a substance block
+   *
+   * @param _components World components
+   * @param _entity Substanceblock entity
+   */
+  function burn(IUint256Component _components, uint256 _entity) internal {
+    MatterComponent matterComponent = MatterComponent(getAddressById(_components, MatterComponentID));
+    BurnBlockComponent burnBlockComponent = BurnBlockComponent(getAddressById(_components, BurnBlockComponentID));
+    GameConfig memory gameConfig = LibConfig.getGameConfig(_components);
+    burnBlockComponent.set(_entity, block.number + (matterComponent.getValue(_entity) * gameConfig.burnTime));
+  }
+
+  /**
+   * Is substance block burning or burnt?
+   *
+   * @param _components World components
+   * @param _entity entity
+   * @return bool is entity burnt?
+   */
+  function isBurnt(IUint256Component _components, uint256 _entity) internal view returns (bool) {
+    BurnBlockComponent burnBlockComponent = BurnBlockComponent(getAddressById(_components, BurnBlockComponentID));
+    return burnBlockComponent.has(_entity);
   }
 }

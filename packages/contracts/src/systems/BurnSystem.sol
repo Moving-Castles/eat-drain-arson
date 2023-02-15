@@ -12,7 +12,6 @@ import { LibInventory } from "../libraries/LibInventory.sol";
 import { LibAbility } from "../libraries/LibAbility.sol";
 import { LibConfig } from "../libraries/LibConfig.sol";
 import { LibSubstanceBlock } from "../libraries/LibSubstanceBlock.sol";
-import { LibBurn } from "../libraries/LibBurn.sol";
 
 import { GameConfig } from "../components/GameConfigComponent.sol";
 import { ID as AbilityBurnComponentID } from "../components/AbilityBurnComponent.sol";
@@ -34,7 +33,9 @@ contract BurnSystem is System {
     require(LibCore.isReady(components, coreEntity), "BurnSystem: core is in cooldown");
     require(!LibCore.isCommitted(components, coreEntity), "BurnSystem: core is committed");
     require(LibCore.checkEnergy(components, coreEntity, gameConfig.burnCost), "BurnSystem: not enough energy");
+
     require(LibSubstanceBlock.isSubstanceBlock(components, _substanceBlockEntity), "BurnSystem: not substanceBlock");
+    require(!LibSubstanceBlock.isBurnt(components, _substanceBlockEntity), "BurnSystem: burnt");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
 
@@ -56,7 +57,7 @@ contract BurnSystem is System {
       );
     }
 
-    LibBurn.burn(components, _substanceBlockEntity);
+    LibSubstanceBlock.burn(components, _substanceBlockEntity);
     LibCore.decreaseEnergy(components, coreEntity, gameConfig.burnCost);
   }
 

@@ -8,6 +8,7 @@ import { addressToEntity } from "solecs/utils.sol";
 import { ComponentDevSystem, ID as ComponentDevSystemID } from "../../systems/ComponentDevSystem.sol";
 import { BurnSystem, ID as BurnSystemID } from "../../systems/BurnSystem.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
+import { ConsumeSystem, ID as ConsumeSystemID } from "../../systems/ConsumeSystem.sol";
 
 import { Coord } from "../../components/PositionComponent.sol";
 
@@ -131,6 +132,83 @@ contract BurnSystemTest is MudTest {
     // Burn it
     vm.expectRevert(bytes("BurnSystem: not adjacent"));
     burnSystem.executeTyped(portableEntity);
+
+    vm.stopPrank();
+  }
+
+  function testRevertDoubleBurn() public {
+    setUp();
+    SpawnSystem spawnSystem = SpawnSystem(system(SpawnSystemID));
+    BurnSystem burnSystem = BurnSystem(system(BurnSystemID));
+
+    vm.startPrank(alice);
+    spawnSystem.executeTyped();
+
+    // Get base entity
+    uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
+    Coord memory initialPosition = positionComponent.getValue(baseEntity);
+
+    vm.roll(2);
+
+    // Create a portable
+    uint256 portableEntity = world.getUniqueEntityId();
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(PortableComponentID, portableEntity, abi.encode(1));
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(MatterComponentID, portableEntity, abi.encode(10));
+
+    // Place on map
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      PositionComponentID,
+      portableEntity,
+      abi.encode(initialPosition)
+    );
+
+    // Burn it
+    burnSystem.executeTyped(portableEntity);
+
+    vm.roll(10);
+
+    // Burn it again
+    vm.expectRevert(bytes("BurnSystem: burnt"));
+    burnSystem.executeTyped(portableEntity);
+
+    vm.stopPrank();
+  }
+
+  function testRevertConsumeBurning() public {
+    setUp();
+    SpawnSystem spawnSystem = SpawnSystem(system(SpawnSystemID));
+    BurnSystem burnSystem = BurnSystem(system(BurnSystemID));
+    ConsumeSystem consumeSystem = ConsumeSystem(system(ConsumeSystemID));
+
+    vm.startPrank(alice);
+    spawnSystem.executeTyped();
+
+    // Get base entity
+    uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
+    Coord memory initialPosition = positionComponent.getValue(baseEntity);
+
+    vm.roll(2);
+
+    // Create a portable
+    uint256 portableEntity = world.getUniqueEntityId();
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(PortableComponentID, portableEntity, abi.encode(1));
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(MatterComponentID, portableEntity, abi.encode(10));
+
+    // Place in inventory
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      CarriedByComponentID,
+      portableEntity,
+      abi.encode(baseEntity)
+    );
+
+    // Burn it
+    burnSystem.executeTyped(portableEntity);
+
+    vm.roll(10);
+
+    // Try to consume
+    vm.expectRevert(bytes("ConsumeSystem: burnt"));
+    consumeSystem.executeTyped(portableEntity);
 
     vm.stopPrank();
   }
