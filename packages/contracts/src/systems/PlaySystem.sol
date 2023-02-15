@@ -30,7 +30,7 @@ contract PlaySystem is System {
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
 
-    uint32 abilityCount = LibAbility.checkInventoryForAbilityNumber(components, baseEntity, AbilityPlayComponentID);
+    uint32 abilityCount = LibAbility.checkInventoryForAbility(components, baseEntity, AbilityPlayComponentID);
     require(abilityCount > 0, "PlaySystem: no item with AbilityPlay");
 
     if (LibCore.isCommitted(components, coreEntity)) {

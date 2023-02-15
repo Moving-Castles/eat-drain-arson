@@ -97,18 +97,18 @@ contract SpawnSystemTest is MudTest {
     uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
 
     // Should be able to move
-    assertTrue(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityMoveComponentID));
+    assertEq(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityMoveComponentID), 1);
 
     // Should be able to consume
-    assertTrue(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityConsumeComponentID));
+    assertEq(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityConsumeComponentID), 1);
 
     // Should be able to extract
-    assertTrue(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityExtractComponentID));
+    assertEq(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityExtractComponentID), 1);
 
     // Should be able to play
-    assertTrue(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityPlayComponentID));
+    assertEq(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityPlayComponentID), 1);
 
     // Should be able to burn
-    assertTrue(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityBurnComponentID));
+    assertEq(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityBurnComponentID), 1);
   }
 }

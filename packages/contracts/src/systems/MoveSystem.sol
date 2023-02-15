@@ -34,7 +34,7 @@ contract MoveSystem is System {
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
 
-    uint32 abilityCount = LibAbility.checkInventoryForAbilityNumber(components, baseEntity, AbilityMoveComponentID);
+    uint32 abilityCount = LibAbility.checkInventoryForAbility(components, baseEntity, AbilityMoveComponentID);
     require(abilityCount > 0, "MoveSystem: no item with AbilityMove");
 
     LibMove.step(components, baseEntity, _targetPosition);

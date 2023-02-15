@@ -38,7 +38,7 @@ contract BurnSystem is System {
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
 
-    uint32 abilityCount = LibAbility.checkInventoryForAbilityNumber(components, baseEntity, AbilityBurnComponentID);
+    uint32 abilityCount = LibAbility.checkInventoryForAbility(components, baseEntity, AbilityBurnComponentID);
     require(abilityCount > 0, "BurnSystem: no item with AbilityBurn");
 
     if (LibMove.hasPosition(components, _substanceBlockEntity)) {

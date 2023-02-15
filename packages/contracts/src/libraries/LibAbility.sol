@@ -54,26 +54,6 @@ library LibAbility {
   }
 
   /**
-   * Check inventory for ability
-   *
-   * @param _components World components
-   * @param _baseEntity Base Entity
-   * @param _componentId AbilityComponent
-   * @return bool does the inventory contain an entity with this ability?
-   */
-  function checkInventoryForAbility(
-    IUint256Component _components,
-    uint256 _baseEntity,
-    uint256 _componentId
-  ) internal view returns (bool) {
-    uint256[] memory inventory = LibInventory.getInventory(_components, _baseEntity);
-    for (uint256 i; i < inventory.length; i++) {
-      if (checkEntityForAbility(_components, inventory[i], _componentId)) return true;
-    }
-    return false;
-  }
-
-  /**
    * Get the number of entities in inventory with the ability
    *
    * @param _components World components
@@ -81,7 +61,7 @@ library LibAbility {
    * @param _componentId AbilityComponent
    * @return number the number of entities in the inventory with this ability
    */
-  function checkInventoryForAbilityNumber(
+  function checkInventoryForAbility(
     IUint256Component _components,
     uint256 _baseEntity,
     uint256 _componentId

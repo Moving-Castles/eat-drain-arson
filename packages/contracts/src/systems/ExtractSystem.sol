@@ -36,7 +36,7 @@ contract ExtractSystem is System {
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
 
-    uint32 abilityCount = LibAbility.checkInventoryForAbilityNumber(components, baseEntity, AbilityExtractComponentID);
+    uint32 abilityCount = LibAbility.checkInventoryForAbility(components, baseEntity, AbilityExtractComponentID);
     require(abilityCount > 0, "ExtractSystem: no item with AbilityExtract");
 
     Coord memory baseEntityPosition = LibMove.getPosition(components, baseEntity);

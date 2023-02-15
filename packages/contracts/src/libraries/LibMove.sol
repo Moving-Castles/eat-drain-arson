@@ -80,7 +80,7 @@ library LibMove {
     uint256[] memory results = LibQuery.query(fragments);
 
     for (uint256 i; i < results.length; i++) {
-      if (LibAbility.checkInventoryForAbility(_components, results[i], UntraversableComponentID)) return true;
+      if (LibAbility.checkInventoryForAbility(_components, results[i], UntraversableComponentID) > 0) return true;
     }
 
     return false;

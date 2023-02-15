@@ -28,7 +28,7 @@ contract ConsumeSystem is System {
 
     require(LibInventory.isCarriedBy(components, _substanceBlockEntity, baseEntity), "ConsumeSystem: not carried");
 
-    uint32 abilityCount = LibAbility.checkInventoryForAbilityNumber(components, baseEntity, AbilityConsumeComponentID);
+    uint32 abilityCount = LibAbility.checkInventoryForAbility(components, baseEntity, AbilityConsumeComponentID);
     require(abilityCount > 0, "ConsumeSystem: no item with AbilityConsume");
 
     uint32 energy = LibSubstanceBlock.convertToEnergy(components, _substanceBlockEntity, abilityCount);
