@@ -98,16 +98,18 @@
     <div class="description">{info.description}</div>
 
     {#if item.burnBlock}
-      <div class="description">BURNING🔥🔥🔥</div>
+      {#if item.burnBlock > $blockNumber}
+        <div class="description">BURNING🔥🔥🔥</div>
+      {:else}
+        <div class="description">ASHES</div>
+      {/if}
     {/if}
 
     {#if item.matter && !item.burnBlock && $playerAbilities.includes("abilityBurn")}
       <button on:click={burn}>burn</button>
     {/if}
 
-    {#if !item.burnBlock}
-      <button on:click={pickUp}>pickup</button>
-    {/if}
+    <button on:click={pickUp}>pickup</button>
   </div>
 {/if}
 
@@ -164,6 +166,5 @@
 
   .item.burnt {
     background: rgb(34, 34, 34) !important;
-    pointer-events: none;
   }
 </style>

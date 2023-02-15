@@ -15,6 +15,7 @@ import { Coord } from "../../components/PositionComponent.sol";
 import { LibResource } from "../../libraries/LibResource.sol";
 import { LibInventory } from "../../libraries/LibInventory.sol";
 import { LibSubstanceBlock } from "../../libraries/LibSubstanceBlock.sol";
+import { LibAbility } from "../../libraries/LibAbility.sol";
 
 contract BurnSystemTest is MudTest {
   function testBurnInInventory() public {
@@ -30,6 +31,20 @@ contract BurnSystemTest is MudTest {
     Coord memory initialPosition = positionComponent.getValue(baseEntity);
 
     vm.roll(2);
+
+    // Place an item allowing Burn in inventory
+    uint256 abilityBurnItem = world.getUniqueEntityId();
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(PortableComponentID, abilityBurnItem, abi.encode(1));
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      AbilityBurnComponentID,
+      abilityBurnItem,
+      abi.encode(1)
+    );
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      CarriedByComponentID,
+      abilityBurnItem,
+      abi.encode(baseEntity)
+    );
 
     // Create a portable
     uint256 portableEntity = world.getUniqueEntityId();
@@ -74,6 +89,20 @@ contract BurnSystemTest is MudTest {
 
     vm.roll(2);
 
+    // Place an item allowing Burn in inventory
+    uint256 abilityBurnItem = world.getUniqueEntityId();
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(PortableComponentID, abilityBurnItem, abi.encode(1));
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      AbilityBurnComponentID,
+      abilityBurnItem,
+      abi.encode(1)
+    );
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      CarriedByComponentID,
+      abilityBurnItem,
+      abi.encode(baseEntity)
+    );
+
     // Create a portable
     uint256 portableEntity = world.getUniqueEntityId();
     ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(PortableComponentID, portableEntity, abi.encode(1));
@@ -117,6 +146,20 @@ contract BurnSystemTest is MudTest {
 
     vm.roll(2);
 
+    // Place an item allowing Burn in inventory
+    uint256 abilityBurnItem = world.getUniqueEntityId();
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(PortableComponentID, abilityBurnItem, abi.encode(1));
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      AbilityBurnComponentID,
+      abilityBurnItem,
+      abi.encode(1)
+    );
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      CarriedByComponentID,
+      abilityBurnItem,
+      abi.encode(baseEntity)
+    );
+
     // Create a portable
     uint256 portableEntity = world.getUniqueEntityId();
     ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(PortableComponentID, portableEntity, abi.encode(1));
@@ -149,6 +192,20 @@ contract BurnSystemTest is MudTest {
     Coord memory initialPosition = positionComponent.getValue(baseEntity);
 
     vm.roll(2);
+
+    // Place an item allowing Burn in inventory
+    uint256 abilityBurnItem = world.getUniqueEntityId();
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(PortableComponentID, abilityBurnItem, abi.encode(1));
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      AbilityBurnComponentID,
+      abilityBurnItem,
+      abi.encode(1)
+    );
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      CarriedByComponentID,
+      abilityBurnItem,
+      abi.encode(baseEntity)
+    );
 
     // Create a portable
     uint256 portableEntity = world.getUniqueEntityId();
@@ -188,6 +245,20 @@ contract BurnSystemTest is MudTest {
     Coord memory initialPosition = positionComponent.getValue(baseEntity);
 
     vm.roll(2);
+
+    // Place an item allowing Burn in inventory
+    uint256 abilityBurnItem = world.getUniqueEntityId();
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(PortableComponentID, abilityBurnItem, abi.encode(1));
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      AbilityBurnComponentID,
+      abilityBurnItem,
+      abi.encode(1)
+    );
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      CarriedByComponentID,
+      abilityBurnItem,
+      abi.encode(baseEntity)
+    );
 
     // Create a portable
     uint256 portableEntity = world.getUniqueEntityId();

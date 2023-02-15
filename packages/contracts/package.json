@@ -42,14 +42,14 @@
     "memmove": "https://github.com/brockelmore/memmove.git#d577ecd1bc43656f4032edf4daa9797f756a8ad2",
     "npm-run-all": "^4.1.5",
     "openzeppelin-solidity": "https://github.com/OpenZeppelin/openzeppelin-contracts.git#57725120581e27ec469e1c7e497a4008aafff818",
-    "prettier": "^2.8.3",
-    "prettier-plugin-solidity": "^1.1.1",
+    "prettier": "^2.8.4",
+    "prettier-plugin-solidity": "^1.1.2",
     "rimraf": "^4.1.2",
     "run-pty": "^4.0.3",
     "solhint": "^3.3.8",
     "ts-node": "^10.9.1",
     "typechain": "^8.1.1",
-    "typescript": "^4.9.4",
+    "typescript": "^4.9.5",
     "wait-on": "^7.0.1"
   },
   "dependencies": {}

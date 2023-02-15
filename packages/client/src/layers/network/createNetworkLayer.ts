@@ -37,8 +37,6 @@ import { transactions, receipts } from "../svelte/modules/network";
  * Its purpose is to synchronize the client components with the contract components.
  */
 export async function createNetworkLayer(config: GameConfig) {
-  console.log("Network config", config);
-
   // --- WORLD ----------------------------------------------------------------------
   const world = createWorld();
 

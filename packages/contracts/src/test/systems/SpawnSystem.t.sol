@@ -80,10 +80,10 @@ contract SpawnSystemTest is MudTest {
     // - AbilityMoveItem
     // - AbilityConsumeItem
     // - AbilityExtractItem
-    // - AbilityPlayItem
-    // - AbilityBurnItem
+    // x AbilityPlayItem
+    // x AbilityBurnItem
     uint256[] memory inventory = LibInventory.getInventory(components, baseEntity);
-    assertEq(inventory.length, 6);
+    assertEq(inventory.length, 4);
   }
 
   function testSpawnAbilities() public {
@@ -106,9 +106,9 @@ contract SpawnSystemTest is MudTest {
     assertEq(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityExtractComponentID), 1);
 
     // Should be able to play
-    assertEq(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityPlayComponentID), 1);
+    // assertEq(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityPlayComponentID), 1);
 
     // Should be able to burn
-    assertEq(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityBurnComponentID), 1);
+    // assertEq(LibAbility.checkInventoryForAbility(components, baseEntity, AbilityBurnComponentID), 1);
   }
 }

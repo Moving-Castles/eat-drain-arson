@@ -14,9 +14,9 @@ struct GameConfig {
   uint32 extractCost;
   uint32 pickUpCost;
   uint32 dropCost;
+  uint32 transferCost;
   uint32 playCost;
   uint32 burnCost;
-  uint32 transferCost;
   uint32 moveCooldown;
   uint32 extractCooldown;
   uint32 burnTime;

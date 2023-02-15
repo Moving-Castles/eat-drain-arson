@@ -1402,7 +1402,7 @@
   dependencies:
     "@protobuf-ts/runtime" "^2.8.2"
 
-"@protobuf-ts/runtime@^2.8.1", "@protobuf-ts/runtime@^2.8.2":
+"@protobuf-ts/runtime@^2.8.2":
   version "2.8.2"
   resolved "https://registry.yarnpkg.com/@protobuf-ts/runtime/-/runtime-2.8.2.tgz#5d5424a6ae7fb846c3f4d0f2dd6448db65bb69d6"
   integrity sha512-PVxsH81y9kEbHldxxG/8Y3z2mTXWQytRl8zNS0mTPUjkEC+8GUX6gj6LsA8EFp25fAs9V0ruh+aNWmPccEI9MA==
@@ -3447,13 +3447,13 @@ dpdm@^3.10.0:
     typescript "^4.9.4"
     yargs "^17.6.2"
 
-"ds-test@git+https://github.com/dapphub/ds-test.git#c9ce3f25bde29fc5eb9901842bf02850dfd2d084":
-  version "1.0.0"
-  resolved "git+https://github.com/dapphub/ds-test.git#c9ce3f25bde29fc5eb9901842bf02850dfd2d084"
-
 "ds-test@https://github.com/dapphub/ds-test.git#c7a36fb236f298e04edf28e2fee385b80f53945f":
   version "0.0.0"
   resolved "https://github.com/dapphub/ds-test.git#c7a36fb236f298e04edf28e2fee385b80f53945f"
+
+"ds-test@https://github.com/dapphub/ds-test.git#c9ce3f25bde29fc5eb9901842bf02850dfd2d084":
+  version "1.0.0"
+  resolved "https://github.com/dapphub/ds-test.git#c9ce3f25bde29fc5eb9901842bf02850dfd2d084"
 
 duplexer@^0.1.1:
   version "0.1.2"
@@ -4392,13 +4392,13 @@ for-each@^0.3.3:
   dependencies:
     is-callable "^1.1.3"
 
-"forge-std@git+https://github.com/foundry-rs/forge-std.git#f36dab24d63d1c1945a05ed375ce341d3c1a49ed":
-  version "0.1.0"
-  resolved "git+https://github.com/foundry-rs/forge-std.git#f36dab24d63d1c1945a05ed375ce341d3c1a49ed"
-
 "forge-std@https://github.com/foundry-rs/forge-std.git#4d36e3f7e2168c8155c641eb0f80e85cd584bd1c":
   version "0.0.0"
   resolved "https://github.com/foundry-rs/forge-std.git#4d36e3f7e2168c8155c641eb0f80e85cd584bd1c"
+
+"forge-std@https://github.com/foundry-rs/forge-std.git#f36dab24d63d1c1945a05ed375ce341d3c1a49ed":
+  version "0.1.0"
+  resolved "https://github.com/foundry-rs/forge-std.git#f36dab24d63d1c1945a05ed375ce341d3c1a49ed"
 
 form-data@^4.0.0:
   version "4.0.0"
@@ -6493,7 +6493,7 @@ mobx-utils@^6.0.5:
   resolved "https://registry.yarnpkg.com/mobx-utils/-/mobx-utils-6.0.5.tgz#0cce9afb07fbba1fb559f959f8cea1f44baa7252"
   integrity sha512-QOduwicYedD4mwYZRl8+c3BalljFDcubg+PUGqBkn8tOuBoj2q7GhjXBP6JXM9J+Zh+2mePK8IoToeLfqr3Z/w==
 
-mobx@^6.7.0:
+mobx@^6.8.0:
   version "6.8.0"
   resolved "https://registry.yarnpkg.com/mobx/-/mobx-6.8.0.tgz#59051755fdb5c8a9f3f2e0a9b6abaf86bab7f843"
   integrity sha512-+o/DrHa4zykFMSKfS8Z+CPSEg5LW9tSNGTuN8o6MF1GKxlfkSHSeJn5UtgxvPkGgaouplnrLXCF+duAsmm6FHQ==
@@ -7457,7 +7457,7 @@ prelude-ls@~1.1.2:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
   integrity sha512-ESF23V4SKG6lVSGZgYNpbsiaAkdab6ZgOxe52p7+Kid3W3u3bxR4Vfd/o21dmN7jSt0IwgZ4v5MUd26FEtXE9w==
 
-prettier-plugin-solidity@^1.1.1:
+prettier-plugin-solidity@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/prettier-plugin-solidity/-/prettier-plugin-solidity-1.1.2.tgz#452be4df925a4b16a974a04235839c9f56c2d10d"
   integrity sha512-KC5oNbFJfyBaFiO0kl56J6AXnDmr9tUlBV1iqo864x4KQrKYKaBZvW9jhT2oC0NHoNp7/GoMJNxqL8pp8k7C/g==
@@ -7471,7 +7471,7 @@ prettier@^1.14.3:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.19.1.tgz#f7d7f5ff8a9cd872a7be4ca142095956a60797cb"
   integrity sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==
 
-prettier@^2.3.1, prettier@^2.8.3, prettier@^2.8.4:
+prettier@^2.3.1, prettier@^2.8.4:
   version "2.8.4"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.4.tgz#34dd2595629bfbb79d344ac4a91ff948694463c3"
   integrity sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==
@@ -8308,9 +8308,9 @@ solidity-comments-extractor@^0.0.7:
   resolved "https://registry.yarnpkg.com/solidity-comments-extractor/-/solidity-comments-extractor-0.0.7.tgz#99d8f1361438f84019795d928b931f4e5c39ca19"
   integrity sha512-wciNMLg/Irp8OKGrh3S2tfvZiZ0NEyILfcRCXCD4mp7SgK/i9gzLfhY2hY7VMCQJ3kH9UB9BzNdibIVMchzyYw==
 
-"solmate@git+https://github.com/Rari-Capital/solmate.git#9cf1428245074e39090dceacb0c28b1f684f584c":
+"solmate@https://github.com/Rari-Capital/solmate.git#9cf1428245074e39090dceacb0c28b1f684f584c":
   version "6.5.0"
-  resolved "git+https://github.com/Rari-Capital/solmate.git#9cf1428245074e39090dceacb0c28b1f684f584c"
+  resolved "https://github.com/Rari-Capital/solmate.git#9cf1428245074e39090dceacb0c28b1f684f584c"
 
 sort-keys@^2.0.0:
   version "2.0.0"

@@ -8,14 +8,12 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
-import { LibAbility } from "../libraries/LibAbility.sol";
 import { LibMap } from "../libraries/LibMap.sol";
 import { LibConfig } from "../libraries/LibConfig.sol";
+
 import { GameConfig } from "../components/GameConfigComponent.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
-import { AbilityMoveComponent, ID as AbilityMoveComponentID } from "../components/AbilityMoveComponent.sol";
-import { UntraversableComponent, ID as UntraversableComponentID } from "../components/UntraversableComponent.sol";
 
 library LibMove {
   /**
@@ -66,40 +64,6 @@ library LibMove {
   }
 
   /**
-   * Check if position is untraversable
-   *
-   * @param _components World components
-   * @param _coordinates position
-   * @return bool is untraversable?
-   */
-  function isUntraversable(IUint256Component _components, Coord memory _coordinates) internal view returns (bool) {
-    PositionComponent positionComponent = PositionComponent(getAddressById(_components, PositionComponentID));
-
-    QueryFragment[] memory fragments = new QueryFragment[](1);
-    fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(_coordinates));
-    uint256[] memory results = LibQuery.query(fragments);
-
-    for (uint256 i; i < results.length; i++) {
-      if (LibAbility.checkInventoryForAbility(_components, results[i], UntraversableComponentID) > 0) return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * Make untraversable
-   *
-   * @param _components World components
-   * @param _entity entity
-   */
-  function makeUntraversable(IUint256Component _components, uint256 _entity) internal {
-    UntraversableComponent untraversableComponent = UntraversableComponent(
-      getAddressById(_components, UntraversableComponentID)
-    );
-    untraversableComponent.set(_entity);
-  }
-
-  /**
    * Move one step
    *
    * @param _components World components
@@ -112,7 +76,7 @@ library LibMove {
 
     require(LibMap.isWithinBounds(_components, _targetPosition), "LibMove: out of bounds");
     require(LibMap.isAdjacent(currentPosition, _targetPosition), "LibMove: not adjacent");
-    require(!isUntraversable(_components, _targetPosition), "LibMove: untraversable");
+    require(!LibMap.isUntraversable(_components, _targetPosition), "LibMove: untraversable");
 
     positionComponent.set(_entity, _targetPosition);
   }

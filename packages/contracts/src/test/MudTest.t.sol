@@ -28,6 +28,8 @@ import { UntraversableComponent, ID as UntraversableComponentID } from "../compo
 import { AbilityMoveComponent, ID as AbilityMoveComponentID } from "../components/AbilityMoveComponent.sol";
 import { AbilityExtractComponent, ID as AbilityExtractComponentID } from "../components/AbilityExtractComponent.sol";
 import { AbilityConsumeComponent, ID as AbilityConsumeComponentID } from "../components/AbilityConsumeComponent.sol";
+import { AbilityPlayComponent, ID as AbilityPlayComponentID } from "../components/AbilityPlayComponent.sol";
+import { AbilityBurnComponent, ID as AbilityBurnComponentID } from "../components/AbilityBurnComponent.sol";
 import { CommitComponent, ID as CommitComponentID } from "../components/CommitComponent.sol";
 import { BurnBlockComponent, ID as BurnBlockComponentID } from "../components/BurnBlockComponent.sol";
 

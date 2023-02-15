@@ -5,6 +5,7 @@
   import UIMenu from "./components/UI/UIMenu.svelte";
   import { createComponentSystem, createLoadingStateSystem } from "./systems";
   import { network as networkStore, blockNumber, transactions, executedTransactions } from "./modules/network";
+  import { playerCore } from "./modules/player";
 
   onMount(async () => {
     const layers = await bootGame();
@@ -40,8 +41,9 @@
   });
 </script>
 
-<UIMenu />
-
+{#if $playerCore}
+  <UIMenu />
+{/if}
 <main>
   <UIContainer />
 </main>

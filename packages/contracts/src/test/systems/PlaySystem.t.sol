@@ -11,7 +11,6 @@ import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol"
 import { MoveSystem, ID as MoveSystemID } from "../../systems/MoveSystem.sol";
 
 import { Coord } from "../../components/PositionComponent.sol";
-
 import { Activity } from "../../utils/constants.sol";
 
 import { LibResource } from "../../libraries/LibResource.sol";
@@ -29,6 +28,20 @@ contract PlaySystemTest is MudTest {
 
     uint256 baseEntity = carriedByComponent.getValue(addressToEntity(alice));
     Coord memory initialPosition = positionComponent.getValue(baseEntity);
+
+    // Place an item allowing Play in inventory
+    uint256 abilityPlayItem = world.getUniqueEntityId();
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(PortableComponentID, abilityPlayItem, abi.encode(1));
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      AbilityPlayComponentID,
+      abilityPlayItem,
+      abi.encode(1)
+    );
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      CarriedByComponentID,
+      abilityPlayItem,
+      abi.encode(baseEntity)
+    );
 
     vm.roll(2);
 
