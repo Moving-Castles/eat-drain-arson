@@ -26,7 +26,7 @@
     event.data.text().then((txt: string) => {
       let msgObj = JSON.parse(txt);
       if (msgObj.channel === $playerCore.carriedBy) {
-        messages = [...messages, { id: msgObj.id, channel: msgObj.channel, text: msgObj.text }];
+        messages = [{ id: msgObj.id, channel: msgObj.channel, text: msgObj.text }, ...messages];
       }
     });
   });
@@ -71,13 +71,17 @@
 <style>
   .debug-chat {
     position: fixed;
-    bottom: 30px;
-    left: 30px;
+    bottom: 40px;
+    left: 40px;
     padding: 10px;
     background: lightgray;
     border-radius: 5px;
     color: black;
     z-index: 1000000;
+    width: 300px;
+    max-width: 90vw;
+    max-height: 70vh;
+    overflow-y: auto;
   }
 
   .type {
