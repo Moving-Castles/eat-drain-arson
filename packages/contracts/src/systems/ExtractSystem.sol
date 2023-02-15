@@ -6,7 +6,6 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
 import { LibMove } from "../libraries/LibMove.sol";
 import { LibCore } from "../libraries/LibCore.sol";
-import { LibCooldown } from "../libraries/LibCooldown.sol";
 import { LibMap } from "../libraries/LibMap.sol";
 import { LibResource } from "../libraries/LibResource.sol";
 import { LibSubstanceBlock } from "../libraries/LibSubstanceBlock.sol";
@@ -31,50 +30,52 @@ contract ExtractSystem is System {
     GameConfig memory gameConfig = LibConfig.getGameConfig(components);
 
     require(LibCore.isSpawned(components, coreEntity), "ExtractSystem: entity does not exist");
-    require(LibCooldown.isReady(components, coreEntity), "ExtractSystem: entity is in cooldown");
+    require(LibCore.isReady(components, coreEntity), "ExtractSystem: entity is in cooldown");
+    require(!LibCore.isCommitted(components, coreEntity), "ExtractSystem: entity is committed");
     require(LibCore.checkEnergy(components, coreEntity, gameConfig.extractCost), "ExtractSystem: not enough energy");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
 
-    require(
-      LibAbility.checkInventoryForAbility(components, baseEntity, AbilityExtractComponentID),
-      "ExtractSystem: no item with AbilityExtract"
-    );
+    uint32 abilityCount = LibAbility.checkInventoryForAbility(components, baseEntity, AbilityExtractComponentID);
+    require(abilityCount > 0, "ExtractSystem: no item with AbilityExtract");
 
     Coord memory baseEntityPosition = LibMove.getPosition(components, baseEntity);
     require(LibMap.isAdjacent(baseEntityPosition, _extractionCoordinates), "ExtractSystem: tile not adjacent");
 
     /*
      * If there is a Resource entity:
-     * – check that there is at least EXTRACT_COST matter
-     * – decrease the matter balance of the resource block by EXTRACT_COST
-     * – create substanceblock with  EXTRACT_COST matter
+     * – subtract the amount of matter in the resource
+     * – create a new substance block with the same amount of matter
      *
      * If there is not (meaning the coordinates have not been extracted):
-     * – create resource with MATTER_PER_TILE - EXTRACT_COST matter
-     * – create substanceblock with  EXTRACT_COST matter
+     * – create resource with the default amount of matter per tile - the requested amount
+     * – create a new substance block with the same amount of matter
      */
 
     uint256 resourceEntity = LibResource.getAtCoordinate(components, _extractionCoordinates);
 
+    // Extract 10 more for each extra "extract organ", capped at default amount per tile
+    uint32 matterToExtract = gameConfig.extractCost + (10 * (abilityCount - 1));
+    matterToExtract = matterToExtract > gameConfig.matterPerTile ? gameConfig.matterPerTile : matterToExtract;
+
     if (resourceEntity != 0) {
-      require(
-        LibResource.checkMatter(components, resourceEntity, gameConfig.extractCost),
-        "ExtractSystem: not enough matter"
-      );
-      LibResource.decreaseMatter(components, resourceEntity, gameConfig.extractCost);
-      LibSubstanceBlock.create(components, world.getUniqueEntityId(), _extractionCoordinates, gameConfig.extractCost);
+      uint32 matterInResource = LibResource.getMatter(components, resourceEntity);
+      require(matterInResource > 0, "ExtractSystem: tile is empty");
+      // Limit extraction to amount available in resource
+      matterToExtract = matterToExtract > matterInResource ? matterInResource : matterToExtract;
+      LibResource.decreaseMatter(components, resourceEntity, matterToExtract);
+      LibSubstanceBlock.create(components, world.getUniqueEntityId(), _extractionCoordinates, matterToExtract);
     } else {
       LibResource.create(
         components,
         world.getUniqueEntityId(),
         _extractionCoordinates,
-        gameConfig.matterPerTile - gameConfig.extractCost
+        gameConfig.matterPerTile - matterToExtract
       );
-      LibSubstanceBlock.create(components, world.getUniqueEntityId(), _extractionCoordinates, gameConfig.extractCost);
+      LibSubstanceBlock.create(components, world.getUniqueEntityId(), _extractionCoordinates, matterToExtract);
     }
 
-    LibCooldown.setReadyBlock(components, coreEntity, gameConfig.extractCost);
+    LibCore.setReadyBlock(components, coreEntity, gameConfig.extractCooldown);
     LibCore.decreaseEnergy(components, coreEntity, gameConfig.extractCost);
   }
 

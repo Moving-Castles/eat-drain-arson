@@ -8,7 +8,7 @@ export function defineAbilityMoveComponent(world: World) {
       value: Type.Boolean,
     },
     {
-      id: "Portable",
+      id: "AbilityMove",
       metadata: { contractId: "component.AbilityMove" },
     }
   );

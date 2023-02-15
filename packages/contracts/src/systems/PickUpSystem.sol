@@ -6,7 +6,6 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
 import { LibMove } from "../libraries/LibMove.sol";
 import { LibCore } from "../libraries/LibCore.sol";
-import { LibCooldown } from "../libraries/LibCooldown.sol";
 import { LibMap } from "../libraries/LibMap.sol";
 import { LibInventory } from "../libraries/LibInventory.sol";
 import { LibConfig } from "../libraries/LibConfig.sol";
@@ -26,8 +25,10 @@ contract PickUpSystem is System {
     GameConfig memory gameConfig = LibConfig.getGameConfig(components);
 
     require(LibCore.isSpawned(components, coreEntity), "PickUpSystem: entity does not exist");
-    require(LibCooldown.isReady(components, coreEntity), "PickUpSystem: entity is in cooldown");
-    require(LibCore.checkEnergy(components, coreEntity, gameConfig.transferCost), "PickUpSystem: not enough energy");
+    require(LibCore.isReady(components, coreEntity), "PickUpSystem: entity is in cooldown");
+    require(!LibCore.isCommitted(components, coreEntity), "PickUpSystem: entity is committed");
+    require(LibCore.checkEnergy(components, coreEntity, gameConfig.pickUpCost), "PickUpSystem: not enough energy");
+
     require(LibInventory.isPortable(components, _portableEntity), "PickUpSystem: entity is not portable");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
@@ -39,7 +40,7 @@ contract PickUpSystem is System {
     LibMove.removePosition(components, _portableEntity);
     LibInventory.addToInventory(components, baseEntity, _portableEntity);
 
-    LibCore.decreaseEnergy(components, coreEntity, gameConfig.transferCost);
+    LibCore.decreaseEnergy(components, coreEntity, gameConfig.pickUpCost);
   }
 
   function executeTyped(uint256 _portableEntity) public returns (bytes memory) {

@@ -10,7 +10,6 @@ import { PickUpSystem, ID as PickUpSystemID } from "../../systems/PickUpSystem.s
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 
 import { Coord } from "../../components/PositionComponent.sol";
-import { Direction } from "../../utils/constants.sol";
 
 import { LibResource } from "../../libraries/LibResource.sol";
 import { LibSubstanceBlock } from "../../libraries/LibSubstanceBlock.sol";
@@ -49,8 +48,8 @@ contract PickUpSystemTest is MudTest {
     // portableEntity should have no position
     assertTrue(!positionComponent.has(portableEntity));
 
-    // Core energy should be INITAL_ENERGY - TRANSFER_COST
-    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.transferCost);
+    // Core energy should be INITAL_ENERGY - PICKUP_COST
+    assertEq(energyComponent.getValue(addressToEntity(alice)), gameConfig.initialEnergy - gameConfig.pickUpCost);
 
     vm.stopPrank();
   }

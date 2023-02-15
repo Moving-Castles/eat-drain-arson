@@ -1,1 +1,0 @@
-export { fire } from "./fire";

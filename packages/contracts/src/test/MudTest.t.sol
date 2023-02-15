@@ -24,6 +24,14 @@ import { CarryingCapacityComponent, ID as CarryingCapacityComponentID } from "..
 import { CoreComponent, ID as CoreComponentID } from "../components/CoreComponent.sol";
 import { CarriedByComponent, ID as CarriedByComponentID } from "../components/CarriedByComponent.sol";
 import { MatterComponent, ID as MatterComponentID } from "../components/MatterComponent.sol";
+import { UntraversableComponent, ID as UntraversableComponentID } from "../components/UntraversableComponent.sol";
+import { AbilityMoveComponent, ID as AbilityMoveComponentID } from "../components/AbilityMoveComponent.sol";
+import { AbilityExtractComponent, ID as AbilityExtractComponentID } from "../components/AbilityExtractComponent.sol";
+import { AbilityConsumeComponent, ID as AbilityConsumeComponentID } from "../components/AbilityConsumeComponent.sol";
+import { AbilityPlayComponent, ID as AbilityPlayComponentID } from "../components/AbilityPlayComponent.sol";
+import { AbilityBurnComponent, ID as AbilityBurnComponentID } from "../components/AbilityBurnComponent.sol";
+import { CommitComponent, ID as CommitComponentID } from "../components/CommitComponent.sol";
+import { BurnBlockComponent, ID as BurnBlockComponentID } from "../components/BurnBlockComponent.sol";
 
 contract MudTest is DSTest {
   Cheats internal immutable vm = Cheats(HEVM_ADDRESS);
@@ -50,6 +58,9 @@ contract MudTest is DSTest {
   CoreComponent coreComponent;
   CarriedByComponent carriedByComponent;
   MatterComponent matterComponent;
+  UntraversableComponent untraversableComponent;
+  CommitComponent commitComponent;
+  BurnBlockComponent burnBlockComponent;
 
   function component(uint256 id) public view returns (address) {
     return getAddressById(components, id);
@@ -78,6 +89,9 @@ contract MudTest is DSTest {
     coreComponent = CoreComponent(getAddressById(components, CoreComponentID));
     carriedByComponent = CarriedByComponent(getAddressById(components, CarriedByComponentID));
     matterComponent = MatterComponent(getAddressById(components, MatterComponentID));
+    untraversableComponent = UntraversableComponent(getAddressById(components, UntraversableComponentID));
+    commitComponent = CommitComponent(getAddressById(components, CommitComponentID));
+    burnBlockComponent = BurnBlockComponent(getAddressById(components, BurnBlockComponentID));
 
     gameConfig = LibConfig.getGameConfig(components);
   }

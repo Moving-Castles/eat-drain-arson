@@ -1,6 +1,8 @@
 {
   "components": [
+    "GameConfigComponent",
     "CoreComponent",
+    "CommitComponent",
     "PositionComponent",
     "EnergyComponent",
     "CreationBlockComponent",
@@ -13,8 +15,10 @@
     "AbilityMoveComponent",
     "AbilityConsumeComponent",
     "AbilityExtractComponent",
-    "GameConfigComponent",
-    "UntraversableComponent"
+    "AbilityPlayComponent",
+    "AbilityBurnComponent",
+    "UntraversableComponent",
+    "BurnBlockComponent"
   ],
   "systems": [
     {
@@ -45,7 +49,11 @@
         "AbilityMoveComponent",
         "AbilityConsumeComponent",
         "AbilityExtractComponent",
-        "UntraversableComponent"
+        "AbilityPlayComponent",
+        "UntraversableComponent",
+        "MatterComponent",
+        "CommitComponent",
+        "AbilityBurnComponent"
       ]
     },
     {
@@ -104,20 +112,7 @@
       ]
     },
     {
-      "name": "TakeSystem",
-      "writeAccess": [
-        "GameConfigComponent",
-        "CoreComponent",
-        "PositionComponent",
-        "EnergyComponent",
-        "ReadyBlockComponent",
-        "CarriedByComponent",
-        "PortableComponent",
-        "CarryingCapacityComponent"
-      ]
-    },
-    {
-      "name": "GiveSystem",
+      "name": "TransferSystem",
       "writeAccess": [
         "GameConfigComponent",
         "CoreComponent",
@@ -142,6 +137,31 @@
         "SubstanceComponent",
         "MatterComponent",
         "AbilityConsumeComponent"
+      ]
+    },
+    {
+      "name": "PlaySystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "AbilityPlayComponent",
+        "CommitComponent"
+      ]
+    },
+    {
+      "name": "BurnSystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "AbilityBurnComponent",
+        "CommitComponent",
+        "BurnBlockComponent"
       ]
     }
   ]

@@ -5,7 +5,6 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
 import { LibCore } from "../libraries/LibCore.sol";
-import { LibCooldown } from "../libraries/LibCooldown.sol";
 import { LibInventory } from "../libraries/LibInventory.sol";
 import { LibSubstanceBlock } from "../libraries/LibSubstanceBlock.sol";
 import { LibAbility } from "../libraries/LibAbility.sol";
@@ -22,18 +21,20 @@ contract ConsumeSystem is System {
     uint256 coreEntity = addressToEntity(msg.sender);
 
     require(LibCore.isSpawned(components, coreEntity), "ConsumeSystem: entity does not exist");
-    require(LibCooldown.isReady(components, coreEntity), "ConsumeSystem: entity is in cooldown");
+    require(LibCore.isReady(components, coreEntity), "ConsumeSystem: entity is in cooldown");
+    require(!LibCore.isCommitted(components, coreEntity), "ConsumeSystem: entity is committed");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
 
-    require(
-      LibAbility.checkInventoryForAbility(components, baseEntity, AbilityConsumeComponentID),
-      "ConsumeSystem: no item with AbilityConsume"
-    );
-
     require(LibInventory.isCarriedBy(components, _substanceBlockEntity, baseEntity), "ConsumeSystem: not carried");
 
-    uint32 energy = LibSubstanceBlock.convertToEnergy(components, _substanceBlockEntity);
+    uint32 abilityCount = LibAbility.checkInventoryForAbility(components, baseEntity, AbilityConsumeComponentID);
+    require(abilityCount > 0, "ConsumeSystem: no item with AbilityConsume");
+
+    require(LibSubstanceBlock.isSubstanceBlock(components, _substanceBlockEntity), "ConsumeSystem: not substanceBlock");
+    require(!LibSubstanceBlock.isBurnt(components, _substanceBlockEntity), "ConsumeSystem: burnt");
+
+    uint32 energy = LibSubstanceBlock.convertToEnergy(components, _substanceBlockEntity, abilityCount);
     LibCore.increaseEnergy(components, coreEntity, energy);
 
     LibInventory.removeFromInventory(components, _substanceBlockEntity);

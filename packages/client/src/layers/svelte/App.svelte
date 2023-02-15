@@ -1,71 +1,49 @@
 <script lang="ts">
-  import { startEnvironmentSoundSystem, startMelodySoundSystem, startHarmonySoundSystem } from "../howler";
   import { onMount } from "svelte";
   import { bootGame } from "./boot";
-  import UIContainer from "./lib/UIContainer.svelte";
-  import UIMenu from "./lib/UIMenu.svelte";
-  import {
-    createLoadingStateSystem,
-    createPositionSystem,
-    createCreationBlockSystem,
-    createEnergySystem,
-    createMatterSystem,
-    createReadyBlockSystem,
-    createCoreSystem,
-    createCarriedBySystem,
-    createPortableSystem,
-    createCarryingCapacitySystem,
-    createAbilityMoveSystem,
-    createAbilityConsumeSystem,
-    createAbilityExtractSystem,
-    createUntraversableSystem,
-    createGameConfigSystem,
-  } from "./systems";
-  import { network as networkStore, blockNumber, startBlock } from "./modules/network";
+  import UIContainer from "./components/UI/UIContainer.svelte";
+  import UIMenu from "./components/UI/UIMenu.svelte";
+  import { createComponentSystem, createLoadingStateSystem } from "./systems";
+  import { network as networkStore, blockNumber, transactions, executedTransactions } from "./modules/network";
+  import { playerCore } from "./modules/player";
 
   onMount(async () => {
     const layers = await bootGame();
 
-    // ---- Systems
-    createLoadingStateSystem(layers.network);
-    createPositionSystem(layers.network);
-    createCreationBlockSystem(layers.network);
-    createReadyBlockSystem(layers.network);
-    createEnergySystem(layers.network);
-    createMatterSystem(layers.network);
-    createPortableSystem(layers.network);
-    createCarryingCapacitySystem(layers.network);
-    createCarriedBySystem(layers.network);
-    createCoreSystem(layers.network);
-    createAbilityMoveSystem(layers.network);
-    createAbilityConsumeSystem(layers.network);
-    createAbilityExtractSystem(layers.network);
-    createUntraversableSystem(layers.network);
-    createGameConfigSystem(layers.network);
-
     networkStore.set(layers.network);
 
-    layers.network.txReduced$.subscribe((tx) => {
-      console.log("TX:", tx);
-      // transactions.update((ts) => [tx, ...ts]);
-    });
+    // Create systems to listen to component changes
+    for (const componentKey of Object.keys(layers.network.components)) {
+      if (componentKey === "LoadingState") {
+        createLoadingStateSystem(layers.network);
+      } else {
+        createComponentSystem(layers.network, componentKey);
+      }
+    }
 
-    // startEnvironmentSoundSystem();
-    // startMelodySoundSystem();
-    // startHarmonySoundSystem();
+    const EXCLUDED_SYSTEMS = ["system.ComponentDev", "system.Init", "system.Spawn"];
+
+    // Listen to all system call streams
+    for (const [key, value] of Object.entries(layers.network.systemCallStreams)) {
+      if (!EXCLUDED_SYSTEMS.includes(key)) {
+        value.subscribe((systemCall) => {
+          // If local, mark transaction as executed
+          if ($transactions.find((t) => t.hash === systemCall.tx.hash)) {
+            executedTransactions.update((value) => [...value, systemCall.tx.hash]);
+          }
+        });
+      }
+    }
 
     layers.network.network.blockNumber$.subscribe((x) => {
-      // console.log(x);
       blockNumber.set(x);
-      if ($startBlock == 0) {
-        startBlock.set(x);
-      }
     });
   });
 </script>
 
-<UIMenu />
-
+{#if $playerCore}
+  <UIMenu />
+{/if}
 <main>
   <UIContainer />
 </main>

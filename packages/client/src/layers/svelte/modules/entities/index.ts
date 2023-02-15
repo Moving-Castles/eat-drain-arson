@@ -5,6 +5,10 @@ import { network } from "../network";
 
 // --- TYPES -----------------------------------------------------------------
 
+export enum Activity {
+  Play,
+}
+
 export type GameConfig = {
   worldHeight: number;
   worldWidth: number;
@@ -13,7 +17,14 @@ export type GameConfig = {
   defaultCarryingCapacity: number;
   moveCost: number;
   extractCost: number;
+  pickUpCost: number;
+  dropCost: number;
   transferCost: number;
+  playCost: number;
+  burnCost: number;
+  moveCooldown: number;
+  extractCooldown: number;
+  burntime: number;
 };
 
 export type Entity = {
@@ -26,16 +37,21 @@ export type Entity = {
   portable?: boolean;
   carryingCapacity?: number;
   core?: boolean;
+  commit?: Activity;
   carriedBy?: string;
   inventory?: string[];
   abilityMove?: boolean;
   abilityConsume?: boolean;
   abilityExtract?: boolean;
   untraversable?: boolean;
+  abilityPlay?: boolean;
+  abilityBurn?: boolean;
+  burnBlock?: number;
 };
 
 export type Core = {
   core: true;
+  commit?: Activity;
   portable: true;
   creationBlock: number;
   readyBlock: number;
@@ -60,15 +76,20 @@ export type SubstanceBlock = {
   portable: true;
   position?: Coord;
   carriedBy?: string;
+  burnBlock?: number;
 };
 
 export type Item = {
   portable: true;
+  matter?: number;
   position?: Coord;
   carriedBy?: string;
   abilityMove?: boolean;
   abilityConsume?: boolean;
   abilityExtract?: boolean;
+  abilityPlay?: boolean;
+  abilityBurn?: boolean;
+  untraversable?: boolean;
 };
 
 export type Untraversable = {
@@ -84,6 +105,8 @@ export type FreePortable = {
   abilityMove?: boolean;
   abilityConsume?: boolean;
   abilityExtract?: boolean;
+  abilityPlay?: boolean;
+  abilityBurn?: boolean;
 };
 
 // - - - -
@@ -124,6 +147,10 @@ export type FreePortables = {
 
 export const entities = writable({} as Entities);
 
+export const gameConfig = derived(entities, ($entities) => {
+  return $entities["0x6a1a"].gameConfig;
+});
+
 export const cores = derived(entities, ($entities) => {
   return Object.fromEntries(Object.entries($entities).filter(([key, entity]) => entity.core)) as Cores;
 });
@@ -137,13 +164,17 @@ export const baseEntities = derived(entities, ($entities) => {
 
 export const resources = derived(entities, ($entities) => {
   return Object.fromEntries(
-    Object.entries($entities).filter(([key, entity]) => entity.matter && !entity.portable)
+    Object.entries($entities).filter(
+      ([key, entity]) => Object.prototype.hasOwnProperty.call(entity, "matter") && !entity.portable
+    )
   ) as Resources;
 });
 
 export const substanceBlocks = derived(entities, ($entities) => {
   return Object.fromEntries(
-    Object.entries($entities).filter(([key, entity]) => entity.matter && entity.portable)
+    Object.entries($entities).filter(
+      ([key, entity]) => Object.prototype.hasOwnProperty.call(entity, "matter") && entity.portable
+    )
   ) as SubstanceBlocks;
 });
 

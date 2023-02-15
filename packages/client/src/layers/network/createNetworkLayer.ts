@@ -6,9 +6,9 @@ import { createActionSystem, setupMUDNetwork } from "@latticexyz/std-client";
 import { createFaucetService } from "@latticexyz/network";
 import {
   defineLoadingStateComponent,
+  defineGameConfigComponent,
   defineCreationBlockComponent,
   defineEnergyComponent,
-  defineExpirationBlockComponent,
   defineMatterComponent,
   definePortableComponent,
   definePositionComponent,
@@ -19,21 +19,24 @@ import {
   defineAbilityMoveComponent,
   defineAbilityConsumeComponent,
   defineAbilityExtractComponent,
-  defineGameConfigComponent,
+  defineAbilityPlayComponent,
+  defineAbilityBurnComponent,
   defineUntraversableComponent,
+  defineCommitComponent,
+  defineBurnBlockComponent,
 } from "./components";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { getNetworkConfig } from "./config";
 import { utils } from "ethers";
 import type { Coord } from "@latticexyz/utils";
+import type { ContractReceipt, ContractTransaction } from "ethers";
+import { transactions, receipts } from "../svelte/modules/network";
 
 /**
  * The Network layer is the lowest layer in the client architecture.
  * Its purpose is to synchronize the client components with the contract components.
  */
 export async function createNetworkLayer(config: GameConfig) {
-  console.log("Network config", config);
-
   // --- WORLD ----------------------------------------------------------------------
   const world = createWorld();
 
@@ -45,8 +48,8 @@ export async function createNetworkLayer(config: GameConfig) {
     Energy: defineEnergyComponent(world),
     Matter: defineMatterComponent(world),
     CreationBlock: defineCreationBlockComponent(world),
-    ExpirationBlock: defineExpirationBlockComponent(world),
     ReadyBlock: defineReadyBlockComponent(world),
+    BurnBlock: defineBurnBlockComponent(world),
     Portable: definePortableComponent(world),
     CarryingCapacity: defineCarryingCapacityComponent(world),
     CarriedBy: defineCarriedByComponent(world),
@@ -54,14 +57,17 @@ export async function createNetworkLayer(config: GameConfig) {
     AbilityMove: defineAbilityMoveComponent(world),
     AbilityConsume: defineAbilityConsumeComponent(world),
     AbilityExtract: defineAbilityExtractComponent(world),
+    AbilityPlay: defineAbilityPlayComponent(world),
+    AbilityBurn: defineAbilityBurnComponent(world),
     Untraversable: defineUntraversableComponent(world),
+    Commit: defineCommitComponent(world),
   };
 
   // --- SETUP ----------------------------------------------------------------------
-  const { txQueue, systems, txReduced$, network, startSync, encoders } = await setupMUDNetwork<
+  const { txQueue, systems, txReduced$, network, startSync, encoders, systemCallStreams } = await setupMUDNetwork<
     typeof components,
     SystemTypes
-  >(getNetworkConfig(config), world, components, SystemAbis);
+  >(getNetworkConfig(config), world, components, SystemAbis, { fetchSystemCalls: true });
 
   // Faucet setup
   const faucet = config.faucetServiceUrl ? createFaucetService(config.faucetServiceUrl) : undefined;
@@ -85,41 +91,83 @@ export async function createNetworkLayer(config: GameConfig) {
   const actions = createActionSystem(world, txReduced$);
 
   // --- API ------------------------------------------------------------------------
-  function spawn() {
-    systems["system.Spawn"].executeTyped();
+
+  async function addToTxLog(tx: ContractTransaction, description: string) {
+    transactions.update((value) => [...value, { hash: tx.hash, description: description }]);
+    const receipt: ContractReceipt = await tx.wait();
+    receipts.update((value) => [...value, receipt]);
   }
 
-  function move(direction: number) {
+  function spawn() {
     try {
-      return systems["system.Move"].executeTyped(direction);
+      systems["system.Spawn"].executeTyped();
     } catch (e) {
-      console.log("catch");
-      console.log(e);
+      window.alert(e);
     }
   }
 
-  function extract(extractionCoordinates: Coord) {
-    return systems["system.Extract"].executeTyped(extractionCoordinates);
+  async function move(targetPosition: Coord) {
+    try {
+      addToTxLog(await systems["system.Move"].executeTyped(targetPosition), "move");
+    } catch (e) {
+      window.alert(e);
+    }
   }
 
-  function pickUp(portableEntity: string) {
-    return systems["system.PickUp"].executeTyped(portableEntity);
+  async function extract(extractionCoordinates: Coord) {
+    try {
+      addToTxLog(await systems["system.Extract"].executeTyped(extractionCoordinates), "extract");
+    } catch (e) {
+      window.alert(e);
+    }
   }
 
-  function drop(portableEntity: string) {
-    return systems["system.Drop"].executeTyped(portableEntity);
+  async function pickUp(portableEntity: string) {
+    try {
+      addToTxLog(await systems["system.PickUp"].executeTyped(portableEntity), "pickUp");
+    } catch (e) {
+      window.alert(e);
+    }
   }
 
-  function take(portableEntity: string) {
-    return systems["system.Take"].executeTyped(portableEntity);
+  async function drop(portableEntity: string) {
+    try {
+      addToTxLog(await systems["system.Drop"].executeTyped(portableEntity), "drop");
+    } catch (e) {
+      window.alert(e);
+    }
   }
 
-  function give(portableEntity: string, targetBaseEntity: string) {
-    return systems["system.Give"].executeTyped(portableEntity, targetBaseEntity);
+  async function transfer(portableEntity: string, targetBaseEntity: string) {
+    try {
+      addToTxLog(await systems["system.Transfer"].executeTyped(portableEntity, targetBaseEntity), "transfer");
+    } catch (e) {
+      window.alert(e);
+    }
   }
 
-  function consume(substanceBlockEntity: string) {
-    return systems["system.Consume"].executeTyped(substanceBlockEntity);
+  async function consume(substanceBlockEntity: string) {
+    try {
+      addToTxLog(await systems["system.Consume"].executeTyped(substanceBlockEntity), "consume");
+    } catch (e) {
+      window.alert(e);
+    }
+  }
+
+  async function play() {
+    try {
+      addToTxLog(await systems["system.Play"].executeTyped(), "play");
+    } catch (e) {
+      window.alert(e);
+    }
+  }
+
+  async function burn(substanceBlockEntity: string) {
+    try {
+      addToTxLog(await systems["system.Burn"].executeTyped(substanceBlockEntity), "burn");
+    } catch (e) {
+      window.alert(e);
+    }
   }
 
   // --- CONTEXT --------------------------------------------------------------------
@@ -132,7 +180,8 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: { spawn, move, extract, pickUp, drop, take, give, consume },
+    systemCallStreams,
+    api: { spawn, move, extract, pickUp, drop, transfer, consume, play, burn },
     dev: setupDevSystems(world, encoders, systems),
   };
 
