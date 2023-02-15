@@ -6,7 +6,6 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
 import { LibCore } from "../libraries/LibCore.sol";
-import { LibCooldown } from "../libraries/LibCooldown.sol";
 import { LibInventory } from "../libraries/LibInventory.sol";
 import { LibAbility } from "../libraries/LibAbility.sol";
 import { LibConfig } from "../libraries/LibConfig.sol";
@@ -27,7 +26,7 @@ contract PlaySystem is System {
     GameConfig memory gameConfig = LibConfig.getGameConfig(components);
 
     require(LibCore.isSpawned(components, coreEntity), "PlaySystem: entity does not exist");
-    require(LibCooldown.isReady(components, coreEntity), "PlaySystem: entity is in cooldown");
+    require(LibCore.isReady(components, coreEntity), "PlaySystem: entity is in cooldown");
 
     uint256 baseEntity = LibInventory.getCarriedBy(components, coreEntity);
 

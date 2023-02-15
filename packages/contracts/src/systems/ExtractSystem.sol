@@ -6,7 +6,6 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
 import { LibMove } from "../libraries/LibMove.sol";
 import { LibCore } from "../libraries/LibCore.sol";
-import { LibCooldown } from "../libraries/LibCooldown.sol";
 import { LibMap } from "../libraries/LibMap.sol";
 import { LibResource } from "../libraries/LibResource.sol";
 import { LibSubstanceBlock } from "../libraries/LibSubstanceBlock.sol";
@@ -31,7 +30,7 @@ contract ExtractSystem is System {
     GameConfig memory gameConfig = LibConfig.getGameConfig(components);
 
     require(LibCore.isSpawned(components, coreEntity), "ExtractSystem: entity does not exist");
-    require(LibCooldown.isReady(components, coreEntity), "ExtractSystem: entity is in cooldown");
+    require(LibCore.isReady(components, coreEntity), "ExtractSystem: entity is in cooldown");
     require(!LibCore.isCommitted(components, coreEntity), "ExtractSystem: entity is committed");
     require(LibCore.checkEnergy(components, coreEntity, gameConfig.extractCost), "ExtractSystem: not enough energy");
 
@@ -76,7 +75,7 @@ contract ExtractSystem is System {
       LibSubstanceBlock.create(components, world.getUniqueEntityId(), _extractionCoordinates, matterToExtract);
     }
 
-    LibCooldown.setReadyBlock(components, coreEntity, gameConfig.extractCooldown);
+    LibCore.setReadyBlock(components, coreEntity, gameConfig.extractCooldown);
     LibCore.decreaseEnergy(components, coreEntity, gameConfig.extractCost);
   }
 

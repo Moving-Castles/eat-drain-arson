@@ -7,7 +7,6 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
 import { LibMove } from "../libraries/LibMove.sol";
 import { LibCore } from "../libraries/LibCore.sol";
-import { LibCooldown } from "../libraries/LibCooldown.sol";
 import { LibInventory } from "../libraries/LibInventory.sol";
 import { LibAbility } from "../libraries/LibAbility.sol";
 import { LibConfig } from "../libraries/LibConfig.sol";
@@ -29,7 +28,7 @@ contract MoveSystem is System {
     GameConfig memory gameConfig = LibConfig.getGameConfig(components);
 
     require(LibCore.isSpawned(components, coreEntity), "MoveSystem: entity does not exist");
-    require(LibCooldown.isReady(components, coreEntity), "MoveSystem: entity is in cooldown");
+    require(LibCore.isReady(components, coreEntity), "MoveSystem: entity is in cooldown");
     require(!LibCore.isCommitted(components, coreEntity), "MoveSystem: entity is committed");
     require(LibCore.checkEnergy(components, coreEntity, gameConfig.moveCost), "MoveSystem: not enough energy");
 
@@ -44,7 +43,7 @@ contract MoveSystem is System {
     uint32 calculatedMoveCost = gameConfig.moveCost - (2 * (abilityCount - 1));
 
     LibCore.decreaseEnergy(components, coreEntity, calculatedMoveCost);
-    LibCooldown.setReadyBlock(components, coreEntity, gameConfig.moveCooldown);
+    LibCore.setReadyBlock(components, coreEntity, gameConfig.moveCooldown);
   }
 
   function executeTyped(Coord memory _targetPosition) public returns (bytes memory) {

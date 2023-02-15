@@ -6,7 +6,6 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
 import { LibMove } from "../libraries/LibMove.sol";
 import { LibCore } from "../libraries/LibCore.sol";
-import { LibCooldown } from "../libraries/LibCooldown.sol";
 import { LibMap } from "../libraries/LibMap.sol";
 import { LibInventory } from "../libraries/LibInventory.sol";
 import { LibConfig } from "../libraries/LibConfig.sol";
@@ -26,7 +25,7 @@ contract DropSystem is System {
     GameConfig memory gameConfig = LibConfig.getGameConfig(components);
 
     require(LibCore.isSpawned(components, coreEntity), "DropSystem: entity does not exist");
-    require(LibCooldown.isReady(components, coreEntity), "DropSystem: entity is in cooldown");
+    require(LibCore.isReady(components, coreEntity), "DropSystem: entity is in cooldown");
     require(!LibCore.isCommitted(components, coreEntity), "DropSystem: entity is committed");
     require(LibCore.checkEnergy(components, coreEntity, gameConfig.dropCost), "DropSystem: not enough energy");
 

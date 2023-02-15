@@ -59,6 +59,30 @@ library LibCore {
   }
 
   /**
+   * Set the ready block for entity
+   *
+   * @param _components World components
+   * @param _entity Entity
+   * @param _period How many block to add
+   */
+  function setReadyBlock(IUint256Component _components, uint256 _entity, uint256 _period) internal {
+    ReadyBlockComponent readyBlockComponent = ReadyBlockComponent(getAddressById(_components, ReadyBlockComponentID));
+    readyBlockComponent.set(_entity, block.number + _period);
+  }
+
+  /**
+   * Check if the entity's cooldown period is over
+   *
+   * @param _components World components
+   * @param _entity Entity
+   * @return bool is the cooldown period over?
+   */
+  function isReady(IUint256Component _components, uint256 _entity) internal view returns (bool) {
+    ReadyBlockComponent readyBlockComponent = ReadyBlockComponent(getAddressById(_components, ReadyBlockComponentID));
+    return readyBlockComponent.getValue(_entity) >= block.number ? false : true;
+  }
+
+  /**
    * Check energy
    *
    * @param _components World components

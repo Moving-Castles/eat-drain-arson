@@ -8,7 +8,6 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { LibCore } from "../libraries/LibCore.sol";
 import { LibMap } from "../libraries/LibMap.sol";
 import { LibMove } from "../libraries/LibMove.sol";
-import { LibCooldown } from "../libraries/LibCooldown.sol";
 import { LibInventory } from "../libraries/LibInventory.sol";
 import { LibAbility } from "../libraries/LibAbility.sol";
 import { LibConfig } from "../libraries/LibConfig.sol";
@@ -32,7 +31,7 @@ contract BurnSystem is System {
     GameConfig memory gameConfig = LibConfig.getGameConfig(components);
 
     require(LibCore.isSpawned(components, coreEntity), "BurnSystem: core does not exist");
-    require(LibCooldown.isReady(components, coreEntity), "BurnSystem: core is in cooldown");
+    require(LibCore.isReady(components, coreEntity), "BurnSystem: core is in cooldown");
     require(!LibCore.isCommitted(components, coreEntity), "BurnSystem: core is committed");
     require(LibCore.checkEnergy(components, coreEntity, gameConfig.burnCost), "BurnSystem: not enough energy");
     require(LibSubstanceBlock.isSubstanceBlock(components, _substanceBlockEntity), "BurnSystem: not substanceBlock");

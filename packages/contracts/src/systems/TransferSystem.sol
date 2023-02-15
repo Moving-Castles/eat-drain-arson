@@ -6,7 +6,6 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
 import { LibMove } from "../libraries/LibMove.sol";
 import { LibCore } from "../libraries/LibCore.sol";
-import { LibCooldown } from "../libraries/LibCooldown.sol";
 import { LibMap } from "../libraries/LibMap.sol";
 import { LibInventory } from "../libraries/LibInventory.sol";
 import { LibConfig } from "../libraries/LibConfig.sol";
@@ -26,7 +25,7 @@ contract TransferSystem is System {
     GameConfig memory gameConfig = LibConfig.getGameConfig(components);
 
     require(LibCore.isSpawned(components, coreEntity), "TransferSystem: entity does not exist");
-    require(LibCooldown.isReady(components, coreEntity), "TransferSystem: entity is in cooldown");
+    require(LibCore.isReady(components, coreEntity), "TransferSystem: entity is in cooldown");
     require(!LibCore.isCommitted(components, coreEntity), "TransferSystem: entity is committed");
     require(LibCore.checkEnergy(components, coreEntity, gameConfig.transferCost), "TransferSystem: not enough energy");
 
