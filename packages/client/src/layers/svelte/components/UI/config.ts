@@ -3,7 +3,7 @@ import UIDebugLog from "../DebugLog/DebugLog.svelte";
 import UIDebugStats from "../Stats/Stats.svelte";
 import UIDebugMap from "../Map/Map.svelte";
 import UIGameConfig from "../GameConfig/GameConfig.svelte";
-import UITransactions from "../TransactionQueue/TransactionQueue.svelte";
+import UITransactions from "../ActionSequencer/ActionSequencer.svelte";
 
 // --- TYPES -----------------------------------------------------------------
 

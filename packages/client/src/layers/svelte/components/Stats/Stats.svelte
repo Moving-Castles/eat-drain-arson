@@ -1,12 +1,12 @@
 <script lang="ts">
   import { Activity } from "../../modules/entities";
   import { playerCore, playerBaseEntity, playerAddress } from "../../modules/player";
-  import { network } from "../../modules/network";
   import { shortenAddress, addressToColor } from "../../utils/ui";
   import Inventory from "../Inventory/Inventory.svelte";
+  import { addToSequencer } from "../../modules/actionSequencer";
 
   function play() {
-    $network.api.play();
+    addToSequencer("system.Play");
   }
 </script>
 

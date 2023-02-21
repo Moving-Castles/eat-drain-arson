@@ -1,11 +1,12 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
   import tippy from "tippy.js";
-  import "tippy.js/dist/tippy.css"; // optional for styling
+  import "tippy.js/dist/tippy.css";
   import { addressToColor } from "../../utils/ui";
   import type { Entity } from "../../modules/entities";
-  import { network, blockNumber } from "../../modules/network";
+  import { blockNumber } from "../../modules/network";
   import { playerAddress, playerAbilities } from "../../modules/player";
+  import { addToSequencer } from "../../modules/actionSequencer";
 
   export let itemId: string;
   export let item: Entity;
@@ -44,15 +45,14 @@
   }
 
   function pickUp() {
-    $network.api.pickUp(itemId);
+    addToSequencer("system.PickUp", [itemId]);
   }
 
   function burn() {
-    $network.api.burn(itemId);
+    addToSequencer("system.Burn", [itemId]);
   }
 
   onMount(async () => {
-    // console.log("** mount", itemId);
     if (free) {
       toolTip = tippy(markerEl, {
         content: dialogEl,
@@ -62,10 +62,7 @@
   });
 
   onDestroy(() => {
-    // console.log("** destroy", itemId);
-    if (toolTip) {
-      toolTip.destroy();
-    }
+    if (toolTip) toolTip.destroy();
   });
 </script>
 
