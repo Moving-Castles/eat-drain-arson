@@ -13,15 +13,3 @@ export const network = writable({} as NetworkLayer);
 export const blockNumber = writable(0);
 export const ready = writable(false);
 export const loadingMessage = writable("Loading");
-export const transactions = writable([] as tx[]);
-export const executedTransactions = writable([] as string[]);
-export const receipts = writable([] as ContractReceipt[]);
-// Get transaction that do not have a matching receipt
-export const activeTransactions = derived([transactions, receipts], ([$transactions, $receipts]) =>
-  $transactions.filter((t) => !$receipts.find((r) => r.transactionHash === t.hash))
-);
-export const activeTransactions2 = derived(
-  [transactions, executedTransactions],
-  ([$transactions, $executedTransactions]) =>
-    $transactions.filter((t) => !$executedTransactions.find((eTx) => eTx === t.hash))
-);

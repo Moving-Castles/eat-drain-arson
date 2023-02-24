@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Coord } from "@latticexyz/utils";
+  import { addToSequencer } from "../../modules/actionSequencer";
   import { chebyshev } from "../../utils/space";
-  import { network } from "../../modules/network";
-  import { entities, baseEntities } from "../../modules/entities";
+  import { baseEntities } from "../../modules/entities";
   import { playerCore, playerAbilities } from "../../modules/player";
 
   export let selectedTileCoords: Coord;
@@ -14,16 +14,16 @@
   const isAdjacent = chebyshev($baseEntities[$playerCore.carriedBy].position, selectedTileCoords) === 1;
 
   function move() {
-    if (isAdjacent) {
-      $network.api.move(selectedTileCoords);
-    }
+    // if (isAdjacent) {
+    addToSequencer("system.Move", [selectedTileCoords]);
+    // }
     close();
   }
 
   function extract() {
-    if (isSame || isAdjacent) {
-      $network.api.extract(selectedTileCoords);
-    }
+    // if (isSame || isAdjacent) {
+    addToSequencer("system.Extract", [selectedTileCoords]);
+    // }
     close();
   }
 
@@ -34,10 +34,10 @@
 
 <div class="tile-interact">
   <div class="text">x:{selectedTileCoords.x},y:{selectedTileCoords.y}</div>
-  {#if $playerAbilities.includes("abilityMove") && isAdjacent}
+  {#if $playerAbilities.includes("abilityMove")}
     <div><button on:click={move}>MOVE</button></div>
   {/if}
-  {#if $playerAbilities.includes("abilityExtract") && (isSame || isAdjacent)}
+  {#if $playerAbilities.includes("abilityExtract")}
     <div><button on:click={extract}>EXTRACT</button></div>
   {/if}
   <div><button on:click={close}>CLOSE</button></div>

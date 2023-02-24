@@ -4,8 +4,9 @@
   import UIContainer from "./components/UI/UIContainer.svelte";
   import UIMenu from "./components/UI/UIMenu.svelte";
   import { createComponentSystem, createLoadingStateSystem } from "./systems";
-  import { network as networkStore, blockNumber, transactions, executedTransactions } from "./modules/network";
+  import { network as networkStore, blockNumber } from "./modules/network";
   import { playerCore } from "./modules/player";
+  import { initActionSequencer } from "./modules/actionSequencer";
 
   onMount(async () => {
     const layers = await bootGame();
@@ -21,19 +22,8 @@
       }
     }
 
-    const EXCLUDED_SYSTEMS = ["system.ComponentDev", "system.Init", "system.Spawn"];
-
-    // Listen to all system call streams
-    for (const [key, value] of Object.entries(layers.network.systemCallStreams)) {
-      if (!EXCLUDED_SYSTEMS.includes(key)) {
-        value.subscribe((systemCall) => {
-          // If local, mark transaction as executed
-          if ($transactions.find((t) => t.hash === systemCall.tx.hash)) {
-            executedTransactions.update((value) => [...value, systemCall.tx.hash]);
-          }
-        });
-      }
-    }
+    // Initialize the action sequencer
+    initActionSequencer();
 
     layers.network.network.blockNumber$.subscribe((x) => {
       blockNumber.set(x);

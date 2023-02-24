@@ -1,12 +1,13 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
   import tippy from "tippy.js";
-  import "tippy.js/dist/tippy.css"; // optional for styling
+  import "tippy.js/dist/tippy.css";
   import { addressToColor } from "../../utils/ui";
-  import { network, blockNumber } from "../../modules/network";
+  import { blockNumber } from "../../modules/network";
   import { playerAddress, playerAbilities, playerCore } from "../../modules/player";
   import type { Entity } from "../../modules/entities";
   import { Activity } from "../../modules/entities";
+  import { addToSequencer } from "../../modules/actionSequencer";
 
   export let itemId: string;
   export let item: Entity;
@@ -45,19 +46,19 @@
   }
 
   function drop() {
-    $network.api.drop(itemId);
+    addToSequencer("system.Drop", [itemId]);
   }
 
   function consume() {
-    $network.api.consume(itemId);
+    addToSequencer("system.Consume", [itemId]);
   }
 
   function burn() {
-    $network.api.burn(itemId);
+    addToSequencer("system.Burn", [itemId]);
   }
 
   function play() {
-    $network.api.play();
+    addToSequencer("system.Play");
   }
 
   onMount(async () => {
@@ -85,7 +86,8 @@
   style={"background:" + addressToColor(itemId) + ";"}
   on:click={() => {
     if (targetBaseEntityId) {
-      $network.api.transfer(itemId, targetBaseEntityId);
+      addToSequencer("system.Transfer", [itemId, targetBaseEntityId]);
+      // $network.api.transfer(itemId, targetBaseEntityId);
     }
   }}
 >
