@@ -1,12 +1,167 @@
 {
   "components": [
-    "PositionComponent"
+    "GameConfigComponent",
+    "CoreComponent",
+    "CommitComponent",
+    "PositionComponent",
+    "EnergyComponent",
+    "CreationBlockComponent",
+    "ReadyBlockComponent",
+    "MatterComponent",
+    "PortableComponent",
+    "CarryingCapacityComponent",
+    "CarriedByComponent",
+    "SubstanceComponent",
+    "AbilityMoveComponent",
+    "AbilityConsumeComponent",
+    "AbilityExtractComponent",
+    "AbilityPlayComponent",
+    "AbilityBurnComponent",
+    "UntraversableComponent",
+    "BurnBlockComponent"
   ],
   "systems": [
     {
       "name": "ComponentDevSystem",
       "writeAccess": [
         "*"
+      ]
+    },
+    {
+      "name": "InitSystem",
+      "initialize": "new bytes(0)",
+      "writeAccess": [
+        "*"
+      ]
+    },
+    {
+      "name": "SpawnSystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "PositionComponent",
+        "EnergyComponent",
+        "CreationBlockComponent",
+        "ReadyBlockComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent",
+        "CarriedByComponent",
+        "AbilityMoveComponent",
+        "AbilityConsumeComponent",
+        "AbilityExtractComponent",
+        "AbilityPlayComponent",
+        "UntraversableComponent",
+        "MatterComponent",
+        "CommitComponent",
+        "AbilityBurnComponent"
+      ]
+    },
+    {
+      "name": "MoveSystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "PositionComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "AbilityMoveComponent",
+        "UntraversableComponent"
+      ]
+    },
+    {
+      "name": "ExtractSystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "PositionComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent",
+        "SubstanceComponent",
+        "MatterComponent",
+        "AbilityExtractComponent"
+      ]
+    },
+    {
+      "name": "PickUpSystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "PositionComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent"
+      ]
+    },
+    {
+      "name": "DropSystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "PositionComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent"
+      ]
+    },
+    {
+      "name": "TransferSystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "PositionComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent"
+      ]
+    },
+    {
+      "name": "ConsumeSystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "PortableComponent",
+        "CarryingCapacityComponent",
+        "SubstanceComponent",
+        "MatterComponent",
+        "AbilityConsumeComponent"
+      ]
+    },
+    {
+      "name": "PlaySystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "AbilityPlayComponent",
+        "CommitComponent"
+      ]
+    },
+    {
+      "name": "BurnSystem",
+      "writeAccess": [
+        "GameConfigComponent",
+        "CoreComponent",
+        "EnergyComponent",
+        "ReadyBlockComponent",
+        "CarriedByComponent",
+        "AbilityBurnComponent",
+        "CommitComponent",
+        "BurnBlockComponent"
       ]
     }
   ]

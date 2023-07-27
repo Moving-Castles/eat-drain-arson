@@ -1,0 +1,203 @@
+/* @import url("../../public/jetbrains/style.css"); */
+
+:root {
+  /* Colors */
+  --background-rgb: 0, 0, 0;
+  --background: rgb(var(--background-rgb));
+  --background-offset: rgb(40, 40, 40);
+  --foreground-rgb: 255, 255, 255;
+  --foreground: rgb(var(--foreground-rgb));
+
+  --blue: #0033eb;
+  --warning: #fffbad;
+  --success: #bfff5e;
+  --failure: #d1656c;
+  --move: #92ff7c;
+  --gather: #7ce5ff;
+  --consume: #d37cff;
+  --burn: orangered;
+  --play: #ebff7c;
+  --special: #ff7ce7;
+  --gate: #7269f8;
+  --empty: lightgrey;
+
+  /* Sizing */
+  --padding-button: 6px 12px;
+  --col-gap: 4rem;
+  --row-gap: 2rem;
+  --taskbar-height: 30px;
+  --titlebar-height: 30px;
+
+  /* Fonts */
+  --font-family: Courier, monospaced;
+  --font-size: 12px;
+  --font-size-large: 18px;
+
+  /* Deco */
+  --muted-opacity: 0.7;
+  --backdrop: blur(10px);
+  --outer-border: 1px solid rgba(var(--foreground-rgb), var(--muted-opacity));
+}
+
+* {
+  box-sizing: border-box;
+  border-color: var(--foreground);
+  -webkit-font-feature-settings: "liga" on, "calt" on;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+body,
+html {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  margin: 0;
+  padding: 0;
+}
+
+@keyframes backgroundFlicker {
+  0% {
+    background: rgb(0, 0, 0);
+  }
+  12% {
+    background: rgb(20, 20, 20);
+  }
+  30% {
+    background: rgb(25, 25, 25);
+  }
+  45% {
+    background: rgb(12, 12, 12);
+  }
+  67% {
+    background: rgb(25, 25, 25);
+  }
+  78% {
+    background: rgb(6, 6, 6);
+  }
+  89% {
+    background: rgb(19, 19, 19);
+  }
+  100% {
+    background: rgb(0, 0, 0);
+  }
+}
+
+span.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 600ms linear;
+  background-color: rgba(255, 255, 255, var(--muted-opacity));
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.pointer-events-auto {
+  pointer-events: auto;
+}
+
+.link {
+  cursor: pointer;
+  opacity: var(--muted-opacity);
+}
+
+.link.active,
+.link:hover {
+  opacity: 1;
+}
+
+/* OVERLAYS */
+.overlay:before,
+.overlay:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  /* pointer-events: none; */
+}
+
+.overlay:before {
+  z-index: 1;
+}
+
+.overlay:after {
+  z-index: 2;
+}
+
+.overlay.mask:before {
+  z-index: 1;
+}
+
+.action {
+  all: unset;
+  border: var(--outer-border);
+  color: var(--foreground);
+  padding: var(--padding-button);
+  background-color: var(--background) !important;
+  cursor: pointer;
+}
+
+.action.success:hover {
+  color: var(--success);
+  border: 1px solid var(--success);
+}
+
+.action.warning:hover {
+  color: var(--warning);
+  border: 1px solid var(--warning);
+}
+
+.action.failure:hover {
+  color: var(--failure);
+  border: 1px solid var(--failure);
+}
+
+.action,
+.action-filled {
+  transition: all 0.1s ease;
+}
+
+.action-filled:active,
+.action:active {
+  background-color: var(--foreground) !important;
+  color: var(--background) !important;
+  transform: translate(0, 1px);
+}
+
+.cooldown-overlay {
+  position: absolute;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  /* backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px); */
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  padding: var(--font-size);
+}
